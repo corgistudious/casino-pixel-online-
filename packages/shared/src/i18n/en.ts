@@ -1,7 +1,7 @@
 export const en = {
   app: {
     title: 'Casino Pixel Online',
-    tagline: 'Pixel-art social casino. Virtual chips only — no real money.',
+    tagline: 'Premium social casino. Virtual chips only — no real money.',
     loading: 'Loading…',
     disclaimer:
       'Entertainment only. Chips are virtual, have no cash value and cannot be exchanged, withdrawn or redeemed for real money or prizes.',
@@ -15,6 +15,7 @@ export const en = {
     leaderboard: 'Ranking',
     settings: 'Settings',
     logout: 'Log out',
+    admin: 'Admin',
     back: 'Back',
   },
   auth: {
@@ -45,7 +46,7 @@ export const en = {
     bigWinLine: '{{name}} won {{payout}} on {{game}}',
   },
   games: {
-    slots: { name: 'Pixel Slots', desc: '5 reels, 10 lines, wilds pay up to 5000× line bet' },
+    slots: { name: 'Royal Slots', desc: '5 reels, 10 lines, wilds pay up to 5000× line bet' },
     roulette: { name: 'Roulette', desc: 'European single-zero wheel' },
     sicbo: { name: 'Sic Bo', desc: 'Three dice — big, small, totals & triples' },
     blackjack: { name: 'Blackjack', desc: 'Beat the dealer to 21. Blackjack pays 3:2' },
@@ -166,6 +167,23 @@ export const en = {
     off: 'Off',
     about: 'About',
     version: 'Version {{version}}',
+  },
+  admin: {
+    title: 'Admin dashboard',
+    users: 'Players',
+    online: 'Online now',
+    rounds24h: 'Rounds (24h)',
+    wagered24h: 'Wagered (24h)',
+    paid24h: 'Paid out (24h)',
+    edge24h: 'Realised hold (24h)',
+    chips: 'Chips in circulation',
+    manage: 'Manage player',
+    username: 'Username',
+    amount: 'Chip adjustment (+/−)',
+    grant: 'Apply adjustment',
+    ban: 'Suspend',
+    unban: 'Unsuspend',
+    done: 'Done',
   },
   errors: {
     bad_request: 'Invalid request.',

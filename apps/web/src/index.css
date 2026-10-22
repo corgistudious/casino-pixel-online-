@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-ink-950 bg-lounge font-sans text-white antialiased;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  input {
+    user-select: text;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply rounded-2xl border border-white/10 bg-glass shadow-panel backdrop-blur-xl;
+  }
+  .gold-border {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(#120e26, #120e26) padding-box,
+      linear-gradient(135deg, #fff1b8, #b9801c 50%, #f7d77a) border-box;
+  }
+  .text-gold {
+    @apply bg-gold-sheen bg-clip-text text-transparent;
+  }
+  .field {
+    @apply w-full rounded-xl border border-white/10 bg-black/30 px-4 py-2.5 text-white outline-none transition placeholder:text-white/30 focus:border-gold-300/70 focus:ring-2 focus:ring-gold-300/20;
+  }
+  .sheen {
+    @apply pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-sheen bg-gradient-to-r from-transparent via-white/40 to-transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}

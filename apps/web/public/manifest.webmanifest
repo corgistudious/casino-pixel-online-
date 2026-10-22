@@ -1,0 +1,10 @@
+{
+  "name": "Casino Pixel Online",
+  "short_name": "Casino Pixel",
+  "start_url": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#05040b",
+  "theme_color": "#05040b",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

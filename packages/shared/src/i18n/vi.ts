@@ -3,7 +3,7 @@ import type { Translation } from './index';
 export const vi: Translation = {
   app: {
     title: 'Casino Pixel Online',
-    tagline: 'Casino giải trí phong cách pixel. Chỉ dùng chip ảo — không có tiền thật.',
+    tagline: 'Casino giải trí cao cấp. Chỉ dùng chip ảo — không có tiền thật.',
     loading: 'Đang tải…',
     disclaimer:
       'Chỉ nhằm mục đích giải trí. Chip là tiền ảo, không có giá trị tiền mặt và không thể quy đổi, rút hay đổi thành tiền thật hoặc giải thưởng.',
@@ -17,6 +17,7 @@ export const vi: Translation = {
     leaderboard: 'Xếp hạng',
     settings: 'Cài đặt',
     logout: 'Đăng xuất',
+    admin: 'Quản trị',
     back: 'Quay lại',
   },
   auth: {
@@ -47,7 +48,7 @@ export const vi: Translation = {
     bigWinLine: '{{name}} thắng {{payout}} ở {{game}}',
   },
   games: {
-    slots: { name: 'Pixel Slots', desc: '5 cuộn, 10 dòng, Wild trả tới 5000× cược dòng' },
+    slots: { name: 'Royal Slots', desc: '5 cuộn, 10 dòng, Wild trả tới 5000× cược dòng' },
     roulette: { name: 'Roulette', desc: 'Vòng quay châu Âu một số 0' },
     sicbo: { name: 'Tài Xỉu', desc: 'Ba xúc xắc — tài, xỉu, tổng điểm & bộ ba' },
     blackjack: { name: 'Blackjack', desc: 'Đánh bại nhà cái tới 21. Blackjack trả 3:2' },
@@ -168,6 +169,23 @@ export const vi: Translation = {
     off: 'Tắt',
     about: 'Giới thiệu',
     version: 'Phiên bản {{version}}',
+  },
+  admin: {
+    title: 'Bảng quản trị',
+    users: 'Người chơi',
+    online: 'Đang online',
+    rounds24h: 'Số ván (24h)',
+    wagered24h: 'Tổng cược (24h)',
+    paid24h: 'Đã trả thưởng (24h)',
+    edge24h: 'Lợi thế thực tế (24h)',
+    chips: 'Chip đang lưu hành',
+    manage: 'Quản lý người chơi',
+    username: 'Tên đăng nhập',
+    amount: 'Điều chỉnh chip (+/−)',
+    grant: 'Áp dụng điều chỉnh',
+    ban: 'Khóa tài khoản',
+    unban: 'Mở khóa',
+    done: 'Hoàn tất',
   },
   errors: {
     bad_request: 'Yêu cầu không hợp lệ.',

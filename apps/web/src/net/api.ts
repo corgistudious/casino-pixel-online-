@@ -1,0 +1,45 @@
+import type { ErrorCode } from '@casino/shared';
+import { API_URL } from '../config';
+
+export class ApiError extends Error {
+  constructor(
+    public readonly code: ErrorCode | 'network',
+    public readonly status = 0,
+  ) {
+    super(code);
+  }
+}
+
+let authToken: string | null = null;
+let onUnauthorized: (() => void) | null = null;
+
+export function setAuthToken(token: string | null) {
+  authToken = token;
+}
+
+export function setUnauthorizedHandler(fn: () => void) {
+  onUnauthorized = fn;
+}
+
+export async function api<T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<T> {
+  let res: Response;
+  try {
+    res = await fetch(API_URL + path, {
+      method: init.method ?? 'GET',
+      headers: {
+        ...(init.body !== undefined ? { 'content-type': 'application/json' } : {}),
+        ...(authToken ? { authorization: `Bearer ${authToken}` } : {}),
+      },
+      body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
+    });
+  } catch {
+    throw new ApiError('network');
+  }
+  const data = (await res.json().catch(() => ({}))) as { error?: { code?: ErrorCode } };
+  if (!res.ok) {
+    const code = data.error?.code ?? 'internal';
+    if (code === 'unauthorized' || code === 'banned') onUnauthorized?.();
+    throw new ApiError(code, res.status);
+  }
+  return data as T;
+}
