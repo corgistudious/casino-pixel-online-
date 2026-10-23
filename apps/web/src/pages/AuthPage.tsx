@@ -7,6 +7,7 @@ import { useSession } from '../store/session';
 import { useSettings } from '../store/settings';
 import { Button } from '../ui/Button';
 import { GameArt } from '../ui/Icons';
+import { KeyoLogo } from '../ui/KeyoLogo';
 import { LanguageSwitch } from './SettingsPage';
 
 export function AuthPage() {
@@ -40,7 +41,7 @@ export function AuthPage() {
     <div className="flex h-full items-center justify-center overflow-y-auto p-4">
       <div className="grid w-full max-w-4xl animate-rise items-center gap-6 lg:grid-cols-2">
         <div className="hidden flex-col gap-4 lg:flex">
-          <h1 className="font-display text-5xl font-bold leading-tight text-gold">{t('app.title')}</h1>
+          <KeyoLogo size={84} />
           <p className="text-white/70">{t('app.tagline')}</p>
           <div className="grid grid-cols-2 gap-3">
             {(['roulette', 'blackjack', 'slots', 'sicbo'] as const).map((g) => (

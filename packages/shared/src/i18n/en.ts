@@ -1,6 +1,6 @@
 export const en = {
   app: {
-    title: 'Casino Pixel Online',
+    title: 'Keyo Game',
     tagline: 'Premium social casino. Virtual Cxu only — no real money.',
     loading: 'Loading…',
     disclaimer:
@@ -201,7 +201,7 @@ export const en = {
     verified: 'Verified',
     partner: 'Partner',
     verifiedDesc: 'Official, verified account',
-    partnerDesc: 'Official Casino Pixel Online partner',
+    partnerDesc: 'Official Keyo Game partner',
   },
   checkin: {
     title: 'Daily check-in',
@@ -213,7 +213,7 @@ export const en = {
     streakInfo: 'Check in every day — missing a day restarts the cycle at Day 1.',
   },
   welcome: {
-    title: 'Welcome to Casino Pixel Online!',
+    title: 'Welcome to Keyo Game!',
     body: 'Your welcome pack has been added to your account:',
     cta: 'Start playing',
   },

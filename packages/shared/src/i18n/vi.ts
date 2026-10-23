@@ -2,7 +2,7 @@ import type { Translation } from './index';
 
 export const vi: Translation = {
   app: {
-    title: 'Casino Pixel Online',
+    title: 'Keyo Game',
     tagline: 'Casino giải trí cao cấp. Chỉ dùng Cxu ảo — không có tiền thật.',
     loading: 'Đang tải…',
     disclaimer:
@@ -203,7 +203,7 @@ export const vi: Translation = {
     verified: 'Đã xác minh',
     partner: 'Đối tác',
     verifiedDesc: 'Tài khoản chính thức đã được xác minh',
-    partnerDesc: 'Đối tác chính thức của Casino Pixel Online',
+    partnerDesc: 'Đối tác chính thức của Keyo Game',
   },
   checkin: {
     title: 'Điểm danh hằng ngày',
@@ -215,7 +215,7 @@ export const vi: Translation = {
     streakInfo: 'Điểm danh mỗi ngày — bỏ lỡ một ngày sẽ quay lại Ngày 1.',
   },
   welcome: {
-    title: 'Chào mừng đến Casino Pixel Online!',
+    title: 'Chào mừng đến Keyo Game!',
     body: 'Quà tân thủ đã được cộng vào tài khoản của bạn:',
     cta: 'Bắt đầu chơi',
   },

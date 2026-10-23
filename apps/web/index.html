@@ -4,13 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
     <meta name="theme-color" content="#05040b" />
-    <meta name="description" content="Casino Pixel Online — premium social casino with virtual Cxu only." />
+    <meta name="description" content="Keyo Game — premium multiplayer social casino with virtual Cxu only." />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <title>Casino Pixel Online</title>
+    <title>Keyo Game</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Branded splash shown until the app mounts (also covers native app start-up). -->
+      <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(ellipse at 50% 30%,#2a1a66,#0b0822 60%,#05040f);font-family:Georgia,serif">
+        <img src="./favicon.svg" alt="" width="96" height="96" />
+        <div style="color:#f2c14e;font-size:34px;font-weight:900;letter-spacing:.14em">KEYO GAME</div>
+        <div style="width:160px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,#f2c14e,transparent);opacity:.8"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

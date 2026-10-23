@@ -4,6 +4,7 @@ import { formatChips } from '../lib/format';
 import { useSession } from '../store/session';
 import { Avatar } from './Avatar';
 import { CurrencyIcon } from './OfficialAssets';
+import { KeyoLogo } from './KeyoLogo';
 import { useToasts } from './toast';
 
 export function BalancePill({ compact = false }: { compact?: boolean }) {
@@ -39,8 +40,8 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
           ← {t('nav.back')}
         </button>
       ) : (
-        <Link to="/" className="font-display text-lg font-bold text-gold">
-          {t('app.title')}
+        <Link to="/" aria-label={t('app.title')}>
+          <KeyoLogo size={30} />
         </Link>
       )}
       {title && <h1 className="font-display text-lg font-semibold text-white/90">{title}</h1>}

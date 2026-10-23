@@ -17,6 +17,7 @@ import { VipPage } from './pages/VipPage';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, RotateOverlay, Toasts } from './ui/Chrome';
+import { KeyoLogo } from './ui/KeyoLogo';
 
 function GameRoute() {
   const { game } = useParams();
@@ -57,9 +58,10 @@ export function App() {
 
   if (booting) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
-        <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-300/20 border-t-gold-300" />
-        <p className="font-display text-gold-100">{t('app.loading')}</p>
+      <div className="flex h-full flex-col items-center justify-center gap-5 bg-[radial-gradient(ellipse_at_50%_30%,#2a1a66,#0b0822_60%,#05040f)]">
+        <KeyoLogo size={88} />
+        <div className="h-[3px] w-40 animate-pulse rounded-full bg-gradient-to-r from-transparent via-gold-300 to-transparent" />
+        <p className="text-sm text-white/60">{t('app.loading')}</p>
       </div>
     );
   }
