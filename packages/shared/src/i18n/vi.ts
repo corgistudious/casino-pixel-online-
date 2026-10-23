@@ -44,6 +44,12 @@ export const vi: Translation = {
   },
   hub: {
     title: 'Sảnh Game',
+    slides: {
+      roulette: { kicker: 'Bàn nổi bật', title: 'Roulette Châu Âu', body: 'Một số 0, chín loại cược, kết quả có thể kiểm chứng.', cta: 'Vào bàn' },
+      welcome: { kicker: 'Quà mỗi ngày', title: 'Điểm danh nhận Cxu', body: 'Chuỗi 7 ngày, ngày 4 và ngày 7 có thêm Cxu Vàng.', cta: 'Điểm danh' },
+      vip: { kicker: 'Câu lạc bộ VIP', title: '15 cấp danh giá', body: 'Lên cấp bằng nhiệm vụ và hoạt động, không bao giờ bằng tiền.', cta: 'Xem VIP' },
+    },
+    soonToast: '{{game}} sắp ra mắt.',
     games: 'Trò chơi casino',
     playNow: 'Chơi ngay',
     comingSoon: 'Sắp ra mắt',

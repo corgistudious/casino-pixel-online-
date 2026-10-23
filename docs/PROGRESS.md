@@ -7,7 +7,17 @@ _Cập nhật: 2026-10-23_
 - Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
 - Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
 
-## UI approval gate (nhánh `claude/ui-hub-approval`) — CHỜ CHỦ DỰ ÁN DUYỆT
+## Game Hub phong cách C — Casino online hiện đại (nhánh `claude/hub-modern-c`) — CHỜ DUYỆT
+
+Chủ dự án **không duyệt** bản UI trước (nhánh `claude/ui-hub-approval`) và chọn phong cách C. Vòng này chỉ thiết kế lại **Game Hub**; các màn hình khác giữ nguyên cho tới khi Game Hub được duyệt.
+
+- Bố cục kiểu màn hình game trên "stage" co giãn (thiết kế 1080p cho PC, 720p cho điện thoại ngang): thanh tài khoản (avatar, tên + huy hiệu, VIP + EXP, Cxu Bạc/Vàng), nút nhanh bên trái (Điểm danh, Nhiệm Vụ, Chợ Xa Hoa), banner 3 slide, 6 thẻ game lớn, dock điều hướng 8 mục.
+- Nền lounge động bằng Canvas (sương tím hoàng gia, tia sáng, bokeh), tự dừng chuyển động khi thiết bị không giữ được nhịp khung hình hoặc khi bật "Giảm chuyển động".
+- Thẻ game nghiêng 3D theo con trỏ, ánh sáng theo vị trí chuột, nhấn có phản hồi; game chưa phát hành hiện "Sắp ra mắt" và báo khi chạm.
+- Artwork: 6 minh họa game + 2 banner vẽ bằng SVG (nguyên bản), dùng asset chính thức Cxu Bạc/Vàng. Không phải tranh raster vẽ tay/render 3D (xem `docs/ART_PIPELINE.md`).
+- Đo FPS trong môi trường không GPU: 60 FPS khi tĩnh; nền động ~25 FPS và tự chuyển sang tĩnh, sau đó ~41–46 FPS khi tương tác. Cần kiểm tra trên thiết bị thật.
+
+## UI approval gate (nhánh `claude/ui-hub-approval`) — KHÔNG ĐƯỢC DUYỆT, đã thay bằng phong cách C
 
 Giao diện **chưa được duyệt**. Gameplay và tính năng mới tạm dừng cho tới khi có xác nhận.
 

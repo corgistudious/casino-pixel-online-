@@ -7,7 +7,7 @@ import { SicBoGame } from './game/controls/SicBoGame';
 import { SlotsGame } from './game/controls/SlotsGame';
 import { AdminPage } from './pages/AdminPage';
 import { AuthPage } from './pages/AuthPage';
-import { HubPage } from './pages/HubPage';
+import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -70,7 +70,7 @@ export function App() {
       <RotateOverlay />
       <Toasts />
       <Routes>
-        <Route path="/" element={<Authed><HubPage /></Authed>} />
+        <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
         <Route path="/profile" element={<Authed><ProfilePage /></Authed>} />
         <Route path="/market" element={<Authed><MarketPage /></Authed>} />

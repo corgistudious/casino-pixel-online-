@@ -42,6 +42,13 @@ export const en = {
   },
   hub: {
     title: 'Game Hub',
+    slides: {
+      roulette: { kicker: 'Featured table', title: 'European Roulette', body: 'Single zero, nine bet types and provably fair results.', cta: 'Take a seat' },
+      welcome: { kicker: 'Daily rewards', title: 'Check in for Cxu', body: 'A 7-day streak with Gold Cxu on day 4 and day 7.', cta: 'Check in' },
+      vip: { kicker: 'VIP Club', title: '15 levels of prestige', body: 'Level up through missions and play, never with money.', cta: 'View VIP' },
+    },
+    play: 'Play',
+    soonToast: '{{game}} is coming soon.',
     games: 'Casino games',
     playNow: 'Play now',
     comingSoon: 'Coming soon',
@@ -50,7 +57,6 @@ export const en = {
     heroBody: 'Poker, Sic Bo, Roulette, Liêng, Xì Tố and Blackjack with virtual Cxu only.',
     heroCta: 'Play Roulette',
     balance: 'Balance',
-    play: 'Play',
     rescueDone: 'Top-up received! +{{amount}}',
     rescue: 'Out of Silver Cxu? Get {{amount}}',
     bigWins: 'Big wins',

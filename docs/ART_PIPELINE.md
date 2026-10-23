@@ -34,6 +34,18 @@ Tất cả được vẽ bằng canvas/SVG vector (gradient, bóng đổ, highli
 | Huy chương xếp hạng 1–3 | `ui/Avatar.tsx` (`Medal`) | |
 | Nút, panel kính, typography | Tailwind (`index.css`, `tailwind.config.js`) | Be Vietnam Pro + Playfair Display (OFL) |
 
+## Game Hub phong cách C — artwork
+
+| Artwork | File | Loại |
+| --- | --- | --- |
+| Poker, Sic Bo, Roulette, Liêng, Xì Tố, Blackjack (thẻ game) | `apps/web/src/hub/art/gameArt.tsx` | Minh họa vector SVG nguyên bản, có phối cảnh/ánh sáng/đổ bóng |
+| Banner Roulette nổi bật, banner Quà điểm danh | `apps/web/src/hub/art/gameArt.tsx` | Như trên, khung đứng 600×640 |
+| Bộ công cụ (lá bài, chip 3D, xúc xắc isometric, tia sáng) | `apps/web/src/hub/art/kit.tsx` | Vector |
+| Nền lounge động | `apps/web/src/hub/LoungeBackground.tsx` | Canvas 2D |
+| Cxu Bạc / Cxu Vàng / Partner / Verified | `assets/official/` | Asset chính thức của chủ dự án |
+
+Nếu muốn key art dạng tranh vẽ tay hoặc render 3D (phong cách quảng cáo game thương mại), cần công cụ tạo ảnh hoặc họa sĩ. Thông số đề xuất: thẻ game 1200×900 PNG/WebP (vùng chính ở 70% phía trên), banner 1200×1280 (khung đứng, chừa 40% phía dưới cho chữ), nền trong suốt không bắt buộc.
+
 ## Chưa có — cần công cụ tạo ảnh / hoạ sĩ bên ngoài
 
 Claude Code không tạo được tranh minh hoạ raster chất lượng chuyên nghiệp. Các mục sau **chưa hoàn thành**:
