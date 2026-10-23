@@ -7,6 +7,34 @@ _Cập nhật: 2026-10-23_
 - Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
 - Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
 
+## KEYO GAME — Master Development (nhánh `claude/keyo-foundation`)
+
+Làm theo thứ tự phụ thuộc trong `docs/AUDIT.md`. **Dự án chưa hoàn tất** — dưới đây là trạng thái thật của từng giai đoạn.
+
+| Giai đoạn | Nội dung | Trạng thái |
+|---|---|---|
+| 0 | Audit source, ma trận còn thiếu, xung đột chính sách | ✅ `docs/AUDIT.md` |
+| 1 | Thương hiệu Keyo Game (tên, logo, splash, manifest, appId Android/Windows) | ✅ |
+| 2 | Tài khoản: email + xác minh, UID, Argon2id, quên mật khẩu, ban có thời hạn, xoá tài khoản, RBAC, audit, Keyo Support UID 1000, email outbox | ✅ đã chạy thật (xem dưới) |
+| 3 | Sổ cái kép + ngân hàng | ⏳ tiếp theo |
+| 4+ | Hộp thư, Support Center/ticket, báo cáo, giftcode, bạn bè, phòng nhiều người + 6 game, VIP/nhiệm vụ/thành tựu, giải đấu, Chợ Xa Hoa, Thư viện khung, Reviewer, Admin Dashboard đầy đủ | ⏳ chưa làm |
+
+### Giai đoạn 2 — đã kiểm chứng
+
+- Server: 61 test ✓ (trong đó 29 test tài khoản: cấp UID đồng thời, Keyo Support, đăng ký/xác minh bằng mã & liên kết, quà tân thủ đúng 1 lần, khoá sau 5 lần sai, nâng hash scrypt → Argon2id, đặt lại mật khẩu + thu hồi phiên, UID đặc biệt + kích hoạt, ban có hạn/vĩnh viễn/gỡ, xoá tài khoản, RBAC, audit). Shared 35 ✓, web 4 ✓. Typecheck + build ✓.
+- E2E trình duyệt với server + PostgreSQL thật: đăng ký → nhận mã trong `email_outbox` → xác minh → 50.000 Cxu Bạc → sảnh hiển thị UID 100000; Cài đặt hiển thị tài khoản; admin (super_admin) tìm người chơi, khoá 1 ngày, audit ghi `ban.create`. 0 lỗi console.
+- Nâng cấp DB có dữ liệu cũ (migration 0001 → 0002): 3 tài khoản cũ được cấp UID 100000–100002, admin cũ → `super_admin`, tài khoản bị khoá cũ → ban vĩnh viễn, không ai nhận quà tân thủ lần hai, không mất dòng nào.
+- Client: form đăng ký mới (email, nhập lại mật khẩu, điều khoản), đăng nhập bằng tên/email, quên & đặt lại mật khẩu (mã hoặc liên kết), kích hoạt UID đặc biệt, màn hình chờ xác minh, mục Tài khoản trong Cài đặt (liên kết email, đăng xuất mọi thiết bị, yêu cầu/huỷ xoá), bảng admin theo UID và theo quyền, thông báo khoá có ngày kết thúc.
+- Bản build thật không còn hiển thị số VIP EXP / Điểm Hấp Dẫn mẫu: hiện 0 kèm nhãn "Chưa hoạt động" cho tới khi có backend.
+- Chính sách kinh tế mới: quà tân thủ 50.000 Bạc khi xác minh email; điểm danh 5K/5K/6K/6K/8K/10K/20K theo ngày UTC; Cxu hỗ trợ 2.000/12 giờ khi (khả dụng + đang cược) < 1.000; khung avatar bán bằng Cxu Bạc.
+
+### Giai đoạn 2 — chưa làm / cần cấu hình
+
+- **Email chưa gửi thật** nếu không đặt `SMTP_URL` (thư nằm trong `email_outbox`). Cần SMTP + tên miền có SPF/DKIM.
+- Gỡ/đổi email đã xác minh qua ticket Keyo Support — chờ giai đoạn Support Center.
+- Phê duyệt kép, 2FA nhân viên — giai đoạn Admin Dashboard.
+- Tài liệu: `docs/ACCOUNT_SYSTEM.md`, `docs/SECURITY.md`.
+
 ## Game Hub phong cách C — Casino online hiện đại (nhánh `claude/hub-modern-c`) — CHỜ DUYỆT
 
 Chủ dự án **không duyệt** bản UI trước (nhánh `claude/ui-hub-approval`) và chọn phong cách C. Vòng này chỉ thiết kế lại **Game Hub**; các màn hình khác giữ nguyên cho tới khi Game Hub được duyệt.

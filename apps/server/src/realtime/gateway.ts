@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { clientMessageSchema, type ClientMessage, type ServerMessage } from '@casino/shared';
 import type { FastifyInstance } from 'fastify';
 import type { WebSocket } from 'ws';
-import { accountFromToken } from '../auth/session';
+import { accountFromToken, requireActive } from '../auth/session';
 import type { Db } from '../db/client';
 import { AppError } from '../errors';
 import {
@@ -31,7 +31,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
     const send = (msg: ServerMessage) => {
       if (socket.readyState === socket.OPEN) socket.send(JSON.stringify(msg));
     };
-    const conn = { userId: '', send };
+    const conn = { userId: '', send, close: (reason: string) => socket.close(4001, reason) };
 
     const authTimer = setTimeout(() => {
       if (!account) socket.close(4001, 'auth timeout');
@@ -48,6 +48,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
       }
       if (msg.type === 'ping') return { now: Date.now() };
       if (!account) throw new AppError('unauthorized', 401);
+      requireActive(account);
       const userId = account.id;
 
       let outcome: PlayOutcome<unknown> | null = null;

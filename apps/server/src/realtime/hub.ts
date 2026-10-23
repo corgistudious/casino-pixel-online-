@@ -6,9 +6,10 @@ import type { FastifyBaseLogger } from 'fastify';
 export interface Connection {
   userId: string;
   send(msg: ServerMessage): void;
+  close(reason: string): void;
 }
 
-type Envelope = { origin: string } & ({ kind: 'all'; msg: ServerMessage } | { kind: 'user'; userId: string; msg: ServerMessage });
+type Envelope = { origin: string } & ({ kind: 'all'; msg: ServerMessage } | { kind: 'user'; userId: string; msg: ServerMessage } | { kind: 'kick'; userId: string });
 
 const CHANNEL = 'casino:events';
 const BIG_WINS_KEY = 'casino:bigwins';
@@ -76,6 +77,16 @@ export class RealtimeHub {
     this.publish({ origin: this.instanceId, kind: 'user', userId, msg });
   }
 
+  /** Closes every live socket of a user (ban, password change, logout everywhere). */
+  kick(userId: string): void {
+    this.kickLocal(userId);
+    this.publish({ origin: this.instanceId, kind: 'kick', userId });
+  }
+
+  private kickLocal(userId: string): void {
+    for (const conn of [...(this.byUser.get(userId) ?? [])]) conn.close('revoked');
+  }
+
   broadcast(msg: ServerMessage): void {
     this.deliverAll(msg);
     this.publish({ origin: this.instanceId, kind: 'all', msg });
@@ -134,6 +145,7 @@ export class RealtimeHub {
       const env = JSON.parse(raw) as Envelope;
       if (env.origin === this.instanceId) return;
       if (env.kind === 'all') this.deliverAll(env.msg);
+      else if (env.kind === 'kick') this.kickLocal(env.userId);
       else this.deliverToUser(env.userId, env.msg);
     } catch (err) {
       this.log.warn({ err }, 'bad realtime envelope');

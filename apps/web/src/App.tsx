@@ -6,7 +6,7 @@ import { RouletteGame } from './game/controls/RouletteGame';
 import { SicBoGame } from './game/controls/SicBoGame';
 import { SlotsGame } from './game/controls/SlotsGame';
 import { AdminPage } from './pages/AdminPage';
-import { AuthPage } from './pages/AuthPage';
+import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
 import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { ProfilePage } from './pages/ProfilePage';
@@ -38,6 +38,7 @@ function GameRoute() {
 function Authed({ children, admin = false }: { children: ReactNode; admin?: boolean }) {
   const user = useSession((s) => s.user);
   if (!user) return <AuthPage />;
+  if (user.status === 'pending_verification') return <VerifyEmailGate />;
   if (admin && user.role !== 'admin') return <Navigate to="/" replace />;
   return <>{children}</>;
 }
@@ -86,6 +87,9 @@ export function App() {
         <Route path="/leaderboard" element={<Authed><LeaderboardPage /></Authed>} />
         <Route path="/settings" element={<Authed><SettingsPage /></Authed>} />
         <Route path="/admin" element={<Authed admin><AdminPage /></Authed>} />
+        <Route path="/verify-email" element={<EmailLinkPage kind="verify" />} />
+        <Route path="/reset-password" element={<EmailLinkPage kind="reset" />} />
+        <Route path="/activate" element={<EmailLinkPage kind="activate" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>

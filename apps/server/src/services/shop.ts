@@ -2,7 +2,7 @@ import { DEFAULT_FRAME, findFrame } from '@casino/shared';
 import { and, eq } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { userItems, users } from '../db/schema';
-import { AppError, fail } from '../errors';
+import { fail } from '../errors';
 import { applyDelta } from './wallet';
 
 export async function ownedFrames(db: DbOrTx, userId: string): Promise<string[]> {
@@ -10,7 +10,7 @@ export async function ownedFrames(db: DbOrTx, userId: string): Promise<string[]>
   return [DEFAULT_FRAME, ...rows.map((r) => r.itemId).filter((id) => id !== DEFAULT_FRAME)];
 }
 
-/** Buys a frame with Cxu Vàng. Debit and ownership are written in one transaction. */
+/** Buys a built-in frame with Cxu Bạc. Debit and ownership are written in one transaction. */
 export async function buyFrame(db: Db, userId: string, itemId: string): Promise<void> {
   const frame = findFrame(itemId);
   if (!frame) throw fail('item_not_found');
@@ -18,12 +18,7 @@ export async function buyFrame(db: Db, userId: string, itemId: string): Promise<
   await db.transaction(async (tx) => {
     const inserted = await tx.insert(userItems).values({ userId, itemId }).onConflictDoNothing().returning();
     if (inserted.length === 0) throw fail('already_owned');
-    try {
-      await applyDelta(tx, userId, -frame.price, 'shop', null, 'gold');
-    } catch (err) {
-      if (err instanceof AppError && err.code === 'insufficient_funds') throw fail('insufficient_gold');
-      throw err;
-    }
+    await applyDelta(tx, userId, -frame.price, 'shop');
   });
 }
 

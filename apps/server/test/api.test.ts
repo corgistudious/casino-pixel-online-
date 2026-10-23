@@ -31,7 +31,11 @@ describe('auth & profile', () => {
   });
 
   it('rejects duplicate usernames case-insensitively', async () => {
-    const res = await t.app.inject({ method: 'POST', url: '/api/auth/register', payload: { username: 'ALICE', password: 'password123' } });
+    const res = await t.app.inject({
+      method: 'POST',
+      url: '/api/auth/register',
+      payload: { username: 'ALICE', displayName: 'A', email: 'other@example.test', password: 'password123', confirmPassword: 'password123', acceptTerms: true },
+    });
     expect(res.statusCode).toBe(409);
     expect(res.json().error.code).toBe('username_taken');
   });
@@ -43,10 +47,10 @@ describe('auth & profile', () => {
   });
 
   it('logs in and rejects bad passwords', async () => {
-    const ok = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { username: 'Alice', password: 'password123' } });
+    const ok = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'Alice', password: 'password123' } });
     expect(ok.statusCode).toBe(200);
     expect(ok.json().token).toBeTypeOf('string');
-    const bad = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { username: 'alice', password: 'wrongwrong' } });
+    const bad = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'alice', password: 'wrongwrong' } });
     expect(bad.statusCode).toBe(401);
     expect(bad.json().error.code).toBe('invalid_credentials');
   });
@@ -76,7 +80,7 @@ describe('auth & profile', () => {
 });
 
 describe('economy', () => {
-  it('grants the welcome pack in both currencies', async () => {
+  it('grants the silver starter reward on verification', async () => {
     const { token } = await register(t);
     const me = (await t.app.inject({ url: '/api/me', headers: { authorization: `Bearer ${token}` } })).json().user;
     expect(me.balance).toBe(ECONOMY.welcome.silver);
@@ -141,16 +145,16 @@ describe('economy', () => {
 });
 
 describe('shop', () => {
-  it('buys and equips a frame with Cxu Vàng', async () => {
+  it('buys and equips a frame with Cxu Bạc', async () => {
     const { token, user } = await register(t);
     const headers = { authorization: `Bearer ${token}` };
-    const frame = FRAMES.find((f) => f.price > 0 && f.price <= ECONOMY.welcome.gold)!;
+    const frame = FRAMES.find((f) => f.price > 0 && f.price <= ECONOMY.welcome.silver)!;
     const notOwned = await t.app.inject({ method: 'POST', url: '/api/me/frame', headers, payload: { itemId: frame.id } });
     expect(notOwned.json().error.code).toBe('not_owned');
 
     const bought = (await t.app.inject({ method: 'POST', url: '/api/shop/buy', headers, payload: { itemId: frame.id } })).json();
-    expect(bought.user.gold).toBe(ECONOMY.welcome.gold - frame.price);
-    expect(bought.user.balance).toBe(ECONOMY.welcome.silver);
+    expect(bought.user.balance).toBe(ECONOMY.welcome.silver - frame.price);
+    expect(bought.user.gold).toBe(0);
     expect(bought.user.ownedFrames).toContain(frame.id);
 
     const again = await t.app.inject({ method: 'POST', url: '/api/shop/buy', headers, payload: { itemId: frame.id } });
@@ -161,16 +165,16 @@ describe('shop', () => {
     await ledgerMatches(user.id);
   });
 
-  it('rejects purchases without enough gold, and unknown items', async () => {
+  it('rejects purchases without enough silver, and unknown items', async () => {
     const { token, user } = await register(t);
     const headers = { authorization: `Bearer ${token}` };
     const expensive = FRAMES.reduce((a, b) => (b.price > a.price ? b : a));
-    expect(expensive.price).toBeGreaterThan(ECONOMY.welcome.gold);
+    expect(expensive.price).toBeGreaterThan(ECONOMY.welcome.silver);
     const res = await t.app.inject({ method: 'POST', url: '/api/shop/buy', headers, payload: { itemId: expensive.id } });
-    expect(res.json().error.code).toBe('insufficient_gold');
+    expect(res.json().error.code).toBe('insufficient_funds');
     const me = (await t.app.inject({ url: '/api/me', headers })).json().user;
     expect(me.ownedFrames).toEqual(['classic']);
-    expect(me.gold).toBe(ECONOMY.welcome.gold);
+    expect(me.balance).toBe(ECONOMY.welcome.silver);
     const unknown = await t.app.inject({ method: 'POST', url: '/api/shop/buy', headers, payload: { itemId: 'nope' } });
     expect(unknown.statusCode).toBe(404);
     await ledgerMatches(user.id);
@@ -183,7 +187,7 @@ describe('shop', () => {
     const results = await Promise.all(Array.from({ length: 6 }, () => t.app.inject({ method: 'POST', url: '/api/shop/buy', headers, payload: { itemId: frame.id } })));
     expect(results.filter((r) => r.statusCode === 200)).toHaveLength(1);
     const me = (await t.app.inject({ url: '/api/me', headers })).json().user;
-    expect(me.gold).toBe(ECONOMY.welcome.gold - frame.price);
+    expect(me.balance).toBe(ECONOMY.welcome.silver - frame.price);
     await ledgerMatches(user.id);
   });
 });
@@ -192,24 +196,27 @@ describe('admin', () => {
   it('only admins reach admin endpoints', async () => {
     const player = await register(t);
     const denied = await t.app.inject({ url: '/api/admin/overview', headers: { authorization: `Bearer ${player.token}` } });
-    expect(denied.statusCode).toBe(401);
+    expect(denied.statusCode).toBe(403);
 
-    const admin = await register(t, 'boss');
-    const headers = { authorization: `Bearer ${admin.token}` };
+    // ADMIN_USERNAMES grants super_admin on login (registering alone grants nothing).
+    await register(t, 'boss');
+    const login = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'boss', password: 'password123' } });
+    const headers = { authorization: `Bearer ${login.json().token}` };
+    expect(login.json().user.permissions).toContain('admin.access');
     const overview = await t.app.inject({ url: '/api/admin/overview', headers });
     expect(overview.statusCode).toBe(200);
     expect(overview.json().users).toBeGreaterThan(0);
 
     const grant = await t.app.inject({
       method: 'POST',
-      url: `/api/admin/users/${player.user.username}/grant`,
+      url: `/api/admin/users/${player.user.uid}/grant`,
       headers,
       payload: { amount: 500 },
     });
     expect(grant.json().balance).toBe(ECONOMY.welcome.silver + 500);
     const gold = await t.app.inject({
       method: 'POST',
-      url: `/api/admin/users/${player.user.username}/grant`,
+      url: `/api/admin/users/${player.user.uid}/grant`,
       headers,
       payload: { amount: 7, currency: 'gold' },
     });
@@ -218,7 +225,7 @@ describe('admin', () => {
 
     const badges = await t.app.inject({
       method: 'POST',
-      url: `/api/admin/users/${player.user.username}/badges`,
+      url: `/api/admin/users/${player.user.uid}/badges`,
       headers,
       payload: { verified: true, partner: true },
     });
@@ -230,12 +237,13 @@ describe('admin', () => {
 
     const ban = await t.app.inject({
       method: 'POST',
-      url: `/api/admin/users/${player.user.username}/ban`,
+      url: `/api/admin/users/${player.user.uid}/bans`,
       headers,
-      payload: { banned: true },
+      payload: { duration: 'permanent', reason: 'test ban' },
     });
     expect(ban.statusCode).toBe(200);
     const banned = await t.app.inject({ url: '/api/me', headers: { authorization: `Bearer ${player.token}` } });
-    expect(banned.statusCode).toBe(401);
+    expect(banned.statusCode).toBe(403);
+    expect(banned.json().error).toMatchObject({ code: 'banned', endsAt: null, reason: 'test ban' });
   });
 });

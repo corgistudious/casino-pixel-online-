@@ -17,15 +17,26 @@ export function statusFor(code: ErrorCode): number {
     case 'invalid_credentials':
       return 401;
     case 'banned':
+    case 'forbidden':
+    case 'email_not_verified':
+    case 'system_account':
       return 403;
     case 'round_not_found':
+    case 'not_found':
     case 'item_not_found':
       return 404;
     case 'username_taken':
     case 'round_active':
     case 'round_finished':
     case 'already_owned':
+    case 'email_taken':
+    case 'uid_taken':
+    case 'uid_reserved':
+    case 'deletion_pending':
       return 409;
+    case 'too_soon':
+    case 'too_many_attempts':
+      return 429;
     case 'rate_limited':
       return 429;
     case 'internal':

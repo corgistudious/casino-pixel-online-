@@ -6,6 +6,8 @@ export class ApiError extends Error {
   constructor(
     public readonly code: ErrorCode | 'network',
     public readonly status = 0,
+    /** Extra fields from the error body, e.g. `endsAt` and `reason` for `banned`. */
+    public readonly details: { endsAt?: string | null; reason?: string } = {},
   ) {
     super(code);
   }
@@ -43,11 +45,11 @@ export async function api<T>(path: string, init: { method?: string; body?: unkno
   } catch {
     throw new ApiError('network');
   }
-  const data = (await res.json().catch(() => ({}))) as { error?: { code?: ErrorCode } };
+  const data = (await res.json().catch(() => ({}))) as { error?: { code?: ErrorCode; endsAt?: string | null; reason?: string } };
   if (!res.ok) {
-    const code = data.error?.code ?? 'internal';
+    const { code = 'internal', ...details } = data.error ?? {};
     if (code === 'unauthorized' || code === 'banned') onUnauthorized?.();
-    throw new ApiError(code, res.status);
+    throw new ApiError(code, res.status, details);
   }
   return data as T;
 }

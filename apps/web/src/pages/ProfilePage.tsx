@@ -83,7 +83,7 @@ export function ProfilePage() {
                 <PlayerName name={user.displayName} badges={user.badges} size={26} />
               </h1>
               <div className="mt-0.5 flex flex-wrap gap-x-3 text-xs text-white/55">
-                <span className="tabular-nums">{t('player.id', { id: user.id.slice(0, 8).toUpperCase() })}</span>
+                <span className="tabular-nums">{t('player.id', { id: user.uid })}</span>
                 <span>@{user.username}</span>
                 <span>{t('profile.memberSince', { date: new Date(user.createdAt).toLocaleDateString(i18n.language) })}</span>
               </div>

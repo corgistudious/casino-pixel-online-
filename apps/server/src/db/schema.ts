@@ -19,15 +19,37 @@ import {
 export const users = pgTable(
   'users',
   {
+    /** Internal account id. Never shown to players. */
     id: uuid('id').primaryKey().defaultRandom(),
+    /**
+     * Public UID. Regular accounts draw from player_uid_seq (100000, 100001, …);
+     * 1–99999 are assigned manually by admins; 1000 is Keyo Support. Never changes or is reused.
+     */
+    uid: bigint('uid', { mode: 'number' })
+      .notNull()
+      .default(sql`nextval('player_uid_seq')`),
     username: text('username').notNull(),
     usernameLower: text('username_lower').notNull(),
     passwordHash: text('password_hash').notNull(),
     displayName: text('display_name').notNull(),
     locale: text('locale').notNull().default('vi'),
     avatar: integer('avatar').notNull().default(0),
+    /** Legacy single role; superseded by user_roles (kept so existing data is never dropped). */
     role: text('role').notNull().default('player'),
+    /** Legacy flag; superseded by the bans table. */
     banned: boolean('banned').notNull().default(false),
+    email: text('email'),
+    emailLower: text('email_lower'),
+    emailVerifiedAt: timestamp('email_verified_at', { withTimezone: true }),
+    /** pending_verification | pending_activation | active | restricted | deleted */
+    status: text('status').notNull().default('active'),
+    /** player | system_support */
+    accountType: text('account_type').notNull().default('player'),
+    termsAcceptedAt: timestamp('terms_accepted_at', { withTimezone: true }),
+    failedLogins: integer('failed_logins').notNull().default(0),
+    lockedUntil: timestamp('locked_until', { withTimezone: true }),
+    starterGrantedAt: timestamp('starter_granted_at', { withTimezone: true }),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
     tokenVersion: integer('token_version').notNull().default(0),
     /** Deprecated by the 7-day check-in; kept so existing data is never dropped. */
     lastDailyBonusAt: timestamp('last_daily_bonus_at', { withTimezone: true }),
@@ -42,7 +64,12 @@ export const users = pgTable(
     lastRescueAt: timestamp('last_rescue_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [uniqueIndex('users_username_lower_idx').on(t.usernameLower)],
+  (t) => [
+    uniqueIndex('users_username_lower_idx').on(t.usernameLower),
+    uniqueIndex('users_uid_idx').on(t.uid),
+    uniqueIndex('users_email_lower_idx').on(t.emailLower).where(sql`${t.emailLower} IS NOT NULL`),
+    check('users_uid_positive', sql`${t.uid} >= 1`),
+  ],
 );
 
 export const wallets = pgTable(
@@ -141,4 +168,138 @@ export const gameRounds = pgTable(
     uniqueIndex('game_rounds_one_active_idx').on(t.userId, t.game).where(sql`${t.status} = 'active'`),
     index('game_rounds_user_created_idx').on(t.userId, t.createdAt),
   ],
+);
+
+// ---------------------------------------------------------------- accounts & security
+
+/** Roles are data so admins can manage them; the permission catalogue lives in code. */
+export const roles = pgTable('roles', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  description: text('description').notNull().default(''),
+  /** System roles cannot be deleted. */
+  system: boolean('system').notNull().default(false),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const rolePermissions = pgTable(
+  'role_permissions',
+  {
+    roleId: text('role_id')
+      .notNull()
+      .references(() => roles.id, { onDelete: 'cascade' }),
+    permission: text('permission').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.roleId, t.permission] })],
+);
+
+export const userRoles = pgTable(
+  'user_roles',
+  {
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    roleId: text('role_id')
+      .notNull()
+      .references(() => roles.id, { onDelete: 'restrict' }),
+    grantedBy: uuid('granted_by'),
+    grantedAt: timestamp('granted_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.roleId] })],
+);
+
+/** Append-only audit trail for security-relevant and administrative actions. */
+export const auditLogs = pgTable(
+  'audit_logs',
+  {
+    id: bigserial('id', { mode: 'number' }).primaryKey(),
+    actorId: uuid('actor_id'),
+    action: text('action').notNull(),
+    targetType: text('target_type'),
+    targetId: text('target_id'),
+    details: jsonb('details'),
+    ip: text('ip'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('audit_logs_target_idx').on(t.targetType, t.targetId), index('audit_logs_created_idx').on(t.createdAt)],
+);
+
+export const bans = pgTable(
+  'bans',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    reason: text('reason').notNull(),
+    evidence: text('evidence'),
+    issuedBy: uuid('issued_by'),
+    startsAt: timestamp('starts_at', { withTimezone: true }).notNull().defaultNow(),
+    /** Null = permanent. Temporary bans expire automatically once ends_at has passed. */
+    endsAt: timestamp('ends_at', { withTimezone: true }),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    revokedBy: uuid('revoked_by'),
+    revokeReason: text('revoke_reason'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('bans_user_idx').on(t.userId)],
+);
+
+/** One-time email codes/links. Only hashes are stored. */
+export const emailTokens = pgTable(
+  'email_tokens',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    /** verify_email | reset_password | activate */
+    purpose: text('purpose').notNull(),
+    email: text('email').notNull(),
+    tokenHash: text('token_hash').notNull(),
+    codeHash: text('code_hash').notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    usedAt: timestamp('used_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('email_tokens_token_hash_idx').on(t.tokenHash), index('email_tokens_user_idx').on(t.userId, t.purpose)],
+);
+
+/** Outgoing mail queue; a worker delivers through SMTP when configured. */
+export const emailOutbox = pgTable(
+  'email_outbox',
+  {
+    id: bigserial('id', { mode: 'number' }).primaryKey(),
+    toAddress: text('to_address').notNull(),
+    subject: text('subject').notNull(),
+    bodyText: text('body_text').notNull(),
+    bodyHtml: text('body_html').notNull(),
+    /** Machine-readable template id, e.g. verify_email. */
+    template: text('template').notNull(),
+    status: text('status').notNull().default('pending'),
+    attempts: integer('attempts').notNull().default(0),
+    lastError: text('last_error'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+  },
+  (t) => [index('email_outbox_status_idx').on(t.status, t.id)],
+);
+
+export const accountDeletionRequests = pgTable(
+  'account_deletion_requests',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    /** pending | cancelled | rejected | completed */
+    status: text('status').notNull().default('pending'),
+    reason: text('reason'),
+    decidedBy: uuid('decided_by'),
+    decisionNote: text('decision_note'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    decidedAt: timestamp('decided_at', { withTimezone: true }),
+  },
+  (t) => [uniqueIndex('account_deletion_one_pending_idx').on(t.userId).where(sql`${t.status} = 'pending'`)],
 );

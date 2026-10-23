@@ -24,12 +24,12 @@ export const NAV_ITEMS: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/settings', icon: 'settings', label: 'nav.settings' },
 ];
 
-/** Small pill marking values that are demo data (feature not implemented on the server). */
+/** Small pill marking values whose feature is not implemented on the server yet ("Demo" in the preview build). */
 export function DemoTag() {
   const { t } = useTranslation();
   return (
     <span className="rounded border border-neon-cyan/40 bg-neon-cyan/10 px-1 py-px text-[9px] font-bold uppercase leading-none tracking-wider text-neon-cyan">
-      {t('demo.tag')}
+      {t(IS_DEMO ? 'demo.tag' : 'demo.notLive')}
     </span>
   );
 }
@@ -93,7 +93,7 @@ function PlayerBar() {
         <Avatar index={user.avatar} frame={user.frame} size={40} />
         <div className="hidden min-w-0 sm:block">
           <PlayerName name={user.displayName} badges={user.badges} size={16} className="max-w-[11rem] text-sm font-semibold" />
-          <div className="text-[11px] leading-tight text-white/45 tabular-nums">{t('player.id', { id: user.id.slice(0, 8).toUpperCase() })}</div>
+          <div className="text-[11px] leading-tight text-white/45 tabular-nums">{t('player.id', { id: user.uid })}</div>
         </div>
       </NavLink>
       <span className="hidden h-8 w-px bg-white/10 md:block" />
