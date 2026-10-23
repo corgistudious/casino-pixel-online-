@@ -11,10 +11,12 @@ export interface Connection {
 
 type Envelope = { origin: string } & ({ kind: 'all'; msg: ServerMessage } | { kind: 'user'; userId: string; msg: ServerMessage } | { kind: 'kick'; userId: string });
 
-const CHANNEL = 'casino:events';
-const BIG_WINS_KEY = 'casino:bigwins';
-const PRESENCE_PREFIX = 'casino:presence:';
 const MAX_BIG_WINS = 20;
+
+/** Redis keys and channels used by the hub, all under one namespace so the instance can share a Redis server safely. */
+export function redisKeys(prefix: string) {
+  return { channel: `${prefix}events`, bigWins: `${prefix}bigwins`, presence: `${prefix}presence:` };
+}
 
 /**
  * Tracks live sockets and fans out events. With Redis configured, events and
@@ -28,17 +30,20 @@ export class RealtimeHub {
   private sub?: Redis;
   private remoteOnline = 0;
   private timer?: NodeJS.Timeout;
+  private readonly keys: ReturnType<typeof redisKeys>;
 
   constructor(
     private readonly log: FastifyBaseLogger,
     redisUrl?: string,
+    redisPrefix = 'keyo:',
   ) {
+    this.keys = redisKeys(redisPrefix);
     if (redisUrl) {
       this.pub = new Redis(redisUrl, { lazyConnect: false, maxRetriesPerRequest: 2 });
       this.sub = new Redis(redisUrl, { lazyConnect: false, maxRetriesPerRequest: 2 });
       this.pub.on('error', (err) => this.log.warn({ err }, 'redis pub error'));
       this.sub.on('error', (err) => this.log.warn({ err }, 'redis sub error'));
-      void this.sub.subscribe(CHANNEL);
+      void this.sub.subscribe(this.keys.channel);
       this.sub.on('message', (_ch, raw) => this.onRemote(raw));
     }
     this.timer = setInterval(() => void this.heartbeat(), 10_000);
@@ -97,8 +102,8 @@ export class RealtimeHub {
     if (this.pub) {
       await this.pub
         .multi()
-        .lpush(BIG_WINS_KEY, JSON.stringify(win))
-        .ltrim(BIG_WINS_KEY, 0, MAX_BIG_WINS - 1)
+        .lpush(this.keys.bigWins, JSON.stringify(win))
+        .ltrim(this.keys.bigWins, 0, MAX_BIG_WINS - 1)
         .exec()
         .catch((err) => this.log.warn({ err }, 'redis bigwin store failed'));
     }
@@ -108,7 +113,7 @@ export class RealtimeHub {
   async recentBigWins(): Promise<BigWinEvent[]> {
     if (this.pub) {
       try {
-        const raw = await this.pub.lrange(BIG_WINS_KEY, 0, MAX_BIG_WINS - 1);
+        const raw = await this.pub.lrange(this.keys.bigWins, 0, MAX_BIG_WINS - 1);
         return raw.map((r) => JSON.parse(r) as BigWinEvent);
       } catch (err) {
         this.log.warn({ err }, 'redis bigwin read failed');
@@ -119,7 +124,7 @@ export class RealtimeHub {
 
   async close(): Promise<void> {
     clearInterval(this.timer);
-    await this.pub?.del(PRESENCE_PREFIX + this.instanceId).catch(() => {});
+    await this.pub?.del(this.keys.presence + this.instanceId).catch(() => {});
     this.pub?.disconnect();
     this.sub?.disconnect();
   }
@@ -137,7 +142,7 @@ export class RealtimeHub {
   }
 
   private publish(env: Envelope): void {
-    this.pub?.publish(CHANNEL, JSON.stringify(env)).catch((err) => this.log.warn({ err }, 'redis publish failed'));
+    this.pub?.publish(this.keys.channel, JSON.stringify(env)).catch((err) => this.log.warn({ err }, 'redis publish failed'));
   }
 
   private onRemote(raw: string): void {
@@ -156,8 +161,8 @@ export class RealtimeHub {
   private async heartbeat(): Promise<void> {
     if (!this.pub) return;
     try {
-      await this.pub.set(PRESENCE_PREFIX + this.instanceId, String(this.localOnline), 'EX', 30);
-      const keys = (await this.pub.keys(PRESENCE_PREFIX + '*')).filter((k) => k !== PRESENCE_PREFIX + this.instanceId);
+      await this.pub.set(this.keys.presence + this.instanceId, String(this.localOnline), 'EX', 30);
+      const keys = (await this.pub.keys(this.keys.presence + '*')).filter((k) => k !== this.keys.presence + this.instanceId);
       const values = keys.length ? await this.pub.mget(keys) : [];
       const remote = values.reduce((s, v) => s + Number(v ?? 0), 0);
       if (remote !== this.remoteOnline) {

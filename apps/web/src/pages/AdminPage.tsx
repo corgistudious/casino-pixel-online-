@@ -12,6 +12,8 @@ import { toast } from '../ui/toast';
 
 interface Overview {
   users: number;
+  testUsers: number;
+  dataMode: 'test' | 'production';
   pendingVerification: number;
   activeBans: number;
   online: number;
@@ -31,6 +33,7 @@ interface PlayerRow {
   email: string | null;
   status: string;
   accountType: string;
+  isTest: boolean;
 }
 
 interface BanRow {
@@ -60,6 +63,11 @@ interface AuditRow {
   targetType: string | null;
   targetId: string | null;
   createdAt: string;
+}
+
+function TestTag() {
+  const { t } = useTranslation();
+  return <span className="ml-2 rounded border border-neon-cyan/50 px-1 text-[10px] font-bold text-neon-cyan">{t('admin.testTag')}</span>;
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -97,6 +105,7 @@ export function AdminPage() {
               (
                 [
                   ['admin.users', String(data.users)],
+                  ['admin.testUsers', String(data.testUsers)],
                   ['admin.online', String(data.online)],
                   ['admin.rounds24h', String(data.rounds24h)],
                   ['admin.wagered24h', fmt(data.wagered24h)],
@@ -186,6 +195,7 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
                 onClick={() => setSelected(r.uid)}
               >
                 <span className="tabular-nums text-white/50">#{r.uid}</span> {r.displayName} <span className="text-white/40">@{r.username}</span>
+                {r.isTest && <TestTag />}
               </button>
             </li>
           ))}
@@ -198,6 +208,7 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
             <div>
               <div className="font-display text-lg">
                 {detail.user.displayName} <span className="text-white/40">@{detail.user.username} · UID {uid}</span>
+                {detail.user.isTest && <TestTag />}
               </div>
               <div className="text-white/60">
                 {detail.user.email ?? t('account.noEmail')} · {t(`account.statuses.${detail.user.status}`, { defaultValue: detail.user.status })} · {fmt(detail.user.wallet.balance)} {t('currency.silver')} · {fmt(detail.user.wallet.gold)} {t('currency.gold')}
@@ -319,7 +330,7 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
 function SpecialUids({ fail }: { fail: Fail }) {
   const { t } = useTranslation();
   const [list, setList] = useState<{ special: PlayerRow[]; nextPlayerUid: number } | null>(null);
-  const [form, setForm] = useState({ uid: '', username: '', displayName: '', email: '' });
+  const [form, setForm] = useState({ uid: '', username: '', displayName: '', email: '', isTest: false });
   const load = () => void api<{ special: PlayerRow[]; nextPlayerUid: number }>('/api/admin/uids/special').then(setList, fail);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(load, []);
@@ -329,7 +340,7 @@ function SpecialUids({ fail }: { fail: Fail }) {
     try {
       await api('/api/admin/accounts', { method: 'POST', body: { ...form, uid: Number(form.uid) } });
       toast(t('admin.done'), 'success');
-      setForm({ uid: '', username: '', displayName: '', email: '' });
+      setForm({ uid: '', username: '', displayName: '', email: '', isTest: false });
       load();
     } catch (err) {
       fail(err);
@@ -343,6 +354,7 @@ function SpecialUids({ fail }: { fail: Fail }) {
         {list?.special.map((r) => (
           <li key={r.uid} className="rounded-lg bg-black/20 px-3 py-2">
             <span className="tabular-nums text-gold-100">#{r.uid}</span> {r.displayName} <span className="text-white/40">@{r.username} · {r.accountType} · {r.status}</span>
+            {r.isTest && <TestTag />}
           </li>
         ))}
       </ul>
@@ -354,6 +366,10 @@ function SpecialUids({ fail }: { fail: Fail }) {
         <input className="field" placeholder={t('auth.username')} required value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} />
         <input className="field" placeholder={t('auth.displayName')} required value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} />
         <input className="field" type="email" placeholder={t('auth.email')} required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+        <label className="flex items-center gap-2 text-xs text-white/70 sm:col-span-2">
+          <input type="checkbox" className="accent-gold-300" checked={form.isTest} onChange={(e) => setForm({ ...form, isTest: e.target.checked })} />
+          {t('admin.markTest')}
+        </label>
         <Button type="submit" variant="gold" className="sm:col-span-2">
           {t('admin.createSpecial')}
         </Button>

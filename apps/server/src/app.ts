@@ -13,6 +13,7 @@ import { registerGateway } from './realtime/gateway';
 import { RealtimeHub } from './realtime/hub';
 import { startMailWorker } from './mail/mailer';
 import { BannedError, bootstrapSystemAccounts } from './services/accounts';
+import { assertDataMode } from './services/environment';
 import { bootstrapRoles } from './services/rbac';
 import { registerAdminRoutes } from './routes/admin';
 import { registerApiRoutes } from './routes/api';
@@ -27,9 +28,13 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
 
   const { db, client } = createDb(config.DATABASE_URL);
   if (opts.migrate ?? true) await runMigrations(db);
+  await assertDataMode(db, config.KEYO_DATA_MODE).catch(async (err) => {
+    await client.end();
+    throw err;
+  });
   await bootstrapRoles(db);
   await bootstrapSystemAccounts(db);
-  const hub = new RealtimeHub(app.log, config.REDIS_URL);
+  const hub = new RealtimeHub(app.log, config.REDIS_URL, config.REDIS_PREFIX);
 
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(cors, {

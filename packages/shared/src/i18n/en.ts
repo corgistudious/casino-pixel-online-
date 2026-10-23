@@ -275,6 +275,10 @@ export const en = {
     toNext: '{{exp}} EXP to VIP {{level}}',
     maxLevel: 'Maximum level reached',
   },
+  env: {
+    test: 'TEST ENVIRONMENT',
+    testNote: 'Test data — accounts, Cxu and history will be deleted before the official launch.',
+  },
   demo: {
     banner: 'UI PREVIEW — demo data, not connected to the game server',
     tag: 'Demo',
@@ -366,6 +370,9 @@ export const en = {
     grant: 'Apply adjustment',
     ban: 'Suspend',
     unban: 'Unsuspend',
+    testUsers: 'Test accounts',
+    testTag: 'TEST',
+    markTest: 'Test account (deleted by reset:test-data)',
     search: 'Search by UID, username or email',
     searchSubmit: 'Search',
     noResults: 'No players found',

@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { IS_DEMO } from '../demo';
 import { formatChips } from '../lib/format';
+import { api } from '../net/api';
 import { useSession } from '../store/session';
 import { Avatar } from './Avatar';
 import { CurrencyIcon } from './OfficialAssets';
@@ -82,6 +85,28 @@ export function ConnectionBanner() {
   const status = useSession((s) => s.status);
   if (status !== 'offline') return null;
   return <div className="fixed inset-x-0 top-0 z-50 bg-ruby-600/90 py-1 text-center text-xs font-medium backdrop-blur">{t('app.offline')}</div>;
+}
+
+/**
+ * Permanent corner label on servers running with KEYO_DATA_MODE=test, so testers never mistake
+ * test data for the real game. Hidden on production servers and in the UI preview build.
+ */
+export function TestEnvBadge() {
+  const { t } = useTranslation();
+  const [test, setTest] = useState(false);
+  useEffect(() => {
+    if (IS_DEMO) return;
+    void api<{ dataMode?: string }>('/api/health').then((r) => setTest(r.dataMode === 'test'), () => {});
+  }, []);
+  if (!test) return null;
+  return (
+    <div
+      className="pointer-events-none fixed bottom-2 left-2 z-[55] max-w-[min(22rem,calc(100vw-1rem))] rounded-lg border border-neon-cyan/50 bg-ink-950/85 px-2.5 py-1.5 text-[10px] leading-snug text-neon-cyan shadow-lg backdrop-blur"
+      role="note"
+    >
+      <span className="font-bold tracking-wider">{t('env.test')}</span> · <span className="text-white/70">{t('env.testNote')}</span>
+    </div>
+  );
 }
 
 /** Mobile web in portrait: ask the player to rotate (gameplay is landscape-only). */

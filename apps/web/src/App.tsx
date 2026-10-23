@@ -16,7 +16,7 @@ import { MarketPage } from './pages/MarketPage';
 import { VipPage } from './pages/VipPage';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
-import { ConnectionBanner, RotateOverlay, Toasts } from './ui/Chrome';
+import { ConnectionBanner, RotateOverlay, TestEnvBadge, Toasts } from './ui/Chrome';
 import { KeyoLogo } from './ui/KeyoLogo';
 
 function GameRoute() {
@@ -70,6 +70,7 @@ export function App() {
   return (
     <HashRouter>
       <ConnectionBanner />
+      <TestEnvBadge />
       <RotateOverlay />
       <Toasts />
       <Routes>

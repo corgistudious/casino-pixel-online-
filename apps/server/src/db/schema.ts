@@ -10,6 +10,7 @@ import {
   jsonb,
   pgTable,
   primaryKey,
+  smallint,
   text,
   timestamp,
   uniqueIndex,
@@ -50,6 +51,11 @@ export const users = pgTable(
     lockedUntil: timestamp('locked_until', { withTimezone: true }),
     starterGrantedAt: timestamp('starter_granted_at', { withTimezone: true }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
+    /**
+     * TEST account flag. Left unset on insert, the users_set_is_test trigger fills it from
+     * environment_state.mode (test → true); in production mode test accounts are rejected.
+     */
+    isTest: boolean('is_test').notNull().default(sql`NULL`),
     tokenVersion: integer('token_version').notNull().default(0),
     /** Deprecated by the 7-day check-in; kept so existing data is never dropped. */
     lastDailyBonusAt: timestamp('last_daily_bonus_at', { withTimezone: true }),
@@ -68,6 +74,7 @@ export const users = pgTable(
     uniqueIndex('users_username_lower_idx').on(t.usernameLower),
     uniqueIndex('users_uid_idx').on(t.uid),
     uniqueIndex('users_email_lower_idx').on(t.emailLower).where(sql`${t.emailLower} IS NOT NULL`),
+    index('users_is_test_idx').on(t.isTest).where(sql`${t.isTest}`),
     check('users_uid_positive', sql`${t.uid} >= 1`),
   ],
 );
@@ -303,3 +310,35 @@ export const accountDeletionRequests = pgTable(
   },
   (t) => [uniqueIndex('account_deletion_one_pending_idx').on(t.userId).where(sql`${t.status} = 'pending'`)],
 );
+
+/**
+ * Single row describing what kind of data this database holds. 'test' until the owner runs
+ * launch:production; triggers forbid going back to 'test' or deleting the row.
+ */
+export const environmentState = pgTable(
+  'environment_state',
+  {
+    id: smallint('id').primaryKey().default(1),
+    /** test | production */
+    mode: text('mode').notNull().default('test'),
+    launchedAt: timestamp('launched_at', { withTimezone: true }),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [check('environment_state_singleton', sql`${t.id} = 1`), check('environment_state_mode', sql`${t.mode} IN ('test', 'production')`)],
+);
+
+/** Log of maintenance commands (test-data reset, production launch), including refused runs and dry runs. */
+export const maintenanceRuns = pgTable('maintenance_runs', {
+  id: bigserial('id', { mode: 'number' }).primaryKey(),
+  /** reset_test_data | launch_production | create_test_accounts */
+  kind: text('kind').notNull(),
+  dryRun: boolean('dry_run').notNull(),
+  /** OS user / operator name given on the command line. */
+  operator: text('operator').notNull(),
+  /** started | succeeded | failed | refused */
+  status: text('status').notNull().default('started'),
+  backupPath: text('backup_path'),
+  details: jsonb('details'),
+  startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+  finishedAt: timestamp('finished_at', { withTimezone: true }),
+});

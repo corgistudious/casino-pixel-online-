@@ -32,6 +32,8 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     const [row] = await db.execute<Record<string, string>>(sql`
       SELECT
         (SELECT count(*) FROM users WHERE account_type = 'player') AS users,
+        (SELECT count(*) FROM users WHERE is_test) AS test_users,
+        (SELECT mode FROM environment_state WHERE id = 1) AS data_mode,
         (SELECT count(*) FROM users WHERE status = 'pending_verification') AS pending,
         (SELECT count(*) FROM bans WHERE revoked_at IS NULL AND (ends_at IS NULL OR ends_at > now())) AS banned,
         (SELECT count(*) FROM game_rounds WHERE created_at > now() - interval '24 hours' AND status = 'settled') AS rounds24h,
@@ -45,6 +47,8 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     const n = (k: string) => Number(row![k]);
     return {
       users: n('users'),
+      testUsers: n('test_users'),
+      dataMode: row!.data_mode,
       pendingVerification: n('pending'),
       activeBans: n('banned'),
       online: hub.online,
@@ -67,7 +71,7 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
         : or(ilike(users.usernameLower, `%${q.toLowerCase()}%`), ilike(users.emailLower, `%${q.toLowerCase()}%`), ilike(users.displayName, `%${q}%`))
       : undefined;
     const rows = await db
-      .select({ uid: users.uid, username: users.username, displayName: users.displayName, email: users.email, status: users.status, accountType: users.accountType, createdAt: users.createdAt })
+      .select({ uid: users.uid, username: users.username, displayName: users.displayName, email: users.email, status: users.status, accountType: users.accountType, isTest: users.isTest, createdAt: users.createdAt })
       .from(users)
       .where(where)
       .orderBy(users.uid)
@@ -90,6 +94,7 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
         emailVerified: !!user.emailVerifiedAt,
         status: user.status,
         accountType: user.accountType,
+        isTest: user.isTest,
         badges: badgesOf(user),
         createdAt: user.createdAt,
         roles: await userRoleIds(db, user.id),
@@ -127,7 +132,7 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
   // ---------------------------------------------------------------- UID registry
   app.get('/api/admin/uids/special', { preHandler: can('uid.assign') }, async () => {
     const rows = await db
-      .select({ uid: users.uid, username: users.username, displayName: users.displayName, status: users.status, accountType: users.accountType })
+      .select({ uid: users.uid, username: users.username, displayName: users.displayName, status: users.status, accountType: users.accountType, isTest: users.isTest })
       .from(users)
       .where(sql`${users.uid} <= ${SPECIAL_UID_MAX}`)
       .orderBy(users.uid);
@@ -137,7 +142,13 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
 
   app.post('/api/admin/accounts', { preHandler: can('uid.assign') }, async (req) => {
     const input = z
-      .object({ uid: z.number().int().min(1).max(SPECIAL_UID_MAX), username: usernameSchema, displayName: z.string().trim().min(1).max(24), email: emailSchema })
+      .object({
+        uid: z.number().int().min(1).max(SPECIAL_UID_MAX),
+        username: usernameSchema,
+        displayName: z.string().trim().min(1).max(24),
+        email: emailSchema,
+        isTest: z.boolean().optional(),
+      })
       .parse(req.body);
     const user = await createCustomUidAccount(db, req.account!.id, input, { appUrl: config.APP_URL, admins: config.adminUsernames, ip: req.ip });
     return { uid: user.uid, status: user.status };

@@ -1,0 +1,44 @@
+# Keyo Game web container on a shared VPS. Plain HTTP only: HTTPS is terminated by the host's
+# reverse proxy (nginx/Caddy), which forwards to 127.0.0.1:${KEYO_HTTP_PORT} on this container.
+{
+	auto_https off
+	admin off
+	servers {
+		# Requests arrive from the host proxy through the Docker bridge; keep its X-Forwarded-For
+		# (set from the real client address) so per-IP rate limits see real players.
+		trusted_proxies static private_ranges
+	}
+}
+
+:8080 {
+	encode zstd gzip
+
+	handle /api/* {
+		reverse_proxy server:3000
+	}
+	handle /ws {
+		reverse_proxy server:3000
+	}
+	handle /healthz {
+		respond "ok" 200
+	}
+	handle {
+		root * /srv
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+		try_files {path} /index.html
+		file_server
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options DENY
+		-Server
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

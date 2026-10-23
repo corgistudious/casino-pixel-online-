@@ -307,7 +307,7 @@ export async function setPasswordWithToken(
 export async function createCustomUidAccount(
   db: Db,
   actorId: string,
-  input: { uid: number; username: string; displayName: string; email: string },
+  input: { uid: number; username: string; displayName: string; email: string; isTest?: boolean },
   ctx: AccountContext,
 ): Promise<UserRow> {
   if (!Number.isInteger(input.uid) || input.uid < 1 || input.uid > SPECIAL_UID_MAX) throw fail('bad_request');
@@ -327,12 +327,14 @@ export async function createCustomUidAccount(
           status: 'pending_activation',
           // Pre-activated by an admin: the starter reward is not part of special accounts.
           starterGrantedAt: new Date(),
+          // Special UIDs are deliberate assignments, so they are official unless the admin marks them as test.
+          isTest: input.isTest ?? false,
         })
         .returning();
       await createWalletAndSeed(tx, user!.id);
       const { token, code } = await issueToken(tx, user!.id, 'activate', user!.emailLower!);
       await enqueueMail(tx, user!.email!, 'activate_account', user!.locale, { name: user!.displayName, uid: String(user!.uid), code }, link(ctx, 'activate', token));
-      await audit(tx, { actorId, action: 'uid.custom_create', targetType: 'user', targetId: input.uid, details: { username: input.username }, ip: ctx.ip });
+      await audit(tx, { actorId, action: 'uid.custom_create', targetType: 'user', targetId: input.uid, details: { username: input.username, isTest: input.isTest ?? false }, ip: ctx.ip });
       return user!;
     });
   } catch (err) {
@@ -453,11 +455,50 @@ export async function bootstrapSystemAccounts(db: Db): Promise<void> {
         status: 'active',
         isVerified: true,
         starterGrantedAt: new Date(),
+        // The official support account is never test data, in any mode.
+        isTest: false,
       })
       .onConflictDoNothing()
       .returning();
     if (!user) return;
     await createWalletAndSeed(tx, user.id);
     await audit(tx, { action: 'system.keyo_support_created', targetType: 'user', targetId: KEYO_SUPPORT_UID });
+  });
+}
+
+// ---------------------------------------------------------------- test accounts (test mode only)
+
+/** Mailbox domain for generated test accounts; `.invalid` can never receive real mail (RFC 2606). */
+export const TEST_EMAIL_DOMAIN = 'test.keyo.invalid';
+
+/**
+ * Creates a ready-to-play TEST account (verified, starter reward credited) for the test phase.
+ * The users trigger rejects it outright if the database is already in production mode.
+ */
+export async function createTestAccount(db: Db, input: { username: string; password: string }, actor: string): Promise<UserRow> {
+  const passwordHash = await hashPassword(input.password);
+  return db.transaction(async (tx) => {
+    const email = `${input.username.toLowerCase()}@${TEST_EMAIL_DOMAIN}`;
+    const now = new Date();
+    const [user] = await tx
+      .insert(users)
+      .values({
+        username: input.username,
+        usernameLower: input.username.toLowerCase(),
+        passwordHash,
+        displayName: input.username,
+        email,
+        emailLower: email,
+        emailVerifiedAt: now,
+        status: 'active',
+        termsAcceptedAt: now,
+        starterGrantedAt: now,
+        isTest: true,
+      })
+      .returning();
+    await createWalletAndSeed(tx, user!.id);
+    if (ECONOMY.welcome.silver > 0) await applyDelta(tx, user!.id, ECONOMY.welcome.silver, 'welcome');
+    await audit(tx, { action: 'account.test_create', targetType: 'user', targetId: user!.uid, details: { operator: actor } });
+    return user!;
   });
 }
