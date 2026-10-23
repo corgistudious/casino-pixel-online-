@@ -7,6 +7,17 @@ _Cập nhật: 2026-10-23_
 - Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
 - Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
 
+## UI approval gate (nhánh `claude/ui-hub-approval`) — CHỜ CHỦ DỰ ÁN DUYỆT
+
+Giao diện **chưa được duyệt**. Gameplay và tính năng mới tạm dừng cho tới khi có xác nhận.
+
+- Sảnh Game mới: banner, 6 trò chơi chính thức (Poker, Tài Xỉu, Roulette, Liêng, Xì Tố, Blackjack 21). Royal Slots ẩn khỏi sảnh, source và route `/play/slots` vẫn giữ.
+- Thanh người chơi: avatar + khung, Player ID, Cxu Bạc/Vàng (asset chính thức), VIP 1–15 + thanh VIP EXP, Điểm Hấp Dẫn, huy hiệu Partner/Verified.
+- Điều hướng 11 mục; Chợ Xa Hoa, Hồ sơ, VIP 15 cấp đã có màn hình; Danh sách phòng, Bộ Sưu Tập, Nhiệm Vụ, Bạn Bè, Quà Tặng là màn hình "Sắp ra mắt".
+- **Chưa có backend**: VIP EXP, Điểm Hấp Dẫn, quyền lợi VIP, Poker/Liêng/Xì Tố, các mục "Sắp ra mắt", các tab Chợ Xa Hoa ngoài Khung avatar. Giá trị VIP EXP/Điểm Hấp Dẫn trên UI là demo và luôn gắn nhãn **DEMO**.
+- Bản Web Preview: `pnpm --filter @casino/web build:preview` (biến `VITE_DEMO=1`) chạy không cần server, dữ liệu demo nằm trong `apps/web/src/demo.ts`, có banner "BẢN XEM TRƯỚC GIAO DIỆN" cố định. Bản build thật không chứa dữ liệu demo.
+- Sửa lỗi có từ trước: nút trong panel điều khiển bàn chơi bị co về chiều cao 0 trên màn hình thấp (iPhone landscape).
+
 ## Kinh tế & phần thưởng (PR: Cxu Bạc/Vàng, quà tân thủ, điểm danh, cửa hàng, huy hiệu)
 
 - **Cxu Bạc**: tiền cược của mọi game (thay cho "chip"). **Cxu Vàng**: tiền hiếm, chỉ nhận qua quà tân thủ, điểm danh, admin; dùng ở cửa hàng. Không thể mua bằng tiền thật.

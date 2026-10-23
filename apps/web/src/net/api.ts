@@ -1,5 +1,6 @@
 import type { ErrorCode } from '@casino/shared';
 import { API_URL } from '../config';
+import { demoApi, IS_DEMO } from '../demo';
 
 export class ApiError extends Error {
   constructor(
@@ -22,6 +23,13 @@ export function setUnauthorizedHandler(fn: () => void) {
 }
 
 export async function api<T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<T> {
+  if (IS_DEMO) {
+    try {
+      return (await demoApi(path, init.method ?? 'GET', init.body)) as T;
+    } catch (err) {
+      throw new ApiError((err as { code: ErrorCode }).code ?? 'network');
+    }
+  }
   let res: Response;
   try {
     res = await fetch(API_URL + path, {
