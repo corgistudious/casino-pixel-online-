@@ -2,7 +2,7 @@
   "name": "casino-pixel-online",
   "private": true,
   "version": "0.1.0",
-  "description": "Casino Pixel Online — 2D HD pixel-art social casino (virtual chips only)",
+  "description": "Casino Pixel Online \u2014 2D HD pixel-art social casino (virtual chips only)",
   "packageManager": "pnpm@10.28.0",
   "engines": {
     "node": ">=22"
@@ -18,6 +18,10 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
+    ],
+    "ignoredBuiltDependencies": [
+      "electron",
+      "electron-winstaller"
     ]
   }
 }

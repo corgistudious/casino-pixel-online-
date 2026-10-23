@@ -1,0 +1,50 @@
+# Production-like stack: docker compose --env-file .env up -d --build
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: casino
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: casino
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U casino"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "no", "--save", ""]
+
+  server:
+    build: { context: ., target: server }
+    restart: unless-stopped
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_started }
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://casino:${POSTGRES_PASSWORD}@postgres:5432/casino
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://localhost,capacitor://localhost,app://casino}
+      ADMIN_USERNAMES: ${ADMIN_USERNAMES:-}
+
+  web:
+    build: { context: ., target: web }
+    restart: unless-stopped
+    depends_on: [server]
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+
+volumes:
+  pgdata:
+  caddy_data:

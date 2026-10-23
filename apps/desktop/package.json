@@ -1,0 +1,25 @@
+{
+  "name": "@casino/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Casino Pixel Online — Windows desktop client (Electron shell around the web build)",
+  "main": "main.cjs",
+  "author": "Casino Pixel Online",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win nsis portable --publish never"
+  },
+  "devDependencies": {
+    "electron": "^44.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "online.casinopixel.desktop",
+    "productName": "Casino Pixel Online",
+    "directories": { "output": "release" },
+    "files": ["main.cjs", "preload.cjs"],
+    "extraResources": [{ "from": "../web/dist", "to": "web" }],
+    "win": { "target": ["nsis", "portable"], "artifactName": "CasinoPixelOnline-${version}-${arch}.${ext}" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "perMachine": false }
+  }
+}

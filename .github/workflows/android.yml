@@ -1,0 +1,50 @@
+name: Android APK
+
+# Builds a landscape debug APK. Set the repository variable API_URL
+# (e.g. https://play.example.com) so the app knows which server to talk to.
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  apk:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: pnpm install --frozen-lockfile
+      - name: Build web bundle
+        run: pnpm --filter @casino/web build
+        env:
+          VITE_API_URL: ${{ vars.API_URL }}
+      - name: Generate Android project
+        working-directory: apps/web
+        run: |
+          npx cap add android
+          npx cap sync android
+      - name: Force landscape orientation
+        working-directory: apps/web
+        run: |
+          node -e "
+            const fs = require('fs');
+            const p = 'android/app/src/main/AndroidManifest.xml';
+            let xml = fs.readFileSync(p, 'utf8');
+            if (!xml.includes('screenOrientation')) xml = xml.replace('<activity', '<activity android:screenOrientation=\"sensorLandscape\"');
+            fs.writeFileSync(p, xml);
+          "
+      - name: Assemble debug APK
+        working-directory: apps/web/android
+        run: ./gradlew assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: casino-pixel-online-apk
+          path: apps/web/android/app/build/outputs/apk/debug/*.apk
