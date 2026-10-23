@@ -3,6 +3,10 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        /** Phones in landscape and other short viewports. */
+        short: { raw: '(max-height: 520px)' },
+      },
       fontFamily: {
         sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
         display: ['"Playfair Display"', 'Georgia', 'serif'],
