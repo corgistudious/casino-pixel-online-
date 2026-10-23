@@ -1,24 +1,6 @@
 import { useId } from 'react';
 import type { GameKey } from '@casino/shared';
 
-export function CoinIcon({ size = 18 }: { size?: number }) {
-  const id = useId();
-  return (
-    <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden>
-      <defs>
-        <radialGradient id={id} cx="35%" cy="30%" r="75%">
-          <stop offset="0" stopColor="#fff1b8" />
-          <stop offset="0.55" stopColor="#f2c14e" />
-          <stop offset="1" stopColor="#8a5a12" />
-        </radialGradient>
-      </defs>
-      <circle cx="10" cy="10" r="9" fill={`url(#${id})`} stroke="#8a5a12" strokeWidth="0.8" />
-      <circle cx="10" cy="10" r="6" fill="none" stroke="#8a5a12" strokeOpacity="0.6" strokeWidth="0.8" />
-      <path d="M10 6l1.2 2.6 2.8.3-2.1 1.9.6 2.8L10 12.2 7.5 13.6l.6-2.8L6 8.9l2.8-.3z" fill="#fff8e1" opacity="0.9" />
-    </svg>
-  );
-}
-
 function Gold({ id }: { id: string }) {
   return (
     <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">

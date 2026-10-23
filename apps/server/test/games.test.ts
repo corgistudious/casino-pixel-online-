@@ -16,7 +16,7 @@ afterAll(async () => {
 
 async function ledgerMatchesWallet(userId: string) {
   const [row] = await t.db.execute<{ ledger: string; balance: string }>(sql`
-    SELECT (SELECT coalesce(sum(delta), 0) FROM ledger_entries WHERE user_id = ${userId}) AS ledger,
+    SELECT (SELECT coalesce(sum(delta), 0) FROM ledger_entries WHERE user_id = ${userId} AND currency = 'silver') AS ledger,
            (SELECT balance FROM wallets WHERE user_id = ${userId}) AS balance
   `);
   expect(Number(row!.ledger)).toBe(Number(row!.balance));
@@ -42,7 +42,7 @@ describe('websocket games', () => {
   it('spins slots and settles the wallet', async () => {
     const { token, user } = await register(t);
     const s = await TestSocket.connect(t.port, token);
-    let expected = ECONOMY.startingBalance;
+    let expected = ECONOMY.welcome.silver;
     for (let i = 0; i < 20; i++) {
       const data = await s.ok<RoundEnvelope<SlotsResult>>({ type: 'slots.spin', bet: 100 });
       expected += data.result.payout - 100;
@@ -86,7 +86,7 @@ describe('websocket games', () => {
       ],
     });
     expect(data.result.number).toBeGreaterThanOrEqual(0);
-    expect(data.balance).toBe(ECONOMY.startingBalance - 160 + data.result.payout);
+    expect(data.balance).toBe(ECONOMY.welcome.silver - 160 + data.result.payout);
     await ledgerMatchesWallet(user.id);
     const bad = await s.request({ type: 'roulette.spin', bets: [{ kind: 'dozen', value: 7, amount: 100 }] });
     expect(bad.ok).toBe(false);
@@ -104,7 +104,7 @@ describe('websocket games', () => {
       ],
     });
     expect(data.result.dice).toHaveLength(3);
-    expect(data.balance).toBe(ECONOMY.startingBalance - 120 + data.result.payout);
+    expect(data.balance).toBe(ECONOMY.welcome.silver - 120 + data.result.payout);
     await ledgerMatchesWallet(user.id);
     s.close();
   });

@@ -1,3 +1,4 @@
+import { DEFAULT_FRAME, findFrame } from '@casino/shared';
 import { useId } from 'react';
 
 /** 16 vector emblems: gradient pairs and glyph paths (24×24 viewBox). */
@@ -27,7 +28,8 @@ export function avatarCount() {
   return PALETTES.length * 2;
 }
 
-export function Avatar({ index, size = 48, frame = 'gold', animated = false }: { index: number; size?: number; frame?: 'gold' | 'none'; animated?: boolean }) {
+/** `frame` is a shop frame id, or 'none'. Animated shop frames always spin; `animated` forces it for others. */
+export function Avatar({ index, size = 48, frame = DEFAULT_FRAME, animated = false }: { index: number; size?: number; frame?: string; animated?: boolean }) {
   const id = useId();
   const palette = PALETTES[index % PALETTES.length]!;
   const glyph = GLYPHS[(index + Math.floor(index / PALETTES.length) * 3) % GLYPHS.length]!;
@@ -53,13 +55,21 @@ export function Avatar({ index, size = 48, frame = 'gold', animated = false }: {
   if (frame === 'none') return <div style={{ width: size, height: size }}>{inner}</div>;
   return (
     <div className="relative shrink-0 rounded-full" style={{ width: size, height: size }}>
-      <div
-        className={`absolute inset-0 rounded-full ${animated ? 'animate-spin-slow' : ''}`}
-        style={{ background: 'conic-gradient(from 0deg, #fff1b8, #b9801c, #f7d77a, #8a5a12, #fff1b8)' }}
-      />
+      <FrameRing frame={frame} animated={animated} />
       <div className="absolute inset-[2px] rounded-full bg-ink-900" />
       <div className="absolute inset-[3px] overflow-hidden rounded-full">{inner}</div>
     </div>
+  );
+}
+
+export function FrameRing({ frame, animated = false }: { frame: string; animated?: boolean }) {
+  const item = findFrame(frame) ?? findFrame(DEFAULT_FRAME)!;
+  const stops = [...item.colors, item.colors[0]].join(', ');
+  return (
+    <div
+      className={`absolute inset-0 rounded-full ${item.animated || animated ? 'animate-spin-slow' : ''} ${item.animated ? 'shadow-glow' : ''}`}
+      style={{ background: `conic-gradient(from 0deg, ${stops})` }}
+    />
   );
 }
 

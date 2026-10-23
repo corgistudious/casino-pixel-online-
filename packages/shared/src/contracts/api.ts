@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ECONOMY, GAME_KEYS, type ErrorCode, type GameKey } from '../economy';
+import { CURRENCIES, ECONOMY, GAME_KEYS, type ErrorCode, type GameKey, type Reward } from '../economy';
 import type { BlackjackView } from '../games/blackjack';
 import type { RouletteResult } from '../games/roulette';
 import type { SicBoResult } from '../games/sicbo';
@@ -75,6 +75,19 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
 export type ClientMessage = z.infer<typeof clientMessageSchema>;
 export type ClientMessageType = ClientMessage['type'];
 
+export const BADGES = ['verified', 'partner'] as const;
+export type Badge = (typeof BADGES)[number];
+
+export interface CheckinState {
+  /** Days completed in the current cycle (0-7). */
+  streak: number;
+  claimedToday: boolean;
+  /** Cycle day (1-7) the next claim will grant. */
+  nextDay: number;
+  /** When the current check-in day ends (ISO). */
+  dayEndsAt: string;
+}
+
 export interface PublicUser {
   id: string;
   username: string;
@@ -82,10 +95,35 @@ export interface PublicUser {
   locale: Locale;
   avatar: number;
   role: 'player' | 'admin';
+  badges: Badge[];
+  /** Cxu Bạc — betting currency. */
   balance: number;
+  /** Cxu Vàng — rare currency. */
+  gold: number;
+  /** Equipped avatar frame id and every frame the player owns. */
+  frame: string;
+  ownedFrames: string[];
   createdAt: string;
-  nextDailyBonusAt: string | null;
+  checkin: CheckinState;
 }
+
+export interface CheckinResult {
+  day: number;
+  reward: Reward;
+  user: PublicUser;
+}
+
+export const shopItemSchema = z.object({ itemId: z.string().min(1).max(32) });
+
+export const adminBadgesSchema = z.object({
+  verified: z.boolean().optional(),
+  partner: z.boolean().optional(),
+});
+
+export const adminGrantSchema = z.object({
+  amount: z.number().int().min(-10_000_000).max(10_000_000),
+  currency: z.enum(CURRENCIES).default('silver'),
+});
 
 export interface FairnessInfo {
   serverSeedHash: string;
@@ -122,11 +160,14 @@ export interface LeaderboardEntry {
   username: string;
   displayName: string;
   avatar: number;
+  frame: string;
+  badges: Badge[];
   balance: number;
 }
 
 export interface BigWinEvent {
   displayName: string;
+  badges: Badge[];
   game: GameKey;
   bet: number;
   payout: number;
@@ -153,7 +194,7 @@ export interface ResponseMap {
 }
 
 export type ServerEvent =
-  | { event: 'wallet'; data: { balance: number } }
+  | { event: 'wallet'; data: { balance: number; gold?: number } }
   | { event: 'presence'; data: { online: number } }
   | { event: 'bigwin'; data: BigWinEvent };
 

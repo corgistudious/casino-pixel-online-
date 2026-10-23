@@ -7,6 +7,8 @@ import { useSession } from '../store/session';
 import { Avatar, avatarCount } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { TopBar } from '../ui/Chrome';
+import { Link } from 'react-router-dom';
+import { BadgeIcon, CurrencyIcon, PlayerName } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
 
 export function ProfilePage() {
@@ -14,6 +16,8 @@ export function ProfilePage() {
   const user = useSession((s) => s.user)!;
   const setUser = useSession((s) => s.setUser);
   const signOut = useSession((s) => s.signOut);
+  const balance = useSession((s) => s.balance);
+  const gold = useSession((s) => s.gold);
   const [stats, setStats] = useState<PlayerStats | null>(null);
   const [history, setHistory] = useState<RoundSummary[]>([]);
   const [fair, setFair] = useState<FairnessInfo | null>(null);
@@ -63,13 +67,43 @@ export function ProfilePage() {
       <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto p-4 lg:grid-cols-2">
         <section className="glass flex flex-col gap-4 p-5">
           <div className="flex items-center gap-4">
-            <Avatar index={avatar} size={72} animated />
-            <div>
-              <h2 className="font-display text-2xl font-semibold">{user.displayName}</h2>
+            <Avatar index={avatar} frame={user.frame} size={72} animated />
+            <div className="min-w-0">
+              <h2 className="font-display text-2xl font-semibold">
+                <PlayerName name={user.displayName} badges={user.badges} size={24} />
+              </h2>
               <p className="text-sm text-white/50">@{user.username}</p>
               <p className="text-xs text-white/40">{t('profile.memberSince', { date: new Date(user.createdAt).toLocaleDateString(i18n.language) })}</p>
             </div>
           </div>
+          <div className="grid grid-cols-2 gap-2">
+            {(['silver', 'gold'] as const).map((c) => (
+              <div key={c} className="flex items-center gap-3 rounded-xl bg-black/25 px-3 py-2">
+                <CurrencyIcon currency={c} size={36} />
+                <div>
+                  <div className="text-xs text-white/50">{t(`currency.${c}`)}</div>
+                  <div className={`font-semibold tabular-nums ${c === 'gold' ? 'text-gold-100' : ''}`}>{fmt(c === 'gold' ? gold : balance)}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {user.badges.length > 0 && (
+            <div className="flex flex-col gap-2">
+              {user.badges.map((b) => (
+                <div key={b} className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2">
+                  <BadgeIcon badge={b} size={36} />
+                  <div>
+                    <div className="font-semibold">{t(`badges.${b}`)}</div>
+                    <div className="text-xs text-white/50">{t(`badges.${b}Desc`)}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <Link to="/shop" className="glass flex items-center justify-center gap-2 py-2 text-sm hover:border-gold-300/40">
+            <CurrencyIcon currency="gold" size={20} />
+            {t('nav.shop')} · {t('shop.frames')}
+          </Link>
           <label className="flex flex-col gap-1 text-sm">
             <span className="text-white/60">{t('auth.displayName')}</span>
             <input className="field" value={displayName} maxLength={24} onChange={(e) => setDisplayName(e.target.value)} />
@@ -79,7 +113,7 @@ export function ProfilePage() {
             <div className="grid grid-cols-8 gap-2">
               {Array.from({ length: avatarCount() }, (_, i) => (
                 <button key={i} onClick={() => setAvatar(i)} className={`rounded-full transition ${i === avatar ? 'scale-110 shadow-glow' : 'opacity-70 hover:opacity-100'}`}>
-                  <Avatar index={i} size={36} frame={i === avatar ? 'gold' : 'none'} />
+                  <Avatar index={i} size={36} frame={i === avatar ? user.frame : 'none'} />
                 </button>
               ))}
             </div>

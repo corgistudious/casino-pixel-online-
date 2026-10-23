@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import {
   bigint,
+  date,
   bigserial,
   boolean,
   check,
@@ -8,6 +9,7 @@ import {
   integer,
   jsonb,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -27,7 +29,16 @@ export const users = pgTable(
     role: text('role').notNull().default('player'),
     banned: boolean('banned').notNull().default(false),
     tokenVersion: integer('token_version').notNull().default(0),
+    /** Deprecated by the 7-day check-in; kept so existing data is never dropped. */
     lastDailyBonusAt: timestamp('last_daily_bonus_at', { withTimezone: true }),
+    /** Equipped cosmetic avatar frame (see FRAMES in @casino/shared). */
+    frame: text('frame').notNull().default('classic'),
+    isVerified: boolean('is_verified').notNull().default(false),
+    isPartner: boolean('is_partner').notNull().default(false),
+    /** Days completed in the current 7-day check-in cycle. */
+    checkinStreak: integer('checkin_streak').notNull().default(0),
+    /** Local (Asia/Ho_Chi_Minh) date of the last check-in. */
+    lastCheckinDate: date('last_checkin_date', { mode: 'string' }),
     lastRescueAt: timestamp('last_rescue_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
@@ -40,13 +51,20 @@ export const wallets = pgTable(
     userId: uuid('user_id')
       .primaryKey()
       .references(() => users.id, { onDelete: 'restrict' }),
+    /** Cxu Bạc */
     balance: bigint('balance', { mode: 'number' }).notNull(),
+    /** Cxu Vàng */
+    gold: bigint('gold', { mode: 'number' }).notNull().default(0),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [check('wallets_balance_non_negative', sql`${t.balance} >= 0`), index('wallets_balance_idx').on(t.balance)],
+  (t) => [
+    check('wallets_balance_non_negative', sql`${t.balance} >= 0`),
+    check('wallets_gold_non_negative', sql`${t.gold} >= 0`),
+    index('wallets_balance_idx').on(t.balance),
+  ],
 );
 
-/** Append-only record of every balance change. sum(delta) per user == wallet balance. */
+/** Append-only record of every balance change. Per user and currency, sum(delta) == wallet balance. */
 export const ledgerEntries = pgTable(
   'ledger_entries',
   {
@@ -54,6 +72,7 @@ export const ledgerEntries = pgTable(
     userId: uuid('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'restrict' }),
+    currency: text('currency').notNull().default('silver'),
     delta: bigint('delta', { mode: 'number' }).notNull(),
     balanceAfter: bigint('balance_after', { mode: 'number' }).notNull(),
     reason: text('reason').notNull(),
@@ -61,6 +80,19 @@ export const ledgerEntries = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index('ledger_user_idx').on(t.userId, t.id)],
+);
+
+/** Cosmetic items owned by a player (bought with Cxu Vàng). */
+export const userItems = pgTable(
+  'user_items',
+  {
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    itemId: text('item_id').notNull(),
+    acquiredAt: timestamp('acquired_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.itemId] })],
 );
 
 export const fairSeeds = pgTable(
