@@ -15,7 +15,7 @@ import {
   playSlots,
   type PlayOutcome,
 } from '../services/games';
-import { toPublicUser, type UserRow } from '../services/users';
+import { badgesOf, toPublicUser, type UserRow } from '../services/users';
 import type { RealtimeHub } from './hub';
 
 const AUTH_TIMEOUT_MS = 10_000;
@@ -75,6 +75,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
       if (outcome.settled && isBigWin(outcome.settled)) {
         void hub.recordBigWin({
           displayName: account.displayName,
+          badges: badgesOf(account),
           game: outcome.game,
           bet: outcome.settled.bet,
           payout: outcome.settled.payout,

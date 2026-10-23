@@ -2,7 +2,21 @@
 
 Định hướng: luxury modern casino, HD 2D, ánh vàng, bàn nỉ xanh ngọc, nền tối cao cấp, kính/kim loại/bóng, neon nhẹ. **Không dùng pixel art.**
 
-## Hiện trạng — asset đã có (nguyên bản, do code vẽ, dùng thương mại được)
+## Asset chính thức (do chủ dự án cung cấp)
+
+| Asset | File gốc (không bao giờ sửa) | Bản web (chỉ resize) | Dùng ở |
+| --- | --- | --- | --- |
+| Cxu Bạc | `assets/official/cxu-bac.png` (1263×1245) | `apps/web/public/assets/official/cxu-bac.png` (256²) | Số dư, quà tân thủ, điểm danh, xếp hạng, big win, hồ sơ |
+| Cxu Vàng | `assets/official/cxu-vang.png` (128×128) | `…/cxu-vang.png` (128², không phóng to) | Số dư, quà tân thủ, điểm danh ngày 4 & 7, giá cửa hàng, hồ sơ |
+| Partner | `assets/official/badge-partner.png` (1283×1226) | `…/badge-partner.png` (256²) | Cạnh tên người chơi, hồ sơ, xếp hạng, big win, admin |
+| Verified | `assets/official/badge-verified.png` (1254×1254) | `…/badge-verified.png` (256²) | Như Partner |
+
+- File được upload với tên `IMG_2194/2195/2217/2220.png` và đã được đổi tên theo quy ước trên (`git mv`, nội dung giữ nguyên).
+- Tạo lại bản web khi file gốc thay đổi: `python3 scripts/build-official-assets.py` (resize Lanczos, đệm vuông nền trong suốt, không phóng to).
+- Code dùng asset qua `apps/web/src/ui/OfficialAssets.tsx` (`CurrencyIcon`, `BadgeIcon`, `PlayerName`, `Amount`).
+- ⚠️ Cxu Vàng gốc chỉ có 128×128 px: hiển thị tốt ở icon nhỏ nhưng hơi mờ khi lớn (ví dụ 72px trong hộp quà tân thủ trên màn hình Retina). Nên bổ sung bản ≥512px.
+
+## Asset procedural (do code vẽ, nguyên bản, dùng thương mại được)
 
 Tất cả được vẽ bằng canvas/SVG vector (gradient, bóng đổ, highlight), render ở độ phân giải ×2–3:
 

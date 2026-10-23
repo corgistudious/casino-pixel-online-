@@ -19,10 +19,12 @@ export function statusFor(code: ErrorCode): number {
     case 'banned':
       return 403;
     case 'round_not_found':
+    case 'item_not_found':
       return 404;
     case 'username_taken':
     case 'round_active':
     case 'round_finished':
+    case 'already_owned':
       return 409;
     case 'rate_limited':
       return 429;

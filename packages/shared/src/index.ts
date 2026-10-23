@@ -1,4 +1,6 @@
 export * from './economy';
+export * from './checkin';
+export * from './shop';
 export * from './contracts/api';
 export * from './games/rng';
 export * from './games/cards';

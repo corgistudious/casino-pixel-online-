@@ -1,4 +1,14 @@
-import { clientSeedSchema, loginSchema, registerSchema, updateProfileSchema, type FairnessInfo } from '@casino/shared';
+import {
+  adminBadgesSchema,
+  adminGrantSchema,
+  clientSeedSchema,
+  loginSchema,
+  registerSchema,
+  shopItemSchema,
+  updateProfileSchema,
+  type CheckinResult,
+  type FairnessInfo,
+} from '@casino/shared';
 import { sql, eq } from 'drizzle-orm';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { z } from 'zod';
@@ -9,17 +19,19 @@ import { users } from '../db/schema';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { getActiveSeed, rotateSeed } from '../services/fair';
+import { buyFrame, equipFrame } from '../services/shop';
 import { playerStats, roundHistory } from '../services/stats';
 import {
   authenticate,
-  claimDailyBonus,
+  claimCheckin,
   claimRescue,
   leaderboard,
+  badgesOf,
   registerUser,
   toPublicUser,
   updateProfile,
 } from '../services/users';
-import { applyDelta } from '../services/wallet';
+import { applyDelta, getWallet } from '../services/wallet';
 
 export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub, config: Config): void {
   const authed = async (req: FastifyRequest) => {
@@ -65,12 +77,26 @@ export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub
     return { user: await toPublicUser(db, user) };
   });
 
-  app.post('/api/me/daily-bonus', { preHandler: authed }, async (req) => {
+  app.post('/api/me/checkin', { preHandler: authed }, async (req): Promise<CheckinResult> => {
+    const { day, reward, user } = await claimCheckin(db, requireAccount(req).id);
+    const fresh = await toPublicUser(db, user);
+    hub.sendToUser(user.id, { type: 'event', event: 'wallet', data: { balance: fresh.balance, gold: fresh.gold } });
+    return { day, reward, user: fresh };
+  });
+
+  app.post('/api/shop/buy', { preHandler: authed }, async (req) => {
+    const { itemId } = shopItemSchema.parse(req.body);
     const user = requireAccount(req);
-    const balance = await claimDailyBonus(db, user.id);
-    hub.sendToUser(user.id, { type: 'event', event: 'wallet', data: { balance } });
-    const fresh = await toPublicUser(db, (await db.select().from(users).where(eq(users.id, user.id)))[0]!);
+    await buyFrame(db, user.id, itemId);
+    const fresh = await toPublicUser(db, user);
+    hub.sendToUser(user.id, { type: 'event', event: 'wallet', data: { balance: fresh.balance, gold: fresh.gold } });
     return { user: fresh };
+  });
+
+  app.post('/api/me/frame', { preHandler: authed }, async (req) => {
+    const { itemId } = shopItemSchema.parse(req.body);
+    const user = await equipFrame(db, requireAccount(req).id, itemId);
+    return { user: await toPublicUser(db, user) };
   });
 
   app.post('/api/me/rescue', { preHandler: authed }, async (req) => {
@@ -115,13 +141,15 @@ export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub
       wagered24h: string;
       paid24h: string;
       chips: string;
+      gold: string;
     }>(sql`
       SELECT
         (SELECT count(*) FROM users) AS users,
         (SELECT count(*) FROM game_rounds WHERE created_at > now() - interval '24 hours' AND status = 'settled') AS rounds24h,
         (SELECT coalesce(sum(bet), 0) FROM game_rounds WHERE created_at > now() - interval '24 hours' AND status = 'settled') AS wagered24h,
         (SELECT coalesce(sum(payout), 0) FROM game_rounds WHERE created_at > now() - interval '24 hours' AND status = 'settled') AS paid24h,
-        (SELECT coalesce(sum(balance), 0) FROM wallets) AS chips
+        (SELECT coalesce(sum(balance), 0) FROM wallets) AS chips,
+        (SELECT coalesce(sum(gold), 0) FROM wallets) AS gold
     `);
     return {
       users: Number(row!.users),
@@ -130,6 +158,7 @@ export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub
       wagered24h: Number(row!.wagered24h),
       paid24h: Number(row!.paid24h),
       chipsInCirculation: Number(row!.chips),
+      goldInCirculation: Number(row!.gold),
     };
   });
 
@@ -150,12 +179,26 @@ export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub
 
   app.post('/api/admin/users/:username/grant', { preHandler: adminOnly }, async (req) => {
     const { username } = usernameParam.parse(req.params);
-    const { amount } = z.object({ amount: z.number().int().min(-10_000_000).max(10_000_000) }).parse(req.body);
+    const { amount, currency } = adminGrantSchema.parse(req.body);
     const [target] = await db.select().from(users).where(eq(users.usernameLower, username.toLowerCase()));
     if (!target) throw fail('bad_request', 'user not found');
-    const balance = await db.transaction((tx) => applyDelta(tx, target.id, amount, 'admin_adjust'));
-    hub.sendToUser(target.id, { type: 'event', event: 'wallet', data: { balance } });
-    req.log.info({ admin: req.account?.username, username, amount }, 'admin balance adjust');
-    return { balance };
+    await db.transaction((tx) => applyDelta(tx, target.id, amount, 'admin_adjust', null, currency));
+    const wallet = await getWallet(db, target.id);
+    hub.sendToUser(target.id, { type: 'event', event: 'wallet', data: wallet });
+    req.log.info({ admin: req.account?.username, username, amount, currency }, 'admin balance adjust');
+    return wallet;
+  });
+
+  app.post('/api/admin/users/:username/badges', { preHandler: adminOnly }, async (req) => {
+    const { username } = usernameParam.parse(req.params);
+    const input = adminBadgesSchema.parse(req.body);
+    const patch: Partial<typeof users.$inferInsert> = {};
+    if (input.verified !== undefined) patch.isVerified = input.verified;
+    if (input.partner !== undefined) patch.isPartner = input.partner;
+    if (Object.keys(patch).length === 0) throw fail('bad_request');
+    const [row] = await db.update(users).set(patch).where(eq(users.usernameLower, username.toLowerCase())).returning();
+    if (!row) throw fail('bad_request', 'user not found');
+    req.log.info({ admin: req.account?.username, username, ...input }, 'admin badge change');
+    return { badges: badgesOf(row) };
   });
 }

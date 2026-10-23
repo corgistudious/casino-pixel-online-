@@ -3,16 +3,26 @@ import { Link, useNavigate } from 'react-router-dom';
 import { formatChips } from '../lib/format';
 import { useSession } from '../store/session';
 import { Avatar } from './Avatar';
-import { CoinIcon } from './Icons';
+import { CurrencyIcon } from './OfficialAssets';
 import { useToasts } from './toast';
 
 export function BalancePill({ compact = false }: { compact?: boolean }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const balance = useSession((s) => s.balance);
+  const gold = useSession((s) => s.gold);
+  const icon = compact ? 20 : 26;
+  const text = `font-semibold tabular-nums ${compact ? 'text-sm' : 'text-base'}`;
   return (
-    <div className={`gold-border flex items-center gap-2 rounded-full ${compact ? 'px-2.5 py-1' : 'px-3.5 py-1.5'}`}>
-      <CoinIcon size={compact ? 16 : 20} />
-      <span className={`font-semibold tabular-nums text-gold-100 ${compact ? 'text-sm' : 'text-base'}`}>{formatChips(balance, i18n.language)}</span>
+    <div className={`gold-border flex items-center rounded-full ${compact ? 'gap-2 px-2 py-0.5' : 'gap-3 px-3 py-1'}`}>
+      <span className="flex items-center gap-1" title={t('currency.silver')}>
+        <CurrencyIcon currency="silver" size={icon} />
+        <span className={`${text} text-white`}>{formatChips(balance, i18n.language)}</span>
+      </span>
+      <span className="h-4 w-px bg-white/15" />
+      <span className="flex items-center gap-1" title={t('currency.gold')}>
+        <CurrencyIcon currency="gold" size={icon} />
+        <span className={`${text} text-gold-100`}>{formatChips(gold, i18n.language)}</span>
+      </span>
     </div>
   );
 }
@@ -42,7 +52,7 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
         <BalancePill compact />
         {user && (
           <Link to="/profile" aria-label={t('nav.profile')}>
-            <Avatar index={user.avatar} size={36} />
+            <Avatar index={user.avatar} frame={user.frame} size={36} />
           </Link>
         )}
       </div>

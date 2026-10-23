@@ -2,6 +2,23 @@
 
 _Cập nhật: 2026-10-23_
 
+## Nhánh & quy trình
+
+- Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
+- Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
+
+## Kinh tế & phần thưởng (PR: Cxu Bạc/Vàng, quà tân thủ, điểm danh, cửa hàng, huy hiệu)
+
+- **Cxu Bạc**: tiền cược của mọi game (thay cho "chip"). **Cxu Vàng**: tiền hiếm, chỉ nhận qua quà tân thủ, điểm danh, admin; dùng ở cửa hàng. Không thể mua bằng tiền thật.
+- **Quà tân thủ**: 10.000 Bạc + 10 Vàng khi đăng ký, có hộp chào mừng.
+- **Điểm danh 7 ngày** (ngày tính theo giờ Việt Nam): 1K → 5K Bạc, ngày 4 +1 Vàng, ngày 7 +5 Vàng; bỏ lỡ một ngày thì quay lại Ngày 1. Thay cho "thưởng hằng ngày" cũ (cột cũ vẫn giữ, không xoá dữ liệu).
+- **Cửa hàng**: 6 khung avatar trang trí, mua bằng Cxu Vàng (không ảnh hưởng gameplay).
+- **Huy hiệu Verified / Partner**: admin cấp/thu hồi; hiển thị cạnh tên ở sảnh, hồ sơ, xếp hạng, big win.
+- Admin: cộng/trừ theo loại tiền, bật/tắt huy hiệu, thống kê Cxu Vàng lưu hành.
+- Sổ cái tách theo loại tiền; test kiểm `sum(ledger) == ví` cho cả Bạc và Vàng; điểm danh và mua hàng an toàn khi gửi đồng thời.
+- Migration `0001` chỉ thêm cột/bảng; đã thử nâng cấp DB có dữ liệu thật: không mất dòng nào.
+- Gameplay (luật game, scene Phaser, dịch vụ game server) **không thay đổi**.
+
 ## ✅ Đã hoàn thành & đã kiểm chứng
 
 - Monorepo pnpm: `shared`, `server`, `web`, `desktop`; TypeScript strict.
@@ -12,7 +29,7 @@ _Cập nhật: 2026-10-23_
 - Electron shell: đã chạy thử trên Linux/Xvfb, load game từ `app://casino`.
 - Bản build server production (`pnpm deploy`) đã chạy thử và trả `/api/health` OK.
 - CI GitHub Actions (typecheck, test có Postgres + Redis, build); workflow build APK & EXE.
-- Kết quả test gần nhất: shared 26 ✓, server 26 ✓ (cả có và không Redis), web 4 ✓. E2E Playwright (desktop 1280×720 & mobile 844×390): đăng ký → chơi cả 4 game → hồ sơ → ranking, 0 lỗi console.
+- Kết quả test gần nhất: shared 33 ✓, server 32 ✓ (cả có và không Redis), web 4 ✓. E2E Playwright (desktop 1280×720 & mobile 844×390): đăng ký → chơi cả 4 game → hồ sơ → ranking, 0 lỗi console.
 
 ## ⚠️ Chưa kiểm chứng trong môi trường này
 
@@ -24,7 +41,7 @@ _Cập nhật: 2026-10-23_
 
 1. Asset raster chuyên nghiệp (xem `docs/ART_PIPELINE.md`) — cần công cụ tạo ảnh/hoạ sĩ.
 2. Game nhiều người chơi theo bàn: Poker Texas Hold'em, Xì Tố, Liêng (phòng, ghế, lượt, timeout, reconnect).
-3. Thành tựu + huy hiệu, bạn bè, thông báo.
+3. Hệ thống VIP 15 cấp (đã nhận yêu cầu, làm ở PR riêng), nhiệm vụ, thành tựu, bạn bè, thông báo.
 4. Blackjack: split, insurance.
 5. Sao lưu PostgreSQL tự động, giám sát (metrics/log tập trung), staging.
 6. Ký số bản Windows, ký bản phát hành Android (keystore qua GitHub Secrets).

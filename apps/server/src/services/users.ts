@@ -1,24 +1,38 @@
-import { ECONOMY, type LeaderboardEntry, type Locale, type PublicUser, type RegisterInput, type UpdateProfileInput } from '@casino/shared';
+import {
+  checkinDate,
+  checkinDayEnd,
+  checkinProgress,
+  checkinReward,
+  ECONOMY,
+  type Badge,
+  type CheckinResult,
+  type LeaderboardEntry,
+  type Locale,
+  type PublicUser,
+  type RegisterInput,
+  type UpdateProfileInput,
+} from '@casino/shared';
 import { desc, eq, sql } from 'drizzle-orm';
 import { dummyPasswordHash, hashPassword, verifyPassword } from '../auth/password';
 import type { Db, DbOrTx } from '../db/client';
 import { users, wallets } from '../db/schema';
 import { fail } from '../errors';
 import { createActiveSeed } from './fair';
-import { applyDelta, getBalance } from './wallet';
+import { ownedFrames } from './shop';
+import { applyDelta, getWallet } from './wallet';
 
 export type UserRow = typeof users.$inferSelect;
 
-const DAY_START_UTC = sql`(date_trunc('day', now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC')`;
-
-export function nextDailyBonusAt(user: Pick<UserRow, 'lastDailyBonusAt'>, now = new Date()): Date | null {
-  if (!user.lastDailyBonusAt) return null;
-  const startOfToday = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  if (user.lastDailyBonusAt.getTime() < startOfToday) return null;
-  return new Date(startOfToday + 24 * 60 * 60 * 1000);
+export function badgesOf(user: { isVerified: boolean; isPartner: boolean }): Badge[] {
+  const badges: Badge[] = [];
+  if (user.isVerified) badges.push('verified');
+  if (user.isPartner) badges.push('partner');
+  return badges;
 }
 
-export async function toPublicUser(db: DbOrTx, user: UserRow): Promise<PublicUser> {
+export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()): Promise<PublicUser> {
+  const wallet = await getWallet(db, user.id);
+  const progress = checkinProgress(user.checkinStreak, user.lastCheckinDate, checkinDate(now));
   return {
     id: user.id,
     username: user.username,
@@ -26,9 +40,13 @@ export async function toPublicUser(db: DbOrTx, user: UserRow): Promise<PublicUse
     locale: user.locale as Locale,
     avatar: user.avatar,
     role: user.role as PublicUser['role'],
-    balance: await getBalance(db, user.id),
+    badges: badgesOf(user),
+    balance: wallet.balance,
+    gold: wallet.gold,
+    frame: user.frame,
+    ownedFrames: await ownedFrames(db, user.id),
     createdAt: user.createdAt.toISOString(),
-    nextDailyBonusAt: nextDailyBonusAt(user)?.toISOString() ?? null,
+    checkin: { ...progress, dayEndsAt: checkinDayEnd(now).toISOString() },
   };
 }
 
@@ -54,7 +72,8 @@ export async function registerUser(db: Db, input: RegisterInput, admins: Set<str
         })
         .returning();
       await tx.insert(wallets).values({ userId: user!.id, balance: 0 });
-      await applyDelta(tx, user!.id, ECONOMY.startingBalance, 'signup');
+      await applyDelta(tx, user!.id, ECONOMY.welcome.silver, 'welcome');
+      await applyDelta(tx, user!.id, ECONOMY.welcome.gold, 'welcome', null, 'gold');
       await createActiveSeed(tx, user!.id);
       return user!;
     });
@@ -89,15 +108,24 @@ export async function updateProfile(db: Db, userId: string, input: UpdateProfile
   return row!;
 }
 
-export async function claimDailyBonus(db: Db, userId: string): Promise<number> {
+/** Claims today's check-in reward. The user row lock serializes concurrent claims. */
+export async function claimCheckin(db: Db, userId: string, now = new Date()): Promise<Omit<CheckinResult, 'user'> & { user: UserRow }> {
   return db.transaction(async (tx) => {
-    const updated = await tx.execute(sql`
-      UPDATE users SET last_daily_bonus_at = now()
-      WHERE id = ${userId} AND (last_daily_bonus_at IS NULL OR last_daily_bonus_at < ${DAY_START_UTC})
-      RETURNING id
-    `);
-    if (updated.length === 0) throw fail('bonus_not_ready');
-    return applyDelta(tx, userId, ECONOMY.dailyBonus, 'daily_bonus');
+    const [user] = await tx.select().from(users).where(eq(users.id, userId)).for('update');
+    if (!user) throw fail('unauthorized');
+    const today = checkinDate(now);
+    const progress = checkinProgress(user.checkinStreak, user.lastCheckinDate, today);
+    if (progress.claimedToday) throw fail('checkin_done');
+    const day = progress.nextDay;
+    const reward = checkinReward(day);
+    const [updated] = await tx
+      .update(users)
+      .set({ checkinStreak: day, lastCheckinDate: today })
+      .where(eq(users.id, userId))
+      .returning();
+    if (reward.silver > 0) await applyDelta(tx, userId, reward.silver, 'checkin');
+    if (reward.gold > 0) await applyDelta(tx, userId, reward.gold, 'checkin', null, 'gold');
+    return { day, reward, user: updated! };
   });
 }
 
@@ -120,13 +148,21 @@ export async function claimRescue(db: Db, userId: string): Promise<number> {
 
 export async function leaderboard(db: Db, limit = 50): Promise<LeaderboardEntry[]> {
   const rows = await db
-    .select({ username: users.username, displayName: users.displayName, avatar: users.avatar, balance: wallets.balance })
+    .select({
+      username: users.username,
+      displayName: users.displayName,
+      avatar: users.avatar,
+      frame: users.frame,
+      isVerified: users.isVerified,
+      isPartner: users.isPartner,
+      balance: wallets.balance,
+    })
     .from(wallets)
     .innerJoin(users, eq(users.id, wallets.userId))
     .where(eq(users.banned, false))
     .orderBy(desc(wallets.balance), users.createdAt)
     .limit(limit);
-  return rows.map((r, i) => ({ rank: i + 1, ...r }));
+  return rows.map(({ isVerified, isPartner, ...r }, i) => ({ rank: i + 1, ...r, badges: badgesOf({ isVerified, isPartner }) }));
 }
 
 export function isUniqueViolation(err: unknown): boolean {

@@ -28,7 +28,7 @@ export function AuthPage() {
       const body =
         mode === 'login' ? { username, password } : { username, password, locale, ...(displayName.trim() ? { displayName: displayName.trim() } : {}) };
       const res = await api<{ token: string; user: PublicUser }>(`/api/auth/${mode}`, { method: 'POST', body });
-      signIn(res.token, res.user);
+      signIn(res.token, res.user, mode === 'register');
     } catch (err) {
       setError(t(`errors.${err instanceof ApiError ? err.code : 'internal'}`));
     } finally {
@@ -58,7 +58,7 @@ export function AuthPage() {
           </div>
           {mode === 'register' && (
             <p className="rounded-xl border border-gold-300/30 bg-gold-300/10 px-3 py-2 text-sm text-gold-100">
-              {t('auth.welcomeBonus', { amount: formatChips(ECONOMY.startingBalance, i18n.language) })}
+              {t('auth.welcomeBonus', { silver: formatChips(ECONOMY.welcome.silver, i18n.language), gold: formatChips(ECONOMY.welcome.gold, i18n.language) })}
             </p>
           )}
           <label className="flex flex-col gap-1 text-sm">

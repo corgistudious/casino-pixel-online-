@@ -1,50 +1,29 @@
-import { ECONOMY, GAME_KEYS, type PublicUser } from '@casino/shared';
-import { useEffect, useState } from 'react';
+import { ECONOMY, GAME_KEYS } from '@casino/shared';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { formatChips, formatDuration } from '../lib/format';
+import { formatChips } from '../lib/format';
 import { api, ApiError } from '../net/api';
 import { useSession } from '../store/session';
 import { Button } from '../ui/Button';
 import { BalancePill, TopBar } from '../ui/Chrome';
 import { GameArt } from '../ui/Icons';
+import { BadgeIcon, CurrencyIcon, PlayerName } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
-
-function useNow(intervalMs = 1000) {
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), intervalMs);
-    return () => clearInterval(id);
-  }, [intervalMs]);
-  return now;
-}
+import { CheckinPanel } from './CheckinPanel';
+import { WelcomeModal } from './WelcomeModal';
 
 export function HubPage() {
   const { t, i18n } = useTranslation();
   const user = useSession((s) => s.user)!;
   const balance = useSession((s) => s.balance);
   const bigWins = useSession((s) => s.bigWins);
-  const setUser = useSession((s) => s.setUser);
   const setBalance = useSession((s) => s.setBalance);
-  const now = useNow();
-  const nextBonus = user.nextDailyBonusAt ? new Date(user.nextDailyBonusAt).getTime() : 0;
-  const bonusReady = nextBonus <= now;
-
-  const claim = async () => {
-    try {
-      const { user: fresh } = await api<{ user: PublicUser }>('/api/me/daily-bonus', { method: 'POST' });
-      setUser(fresh);
-      toast(t('hub.claimed', { amount: formatChips(ECONOMY.dailyBonus, i18n.language) }), 'success');
-    } catch (err) {
-      toast(t(`errors.${err instanceof ApiError ? err.code : 'internal'}`), 'error');
-    }
-  };
 
   const rescue = async () => {
     try {
       const { balance } = await api<{ balance: number }>('/api/me/rescue', { method: 'POST' });
       setBalance(balance);
-      toast(t('hub.claimed', { amount: formatChips(ECONOMY.rescueAmount, i18n.language) }), 'success');
+      toast(t('hub.rescueDone', { amount: formatChips(ECONOMY.rescueAmount, i18n.language) }), 'success');
     } catch (err) {
       toast(t(`errors.${err instanceof ApiError ? err.code : 'internal'}`), 'error');
     }
@@ -52,12 +31,13 @@ export function HubPage() {
 
   return (
     <div className="flex h-full flex-col">
+      <WelcomeModal />
       <TopBar />
       <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto p-4 lg:grid-cols-[1fr_300px]">
         <section className="flex flex-col gap-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <p className="text-sm text-white/50">{user.displayName}</p>
+              <PlayerName name={user.displayName} badges={user.badges} size={18} className="text-sm text-white/60" />
               <h1 className="font-display text-3xl font-bold text-gold">{t('hub.title')}</h1>
             </div>
             <BalancePill />
@@ -90,37 +70,38 @@ export function HubPage() {
         </section>
 
         <aside className="flex flex-col gap-4">
-          <div className={`glass flex flex-col gap-3 p-4 ${bonusReady ? 'animate-pulse-glow' : ''}`}>
-            <h3 className="font-display text-lg">{t('hub.dailyBonus')}</h3>
-            {bonusReady ? (
-              <Button variant="gold" onClick={() => void claim()}>
-                {t('hub.claim', { amount: formatChips(ECONOMY.dailyBonus, i18n.language) })}
-              </Button>
-            ) : (
-              <p className="text-sm text-white/60">{t('hub.nextBonus', { time: formatDuration(nextBonus - now) })}</p>
-            )}
-            {balance < ECONOMY.rescueThreshold && (
-              <Button variant="emerald" size="sm" onClick={() => void rescue()}>
-                {t('hub.rescue', { amount: formatChips(ECONOMY.rescueAmount, i18n.language) })}
-              </Button>
-            )}
-          </div>
+          <CheckinPanel />
+          {balance < ECONOMY.rescueThreshold && (
+            <Button variant="emerald" size="sm" onClick={() => void rescue()}>
+              {t('hub.rescue', { amount: formatChips(ECONOMY.rescueAmount, i18n.language) })}
+            </Button>
+          )}
           <div className="glass flex min-h-0 flex-col gap-2 p-4">
             <h3 className="font-display text-lg">{t('hub.bigWins')}</h3>
             {bigWins.length === 0 && <p className="text-sm text-white/50">{t('hub.noBigWins')}</p>}
             <ul className="flex flex-col gap-1.5 text-sm">
               {bigWins.slice(0, 10).map((w) => (
-                <li key={w.at + w.displayName} className="animate-rise rounded-lg bg-black/20 px-3 py-1.5">
-                  {t('hub.bigWinLine', {
-                    name: w.displayName,
-                    payout: formatChips(w.payout, i18n.language),
-                    game: t(`games.${w.game}.name`),
-                  })}
+                <li key={w.at + w.displayName} className="flex animate-rise items-center gap-2 rounded-lg bg-black/20 px-3 py-1.5">
+                  <CurrencyIcon currency="silver" size={18} />
+                  <span className="min-w-0">
+                    {t('hub.bigWinLine', {
+                      name: w.displayName,
+                      payout: formatChips(w.payout, i18n.language),
+                      game: t(`games.${w.game}.name`),
+                    })}
+                  </span>
+                  {(w.badges ?? []).map((b) => (
+                    <BadgeIcon key={b} badge={b} size={16} />
+                  ))}
                 </li>
               ))}
             </ul>
           </div>
-          <nav className="grid grid-cols-3 gap-2">
+          <nav className="grid grid-cols-2 gap-2">
+            <Link to="/shop" className="glass flex items-center justify-center gap-1.5 py-2 text-center text-sm hover:border-gold-300/40">
+              <CurrencyIcon currency="gold" size={18} />
+              {t('nav.shop')}
+            </Link>
             <Link to="/leaderboard" className="glass py-2 text-center text-sm hover:border-gold-300/40">
               {t('nav.leaderboard')}
             </Link>

@@ -11,6 +11,7 @@ import { HubPage } from './pages/HubPage';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { ShopPage } from './pages/ShopPage';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, RotateOverlay, Toasts } from './ui/Chrome';
@@ -70,6 +71,7 @@ export function App() {
         <Route path="/" element={<Authed><HubPage /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
         <Route path="/profile" element={<Authed><ProfilePage /></Authed>} />
+        <Route path="/shop" element={<Authed><ShopPage /></Authed>} />
         <Route path="/leaderboard" element={<Authed><LeaderboardPage /></Authed>} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/admin" element={<Authed admin><AdminPage /></Authed>} />

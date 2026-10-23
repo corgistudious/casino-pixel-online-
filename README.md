@@ -2,7 +2,9 @@
 
 Casino giải trí **2D HD cao cấp** (Premium Modern Casino) chạy trên **Web Desktop, Web Mobile (landscape), Android APK và Windows EXE** — cùng một backend, cùng tài khoản.
 
-> ⚠️ Chỉ dùng **chip ảo**: không nạp/rút tiền thật, không quy đổi, không có phần thưởng giá trị thật.
+> ⚠️ Chỉ dùng tiền ảo **Cxu Bạc** (cược) và **Cxu Vàng** (hiếm, dùng ở cửa hàng): không nạp/rút tiền thật, không quy đổi, không có phần thưởng giá trị thật.
+
+Phần thưởng: quà tân thủ, điểm danh 7 ngày, cửa hàng khung avatar, huy hiệu Verified/Partner (xem `docs/PROGRESS.md`).
 
 ## Trò chơi hiện có (gameplay thật, server-authoritative)
 
