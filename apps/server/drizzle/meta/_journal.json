@@ -15,6 +15,13 @@
       "when": 1792717327138,
       "tag": "0001_economy_checkin_badges_shop",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792722311417,
+      "tag": "0002_accounts_uid_rbac_audit",
+      "breakpoints": true
     }
   ]
 }

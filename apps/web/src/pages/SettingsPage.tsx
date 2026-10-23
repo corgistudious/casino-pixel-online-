@@ -5,6 +5,7 @@ import { api } from '../net/api';
 import { useSession } from '../store/session';
 import { useSettings } from '../store/settings';
 import { AppShell, PageHeader } from '../ui/AppShell';
+import { AccountSection } from './AccountSection';
 
 const LOCALE_NAMES = { vi: 'Tiếng Việt', en: 'English' } as const;
 
@@ -64,6 +65,7 @@ export function SettingsPage() {
             <p className="mt-2 text-xs">{t('app.disclaimer')}</p>
           </div>
         </div>
+        <AccountSection />
       </div>
     </AppShell>
   );

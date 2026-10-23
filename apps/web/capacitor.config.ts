@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'online.casinopixel.app',
-  appName: 'Casino Pixel Online',
+  appId: 'game.keyo.app',
+  appName: 'Keyo Game',
   webDir: 'dist',
   android: {
     // Landscape is enforced in AndroidManifest by the CI build (see .github/workflows/android.yml).

@@ -2,6 +2,7 @@ import { FRAMES, type PublicUser } from '@casino/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sfx } from '../audio/sfx';
+import { formatChips } from '../lib/format';
 import { api, ApiError } from '../net/api';
 import { useSession } from '../store/session';
 import { AppShell, PageHeader } from '../ui/AppShell';
@@ -15,9 +16,9 @@ const TABS = ['frames', 'cardBacks', 'tables', 'effects'] as const;
 type Tab = (typeof TABS)[number];
 
 function FramesGrid() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const user = useSession((s) => s.user)!;
-  const gold = useSession((s) => s.gold);
+  const balance = useSession((s) => s.balance);
   const setUser = useSession((s) => s.setUser);
   const [busy, setBusy] = useState<string | null>(null);
 
@@ -69,7 +70,7 @@ function FramesGrid() {
                 {frame.price === 0 ? (
                   <span className="text-white/50">{t('shop.free')}</span>
                 ) : (
-                  <Amount currency="gold" value={String(frame.price)} size={20} className="font-semibold text-gold-100" />
+                  <Amount currency="silver" value={formatChips(frame.price, i18n.language)} size={20} className="font-semibold" />
                 )}
               </div>
             </div>
@@ -80,7 +81,7 @@ function FramesGrid() {
                 {t('shop.equip')}
               </Button>
             ) : (
-              <Button variant="gold" size="sm" onClick={() => void call('/api/shop/buy', frame.id, t('shop.bought'))} disabled={busy !== null || gold < frame.price}>
+              <Button variant="gold" size="sm" onClick={() => void call('/api/shop/buy', frame.id, t('shop.bought'))} disabled={busy !== null || balance < frame.price}>
                 {t('shop.buy')}
               </Button>
             )}

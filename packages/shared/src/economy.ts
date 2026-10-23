@@ -1,7 +1,8 @@
 /**
- * Virtual economy. Two currencies, neither has cash value or can ever be bought or withdrawn:
- * - Cxu Bạc (silver): the betting currency of every game.
- * - Cxu Vàng (gold): rare, earned only from the welcome pack, daily check-in and events.
+ * Virtual economy (Keyo Game policy). No currency can be bought with real money,
+ * cashed out, traded for crypto or exchanged for real-world rewards.
+ * - Cxu Bạc (silver): everyday currency for gameplay and the Frame Marketplace.
+ * - Cxu Vàng (gold): extremely rare, mainly from special events. Silver never converts to gold.
  */
 export const CURRENCIES = ['silver', 'gold'] as const;
 export type Currency = (typeof CURRENCIES)[number];
@@ -11,26 +12,26 @@ export interface Reward {
   gold: number;
 }
 
-/** 7-day check-in cycle. Missing a day restarts at day 1; after day 7 the cycle repeats. */
+/** 7-day streak (UTC days). Missing a day restarts at day 1; after day 7 the cycle repeats. */
 export const CHECKIN_REWARDS: readonly Reward[] = [
-  { silver: 1_000, gold: 0 },
-  { silver: 1_500, gold: 0 },
-  { silver: 2_000, gold: 0 },
-  { silver: 2_500, gold: 1 },
-  { silver: 3_000, gold: 0 },
-  { silver: 4_000, gold: 0 },
-  { silver: 5_000, gold: 5 },
+  { silver: 5_000, gold: 0 },
+  { silver: 5_000, gold: 0 },
+  { silver: 6_000, gold: 0 },
+  { silver: 6_000, gold: 0 },
+  { silver: 8_000, gold: 0 },
+  { silver: 10_000, gold: 0 },
+  { silver: 20_000, gold: 0 },
 ];
 
 export const ECONOMY = {
-  /** Welcome pack granted once at registration. */
-  welcome: { silver: 10_000, gold: 10 } satisfies Reward,
-  /** Check-in days roll over at midnight in this time zone. */
-  checkinTimeZone: 'Asia/Ho_Chi_Minh',
-  /** Free top-up when a player is (almost) broke. */
-  rescueAmount: 1_000,
-  rescueThreshold: 100,
-  rescueCooldownMs: 60 * 60 * 1000,
+  /** Starter reward, granted once when the account's email is verified. */
+  welcome: { silver: 50_000, gold: 0 } satisfies Reward,
+  /** Streak days roll over at midnight UTC. */
+  checkinTimeZone: 'UTC',
+  /** Low-balance relief: once per 12 h, only if available + held silver is below the threshold. */
+  rescueAmount: 2_000,
+  rescueThreshold: 1_000,
+  rescueCooldownMs: 12 * 60 * 60 * 1000,
   minBet: 10,
   maxBet: 100_000,
   /** A win is broadcast to everyone if payout >= bet * multiplier and >= minPayout. */
@@ -56,6 +57,18 @@ export const ERROR_CODES = [
   'round_active',
   'round_finished',
   'checkin_done',
+  'forbidden',
+  'not_found',
+  'email_taken',
+  'email_not_verified',
+  'invalid_token',
+  'too_many_attempts',
+  'too_soon',
+  'password_mismatch',
+  'uid_taken',
+  'uid_reserved',
+  'system_account',
+  'deletion_pending',
   'item_not_found',
   'already_owned',
   'not_owned',

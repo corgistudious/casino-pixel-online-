@@ -81,7 +81,7 @@ function Hud({ s }: { s: Sizes }) {
             <PlayerName name={user.displayName} badges={user.badges} size={s.name * 0.95} className="max-w-[11em] font-bold" />
           </div>
           <div className="tabular-nums text-white/55" style={{ fontSize: s.small }}>
-            {t('player.id', { id: user.id.slice(0, 8).toUpperCase() })}
+            {t('player.id', { id: user.uid })}
           </div>
         </div>
       </Link>

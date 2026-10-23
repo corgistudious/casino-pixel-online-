@@ -17,15 +17,24 @@ import {
  */
 export const IS_DEMO = import.meta.env.VITE_DEMO === '1';
 
-/** Values the server does not provide yet (VIP and Charm are not implemented). Always labelled "Demo" in the UI. */
-export const DEMO_EXTRAS = { vipExp: 9_350, charm: 1_280 } as const;
+/**
+ * Values the server does not provide yet (VIP EXP and Charm are not implemented).
+ * Sample numbers appear only in the preview build; live builds show 0 with a "Not live yet" tag.
+ */
+export const DEMO_EXTRAS = IS_DEMO ? { vipExp: 9_350, charm: 1_280 } : { vipExp: 0, charm: 0 };
 
 const now = () => new Date();
 
 let user: PublicUser = {
   id: '7c1d2e9a-4b3f-4f6e-9a21-5d8c0b7e3f10',
+  uid: 100_428,
   username: 'corgi_vip',
   displayName: 'Corgi Royale',
+  email: 'corgi@example.com',
+  emailVerified: true,
+  status: 'active',
+  accountType: 'player',
+  permissions: [],
   locale: 'vi',
   avatar: 3,
   role: 'player',
@@ -39,12 +48,12 @@ let user: PublicUser = {
 };
 
 const leaderboard: LeaderboardEntry[] = [
-  { rank: 1, username: 'lucky_tiger', displayName: 'Lucky Tiger', avatar: 4, frame: 'royal', badges: ['verified'], balance: 2_480_000 },
-  { rank: 2, username: 'emerald_queen', displayName: 'Emerald Queen', avatar: 2, frame: 'emerald', badges: ['partner'], balance: 1_965_500 },
-  { rank: 3, username: 'ace_hunter', displayName: 'Ace Hunter', avatar: 9, frame: 'ruby', badges: [], balance: 1_402_250 },
-  { rank: 4, username: 'corgi_vip', displayName: 'Corgi Royale', avatar: 3, frame: 'sapphire', badges: ['verified', 'partner'], balance: 128_450 },
-  { rank: 5, username: 'silver_fox', displayName: 'Silver Fox', avatar: 6, frame: 'silver', badges: [], balance: 98_300 },
-  { rank: 6, username: 'midnight', displayName: 'Midnight Ace', avatar: 12, frame: 'classic', badges: [], balance: 76_900 },
+  { rank: 1, uid: 100017, username: 'lucky_tiger', displayName: 'Lucky Tiger', avatar: 4, frame: 'royal', badges: ['verified'], balance: 2_480_000 },
+  { rank: 2, uid: 100052, username: 'emerald_queen', displayName: 'Emerald Queen', avatar: 2, frame: 'emerald', badges: ['partner'], balance: 1_965_500 },
+  { rank: 3, uid: 100103, username: 'ace_hunter', displayName: 'Ace Hunter', avatar: 9, frame: 'ruby', badges: [], balance: 1_402_250 },
+  { rank: 4, uid: 100428, username: 'corgi_vip', displayName: 'Corgi Royale', avatar: 3, frame: 'sapphire', badges: ['verified', 'partner'], balance: 128_450 },
+  { rank: 5, uid: 100611, username: 'silver_fox', displayName: 'Silver Fox', avatar: 6, frame: 'silver', badges: [], balance: 98_300 },
+  { rank: 6, uid: 100890, username: 'midnight', displayName: 'Midnight Ace', avatar: 12, frame: 'classic', badges: [], balance: 76_900 },
 ];
 
 const bigWins: BigWinEvent[] = [
@@ -121,14 +130,16 @@ export async function demoApi(path: string, method: string, body: unknown): Prom
       const frame = findFrame(itemId);
       if (!frame) throw new DemoError('item_not_found');
       if (user.ownedFrames.includes(itemId)) throw new DemoError('already_owned');
-      if (user.gold < frame.price) throw new DemoError('insufficient_gold');
-      user = { ...user, gold: user.gold - frame.price, ownedFrames: [...user.ownedFrames, itemId] };
+      if (user.balance < frame.price) throw new DemoError('insufficient_funds');
+      user = { ...user, balance: user.balance - frame.price, ownedFrames: [...user.ownedFrames, itemId] };
       return { user };
     }
     case 'POST /api/me/frame':
       if (!user.ownedFrames.includes(itemId)) throw new DemoError('not_owned');
       user = { ...user, frame: itemId };
       return { user };
+    case 'GET /api/me/deletion':
+      return { request: null };
     case 'POST /api/me/rescue':
       throw new DemoError('rescue_not_available');
     default:

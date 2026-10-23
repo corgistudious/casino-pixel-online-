@@ -8,16 +8,15 @@ import {
   type CheckinResult,
   type LeaderboardEntry,
   type Locale,
+  type AccountStatus,
   type PublicUser,
-  type RegisterInput,
   type UpdateProfileInput,
 } from '@casino/shared';
-import { desc, eq, sql } from 'drizzle-orm';
-import { dummyPasswordHash, hashPassword, verifyPassword } from '../auth/password';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { users, wallets } from '../db/schema';
+import { userPermissions } from './rbac';
 import { fail } from '../errors';
-import { createActiveSeed } from './fair';
 import { ownedFrames } from './shop';
 import { applyDelta, getWallet } from './wallet';
 
@@ -33,13 +32,20 @@ export function badgesOf(user: { isVerified: boolean; isPartner: boolean }): Bad
 export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()): Promise<PublicUser> {
   const wallet = await getWallet(db, user.id);
   const progress = checkinProgress(user.checkinStreak, user.lastCheckinDate, checkinDate(now));
+  const permissions = await userPermissions(db, user.id);
   return {
     id: user.id,
+    uid: user.uid,
     username: user.username,
+    email: user.email,
+    emailVerified: !!user.emailVerifiedAt,
+    status: user.status as AccountStatus,
+    accountType: user.accountType as PublicUser['accountType'],
+    permissions,
     displayName: user.displayName,
     locale: user.locale as Locale,
     avatar: user.avatar,
-    role: user.role as PublicUser['role'],
+    role: permissions.includes('admin.access') ? 'admin' : 'player',
     badges: badgesOf(user),
     balance: wallet.balance,
     gold: wallet.gold,
@@ -53,49 +59,6 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
 export async function findUser(db: DbOrTx, id: string): Promise<UserRow | undefined> {
   const [row] = await db.select().from(users).where(eq(users.id, id));
   return row;
-}
-
-export async function registerUser(db: Db, input: RegisterInput, admins: Set<string>): Promise<UserRow> {
-  const passwordHash = await hashPassword(input.password);
-  const usernameLower = input.username.toLowerCase();
-  try {
-    return await db.transaction(async (tx) => {
-      const [user] = await tx
-        .insert(users)
-        .values({
-          username: input.username,
-          usernameLower,
-          passwordHash,
-          displayName: input.displayName ?? input.username,
-          locale: input.locale ?? 'vi',
-          role: admins.has(usernameLower) ? 'admin' : 'player',
-        })
-        .returning();
-      await tx.insert(wallets).values({ userId: user!.id, balance: 0 });
-      await applyDelta(tx, user!.id, ECONOMY.welcome.silver, 'welcome');
-      await applyDelta(tx, user!.id, ECONOMY.welcome.gold, 'welcome', null, 'gold');
-      await createActiveSeed(tx, user!.id);
-      return user!;
-    });
-  } catch (err) {
-    if (isUniqueViolation(err)) throw fail('username_taken');
-    throw err;
-  }
-}
-
-export async function authenticate(db: Db, username: string, password: string, admins: Set<string>): Promise<UserRow> {
-  const [user] = await db.select().from(users).where(eq(users.usernameLower, username.toLowerCase()));
-  if (!user) {
-    await verifyPassword(password, await dummyPasswordHash());
-    throw fail('invalid_credentials');
-  }
-  if (!(await verifyPassword(password, user.passwordHash))) throw fail('invalid_credentials');
-  if (user.banned) throw fail('banned');
-  if (admins.has(user.usernameLower) && user.role !== 'admin') {
-    const [promoted] = await db.update(users).set({ role: 'admin' }).where(eq(users.id, user.id)).returning();
-    return promoted!;
-  }
-  return user;
 }
 
 export async function updateProfile(db: Db, userId: string, input: UpdateProfileInput): Promise<UserRow> {
@@ -136,9 +99,9 @@ export async function claimRescue(db: Db, userId: string): Promise<number> {
       UPDATE users u SET last_rescue_at = now()
       FROM wallets w
       WHERE u.id = ${userId} AND w.user_id = u.id
-        AND w.balance < ${ECONOMY.rescueThreshold}
+        -- available silver plus silver held in unfinished rounds must be below the threshold
+        AND w.balance + coalesce((SELECT sum(r.bet) FROM game_rounds r WHERE r.user_id = u.id AND r.status = 'active'), 0) < ${ECONOMY.rescueThreshold}
         AND (u.last_rescue_at IS NULL OR u.last_rescue_at < now() - ${cooldown}::interval)
-        AND NOT EXISTS (SELECT 1 FROM game_rounds r WHERE r.user_id = u.id AND r.status = 'active')
       RETURNING u.id
     `);
     if (updated.length === 0) throw fail('rescue_not_available');
@@ -149,6 +112,7 @@ export async function claimRescue(db: Db, userId: string): Promise<number> {
 export async function leaderboard(db: Db, limit = 50): Promise<LeaderboardEntry[]> {
   const rows = await db
     .select({
+      uid: users.uid,
       username: users.username,
       displayName: users.displayName,
       avatar: users.avatar,
@@ -159,7 +123,13 @@ export async function leaderboard(db: Db, limit = 50): Promise<LeaderboardEntry[
     })
     .from(wallets)
     .innerJoin(users, eq(users.id, wallets.userId))
-    .where(eq(users.banned, false))
+    .where(
+      and(
+        eq(users.accountType, 'player'),
+        eq(users.status, 'active'),
+        sql`NOT EXISTS (SELECT 1 FROM bans b WHERE b.user_id = ${users.id} AND b.revoked_at IS NULL AND b.starts_at <= now() AND (b.ends_at IS NULL OR b.ends_at > now()))`,
+      ),
+    )
     .orderBy(desc(wallets.balance), users.createdAt)
     .limit(limit);
   return rows.map(({ isVerified, isPartner, ...r }, i) => ({ rank: i + 1, ...r, badges: badgesOf({ isVerified, isPartner }) }));

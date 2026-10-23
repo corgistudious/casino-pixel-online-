@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { CHECKIN_REWARDS, checkinDate, checkinDayEnd, checkinProgress, checkinReward } from '../src';
 
 describe('daily check-in', () => {
-  it('uses the Vietnam calendar day', () => {
-    // 2026-10-22 17:30 UTC is already 00:30 on the 23rd in Ho Chi Minh City (UTC+7).
-    expect(checkinDate(new Date('2026-10-22T17:30:00Z'))).toBe('2026-10-23');
-    expect(checkinDate(new Date('2026-10-22T16:59:00Z'))).toBe('2026-10-22');
-    expect(checkinDayEnd(new Date('2026-10-22T10:00:00Z')).toISOString()).toBe('2026-10-22T17:00:00.000Z');
+  it('rolls over at midnight UTC', () => {
+    expect(checkinDate(new Date('2026-10-22T23:59:00Z'))).toBe('2026-10-22');
+    expect(checkinDate(new Date('2026-10-23T00:00:00Z'))).toBe('2026-10-23');
+    expect(checkinDayEnd(new Date('2026-10-22T10:00:00Z')).toISOString()).toBe('2026-10-23T00:00:00.000Z');
+    // Explicit zones still work for other callers.
+    expect(checkinDate(new Date('2026-10-22T17:30:00Z'), 'Asia/Ho_Chi_Minh')).toBe('2026-10-23');
   });
 
   it('starts new players at day 1', () => {
@@ -30,9 +31,9 @@ describe('daily check-in', () => {
     expect(checkinProgress(6, '2026-12-31', '2027-01-01').nextDay).toBe(7);
   });
 
-  it('day 7 gives the biggest reward including gold', () => {
-    expect(CHECKIN_REWARDS).toHaveLength(7);
-    expect(checkinReward(7).gold).toBeGreaterThan(0);
-    expect(checkinReward(7).silver).toBe(Math.max(...CHECKIN_REWARDS.map((r) => r.silver)));
+  it('pays the owner-approved silver streak and no gold', () => {
+    expect(CHECKIN_REWARDS.map((r) => r.silver)).toEqual([5_000, 5_000, 6_000, 6_000, 8_000, 10_000, 20_000]);
+    expect(CHECKIN_REWARDS.every((r) => r.gold === 0)).toBe(true);
+    expect(checkinReward(7).silver).toBe(20_000);
   });
 });

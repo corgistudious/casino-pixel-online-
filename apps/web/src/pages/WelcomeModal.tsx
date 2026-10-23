@@ -5,7 +5,7 @@ import { useSession } from '../store/session';
 import { Button } from '../ui/Button';
 import { CurrencyIcon } from '../ui/OfficialAssets';
 
-/** Shown once after registration: the welcome pack that was credited. */
+/** Shown once after sign-up, when the starter reward has been credited on email verification. */
 export function WelcomeModal() {
   const { t, i18n } = useTranslation();
   const show = useSession((s) => s.justRegistered);
@@ -18,7 +18,7 @@ export function WelcomeModal() {
         <h2 className="font-display text-2xl font-bold text-gold">{t('welcome.title')}</h2>
         <p className="mt-2 text-sm text-white/70">{t('welcome.body')}</p>
         <div className="my-5 flex items-center justify-center gap-6">
-          {(['silver', 'gold'] as const).map((c) => (
+          {(['silver', 'gold'] as const).filter((c) => ECONOMY.welcome[c] > 0).map((c) => (
             <div key={c} className="flex flex-col items-center gap-1">
               <CurrencyIcon currency={c} size={72} />
               <span className="font-display text-xl font-bold tabular-nums">{formatChips(ECONOMY.welcome[c], i18n.language)}</span>
