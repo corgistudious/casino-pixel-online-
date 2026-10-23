@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { api, setAuthToken, setUnauthorizedHandler } from '../net/api';
 import { socket, type SocketStatus } from '../net/socket';
 import { storage } from '../lib/storage';
+import { DEMO_TOKEN, IS_DEMO } from '../demo';
 
 const TOKEN_KEY = 'cpo.token';
 
@@ -66,6 +67,11 @@ export const useSession = create<SessionStore>((set, get) => {
     booting: true,
 
     async boot() {
+      if (IS_DEMO) {
+        const { user } = await api<{ user: PublicUser }>('/api/me');
+        const { wins } = await api<{ wins: BigWinEvent[] }>('/api/bigwins');
+        return set({ token: DEMO_TOKEN, user, balance: user.balance, gold: user.gold, online: 1, bigWins: wins, booting: false });
+      }
       const token = storage.get(TOKEN_KEY);
       if (!token) return set({ booting: false });
       setAuthToken(token);
@@ -88,6 +94,7 @@ export const useSession = create<SessionStore>((set, get) => {
     },
 
     signOut() {
+      if (IS_DEMO) return;
       storage.set(TOKEN_KEY, null);
       setAuthToken(null);
       socket.stop();

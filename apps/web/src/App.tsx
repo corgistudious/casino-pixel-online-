@@ -7,11 +7,13 @@ import { SicBoGame } from './game/controls/SicBoGame';
 import { SlotsGame } from './game/controls/SlotsGame';
 import { AdminPage } from './pages/AdminPage';
 import { AuthPage } from './pages/AuthPage';
-import { HubPage } from './pages/HubPage';
+import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
-import { ShopPage } from './pages/ShopPage';
+import { ComingSoonPage } from './pages/ComingSoonPage';
+import { MarketPage } from './pages/MarketPage';
+import { VipPage } from './pages/VipPage';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, RotateOverlay, Toasts } from './ui/Chrome';
@@ -68,12 +70,19 @@ export function App() {
       <RotateOverlay />
       <Toasts />
       <Routes>
-        <Route path="/" element={<Authed><HubPage /></Authed>} />
+        <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
         <Route path="/profile" element={<Authed><ProfilePage /></Authed>} />
-        <Route path="/shop" element={<Authed><ShopPage /></Authed>} />
+        <Route path="/market" element={<Authed><MarketPage /></Authed>} />
+        <Route path="/shop" element={<Navigate to="/market" replace />} />
+        <Route path="/vip" element={<Authed><VipPage /></Authed>} />
+        <Route path="/rooms" element={<Authed><ComingSoonPage section="rooms" /></Authed>} />
+        <Route path="/collection" element={<Authed><ComingSoonPage section="collection" /></Authed>} />
+        <Route path="/missions" element={<Authed><ComingSoonPage section="missions" /></Authed>} />
+        <Route path="/friends" element={<Authed><ComingSoonPage section="friends" /></Authed>} />
+        <Route path="/gifts" element={<Authed><ComingSoonPage section="gifts" /></Authed>} />
         <Route path="/leaderboard" element={<Authed><LeaderboardPage /></Authed>} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/settings" element={<Authed><SettingsPage /></Authed>} />
         <Route path="/admin" element={<Authed admin><AdminPage /></Authed>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

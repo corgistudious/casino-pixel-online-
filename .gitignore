@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-preview/
 dist-electron/
 release/
 coverage/
@@ -7,6 +8,7 @@ coverage/
 .env
 .env.*
 !.env.example
+!.env.preview
 .DS_Store
 apps/web/android/
 apps/web/ios/
