@@ -6,11 +6,15 @@ const envSchema = z.object({
   HOST: z.string().default('0.0.0.0'),
   DATABASE_URL: z.string().url(),
   REDIS_URL: z.string().optional(),
+  /** Namespace for every Redis key and channel, so Keyo Game can share a Redis server with other apps. */
+  REDIS_PREFIX: z.string().regex(/^[a-z0-9_-]+:$/, 'REDIS_PREFIX must look like "keyo:"').default('keyo:'),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   CORS_ORIGINS: z.string().default('http://localhost:5173'),
   /** Comma-separated usernames promoted to admin on login. */
   ADMIN_USERNAMES: z.string().default(''),
   LOG_LEVEL: z.string().default('info'),
+  /** Must match environment_state.mode in the database (checked at startup). */
+  KEYO_DATA_MODE: z.enum(['test', 'production']).default('test'),
   /** Public URL of the web client, used in email links. */
   APP_URL: z.string().url().default('http://localhost:5173'),
   /** e.g. smtps://user:pass@smtp.example.com:465 — without it mail stays queued in email_outbox. */

@@ -277,6 +277,10 @@ export const vi: Translation = {
     toNext: 'Còn {{exp}} EXP lên VIP {{level}}',
     maxLevel: 'Đã đạt cấp tối đa',
   },
+  env: {
+    test: 'MÔI TRƯỜNG THỬ NGHIỆM',
+    testNote: 'Dữ liệu thử nghiệm — tài khoản, Cxu và lịch sử sẽ bị xóa trước khi ra mắt chính thức.',
+  },
   demo: {
     banner: 'BẢN XEM TRƯỚC GIAO DIỆN — dữ liệu demo, không kết nối máy chủ game',
     tag: 'Demo',
@@ -368,6 +372,9 @@ export const vi: Translation = {
     grant: 'Áp dụng điều chỉnh',
     ban: 'Khóa tài khoản',
     unban: 'Mở khóa',
+    testUsers: 'Tài khoản TEST',
+    testTag: 'TEST',
+    markTest: 'Tài khoản TEST (sẽ bị xóa bởi reset:test-data)',
     search: 'Tìm theo UID, tên đăng nhập hoặc email',
     searchSubmit: 'Tìm',
     noResults: 'Không tìm thấy người chơi',

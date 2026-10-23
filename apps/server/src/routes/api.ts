@@ -12,12 +12,13 @@ import { playerStats, roundHistory } from '../services/stats';
 import { claimCheckin, claimRescue, leaderboard, toPublicUser, updateProfile } from '../services/users';
 import { makeGuards } from './guards';
 
-export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub, _config: Config): void {
+export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub, config: Config): void {
   const { authed } = makeGuards(app, db);
 
   app.get('/api/health', async () => {
     await db.execute(sql`SELECT 1`);
-    return { ok: true, online: hub.online };
+    // dataMode lets clients label test deployments; it is verified against the database at startup.
+    return { ok: true, online: hub.online, dataMode: config.KEYO_DATA_MODE };
   });
 
   app.get('/api/me', { preHandler: authed }, async (req) => ({ user: await toPublicUser(db, requireAccount(req)) }));

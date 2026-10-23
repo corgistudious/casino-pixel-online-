@@ -16,8 +16,25 @@ Làm theo thứ tự phụ thuộc trong `docs/AUDIT.md`. **Dự án chưa hoàn
 | 0 | Audit source, ma trận còn thiếu, xung đột chính sách | ✅ `docs/AUDIT.md` |
 | 1 | Thương hiệu Keyo Game (tên, logo, splash, manifest, appId Android/Windows) | ✅ |
 | 2 | Tài khoản: email + xác minh, UID, Argon2id, quên mật khẩu, ban có thời hạn, xoá tài khoản, RBAC, audit, Keyo Support UID 1000, email outbox | ✅ đã chạy thật (xem dưới) |
+| 2b | Triển khai VPS dùng chung + môi trường TEST + `reset:test-data` + reset UID Production (nhánh `claude/keyo-deploy`) | ✅ chuẩn bị xong, **chưa deploy, chưa xoá dữ liệu** — xem `docs/DEPLOYMENT_VPS.md`, `docs/TEST_ENVIRONMENT.md` |
 | 3 | Sổ cái kép + ngân hàng | ⏳ tiếp theo |
 | 4+ | Hộp thư, Support Center/ticket, báo cáo, giftcode, bạn bè, phòng nhiều người + 6 game, VIP/nhiệm vụ/thành tựu, giải đấu, Chợ Xa Hoa, Thư viện khung, Reviewer, Admin Dashboard đầy đủ | ⏳ chưa làm |
+
+### Giai đoạn 2b — VPS & dữ liệu TEST (chờ duyệt)
+
+- Bộ triển khai `deploy/vps/`:
+  - compose project riêng `keyo-game`; PostgreSQL và Redis riêng (Redis có tiền tố key `keyo:`);
+  - giới hạn CPU/RAM; chỉ mở cổng `127.0.0.1:18480`;
+  - nginx host lo HTTPS + WebSocket; tự khởi động sau reboot;
+  - backup hằng ngày có kiểm tra; health check; log rotation;
+  - `deploy.sh` chỉ chạy tay và phải xác nhận.
+- Chế độ dữ liệu `test` / `production` do database cưỡng chế bằng trigger; server từ chối chạy khi sai chế độ; mọi tài khoản tạo trong giai đoạn test tự gắn cờ `is_test`.
+- Lệnh `create:test-accounts`, `reset:test-data`, `launch:production`:
+  - mặc định chỉ dry-run; cụm xác nhận gồm tên database và số tài khoản;
+  - `pg_dump` có kiểm tra trước khi xoá; chạy trong một transaction, kiểm tra lại dữ liệu được giữ;
+  - ghi nhật ký `maintenance_runs` và audit;
+  - reset UID về 100000 chỉ được một lần, sau đó database khoá ở production vĩnh viễn.
+- Kiểm chứng: xem `docs/TEST_ENVIRONMENT.md` (mục Đã kiểm thử) và mô tả PR.
 
 ### Giai đoạn 2 — đã kiểm chứng
 

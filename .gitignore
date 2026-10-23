@@ -13,3 +13,7 @@ coverage/
 apps/web/android/
 apps/web/ios/
 *.tsbuildinfo
+
+# Keyo Game VPS: database backups and maintenance reports (contain player data)
+/backups/
+/logs/

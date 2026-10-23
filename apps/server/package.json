@@ -10,7 +10,12 @@
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx --env-file-if-exists=../../.env src/db/migrate-cli.ts"
+    "db:migrate": "tsx --env-file-if-exists=../../.env src/db/migrate-cli.ts",
+    "maintenance": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts",
+    "status:data": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts status",
+    "create:test-accounts": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts create-test-accounts",
+    "reset:test-data": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts reset-test-data",
+    "launch:production": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts launch-production"
   },
   "dependencies": {
     "@casino/shared": "workspace:*",

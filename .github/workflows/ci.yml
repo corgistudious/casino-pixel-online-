@@ -35,6 +35,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # The test-data reset tests take a real pg_dump backup; the runner image ships PostgreSQL 16 client tools.
+      - run: pg_dump --version
       - run: pnpm typecheck
       - name: Tests (without Redis)
         run: pnpm test
