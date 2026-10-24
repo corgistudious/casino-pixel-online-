@@ -90,3 +90,23 @@ describe('0004_security_foundation upgrade keeps existing data', () => {
     expect((await rows(sql`SELECT 1 FROM audit_logs WHERE action = 'legacy.entry'`)).length).toBe(1);
   });
 });
+
+describe('0005_cosmetics_mailbox upgrade keeps frame ownership', () => {
+  it('copies owned frames into the inventory, keeps user_items, and leaves equipped frames as they were', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(5) }); // 0000–0004
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name, frame) VALUES
+      (100500, 'collector', 'collector', 'x', 'Collector', 'sapphire'), (100501, 'plain', 'plain', 'x', 'Plain', 'classic')`);
+    await db.execute(sql`INSERT INTO user_items (user_id, item_id) SELECT id, f FROM users, unnest(ARRAY['silver', 'sapphire']) AS f WHERE uid = 100500`);
+    await runMigrations(db);
+    const inv = await rows<{ item_id: string; kind: string; source: string }>(sql`
+      SELECT i.item_id, i.kind, i.source FROM inventory_items i JOIN users u ON u.id = i.user_id WHERE u.uid = 100500 ORDER BY 1`);
+    expect(inv).toEqual([
+      { item_id: 'sapphire', kind: 'frame', source: 'legacy' },
+      { item_id: 'silver', kind: 'frame', source: 'legacy' },
+    ]);
+    expect((await rows(sql`SELECT 1 FROM user_items`)).length).toBe(2);
+    expect((await rows<{ frame: string }>(sql`SELECT frame FROM users WHERE uid = 100500`))[0]!.frame).toBe('sapphire');
+    expect((await rows(sql`SELECT 1 FROM catalog_items WHERE status = 'released'`)).length).toBe(6);
+  });
+});

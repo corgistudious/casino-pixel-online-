@@ -7,6 +7,19 @@ _Cập nhật: 2026-10-23_
 - Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
 - Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
 
+## Master Development Prompt v2 — Giai đoạn 3: Khung, avatar, kho đồ, hộp thư (nhánh `claude/keyo-cosmetics`)
+
+- Catalog vật phẩm trong DB (khung, avatar đặc biệt, sưu tầm), có độ hiếm, nguồn nhận, trạng thái nháp/phát hành/ẩn. 6 khung cũ được seed; quyền sở hữu khung cũ được chuyển sang kho đồ mà không mất gì.
+- Upload ảnh an toàn: kiểm tra magic bytes, kích thước, tỷ lệ, dung lượng; không nhận SVG; ảnh lưu trong PostgreSQL.
+- Khung ảnh có thông số `scale`/`offset`, admin xem trước trên avatar mẫu.
+- Kho đồ thật (trang Bộ sưu tập): trang bị/tháo khung và avatar đặc biệt; không nhân đôi vật phẩm unique.
+- Hộp thư có quà đính kèm (Bạc/Vàng/vật phẩm): nhận một lần trong transaction; có hạn dùng; gửi theo UID hoặc toàn bộ người chơi; báo realtime.
+- Admin: trang Vật phẩm (upload, chỉnh vị trí khung, phát hành/ẩn, người sở hữu, tặng/thu hồi) và trang Hộp thư (soạn thư, lịch sử các đợt gửi, tỉ lệ đã nhận).
+- Sửa lỗi phát hiện khi chạy E2E:
+  - CORS không cho phép PUT/DELETE, khiến app Android/Windows không upload, xoá thư hay thu hồi vai trò được;
+  - catalog bị cache 60 giây nên vật phẩm mới không hiện ngay.
+- Chi tiết: `docs/COSMETICS_MAILBOX.md`.
+
 ## Master Development Prompt v2 — Giai đoạn 2: Admin Panel (nhánh `claude/keyo-admin`, xếp chồng trên Giai đoạn 1)
 
 - Admin Panel mới (`/admin/*`), thanh điều hướng lọc theo quyền:

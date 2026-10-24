@@ -75,7 +75,7 @@ function Hud({ s }: { s: Sizes }) {
       <div className="pointer-events-none absolute inset-x-0 bottom-3 h-[2px] bg-gradient-to-r from-transparent via-[#f2c14e]/70 to-transparent" />
 
       <Link to="/profile" className="relative flex items-center" style={{ gap: s.gap * 0.7 }}>
-        <Avatar index={user.avatar} frame={user.frame} size={s.avatar} />
+        <Avatar index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={s.avatar} />
         <div className="min-w-0">
           <div style={{ fontSize: s.name }}>
             <PlayerName name={user.displayName} badges={user.badges} size={s.name * 0.95} className="max-w-[11em] font-bold" />
@@ -441,7 +441,7 @@ export function GameHub() {
                 <main className="flex min-h-0 flex-1" style={{ paddingInline: s.pad, gap: s.gap, paddingTop: s.gap * 0.5 }}>
                   <div className="flex shrink-0 flex-col items-center justify-center" style={{ width: s.side, gap: s.gap * 1.2 }}>
                     <SideButton s={s} icon="gifts" label={t('checkin.claim')} onClick={() => setCheckinOpen(true)} dot={!user.checkin.claimedToday} />
-                    <SideButton s={s} icon="missions" label={t('nav.missions')} to="/missions" />
+                    <SideButton s={s} icon="mail" label={t('nav.mail')} to="/mail" dot={user.unreadMail > 0} />
                     <SideButton s={s} icon="market" label={t('nav.market')} to="/market" />
                   </div>
                   <div className="shrink-0 animate-rise" style={{ width: `${s.banner * 100}%` }}>

@@ -21,7 +21,7 @@ function reauthHeaders(): Record<string, string> {
  * Admin API call. When the server asks for a password re-confirmation (sensitive actions), the
  * prompt is shown once, the step-up token is fetched and the call is retried.
  */
-export async function adminApi<T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<T> {
+export async function adminApi<T>(path: string, init: { method?: string; body?: unknown; raw?: Blob } = {}): Promise<T> {
   try {
     return await api<T>(path, { ...init, headers: reauthHeaders() });
   } catch (err) {

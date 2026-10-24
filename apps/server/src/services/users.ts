@@ -17,7 +17,8 @@ import type { Db, DbOrTx } from '../db/client';
 import { users, wallets } from '../db/schema';
 import { userPermissions, userRoleIds } from './rbac';
 import { fail } from '../errors';
-import { ownedFrames } from './shop';
+import { ownedFrames } from './catalog';
+import { unreadCount } from './mailbox';
 import { applyDelta, getWallet } from './wallet';
 
 export type UserRow = typeof users.$inferSelect;
@@ -52,6 +53,8 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
     gold: wallet.gold,
     frame: user.frame,
     ownedFrames: await ownedFrames(db, user.id),
+    avatarItem: user.avatarItem,
+    unreadMail: await unreadCount(db, user.id),
     createdAt: user.createdAt.toISOString(),
     checkin: { ...progress, dayEndsAt: checkinDayEnd(now).toISOString() },
   };
@@ -118,6 +121,7 @@ export async function leaderboard(db: Db, limit = 50): Promise<LeaderboardEntry[
       displayName: users.displayName,
       avatar: users.avatar,
       frame: users.frame,
+      avatarItem: users.avatarItem,
       isVerified: users.isVerified,
       isPartner: users.isPartner,
       balance: wallets.balance,

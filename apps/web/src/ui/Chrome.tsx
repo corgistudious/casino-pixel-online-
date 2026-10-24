@@ -56,7 +56,7 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
         <BalancePill compact />
         {user && (
           <Link to="/profile" aria-label={t('nav.profile')}>
-            <Avatar index={user.avatar} frame={user.frame} size={36} />
+            <Avatar index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={36} />
           </Link>
         )}
       </div>

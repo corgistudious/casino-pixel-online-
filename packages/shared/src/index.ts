@@ -1,6 +1,7 @@
 export * from './economy';
 export * from './checkin';
 export * from './shop';
+export * from './cosmetics';
 export * from './vip';
 export * from './rbac';
 export * from './contracts/api';

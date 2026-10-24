@@ -17,6 +17,8 @@ import { assertDataMode } from './services/environment';
 import { bootstrapOwner, bootstrapRoles } from './services/rbac';
 import { registerAdminRoutes } from './routes/admin';
 import { registerAdminPanelRoutes } from './routes/adminPanel';
+import { registerAdminContentRoutes } from './routes/adminContent';
+import { registerCosmeticsRoutes } from './routes/cosmetics';
 import { registerApiRoutes } from './routes/api';
 import { registerAuthRoutes } from './routes/auth';
 
@@ -41,7 +43,8 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(cors, {
     origin: (origin, cb) => cb(null, !origin || config.corsOrigins.includes(origin)),
-    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
+    // PUT (image uploads) and DELETE (mail, roles) are needed by the Android/Windows apps, which call the API cross-origin.
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   });
   // Every HTTP route is limited per client IP; auth routes add a stricter limit of their own.
   await app.register(rateLimit, { global: true, max: config.HTTP_RATE_PER_MIN, timeWindow: '1 minute' });
@@ -68,6 +71,8 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerApiRoutes(app, db, hub, config);
   registerAdminRoutes(app, db, hub, config);
   registerAdminPanelRoutes(app, db, hub, config);
+  registerAdminContentRoutes(app, db, hub);
+  registerCosmeticsRoutes(app, db, hub);
   registerGateway(app, db, hub, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
 
   const stopMail = startMailWorker(db, app.log, config.SMTP_URL, config.MAIL_FROM);
