@@ -43,6 +43,13 @@
       "when": 1792879273875,
       "tag": "0005_cosmetics_mailbox",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792880554190,
+      "tag": "0006_shared_round_tables",
+      "breakpoints": true
     }
   ]
 }

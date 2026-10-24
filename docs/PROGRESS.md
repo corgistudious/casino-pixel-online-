@@ -134,6 +134,12 @@ Giao diện **chưa được duyệt**. Gameplay và tính năng mới tạm d�
 - CI GitHub Actions (typecheck, test có Postgres + Redis, build); workflow build APK & EXE.
 - Kết quả test gần nhất: shared 33 ✓, server 32 ✓ (cả có và không Redis), web 4 ✓. E2E Playwright (desktop 1280×720 & mobile 844×390): đăng ký → chơi cả 4 game → hồ sơ → ranking, 0 lỗi console.
 
+## Giai đoạn 4a: bàn chơi chung Tài Xỉu & Roulette
+
+- Server: `RoundTableEngine` (đồng hồ server, advisory lock leader, chuyển trạng thái có bảo vệ, provably fair theo ván, hủy ván + hoàn tiền), migration `0006_shared_round_tables` (có rollback).
+- Client: `/tables/:id`, cảnh Tài Xỉu có bát úp, Roulette quay dài theo thời gian server, đồng bộ đồng hồ, cảnh báo 5 giây, tổng cược trực tiếp, lịch sử, provably fair.
+- Chi tiết: `docs/MULTIPLAYER.md`.
+
 ## ⚠️ Chưa kiểm chứng trong môi trường này
 
 - `docker build` (Docker Hub trả 429 rate limit) — Dockerfile/compose chưa được build thực tế.

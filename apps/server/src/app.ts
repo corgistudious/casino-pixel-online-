@@ -11,6 +11,8 @@ import { runMigrations } from './db/migrate';
 import { AppError } from './errors';
 import { registerGateway } from './realtime/gateway';
 import { RealtimeHub } from './realtime/hub';
+import { RoundTableEngine } from './services/roundTables';
+import { registerTableRoutes } from './routes/tables';
 import { startMailWorker } from './mail/mailer';
 import { BannedError, bootstrapSystemAccounts } from './services/accounts';
 import { assertDataMode } from './services/environment';
@@ -73,14 +75,18 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerAdminPanelRoutes(app, db, hub, config);
   registerAdminContentRoutes(app, db, hub);
   registerCosmeticsRoutes(app, db, hub);
-  registerGateway(app, db, hub, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
+  const tables = new RoundTableEngine(db, client, hub, app.log);
+  registerTableRoutes(app, db, tables);
+  if (config.TABLE_SCHEDULER === 'on') await tables.start();
+  registerGateway(app, db, hub, tables, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
 
   const stopMail = startMailWorker(db, app.log, config.SMTP_URL, config.MAIL_FROM);
   app.addHook('onClose', async () => {
     stopMail();
+    await tables.stop();
     await hub.close();
     await client.end({ timeout: 5 });
   });
 
-  return { app, db, hub };
+  return { app, db, hub, tables };
 }

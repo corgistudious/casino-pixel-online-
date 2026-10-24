@@ -29,6 +29,7 @@ export async function startTestApp(env: Record<string, string> = {}) {
     REDIS_URL: process.env.TEST_REDIS_URL ?? '',
     WS_RATE_PER_SEC: '1000',
     WS_BURST: '1000',
+    TABLE_SCHEDULER: 'off',
     HTTP_RATE_PER_MIN: '100000',
     ...env,
   });

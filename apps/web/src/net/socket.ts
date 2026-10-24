@@ -31,6 +31,7 @@ export class GameSocket {
   private resolveReady: (() => void) | null = null;
 
   onEvent: (ev: ServerEvent) => void = () => {};
+  private listeners = new Set<(ev: ServerEvent) => void>();
   onStatus: (status: SocketStatus) => void = () => {};
   onAuthFailed: (code: ErrorCode) => void = () => {};
 
@@ -38,6 +39,12 @@ export class GameSocket {
     this.stop();
     this.token = token;
     this.connect();
+  }
+
+  /** Extra event subscribers (e.g. a table screen); returns the unsubscribe function. */
+  listen(fn: (ev: ServerEvent) => void): () => void {
+    this.listeners.add(fn);
+    return () => void this.listeners.delete(fn);
   }
 
   stop() {
@@ -100,6 +107,7 @@ export class GameSocket {
       if (msg.type === 'event') {
         const { type: _t, ...ev } = msg;
         this.onEvent(ev as ServerEvent);
+        for (const fn of this.listeners) fn(ev as ServerEvent);
         return;
       }
       const p = this.pending.get(msg.id);

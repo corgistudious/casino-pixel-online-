@@ -4,6 +4,7 @@ import type { BlackjackView } from '../games/blackjack';
 import type { RouletteResult } from '../games/roulette';
 import type { SicBoResult } from '../games/sicbo';
 import type { SlotsResult } from '../games/slots';
+import { tableBetSchema, type MyTableBet, type TableRoundView } from '../games/tables';
 
 export const LOCALES = ['vi', 'en'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -114,6 +115,15 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
     action: z.enum(['hit', 'stand', 'double']),
   }),
   z.object({ type: z.literal('blackjack.resume'), id: requestId }),
+  z.object({ type: z.literal('table.join'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({ type: z.literal('table.leave'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({
+    type: z.literal('table.bet'),
+    id: requestId,
+    tableId: z.string().min(1).max(40),
+    roundId: z.string().uuid(),
+    bets: z.array(tableBetSchema).min(1).max(40),
+  }),
 ]);
 export type ClientMessage = z.infer<typeof clientMessageSchema>;
 export type ClientMessageType = ClientMessage['type'];
@@ -264,6 +274,9 @@ export interface ResponseMap {
   'blackjack.start': RoundEnvelope<BlackjackView>;
   'blackjack.action': RoundEnvelope<BlackjackView>;
   'blackjack.resume': RoundEnvelope<BlackjackView> | null;
+  'table.join': TableRoundView;
+  'table.leave': { ok: true };
+  'table.bet': { myBets: MyTableBet[]; balance: number };
 }
 
 export type ServerEvent =
@@ -271,7 +284,9 @@ export type ServerEvent =
   | { event: 'presence'; data: { online: number } }
   | { event: 'bigwin'; data: BigWinEvent }
   /** New mail arrived (or a broadcast was sent): the client refreshes its unread count. */
-  | { event: 'mail'; data: { unread?: number } };
+  | { event: 'mail'; data: { unread?: number } }
+  /** Shared-round table update (phase change, result, live totals). `myBets` is omitted in broadcasts. */
+  | { event: 'table'; data: Omit<TableRoundView, 'myBets'> & { myBets?: MyTableBet[] } };
 
 export type ServerMessage =
   | { type: 'res'; id: string; ok: true; data: unknown }

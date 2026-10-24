@@ -481,3 +481,74 @@ export const mailMessages = pgTable(
   },
   (t) => [index('mail_messages_user_idx').on(t.userId, t.createdAt)],
 );
+
+/** Multiplayer tables (shared-round games now, seated card games later). */
+export const gameTables = pgTable('game_tables', {
+  id: text('id').primaryKey(),
+  game: text('game').notNull(),
+  nameVi: text('name_vi').notNull(),
+  nameEn: text('name_en').notNull(),
+  /** { minBet, maxBet, timings: { shakeMs, betMs, revealMs, breakMs } } */
+  config: jsonb('config').notNull(),
+  /** open | paused (no new rounds) */
+  status: text('status').notNull().default('open'),
+  sort: integer('sort').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * One shared round of a table. The timeline is stored so any server (or the same server after a
+ * restart) can carry on from the right phase. The outcome is fixed from `server_seed` when bets lock.
+ */
+export const tableRounds = pgTable(
+  'table_rounds',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tableId: text('table_id')
+      .notNull()
+      .references(() => gameTables.id, { onDelete: 'restrict' }),
+    seq: integer('seq').notNull(),
+    /** betting | locked | settled | void */
+    status: text('status').notNull().default('betting'),
+    serverSeed: text('server_seed').notNull(),
+    seedHash: text('seed_hash').notNull(),
+    outcome: jsonb('outcome'),
+    opensAt: timestamp('opens_at', { withTimezone: true }).notNull(),
+    betsOpenAt: timestamp('bets_open_at', { withTimezone: true }).notNull(),
+    locksAt: timestamp('locks_at', { withTimezone: true }).notNull(),
+    revealAt: timestamp('reveal_at', { withTimezone: true }).notNull(),
+    nextAt: timestamp('next_at', { withTimezone: true }).notNull(),
+    settledAt: timestamp('settled_at', { withTimezone: true }),
+    voidReason: text('void_reason'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('table_rounds_table_seq_idx').on(t.tableId, t.seq), index('table_rounds_status_idx').on(t.status)],
+);
+
+/** A player's bet on a shared round. Stakes are debited when placed; payouts credited at settlement. */
+export const tableBets = pgTable(
+  'table_bets',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    roundId: uuid('round_id')
+      .notNull()
+      .references(() => tableRounds.id, { onDelete: 'restrict' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    kind: text('kind').notNull(),
+    value: integer('value'),
+    amount: bigint('amount', { mode: 'number' }).notNull(),
+    payout: bigint('payout', { mode: 'number' }),
+    /** placed | settled | refunded */
+    status: text('status').notNull().default('placed'),
+    idempotencyKey: text('idempotency_key').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('table_bets_round_idx').on(t.roundId),
+    index('table_bets_user_idx').on(t.userId),
+    uniqueIndex('table_bets_idempotency_idx').on(t.userId, t.idempotencyKey),
+    check('table_bets_amount_positive', sql`${t.amount} > 0`),
+  ],
+);

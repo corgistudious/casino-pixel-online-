@@ -19,13 +19,13 @@ Baseline: `main` @ `6932b19`, đánh giá ngày 2026-10-24. Trạng thái:
 | Avatar đặc biệt | ❌ (16 avatar mặc định) | Giai đoạn 3 |
 | Kho đồ | 🟡 bảng `user_items` (chỉ khung) | Giai đoạn 3 |
 | Hộp thư có đính kèm | ❌ | Giai đoạn 3 |
-| Tài Xỉu / Sicbo | 🟡 mỗi người một ván riêng, kết quả ngay, chưa có chu kỳ chung 30s/5s, chưa có bát úp | Giai đoạn 4 |
-| Roulette | 🟡 European, ván riêng từng người, quay ngắn | Giai đoạn 4: bàn chung, quay 12–18 s |
+| Tài Xỉu / Sicbo | 🟡 mỗi người một ván riêng, kết quả ngay, chưa có chu kỳ chung 30s/5s, chưa có bát úp; nay ✅ bàn chung `taixiu-1`: lắc bát → cược 30 s (cảnh báo 5 s) → nâng bát → trả qua ledger → nghỉ 5 s | Giai đoạn 4a, `docs/MULTIPLAYER.md` |
+| Roulette | 🟡 European, ván riêng từng người, quay ngắn; nay ✅ bàn chung `roulette-1`, quay 15 s (cấu hình được), bi ngược chiều, rơi đúng ô của server | Giai đoạn 4a |
 | Poker Texas Hold'em | ❌ | Giai đoạn 4 |
 | Liêng 3 lá | ❌ | Giai đoạn 4 |
 | Xì Tố | ❌ | Giai đoạn 4 |
 | Blackjack, Slots | ✅ (có từ trước, ngoài danh sách 5 game) | Giữ nguyên |
-| Phòng game nhiều người | ❌ | Giai đoạn 4 |
+| Phòng game nhiều người | ❌; nay 🟡 bàn chung theo vòng (Tài Xỉu, Roulette) có room realtime; bàn có ghế (Poker, Liêng, Xì Tố) chưa có | Giai đoạn 4a ✅, 4b–4c |
 | Ngân hàng | ❌ | Giai đoạn 5 |
 | Chợ sưu tầm | ❌ (chỉ có cửa hàng khung) | Giai đoạn 5 |
 | Cửa hàng | 🟡 khung avatar | Giai đoạn 5 |
