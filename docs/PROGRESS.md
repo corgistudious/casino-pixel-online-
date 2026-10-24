@@ -7,6 +7,19 @@ _Cập nhật: 2026-10-23_
 - Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
 - Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
 
+## Master Development Prompt v2 — Giai đoạn 1: Security Foundation (nhánh `claude/keyo-security`)
+
+Baseline `main` @ `6932b19` (đã gồm PR #1–#5 và commit live từ VPS). Bảng đối chiếu toàn bộ yêu cầu: `docs/REQUIREMENTS_MATRIX.md`.
+
+- RBAC mới gồm 5 vai trò có rank, đồng bộ từ code; chống tự nâng quyền; ban, gỡ ban và duyệt xoá đều theo rank.
+- Owner UID 1002 và Keyo Support UID 1000 được bảo vệ bằng trigger DB. Owner tự gắn ở server; có lệnh `create-owner` khi DB chưa có UID 1002.
+- Bỏ việc cấp `super_admin` theo `ADMIN_USERNAMES` (lỗ hổng nghiêm trọng).
+- Xác thực lại cho thao tác nhạy cảm. Cộng/trừ Cxu có lý do bắt buộc và idempotency.
+- Audit log chỉ ghi thêm. Giới hạn tần suất toàn cục. Email chỉ hiện với quyền `users.pii`.
+- Sửa `deploy/Caddyfile` live gộp mọi người chơi thành một IP.
+- Test: 102 test server (27 test bảo mật mới, 1 test nâng cấp migration có dữ liệu cũ).
+- Chi tiết lỗ hổng và cách sửa: `docs/SECURITY_AUDIT.md`.
+
 ## KEYO GAME — Master Development (nhánh `claude/keyo-foundation`)
 
 Làm theo thứ tự phụ thuộc trong `docs/AUDIT.md`. **Dự án chưa hoàn tất** — dưới đây là trạng thái thật của từng giai đoạn.

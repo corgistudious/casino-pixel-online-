@@ -212,8 +212,27 @@ export const userRoles = pgTable(
     grantedBy: uuid('granted_by'),
     grantedAt: timestamp('granted_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [primaryKey({ columns: [t.userId, t.roleId] })],
+  (t) => [
+    primaryKey({ columns: [t.userId, t.roleId] }),
+    // There is exactly one Owner (UID 1002); triggers also forbid moving or removing the role.
+    uniqueIndex('user_roles_single_owner_idx').on(t.roleId).where(sql`${t.roleId} = 'owner'`),
+  ],
 );
+
+/**
+ * Idempotency records for administrative writes (grants, mail, issuance). The client sends a
+ * fresh key per intended action; a retry with the same key returns the stored result instead of
+ * applying the change twice.
+ */
+export const adminOperations = pgTable('admin_operations', {
+  id: uuid('id').primaryKey(),
+  /** Staff account that performed the operation (no FK: operations outlive test-data resets). */
+  actorId: uuid('actor_id').notNull(),
+  kind: text('kind').notNull(),
+  requestHash: text('request_hash').notNull(),
+  result: jsonb('result'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
 
 /** Append-only audit trail for security-relevant and administrative actions. */
 export const auditLogs = pgTable(

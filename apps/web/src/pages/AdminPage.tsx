@@ -3,12 +3,13 @@ import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { errorText } from '../lib/errors';
 import { formatChips } from '../lib/format';
-import { api } from '../net/api';
+import { adminApi, newIdempotencyKey } from '../net/adminApi';
 import { useSession } from '../store/session';
 import { Button } from '../ui/Button';
 import { TopBar } from '../ui/Chrome';
 import { BadgeIcon } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
+import { ReauthDialog } from '../ui/ReauthDialog';
 
 interface Overview {
   users: number;
@@ -89,7 +90,7 @@ export function AdminPage() {
   const date = (s: string) => new Date(s).toLocaleString(i18n.language);
   const fail = (err: unknown) => toast(errorText(t, err, i18n.language), 'error');
 
-  const loadOverview = () => void api<Overview>('/api/admin/overview').then(setData, fail);
+  const loadOverview = () => void adminApi<Overview>('/api/admin/overview').then(setData, fail);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(loadOverview, []);
 
@@ -98,6 +99,7 @@ export function AdminPage() {
   return (
     <div className="flex h-full flex-col">
       <TopBar title={t('admin.title')} back />
+      <ReauthDialog />
       <div className="min-h-0 flex-1 overflow-y-auto p-4">
         <div className="mx-auto grid max-w-5xl gap-4">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -140,6 +142,7 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
   const [selected, setSelected] = useState<number | null>(null);
   const [detail, setDetail] = useState<PlayerDetail | null>(null);
   const [amount, setAmount] = useState('');
+  const [grantReason, setGrantReason] = useState('');
   const [currency, setCurrency] = useState<Currency>('silver');
   const [unit, setUnit] = useState<'day' | 'month' | 'year' | 'permanent'>('day');
   const [banAmount, setBanAmount] = useState('1');
@@ -149,16 +152,17 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
 
   const search = (e?: FormEvent) => {
     e?.preventDefault();
-    void api<{ users: PlayerRow[] }>(`/api/admin/users?q=${encodeURIComponent(q.trim())}`).then((r) => setRows(r.users), fail);
+    void adminApi<{ users: PlayerRow[] }>(`/api/admin/users?q=${encodeURIComponent(q.trim())}`).then((r) => setRows(r.users), fail);
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => search(), []);
   useEffect(() => {
-    if (can('roles.manage')) void api<{ roles: { id: string }[] }>('/api/admin/roles').then((r) => setRoles(r.roles.map((x) => x.id)), () => {});
+    // Only roles strictly below the viewer's own rank can be handed out (the server enforces the same).
+    if (can('staff.manage')) void adminApi<{ grantableRoles: string[] }>('/api/admin/me').then((r) => setRoles(r.grantableRoles), () => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const load = (uid: number) => void api<PlayerDetail>(`/api/admin/users/${uid}`).then(setDetail, fail);
+  const load = (uid: number) => void adminApi<PlayerDetail>(`/api/admin/users/${uid}`).then(setDetail, fail);
   useEffect(() => {
     if (selected !== null) load(selected);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,7 +170,7 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
 
   const call = async (method: string, path: string, body?: unknown) => {
     try {
-      await api(path, { method, body });
+      await adminApi(path, { method, body });
       toast(t('admin.done'), 'success');
       if (selected !== null) load(selected);
       onChange();
@@ -222,7 +226,8 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
                   <option value="gold">{t('currency.gold')}</option>
                 </select>
                 <input className="field max-w-48" placeholder={t('admin.amount')} inputMode="numeric" value={amount} onChange={(e) => setAmount(e.target.value)} />
-                <Button variant="gold" disabled={!amount || !Number.isInteger(Number(amount))} onClick={() => void call('POST', `/api/admin/users/${uid}/grant`, { amount: Number(amount), currency })}>
+                <input className="field min-w-48 flex-1" placeholder={t('admin.grantReason')} value={grantReason} onChange={(e) => setGrantReason(e.target.value)} maxLength={500} />
+                <Button variant="gold" disabled={!amount || !Number.isInteger(Number(amount)) || grantReason.trim().length < 3} onClick={() => void call('POST', `/api/admin/users/${uid}/grant`, { amount: Number(amount), currency, reason: grantReason.trim(), idempotencyKey: newIdempotencyKey() }).then(() => setGrantReason(''))}>
                   {t('admin.grant')}
                 </Button>
               </div>
@@ -242,7 +247,7 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
               </div>
             )}
 
-            {can('roles.manage') && (
+            {can('staff.manage') && (
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-white/60">{t('admin.roles')}:</span>
                 {detail.user.roles.map((r) => (
@@ -331,14 +336,14 @@ function SpecialUids({ fail }: { fail: Fail }) {
   const { t } = useTranslation();
   const [list, setList] = useState<{ special: PlayerRow[]; nextPlayerUid: number } | null>(null);
   const [form, setForm] = useState({ uid: '', username: '', displayName: '', email: '', isTest: false });
-  const load = () => void api<{ special: PlayerRow[]; nextPlayerUid: number }>('/api/admin/uids/special').then(setList, fail);
+  const load = () => void adminApi<{ special: PlayerRow[]; nextPlayerUid: number }>('/api/admin/uids/special').then(setList, fail);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(load, []);
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await api('/api/admin/accounts', { method: 'POST', body: { ...form, uid: Number(form.uid) } });
+      await adminApi('/api/admin/accounts', { method: 'POST', body: { ...form, uid: Number(form.uid) } });
       toast(t('admin.done'), 'success');
       setForm({ uid: '', username: '', displayName: '', email: '', isTest: false });
       load();
@@ -382,13 +387,13 @@ function Deletions({ fail, date, onChange }: { fail: Fail; date: (s: string) => 
   const { t } = useTranslation();
   const [rows, setRows] = useState<DeletionRow[]>([]);
   const [note, setNote] = useState('');
-  const load = () => void api<{ requests: DeletionRow[] }>('/api/admin/deletion-requests').then((r) => setRows(r.requests), fail);
+  const load = () => void adminApi<{ requests: DeletionRow[] }>('/api/admin/deletion-requests').then((r) => setRows(r.requests), fail);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(load, []);
 
   const decide = async (id: string, approve: boolean) => {
     try {
-      await api(`/api/admin/deletion-requests/${id}/decide`, { method: 'POST', body: { approve, note: note.trim() } });
+      await adminApi(`/api/admin/deletion-requests/${id}/decide`, { method: 'POST', body: { approve, note: note.trim() } });
       toast(t('admin.done'), 'success');
       setNote('');
       load();
@@ -432,7 +437,7 @@ function Audit({ fail, date }: { fail: Fail; date: (s: string) => string }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState<AuditRow[]>([]);
   useEffect(() => {
-    void api<{ entries: AuditRow[] }>('/api/admin/audit?limit=50').then((r) => setRows(r.entries), fail);
+    void adminApi<{ entries: AuditRow[] }>('/api/admin/audit?limit=50').then((r) => setRows(r.entries), fail);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

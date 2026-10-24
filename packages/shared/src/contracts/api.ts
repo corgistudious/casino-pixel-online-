@@ -148,7 +148,10 @@ export interface PublicUser {
   displayName: string;
   locale: Locale;
   avatar: number;
+  /** 'admin' when the account can open the admin panel (derived from permissions on the server). */
   role: 'player' | 'admin';
+  /** Staff roles held (owner, super_admin, admin, moderator, support), highest first. */
+  roles: string[];
   badges: Badge[];
   /** Cxu Bạc — betting currency. */
   balance: number;
@@ -174,9 +177,19 @@ export const adminBadgesSchema = z.object({
   partner: z.boolean().optional(),
 });
 
+/** A fresh UUID per intended admin action; retries with the same key are applied only once. */
+export const idempotencyKeySchema = z.string().uuid();
+
 export const adminGrantSchema = z.object({
-  amount: z.number().int().min(-10_000_000).max(10_000_000),
+  amount: z
+    .number()
+    .int()
+    .min(-10_000_000)
+    .max(10_000_000)
+    .refine((n) => n !== 0, 'amount must not be 0'),
   currency: z.enum(CURRENCIES).default('silver'),
+  reason: z.string().trim().min(3).max(500),
+  idempotencyKey: idempotencyKeySchema,
 });
 
 export interface FairnessInfo {

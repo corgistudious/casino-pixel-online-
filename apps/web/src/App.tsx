@@ -39,7 +39,8 @@ function Authed({ children, admin = false }: { children: ReactNode; admin?: bool
   const user = useSession((s) => s.user);
   if (!user) return <AuthPage />;
   if (user.status === 'pending_verification') return <VerifyEmailGate />;
-  if (admin && user.role !== 'admin' && user.uid !== 1002) return <Navigate to="/" replace />;
+  // Access is decided by server-side permissions; the server re-checks every admin request.
+  if (admin && !user.permissions.includes('admin.access')) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
 

@@ -1,0 +1,47 @@
+# Đối chiếu yêu cầu Master Prompt với source thực tế
+
+Baseline: `main` @ `6932b19`, đánh giá ngày 2026-10-24. Trạng thái:
+- ✅ **có và đã kiểm thử**;
+- 🟡 **có một phần**;
+- ❌ **chưa có**;
+- 🔒 **làm trong Giai đoạn 1** (PR này).
+
+| Phân hệ | Trạng thái tại baseline | Ghi chú / giai đoạn |
+|---|---|---|
+| Đăng ký, xác minh email, UID, ban, xoá tài khoản | ✅ | PR #4 |
+| Bảo vệ UID 1000 Keyo Support | 🟡, nay 🔒 ✅ | Trước chỉ chặn ở vài API; nay có trigger DB |
+| Bảo vệ UID 1002 Owner | ❌ (chỉ frontend), nay 🔒 ✅ | Giai đoạn 1 |
+| RBAC 5 vai trò, phân cấp, chống tự nâng quyền | 🟡, nay 🔒 ✅ | Giai đoạn 1 |
+| Audit log | 🟡 (sửa/xoá được), nay 🔒 ✅ append-only | Giai đoạn 1 |
+| Admin Panel: dashboard, người chơi, nhân sự, audit | 🟡 trang đơn giản | Giai đoạn 2 |
+| Admin: kho vật phẩm, khung, avatar, hộp thư, chợ, ngân hàng, sự kiện, phòng, cấu hình, ticket, chat, lỗi hệ thống | ❌ | Giai đoạn 2–6, theo phân hệ |
+| Khung hồ sơ | 🟡 6 khung CSS cố định trong code, mua bằng Bạc, trang bị được | Giai đoạn 3: catalog trong DB, upload, xem trước, tháo khung |
+| Avatar đặc biệt | ❌ (16 avatar mặc định) | Giai đoạn 3 |
+| Kho đồ | 🟡 bảng `user_items` (chỉ khung) | Giai đoạn 3 |
+| Hộp thư có đính kèm | ❌ | Giai đoạn 3 |
+| Tài Xỉu / Sicbo | 🟡 mỗi người một ván riêng, kết quả ngay, chưa có chu kỳ chung 30s/5s, chưa có bát úp | Giai đoạn 4 |
+| Roulette | 🟡 European, ván riêng từng người, quay ngắn | Giai đoạn 4: bàn chung, quay 12–18 s |
+| Poker Texas Hold'em | ❌ | Giai đoạn 4 |
+| Liêng 3 lá | ❌ | Giai đoạn 4 |
+| Xì Tố | ❌ | Giai đoạn 4 |
+| Blackjack, Slots | ✅ (có từ trước, ngoài danh sách 5 game) | Giữ nguyên |
+| Phòng game nhiều người | ❌ | Giai đoạn 4 |
+| Ngân hàng | ❌ | Giai đoạn 5 |
+| Chợ sưu tầm | ❌ (chỉ có cửa hàng khung) | Giai đoạn 5 |
+| Cửa hàng | 🟡 khung avatar | Giai đoạn 5 |
+| VIP 15 cấp | 🟡 bảng cấp và giao diện; EXP chưa có backend (hiện 0 + "Chưa hoạt động") | Giai đoạn 5 |
+| Thành tích | ❌ | Giai đoạn 5 |
+| Huy hiệu Verified/Partner | ✅ | Từ PR #1 |
+| Support Hub / ticket | ❌ (chỉ có tài khoản Keyo Support) | Giai đoạn 6 |
+| Chat + kiểm duyệt | ❌ | Giai đoạn 6 |
+| Song ngữ vi/en | ✅ cho phần đã có; có kiểu `Translation` kiểm tra lúc compile | Mọi giai đoạn |
+| Provably fair, server-authoritative, ledger, idempotency ván chơi | ✅ | Có từ đầu |
+| Môi trường TEST/PRODUCTION, reset dữ liệu test | ✅ | PR #5 |
+
+## Phát hiện quan trọng về server live
+
+- VPS chạy bằng `docker-compose.yml` gốc tại `127.0.0.1:18481`, **không có** `KEYO_DATA_MODE`. Server và DB đang ở **chế độ test**: mọi tài khoản đăng ký trên live bị gắn cờ TEST, và web hiện nhãn "MÔI TRƯỜNG THỬ NGHIỆM".
+- Nếu live đã là bản chính thức, cần quyết định trước khi chuyển:
+  - Nếu chưa có người chơi thật: chạy `reset:test-data` rồi `launch:production` theo `docs/TEST_ENVIRONMENT.md`.
+  - Nếu đã có người chơi thật giữ UID ≥ 100000: `launch:production` sẽ **từ chối** (đúng thiết kế, không reset UID khi đã có người chơi). Khi đó cần một quyết định riêng: giữ chế độ test hoặc thêm lệnh chuyển chế độ không reset UID. Chưa làm vì chưa được duyệt.
+- Caddyfile live gộp mọi người chơi thành một IP. Đã sửa ở Giai đoạn 1 (V11), có hiệu lực khi deploy lại.

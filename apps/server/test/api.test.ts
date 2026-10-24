@@ -1,7 +1,8 @@
 import { CHECKIN_REWARDS, checkinDate, ECONOMY, FRAMES } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { register, startTestApp, type TestApp } from './helpers';
+import { randomUUID } from 'node:crypto';
+import { createOwner, register, startTestApp, type TestApp } from './helpers';
 
 let t: TestApp;
 beforeAll(async () => {
@@ -198,11 +199,10 @@ describe('admin', () => {
     const denied = await t.app.inject({ url: '/api/admin/overview', headers: { authorization: `Bearer ${player.token}` } });
     expect(denied.statusCode).toBe(403);
 
-    // ADMIN_USERNAMES grants super_admin on login (registering alone grants nothing).
-    await register(t, 'boss');
-    const login = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'boss', password: 'password123' } });
-    const headers = { authorization: `Bearer ${login.json().token}` };
-    expect(login.json().user.permissions).toContain('admin.access');
+    // Registering grants nothing; the Owner (UID 1002) holds every permission.
+    const owner = await createOwner(t);
+    const headers = owner.headers;
+    expect((await t.app.inject({ url: '/api/me', headers })).json().user.permissions).toContain('admin.access');
     const overview = await t.app.inject({ url: '/api/admin/overview', headers });
     expect(overview.statusCode).toBe(200);
     expect(overview.json().users).toBeGreaterThan(0);
@@ -211,14 +211,14 @@ describe('admin', () => {
       method: 'POST',
       url: `/api/admin/users/${player.user.uid}/grant`,
       headers,
-      payload: { amount: 500 },
+      payload: { amount: 500, reason: 'test grant', idempotencyKey: randomUUID() },
     });
     expect(grant.json().balance).toBe(ECONOMY.welcome.silver + 500);
     const gold = await t.app.inject({
       method: 'POST',
       url: `/api/admin/users/${player.user.uid}/grant`,
       headers,
-      payload: { amount: 7, currency: 'gold' },
+      payload: { amount: 7, currency: 'gold', reason: 'test gold', idempotencyKey: randomUUID() },
     });
     expect(gold.json().gold).toBe(ECONOMY.welcome.gold + 7);
     await ledgerMatches(player.user.id);
