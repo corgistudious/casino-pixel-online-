@@ -21,6 +21,9 @@ import { Stage } from './Stage';
 
 type GameId = 'poker' | 'sicbo' | 'roulette' | 'lieng' | 'xito' | 'blackjack';
 
+/** Live games open their shared multiplayer table; the solo versions stay reachable from it. */
+const LIVE_ROUTE: Partial<Record<GameId, string>> = { sicbo: '/tables/taixiu-1', roulette: '/tables/roulette-1', blackjack: '/play/blackjack' };
+
 /** Official line-up. Royal Slots keeps its code and route but is not listed. */
 const GAMES: { id: GameId; live: boolean; Art: () => JSX.Element }[] = [
   { id: 'poker', live: false, Art: PokerArt },
@@ -185,7 +188,7 @@ function Banner({ s, openCheckin }: { s: Sizes; openCheckin: () => void }) {
   const reduceMotion = useSettings((st) => st.reduceMotion);
   const [index, setIndex] = useState(0);
   const slides: Slide[] = [
-    { key: 'roulette', art: <BannerRouletteArt />, action: () => navigate('/play/roulette') },
+    { key: 'roulette', art: <BannerRouletteArt />, action: () => navigate('/tables/roulette-1') },
     { key: 'welcome', art: <BannerGiftArt />, action: openCheckin },
     {
       key: 'vip',
@@ -309,7 +312,7 @@ function GameCard({ s, game, index, cardW }: { s: Sizes; game: (typeof GAMES)[nu
   };
   const open = () => {
     sfx.click();
-    if (game.live) navigate(`/play/${game.id}`);
+    if (game.live) navigate(LIVE_ROUTE[game.id] ?? `/play/${game.id}`);
     else {
       toast(t('hub.soonToast', { game: name }));
       setShake(true);

@@ -5,6 +5,7 @@ import { BlackjackGame } from './game/controls/BlackjackGame';
 import { RouletteGame } from './game/controls/RouletteGame';
 import { SicBoGame } from './game/controls/SicBoGame';
 import { SlotsGame } from './game/controls/SlotsGame';
+import { SharedTableGame } from './game/controls/SharedTableGame';
 import { AdminLayout, RequirePerm } from './admin/AdminLayout';
 import { AuditPage } from './admin/AuditPage';
 import { DashboardPage } from './admin/DashboardPage';
@@ -43,6 +44,12 @@ function GameRoute() {
     default:
       return <Navigate to="/" replace />;
   }
+}
+
+function TableRoute() {
+  const { tableId } = useParams();
+  // Remount per table so scenes and subscriptions never mix two tables.
+  return tableId ? <SharedTableGame key={tableId} tableId={tableId} /> : <Navigate to="/" replace />;
 }
 
 function Authed({ children, admin = false }: { children: ReactNode; admin?: boolean }) {
@@ -89,6 +96,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
+        <Route path="/tables/:tableId" element={<Authed><TableRoute /></Authed>} />
         <Route path="/profile" element={<Authed><ProfilePage /></Authed>} />
         <Route path="/market" element={<Authed><MarketPage /></Authed>} />
         <Route path="/shop" element={<Navigate to="/market" replace />} />
