@@ -7,6 +7,17 @@ _Cập nhật: 2026-10-23_
 - Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
 - Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
 
+## Master Development Prompt v2 — Giai đoạn 2: Admin Panel (nhánh `claude/keyo-admin`, xếp chồng trên Giai đoạn 1)
+
+- Admin Panel mới (`/admin/*`), thanh điều hướng lọc theo quyền:
+  - **Tổng quan:** số liệu thật từ DB (người chơi, online, đăng ký mới, bị khóa, số ván, cược và trả thưởng 24h, Bạc/Vàng lưu hành), cảnh báo hệ thống, 3 biểu đồ hoạt động 14 ngày có tooltip và bảng, giao dịch gần đây (chỉ với quyền `economy.read`).
+  - **Người chơi:** tìm kiếm; tab tổng quan, kho đồ, ván chơi, sổ cái (`economy.read`), lịch sử bảo mật (`users.pii`), vi phạm (người khóa, người gỡ, bằng chứng). Có ban, cộng Cxu, huy hiệu, cấp vai trò theo quyền; tài khoản được bảo vệ bị khóa thao tác.
+  - **Nhân sự:** danh sách, cấp và thu hồi trong phạm vi rank.
+  - **Nhật ký kiểm toán:** lọc theo hành động, người thực hiện, đối tượng, thời gian.
+  - **UID đặc biệt, Yêu cầu xóa tài khoản, Hệ thống:** gồm hàng đợi email.
+- API mới: `GET /api/admin/dashboard`, `/api/admin/users/:uid/activity`, `/api/admin/users/:uid/ledger`, `/api/admin/audit/search`.
+- Chưa có (sẽ thêm cùng phân hệ tương ứng): số phòng đang hoạt động, tổng số dư ngân hàng, ticket chưa xử lý.
+
 ## Master Development Prompt v2 — Giai đoạn 1: Security Foundation (nhánh `claude/keyo-security`)
 
 Baseline `main` @ `6932b19` (đã gồm PR #1–#5 và commit live từ VPS). Bảng đối chiếu toàn bộ yêu cầu: `docs/REQUIREMENTS_MATRIX.md`.

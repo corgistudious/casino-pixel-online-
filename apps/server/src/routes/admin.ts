@@ -1,5 +1,6 @@
 import { adminBadgesSchema, adminGrantSchema, DEFAULT_ROLES, PERMISSIONS, roleRank, SPECIAL_UID_MAX, usernameSchema, emailSchema } from '@casino/shared';
 import { desc, eq, ilike, or, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import type { Db } from '../db/client';
@@ -97,7 +98,29 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     if (!user) throw fail('not_found');
     const viewerPerms = await userPermissions(db, req.account!.id);
     const pii = viewerPerms.includes('users.pii');
-    const userBans = await db.select().from(bans).where(eq(bans.userId, user.id)).orderBy(desc(bans.createdAt));
+    // Violation history with who issued / lifted each ban.
+    const issuer = alias(users, 'issuer');
+    const lifter = alias(users, 'lifter');
+    const userBans = await db
+      .select({
+        id: bans.id,
+        reason: bans.reason,
+        evidence: bans.evidence,
+        startsAt: bans.startsAt,
+        endsAt: bans.endsAt,
+        revokedAt: bans.revokedAt,
+        revokeReason: bans.revokeReason,
+        createdAt: bans.createdAt,
+        issuedByUid: issuer.uid,
+        issuedByName: issuer.username,
+        revokedByUid: lifter.uid,
+        revokedByName: lifter.username,
+      })
+      .from(bans)
+      .leftJoin(issuer, eq(issuer.id, bans.issuedBy))
+      .leftJoin(lifter, eq(lifter.id, bans.revokedBy))
+      .where(eq(bans.userId, user.id))
+      .orderBy(desc(bans.createdAt));
     return {
       user: {
         uid: user.uid,
