@@ -22,14 +22,16 @@
 
 ## Giới hạn tần suất
 
-- HTTP: 10 request/phút/IP cho các endpoint `/api/auth/*` và `POST /api/me/deletion` (không có giới hạn toàn cục cho mọi route — cân nhắc thêm ở reverse proxy).
+- HTTP: 300 request/phút/IP cho mọi route (`HTTP_RATE_PER_MIN`), và 10 request/phút/IP cho `/api/auth/*` và `POST /api/me/deletion`.
 - WebSocket: token bucket theo kết nối (`WS_RATE_PER_SEC`, `WS_BURST`).
 
 ## Phân quyền & kiểm toán
 
-- RBAC theo bảng `roles` / `role_permissions` / `user_roles`; danh mục quyền cố định trong code.
+- RBAC theo bảng `roles` / `role_permissions` / `user_roles`; 5 vai trò dựng sẵn (Owner, Super Admin, Admin, Moderator, Support) được đồng bộ từ code mỗi lần khởi động; phân cấp theo rank, chỉ quản lý được người và vai trò thấp hơn mình. Chi tiết: `docs/SECURITY_AUDIT.md`.
+- Thao tác nhạy cảm (cộng/trừ Cxu, cấp quyền, UID đặc biệt, duyệt xoá) cần nhập lại mật khẩu (token step-up 10 phút). Cộng/trừ Cxu có lý do bắt buộc và khoá idempotency.
+- UID 1000 (Keyo Support) và UID 1002 (Owner) được bảo vệ bằng trigger trong database.
 - Mọi API admin yêu cầu `admin.access` + quyền cụ thể; client ẩn mục không có quyền nhưng server luôn kiểm tra lại.
-- `audit_logs` ghi mọi thao tác nhạy cảm: đăng ký, xác minh, đổi mật khẩu, khoá/gỡ khoá, cấp UID, cấp/thu hồi vai trò, cộng/trừ tiền, huy hiệu, xoá tài khoản.
+- `audit_logs` chỉ ghi thêm (trigger chặn sửa, xoá, truncate) và ghi mọi thao tác nhạy cảm: đăng ký, xác minh, đổi mật khẩu, khoá/gỡ khoá, cấp UID, cấp/thu hồi vai trò, cộng/trừ tiền, huy hiệu, xoá tài khoản.
 - Tài khoản hệ thống (Keyo Support UID 1000) không đăng nhập bằng mật khẩu, không bị khoá/xoá qua API thường.
 
 ## Ví & sổ cái

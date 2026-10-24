@@ -6,6 +6,8 @@
  *   create-test-accounts --operator NAME --count N [--prefix tester]   (password from KEYO_TEST_ACCOUNT_PASSWORD)
  *   reset-test-data      --operator NAME [--execute --confirm "RESET <db> <n>"] [--backup-dir DIR]
  *   launch-production    --operator NAME [--execute --confirm "LAUNCH <db>"]  [--backup-dir DIR]
+ *   create-owner         --operator NAME --username NAME --email EMAIL [--display-name NAME]
+ *                        (only when UID 1002 does not exist; the owner activates it by email)
  */
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -13,7 +15,9 @@ import { parseArgs } from 'node:util';
 import { Redis } from 'ioredis';
 import { createDb } from '../db/client';
 import { redisKeys } from '../realtime/hub';
-import { createTestAccount } from '../services/accounts';
+import { createOwnerAccount, createTestAccount } from '../services/accounts';
+import { emailSchema, KEYO_OWNER_UID, usernameSchema } from '@casino/shared';
+import { sql } from 'drizzle-orm';
 import { getEnvironmentState } from '../services/environment';
 import { backupDatabase } from './backup';
 import { executeLaunch, executeReset, finishRun, MaintenanceRefused, planLaunch, planReset, startRun } from './testData';
@@ -27,6 +31,9 @@ const { positionals, values } = parseArgs({
     'backup-dir': { type: 'string', default: process.env.KEYO_BACKUP_DIR ?? './backups' },
     count: { type: 'string' },
     prefix: { type: 'string', default: 'tester' },
+    username: { type: 'string' },
+    email: { type: 'string' },
+    'display-name': { type: 'string' },
   },
 });
 
@@ -163,12 +170,40 @@ async function createTestAccounts(): Promise<number> {
   }
 }
 
+async function ownerStatus() {
+  const rows = (await db.execute(sql`
+    SELECT u.uid, u.username, u.status, u.is_test, EXISTS (SELECT 1 FROM user_roles r WHERE r.user_id = u.id AND r.role_id = 'owner') AS has_owner_role
+    FROM users u WHERE u.uid = ${KEYO_OWNER_UID}`)) as unknown as { uid: string; username: string; status: string; is_test: boolean; has_owner_role: boolean }[];
+  return rows[0] ? { exists: true, username: rows[0].username, status: rows[0].status, isTest: rows[0].is_test, ownerRole: rows[0].has_owner_role } : { exists: false };
+}
+
 async function status(): Promise<number> {
   const state = await getEnvironmentState(db);
   const reset = await planReset(db);
   const launch = await planLaunch(db);
-  print('Environment', { ...state, database: reset.database, testAccounts: reset.testAccounts, keptAccounts: reset.keptAccounts, uidSequence: launch.sequence });
+  print('Environment', { ...state, database: reset.database, testAccounts: reset.testAccounts, keptAccounts: reset.keptAccounts, uidSequence: launch.sequence, owner: await ownerStatus() });
   return 0;
+}
+
+async function createOwner(): Promise<number> {
+  const runId = await startRun(db, 'create_owner', false, operator || process.env.KEYO_OPERATOR || 'unknown', { username: values.username });
+  try {
+    requireOperator();
+    const username = usernameSchema.safeParse(values.username);
+    const email = emailSchema.safeParse(values.email);
+    if (!username.success || !email.success) throw new MaintenanceRefused('--username (3-20 letters, digits, _) and a valid --email are required.');
+    if ((await ownerStatus()).exists) throw new MaintenanceRefused(`UID ${KEYO_OWNER_UID} already exists; the Owner role is attached to it automatically at server start.`);
+    const appUrl = process.env.APP_URL ?? 'http://localhost:5173';
+    const user = await createOwnerAccount(db, { username: username.data, displayName: values['display-name'] ?? 'Keyo GM', email: email.data }, { appUrl });
+    await finishRun(db, runId, 'succeeded', { uid: user.uid, username: user.username });
+    print('Owner account created (activation email queued)', { uid: user.uid, username: user.username, status: user.status });
+    return 0;
+  } catch (err) {
+    const refused = err instanceof MaintenanceRefused;
+    await finishRun(db, runId, refused ? 'refused' : 'failed', { error: String((err as Error).message) });
+    console.error(`\n${refused ? 'REFUSED' : 'FAILED'}: ${(err as Error).message}`);
+    return refused ? 2 : 1;
+  }
 }
 
 let code = 1;
@@ -183,11 +218,14 @@ try {
     case 'launch-production':
       code = await launchProduction();
       break;
+    case 'create-owner':
+      code = await createOwner();
+      break;
     case 'create-test-accounts':
       code = await createTestAccounts();
       break;
     default:
-      console.error('Usage: maintenance <status | create-test-accounts | reset-test-data | launch-production> [options]');
+      console.error('Usage: maintenance <status | create-owner | create-test-accounts | reset-test-data | launch-production> [options]');
       code = 1;
   }
 } catch (err) {

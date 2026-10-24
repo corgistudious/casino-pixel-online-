@@ -15,7 +15,7 @@ import {
 import { and, desc, eq, sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { users, wallets } from '../db/schema';
-import { userPermissions } from './rbac';
+import { userPermissions, userRoleIds } from './rbac';
 import { fail } from '../errors';
 import { ownedFrames } from './shop';
 import { applyDelta, getWallet } from './wallet';
@@ -46,6 +46,7 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
     locale: user.locale as Locale,
     avatar: user.avatar,
     role: permissions.includes('admin.access') ? 'admin' : 'player',
+    roles: await userRoleIds(db, user.id),
     badges: badgesOf(user),
     balance: wallet.balance,
     gold: wallet.gold,

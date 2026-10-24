@@ -1,4 +1,4 @@
-import { KEYO_SUPPORT_UID, PLAYER_UID_START } from '@casino/shared';
+import { KEYO_SUPPORT_UID, PLAYER_UID_START, PROTECTED_UIDS } from '@casino/shared';
 import { eq, sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { maintenanceRuns } from '../db/schema';
@@ -29,8 +29,11 @@ export const TEST_DATA_TABLES = [
 /** Tables whose foreign keys to the tables above are fine without a registry entry. */
 const REFERENCE_TABLES = new Set(['roles', 'role_permissions']);
 
-/** Accounts removed by a reset: flagged TEST, ordinary players, never UID 1000. */
-const TARGETS = sql`SELECT id FROM users WHERE is_test AND account_type = 'player' AND uid <> ${KEYO_SUPPORT_UID}`;
+/** Accounts removed by a reset: flagged TEST, ordinary players, never Keyo Support (1000) or the Owner (1002). */
+const TARGETS = sql`SELECT id FROM users WHERE is_test AND account_type = 'player' AND uid NOT IN (${sql.join(
+  PROTECTED_UIDS.map((u) => sql`${u}`),
+  sql`, `,
+)})`;
 
 export interface TableCount {
   table: string;

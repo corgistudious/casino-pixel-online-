@@ -24,7 +24,7 @@ export function setUnauthorizedHandler(fn: () => void) {
   onUnauthorized = fn;
 }
 
-export async function api<T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<T> {
+export async function api<T>(path: string, init: { method?: string; body?: unknown; headers?: Record<string, string> } = {}): Promise<T> {
   if (IS_DEMO) {
     try {
       return (await demoApi(path, init.method ?? 'GET', init.body)) as T;
@@ -39,6 +39,7 @@ export async function api<T>(path: string, init: { method?: string; body?: unkno
       headers: {
         ...(init.body !== undefined ? { 'content-type': 'application/json' } : {}),
         ...(authToken ? { authorization: `Bearer ${authToken}` } : {}),
+        ...init.headers,
       },
       body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
     });

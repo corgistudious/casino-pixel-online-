@@ -5,15 +5,14 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { hashPassword } from '../src/auth/password';
 import { users } from '../src/db/schema';
 import { banEnd, bootstrapSystemAccounts } from '../src/services/accounts';
-import { codeIn, lastMail, randomIp, register, registerPending, startTestApp, TestSocket, TEST_PASSWORD, tokenIn, type TestApp } from './helpers';
+import { codeIn, createOwner, createStaff, lastMail, randomIp, register, registerPending, startTestApp, TestSocket, TEST_PASSWORD, tokenIn, type TestApp } from './helpers';
 
 let t: TestApp;
-let admin: { authorization: string };
+let admin: Record<string, string>;
 beforeAll(async () => {
   t = await startTestApp();
-  await register(t, 'boss');
-  const res = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'boss', password: TEST_PASSWORD } });
-  admin = { authorization: `Bearer ${res.json().token}` };
+  // The Owner (UID 1002) has every permission; sensitive routes also need the re-auth header it carries.
+  admin = (await createOwner(t)).headers;
 });
 afterAll(async () => {
   await t.app.close();
@@ -60,7 +59,7 @@ describe('Keyo Support UID 1000', () => {
     const login = await post('/api/auth/login', { login: 'keyo_support', password: '!disabled' });
     expect(login.statusCode).toBe(401);
     const ban = await post(`/api/admin/users/${KEYO_SUPPORT_UID}/bans`, { duration: 'permanent', reason: 'nope' }, admin);
-    expect(ban.json().error.code).toBe('system_account');
+    expect(ban.json().error.code).toBe('protected_account');
     const custom = await post('/api/admin/accounts', { uid: KEYO_SUPPORT_UID, username: 'fake_support', displayName: 'Fake', email: 'fake@example.test' }, admin);
     expect(custom.json().error.code).toBe('uid_reserved');
   });
@@ -322,20 +321,20 @@ describe('account deletion', () => {
 });
 
 describe('RBAC and audit', () => {
-  it('a moderator can ban but cannot grant currency or manage roles', async () => {
-    const mod = await register(t);
+  it('an admin can ban players but cannot grant currency or manage roles; a moderator cannot ban', async () => {
+    const adminStaff = await createStaff(t, 'admin');
+    const mod = await createStaff(t, 'moderator');
     const target = await register(t);
-    expect((await post(`/api/admin/users/${mod.user.uid}/roles`, { roleId: 'moderator' }, admin)).statusCode).toBe(200);
-    const h = auth(mod.token);
-    expect((await post(`/api/admin/users/${target.user.uid}/bans`, { duration: { unit: 'day', amount: 1 }, reason: 'test mod' }, h)).statusCode).toBe(200);
-    expect((await post(`/api/admin/users/${target.user.uid}/grant`, { amount: 100 }, h)).json().error.code).toBe('forbidden');
-    expect((await post(`/api/admin/users/${target.user.uid}/roles`, { roleId: 'admin' }, h)).json().error.code).toBe('forbidden');
-    expect(await auditCount('role.grant', mod.user.uid)).toBe(1);
+    const h = adminStaff.headers;
+    expect((await post(`/api/admin/users/${target.user.uid}/bans`, { duration: { unit: 'day', amount: 1 }, reason: 'test ban' }, h)).statusCode).toBe(200);
+    expect((await post(`/api/admin/users/${target.user.uid}/grant`, { amount: 100, reason: 'nope', idempotencyKey: randomUUID() }, h)).json().error.code).toBe('forbidden');
+    expect((await post(`/api/admin/users/${target.user.uid}/roles`, { roleId: 'support' }, h)).json().error.code).toBe('forbidden');
+    expect((await post(`/api/admin/users/${target.user.uid}/bans`, { duration: 'permanent', reason: 'mod ban' }, mod.headers)).json().error.code).toBe('forbidden');
   });
 
   it('admin grants go through the ledger and are audited', async () => {
     const { user } = await register(t);
-    const res = await post(`/api/admin/users/${user.uid}/grant`, { amount: 500 }, admin);
+    const res = await post(`/api/admin/users/${user.uid}/grant`, { amount: 500, reason: 'event prize', idempotencyKey: randomUUID() }, admin);
     expect(res.json().balance).toBe(ECONOMY.welcome.silver + 500);
     const ledger = await t.db.execute<{ n: string }>(sql`SELECT count(*) AS n FROM ledger_entries WHERE user_id = ${user.id} AND reason = 'admin_adjust'`);
     expect(Number(ledger[0]!.n)).toBe(1);

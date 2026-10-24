@@ -1,4 +1,4 @@
-import { ECONOMY, KEYO_SUPPORT_UID, SPECIAL_UID_MAX, type RegisterInput } from '@casino/shared';
+import { ECONOMY, KEYO_OWNER_UID, KEYO_SUPPORT_UID, PROTECTED_UIDS, SPECIAL_UID_MAX, type RegisterInput } from '@casino/shared';
 import { and, desc, eq, gt, isNull, lte, or, sql } from 'drizzle-orm';
 import { dummyPasswordHash, hashPassword, needsRehash, UNUSABLE_PASSWORD, verifyPassword } from '../auth/password';
 import type { Db, DbOrTx } from '../db/client';
@@ -8,7 +8,7 @@ import { enqueueMail } from '../mail/mailer';
 import { audit } from './audit';
 import { consumeCode, consumeLinkToken, issueToken, type TokenPurpose } from './emailTokens';
 import { createActiveSeed } from './fair';
-import { grantRole } from './rbac';
+import { assertOutranks, bootstrapOwner, isProtected, rankOf } from './rbac';
 import { isUniqueViolation, type UserRow } from './users';
 import { applyDelta } from './wallet';
 
@@ -20,7 +20,6 @@ const RESERVED_USERNAMES = new Set(['keyo', 'keyo_support', 'keyosupport', 'supp
 
 export interface AccountContext {
   appUrl: string;
-  admins: Set<string>;
   ip?: string;
 }
 
@@ -188,9 +187,6 @@ export async function login(db: Db, loginName: string, password: string, ctx: Ac
   const patch: Partial<typeof users.$inferInsert> = { failedLogins: 0, lockedUntil: null };
   if (needsRehash(user.passwordHash)) patch.passwordHash = await hashPassword(password);
   const [updated] = await db.update(users).set(patch).where(eq(users.id, user.id)).returning();
-  if (ctx.admins.has(user.usernameLower)) {
-    await grantRole(db, user.id, 'super_admin', null);
-  }
   return updated!;
 }
 
@@ -214,8 +210,10 @@ export async function banUser(db: Db, actorId: string, uid: number, input: { dur
   return db.transaction(async (tx) => {
     const target = await findByUid(tx, uid);
     if (!target) throw fail('not_found');
+    if (isProtected(target)) throw fail('protected_account');
     if (target.accountType !== 'player') throw fail('system_account');
-    if (target.id === actorId) throw fail('forbidden');
+    // Staff can only ban accounts ranked below them (players have rank 0).
+    await assertOutranks(tx, actorId, target);
     const startsAt = new Date();
     const [ban] = await tx
       .insert(bans)
@@ -226,8 +224,21 @@ export async function banUser(db: Db, actorId: string, uid: number, input: { dur
   });
 }
 
+/** Lifting or changing a ban needs rank over the banned account and at least the rank of whoever issued it. */
+async function assertCanChangeBan(tx: DbOrTx, actorId: string, banId: string) {
+  const [row] = await tx
+    .select({ issuedBy: bans.issuedBy, userId: bans.userId, uid: users.uid })
+    .from(bans)
+    .innerJoin(users, eq(users.id, bans.userId))
+    .where(eq(bans.id, banId));
+  if (!row) throw fail('not_found');
+  await assertOutranks(tx, actorId, { id: row.userId, uid: row.uid });
+  if (row.issuedBy && row.issuedBy !== actorId && (await rankOf(tx, row.issuedBy)) > (await rankOf(tx, actorId))) throw fail('forbidden');
+}
+
 export async function revokeBan(db: Db, actorId: string, banId: string, reason: string, ip?: string) {
   return db.transaction(async (tx) => {
+    await assertCanChangeBan(tx, actorId, banId);
     const [ban] = await tx
       .update(bans)
       .set({ revokedAt: new Date(), revokedBy: actorId, revokeReason: reason })
@@ -242,6 +253,7 @@ export async function revokeBan(db: Db, actorId: string, banId: string, reason: 
 /** Changes the end of an active ban (extend or shorten); `null` makes it permanent. */
 export async function updateBanEnd(db: Db, actorId: string, banId: string, endsAt: Date | null, ip?: string) {
   return db.transaction(async (tx) => {
+    await assertCanChangeBan(tx, actorId, banId);
     const [ban] = await tx.update(bans).set({ endsAt }).where(and(eq(bans.id, banId), isNull(bans.revokedAt))).returning();
     if (!ban) throw fail('not_found');
     await audit(tx, { actorId, action: 'ban.update', targetType: 'ban', targetId: banId, details: { endsAt: endsAt?.toISOString() ?? 'permanent' }, ip });
@@ -311,7 +323,8 @@ export async function createCustomUidAccount(
   ctx: AccountContext,
 ): Promise<UserRow> {
   if (!Number.isInteger(input.uid) || input.uid < 1 || input.uid > SPECIAL_UID_MAX) throw fail('bad_request');
-  if (input.uid === KEYO_SUPPORT_UID || input.uid === 1002) throw fail('uid_reserved');
+  // Keyo Support (1000) and the Owner (1002) are never assigned through the API.
+  if (PROTECTED_UIDS.includes(input.uid)) throw fail('uid_reserved');
   try {
     return await db.transaction(async (tx) => {
       const [user] = await tx
@@ -349,6 +362,7 @@ export async function createCustomUidAccount(
 // ---------------------------------------------------------------- deletion
 
 export async function requestDeletion(db: Db, user: UserRow, password: string, reason: string | undefined, ctx: AccountContext) {
+  if (isProtected(user)) throw fail('protected_account');
   if (user.accountType !== 'player') throw fail('system_account');
   if (!(await verifyPassword(password, user.passwordHash))) throw fail('invalid_credentials');
   try {
@@ -399,6 +413,7 @@ export async function decideDeletion(db: Db, actorId: string, requestId: string,
     if (!user) throw fail('not_found');
     if (approve) {
       if (user.accountType !== 'player') throw fail('system_account');
+      await assertOutranks(tx, actorId, user);
       if (user.email && user.emailVerifiedAt) await enqueueMail(tx, user.email, 'account_deleted', user.locale, { name: user.displayName });
       const anon = `deleted_${user.uid}`;
       await tx
@@ -501,4 +516,40 @@ export async function createTestAccount(db: Db, input: { username: string; passw
     await audit(tx, { action: 'account.test_create', targetType: 'user', targetId: user!.uid, details: { operator: actor } });
     return user!;
   });
+}
+
+// ---------------------------------------------------------------- owner account (server shell only)
+
+/**
+ * Creates the Owner account (UID 1002) when it does not exist yet. Run from the maintenance CLI
+ * on the server, never through the API. The account has no usable password: the owner receives
+ * an activation email and chooses one. The Owner role is attached immediately.
+ */
+export async function createOwnerAccount(db: Db, input: { username: string; displayName: string; email: string }, ctx: AccountContext): Promise<UserRow> {
+  const user = await db.transaction(async (tx) => {
+    const [existing] = await tx.select({ id: users.id }).from(users).where(eq(users.uid, KEYO_OWNER_UID));
+    if (existing) throw fail('uid_taken');
+    const [row] = await tx
+      .insert(users)
+      .values({
+        uid: KEYO_OWNER_UID,
+        username: input.username,
+        usernameLower: input.username.toLowerCase(),
+        displayName: input.displayName,
+        email: input.email,
+        emailLower: input.email.toLowerCase(),
+        passwordHash: UNUSABLE_PASSWORD,
+        status: 'pending_activation',
+        starterGrantedAt: new Date(),
+        isTest: false,
+      })
+      .returning();
+    await createWalletAndSeed(tx, row!.id);
+    const { token, code } = await issueToken(tx, row!.id, 'activate', row!.emailLower!);
+    await enqueueMail(tx, row!.email!, 'activate_account', row!.locale, { name: row!.displayName, uid: String(row!.uid), code }, link(ctx, 'activate', token));
+    await audit(tx, { action: 'system.owner_created', targetType: 'user', targetId: KEYO_OWNER_UID, ip: ctx.ip });
+    return row!;
+  });
+  await bootstrapOwner(db);
+  return user;
 }

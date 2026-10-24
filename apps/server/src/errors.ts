@@ -20,6 +20,8 @@ export function statusFor(code: ErrorCode): number {
     case 'forbidden':
     case 'email_not_verified':
     case 'system_account':
+    case 'protected_account':
+    case 'reauth_required':
       return 403;
     case 'round_not_found':
     case 'not_found':
@@ -33,6 +35,8 @@ export function statusFor(code: ErrorCode): number {
     case 'uid_taken':
     case 'uid_reserved':
     case 'deletion_pending':
+    case 'idempotency_conflict':
+    case 'last_super_admin':
       return 409;
     case 'too_soon':
     case 'too_many_attempts':

@@ -14,7 +14,7 @@ import { RealtimeHub } from './realtime/hub';
 import { startMailWorker } from './mail/mailer';
 import { BannedError, bootstrapSystemAccounts } from './services/accounts';
 import { assertDataMode } from './services/environment';
-import { bootstrapRoles } from './services/rbac';
+import { bootstrapOwner, bootstrapRoles } from './services/rbac';
 import { registerAdminRoutes } from './routes/admin';
 import { registerApiRoutes } from './routes/api';
 import { registerAuthRoutes } from './routes/auth';
@@ -34,6 +34,7 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   });
   await bootstrapRoles(db);
   await bootstrapSystemAccounts(db);
+  await bootstrapOwner(db);
   const hub = new RealtimeHub(app.log, config.REDIS_URL, config.REDIS_PREFIX);
 
   await app.register(helmet, { contentSecurityPolicy: false });
@@ -41,7 +42,11 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
     origin: (origin, cb) => cb(null, !origin || config.corsOrigins.includes(origin)),
     methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
   });
-  await app.register(rateLimit, { global: false });
+  // Every HTTP route is limited per client IP; auth routes add a stricter limit of their own.
+  await app.register(rateLimit, { global: true, max: config.HTTP_RATE_PER_MIN, timeWindow: '1 minute' });
+  if (config.adminUsernames.size > 0) {
+    app.log.warn('ADMIN_USERNAMES is ignored: roles are no longer granted by username at login (privilege escalation risk). The Owner is UID 1002; staff roles are granted in the admin panel.');
+  }
   await app.register(jwt, { secret: config.JWT_SECRET });
   await app.register(websocket, { options: { maxPayload: 16 * 1024 } });
 

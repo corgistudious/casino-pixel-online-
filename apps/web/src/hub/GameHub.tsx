@@ -122,15 +122,15 @@ function Hud({ s }: { s: Sizes }) {
             </div>
           </div>
         ))}
-        {(user.uid === 1002 || user.role === 'admin') && (
+        {user.permissions.includes('admin.access') && (
           <Link
             to="/admin"
-            title="Quản trị"
-            aria-label="Quản trị"
+            title={t('nav.admin')}
+            aria-label={t('nav.admin')}
             className="flex items-center justify-center rounded-full border border-[#f2c14e]/70 bg-gradient-to-b from-[#493074] to-[#1c103e] px-3 font-bold text-[#ffe08a] transition hover:brightness-125"
             style={{ height: s.coin * 0.85, fontSize: s.small * 0.85 }}
           >
-            Quản trị
+            {t('nav.admin')}
           </Link>
         )}
         <Link

@@ -35,6 +35,7 @@ let user: PublicUser = {
   status: 'active',
   accountType: 'player',
   permissions: [],
+  roles: [],
   locale: 'vi',
   avatar: 3,
   role: 'player',
