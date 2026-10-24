@@ -38,7 +38,7 @@ export const ECONOMY = {
   bigWin: { multiplier: 10, minPayout: 5_000 },
 } as const;
 
-export const GAME_KEYS = ['slots', 'roulette', 'sicbo', 'blackjack'] as const;
+export const GAME_KEYS = ['slots', 'roulette', 'sicbo', 'blackjack', 'taixiu'] as const;
 export type GameKey = (typeof GAME_KEYS)[number];
 
 export const ERROR_CODES = [
@@ -77,6 +77,9 @@ export const ERROR_CODES = [
   'mail_expired',
   'invalid_asset',
   'not_tradable',
+  'table_not_found',
+  'betting_closed',
+  'table_unavailable',
   'item_not_found',
   'already_owned',
   'not_owned',
