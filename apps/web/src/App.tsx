@@ -5,7 +5,12 @@ import { BlackjackGame } from './game/controls/BlackjackGame';
 import { RouletteGame } from './game/controls/RouletteGame';
 import { SicBoGame } from './game/controls/SicBoGame';
 import { SlotsGame } from './game/controls/SlotsGame';
-import { AdminPage } from './pages/AdminPage';
+import { AdminLayout, RequirePerm } from './admin/AdminLayout';
+import { AuditPage } from './admin/AuditPage';
+import { DashboardPage } from './admin/DashboardPage';
+import { DeletionsPage, SystemPage, UidsPage } from './admin/MiscPages';
+import { PlayersPage } from './admin/PlayersPage';
+import { StaffPage } from './admin/StaffPage';
 import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
 import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
@@ -88,7 +93,16 @@ export function App() {
         <Route path="/gifts" element={<Authed><ComingSoonPage section="gifts" /></Authed>} />
         <Route path="/leaderboard" element={<Authed><LeaderboardPage /></Authed>} />
         <Route path="/settings" element={<Authed><SettingsPage /></Authed>} />
-        <Route path="/admin" element={<Authed admin><AdminPage /></Authed>} />
+        <Route path="/admin" element={<Authed admin><AdminLayout /></Authed>}>
+          <Route path="dashboard" element={<RequirePerm perm="dashboard.read"><DashboardPage /></RequirePerm>} />
+          <Route path="players" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
+          <Route path="players/:uid" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
+          <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
+          <Route path="audit" element={<RequirePerm perm="audit.read"><AuditPage /></RequirePerm>} />
+          <Route path="uids" element={<RequirePerm perm="uid.assign"><UidsPage /></RequirePerm>} />
+          <Route path="deletions" element={<RequirePerm perm="deletion.manage"><DeletionsPage /></RequirePerm>} />
+          <Route path="system" element={<RequirePerm perm="mail.read"><SystemPage /></RequirePerm>} />
+        </Route>
         <Route path="/verify-email" element={<EmailLinkPage kind="verify" />} />
         <Route path="/reset-password" element={<EmailLinkPage kind="reset" />} />
         <Route path="/activate" element={<EmailLinkPage kind="activate" />} />

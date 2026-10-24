@@ -16,6 +16,7 @@ import { BannedError, bootstrapSystemAccounts } from './services/accounts';
 import { assertDataMode } from './services/environment';
 import { bootstrapOwner, bootstrapRoles } from './services/rbac';
 import { registerAdminRoutes } from './routes/admin';
+import { registerAdminPanelRoutes } from './routes/adminPanel';
 import { registerApiRoutes } from './routes/api';
 import { registerAuthRoutes } from './routes/auth';
 
@@ -66,6 +67,7 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerAuthRoutes(app, db, hub, config);
   registerApiRoutes(app, db, hub, config);
   registerAdminRoutes(app, db, hub, config);
+  registerAdminPanelRoutes(app, db, hub, config);
   registerGateway(app, db, hub, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
 
   const stopMail = startMailWorker(db, app.log, config.SMTP_URL, config.MAIL_FROM);
