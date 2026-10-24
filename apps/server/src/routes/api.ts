@@ -7,7 +7,7 @@ import type { Db } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { getActiveSeed, rotateSeed } from '../services/fair';
-import { buyFrame, equipFrame } from '../services/shop';
+import { buyItem, equip } from '../services/catalog';
 import { playerStats, roundHistory } from '../services/stats';
 import { claimCheckin, claimRescue, leaderboard, toPublicUser, updateProfile } from '../services/users';
 import { makeGuards } from './guards';
@@ -39,15 +39,16 @@ export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub
   app.post('/api/shop/buy', { preHandler: authed }, async (req) => {
     const { itemId } = shopItemSchema.parse(req.body);
     const user = requireActive(requireAccount(req));
-    await buyFrame(db, user.id, itemId);
+    await buyItem(db, user.id, itemId);
     const fresh = await toPublicUser(db, user);
     hub.sendToUser(user.id, { type: 'event', event: 'wallet', data: { balance: fresh.balance, gold: fresh.gold } });
     return { user: fresh };
   });
 
+  /** Kept for older clients; same as POST /api/me/equip with slot "frame". */
   app.post('/api/me/frame', { preHandler: authed }, async (req) => {
     const { itemId } = shopItemSchema.parse(req.body);
-    const user = await equipFrame(db, requireAccount(req).id, itemId);
+    const user = await equip(db, requireAccount(req).id, 'frame', itemId);
     return { user: await toPublicUser(db, user) };
   });
 

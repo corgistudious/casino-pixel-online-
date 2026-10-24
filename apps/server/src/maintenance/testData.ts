@@ -18,6 +18,8 @@ export const TEST_DATA_TABLES = [
   { table: 'game_rounds', column: 'user_id', action: 'delete' },
   { table: 'ledger_entries', column: 'user_id', action: 'delete' },
   { table: 'user_items', column: 'user_id', action: 'delete' },
+  { table: 'inventory_items', column: 'user_id', action: 'delete' },
+  { table: 'mail_messages', column: 'user_id', action: 'delete' },
   { table: 'fair_seeds', column: 'user_id', action: 'delete' },
   { table: 'wallets', column: 'user_id', action: 'delete' },
   { table: 'user_roles', column: 'user_id', action: 'delete' },

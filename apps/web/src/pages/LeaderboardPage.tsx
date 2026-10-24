@@ -31,7 +31,7 @@ export function LeaderboardPage() {
                 style={{ animationDelay: `${Math.min(i, 20) * 25}ms` }}
               >
                 <Medal rank={e.rank} />
-                <Avatar index={e.avatar} size={34} frame={e.frame} animated={e.rank === 1} />
+                <Avatar index={e.avatar} avatarItem={e.avatarItem} size={34} frame={e.frame} animated={e.rank === 1} />
                 <PlayerName name={e.displayName} badges={e.badges} className="flex-1" />
                 <Amount currency="silver" value={formatChips(e.balance, i18n.language)} size={20} className="font-semibold" />
               </li>

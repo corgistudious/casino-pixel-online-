@@ -36,6 +36,13 @@
       "when": 1792877630091,
       "tag": "0004_security_foundation",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792879273875,
+      "tag": "0005_cosmetics_mailbox",
+      "breakpoints": true
     }
   ]
 }

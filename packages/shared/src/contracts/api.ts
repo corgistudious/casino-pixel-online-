@@ -157,9 +157,13 @@ export interface PublicUser {
   balance: number;
   /** Cxu Vàng — rare currency. */
   gold: number;
-  /** Equipped avatar frame id and every frame the player owns. */
+  /** Equipped avatar frame id ('none' = no frame) and every frame the player owns. */
   frame: string;
   ownedFrames: string[];
+  /** Equipped special avatar (catalog item id); null = the default avatar `avatar`. */
+  avatarItem: string | null;
+  /** Unread mail count (for the mailbox badge). */
+  unreadMail: number;
   createdAt: string;
   checkin: CheckinState;
 }
@@ -228,6 +232,7 @@ export interface LeaderboardEntry {
   username: string;
   displayName: string;
   avatar: number;
+  avatarItem: string | null;
   frame: string;
   badges: Badge[];
   balance: number;
@@ -264,7 +269,9 @@ export interface ResponseMap {
 export type ServerEvent =
   | { event: 'wallet'; data: { balance: number; gold?: number } }
   | { event: 'presence'; data: { online: number } }
-  | { event: 'bigwin'; data: BigWinEvent };
+  | { event: 'bigwin'; data: BigWinEvent }
+  /** New mail arrived (or a broadcast was sent): the client refreshes its unread count. */
+  | { event: 'mail'; data: { unread?: number } };
 
 export type ServerMessage =
   | { type: 'res'; id: string; ok: true; data: unknown }

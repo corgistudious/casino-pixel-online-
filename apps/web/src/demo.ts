@@ -3,6 +3,7 @@ import {
   checkinDayEnd,
   ECONOMY,
   findFrame,
+  FRAMES,
   type BigWinEvent,
   type FairnessInfo,
   type LeaderboardEntry,
@@ -36,6 +37,8 @@ let user: PublicUser = {
   accountType: 'player',
   permissions: [],
   roles: [],
+  avatarItem: null,
+  unreadMail: 0,
   locale: 'vi',
   avatar: 3,
   role: 'player',
@@ -49,12 +52,12 @@ let user: PublicUser = {
 };
 
 const leaderboard: LeaderboardEntry[] = [
-  { rank: 1, uid: 100017, username: 'lucky_tiger', displayName: 'Lucky Tiger', avatar: 4, frame: 'royal', badges: ['verified'], balance: 2_480_000 },
-  { rank: 2, uid: 100052, username: 'emerald_queen', displayName: 'Emerald Queen', avatar: 2, frame: 'emerald', badges: ['partner'], balance: 1_965_500 },
-  { rank: 3, uid: 100103, username: 'ace_hunter', displayName: 'Ace Hunter', avatar: 9, frame: 'ruby', badges: [], balance: 1_402_250 },
-  { rank: 4, uid: 100428, username: 'corgi_vip', displayName: 'Corgi Royale', avatar: 3, frame: 'sapphire', badges: ['verified', 'partner'], balance: 128_450 },
-  { rank: 5, uid: 100611, username: 'silver_fox', displayName: 'Silver Fox', avatar: 6, frame: 'silver', badges: [], balance: 98_300 },
-  { rank: 6, uid: 100890, username: 'midnight', displayName: 'Midnight Ace', avatar: 12, frame: 'classic', badges: [], balance: 76_900 },
+  { rank: 1, uid: 100017, username: 'lucky_tiger', displayName: 'Lucky Tiger', avatar: 4, avatarItem: null, frame: 'royal', badges: ['verified'], balance: 2_480_000 },
+  { rank: 2, uid: 100052, username: 'emerald_queen', displayName: 'Emerald Queen', avatar: 2, avatarItem: null, frame: 'emerald', badges: ['partner'], balance: 1_965_500 },
+  { rank: 3, uid: 100103, username: 'ace_hunter', displayName: 'Ace Hunter', avatar: 9, avatarItem: null, frame: 'ruby', badges: [], balance: 1_402_250 },
+  { rank: 4, uid: 100428, username: 'corgi_vip', displayName: 'Corgi Royale', avatar: 3, avatarItem: null, frame: 'sapphire', badges: ['verified', 'partner'], balance: 128_450 },
+  { rank: 5, uid: 100611, username: 'silver_fox', displayName: 'Silver Fox', avatar: 6, avatarItem: null, frame: 'silver', badges: [], balance: 98_300 },
+  { rank: 6, uid: 100890, username: 'midnight', displayName: 'Midnight Ace', avatar: 12, avatarItem: null, frame: 'classic', badges: [], balance: 76_900 },
 ];
 
 const bigWins: BigWinEvent[] = [
@@ -139,6 +142,38 @@ export async function demoApi(path: string, method: string, body: unknown): Prom
       if (!user.ownedFrames.includes(itemId)) throw new DemoError('not_owned');
       user = { ...user, frame: itemId };
       return { user };
+    case 'GET /api/catalog':
+      return {
+        items: FRAMES.map((f) => ({
+          id: f.id,
+          kind: 'frame',
+          name: { vi: f.id, en: f.id },
+          description: null,
+          rarity: 'common',
+          source: 'shop',
+          tradable: false,
+          status: 'released',
+          assetUrl: null,
+          animated: f.animated,
+          render: null,
+          style: { colors: [...f.colors], animated: f.animated },
+          priceSilver: f.price,
+        })),
+      };
+    case 'GET /api/me/inventory':
+      return {
+        items: user.ownedFrames.filter((f) => f !== 'classic').map((f) => ({ instanceId: `demo-${f}`, itemId: f, kind: 'frame', source: 'shop', acquiredAt: user.createdAt })),
+        equipped: { frame: user.frame, avatarItem: null },
+      };
+    case 'POST /api/me/equip': {
+      const { slot, itemId: next } = body as { slot: string; itemId: string | null };
+      if (slot !== 'frame') throw new DemoError('not_owned');
+      if (next && !user.ownedFrames.includes(next)) throw new DemoError('not_owned');
+      user = { ...user, frame: next ?? 'none' };
+      return { user };
+    }
+    case 'GET /api/mail':
+      return { mail: [], unread: 0 };
     case 'GET /api/me/deletion':
       return { request: null };
     case 'POST /api/me/rescue':

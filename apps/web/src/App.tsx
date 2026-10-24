@@ -11,6 +11,8 @@ import { DashboardPage } from './admin/DashboardPage';
 import { DeletionsPage, SystemPage, UidsPage } from './admin/MiscPages';
 import { PlayersPage } from './admin/PlayersPage';
 import { StaffPage } from './admin/StaffPage';
+import { ItemsPage } from './admin/ItemsPage';
+import { MailAdminPage } from './admin/MailAdminPage';
 import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
 import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
@@ -18,7 +20,10 @@ import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 import { MarketPage } from './pages/MarketPage';
+import { CollectionPage } from './pages/CollectionPage';
+import { MailboxPage } from './pages/MailboxPage';
 import { VipPage } from './pages/VipPage';
+import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, RotateOverlay, TestEnvBadge, Toasts } from './ui/Chrome';
@@ -55,9 +60,11 @@ export function App() {
   const boot = useSession((s) => s.boot);
   const reduceMotion = useSettings((s) => s.reduceMotion);
 
+  const loadCatalog = useCatalog((c) => c.load);
   useEffect(() => {
     void boot();
-  }, [boot]);
+    void loadCatalog();
+  }, [boot, loadCatalog]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('reduce-motion', reduceMotion);
@@ -87,7 +94,8 @@ export function App() {
         <Route path="/shop" element={<Navigate to="/market" replace />} />
         <Route path="/vip" element={<Authed><VipPage /></Authed>} />
         <Route path="/rooms" element={<Authed><ComingSoonPage section="rooms" /></Authed>} />
-        <Route path="/collection" element={<Authed><ComingSoonPage section="collection" /></Authed>} />
+        <Route path="/collection" element={<Authed><CollectionPage /></Authed>} />
+        <Route path="/mail" element={<Authed><MailboxPage /></Authed>} />
         <Route path="/missions" element={<Authed><ComingSoonPage section="missions" /></Authed>} />
         <Route path="/friends" element={<Authed><ComingSoonPage section="friends" /></Authed>} />
         <Route path="/gifts" element={<Authed><ComingSoonPage section="gifts" /></Authed>} />
@@ -98,6 +106,8 @@ export function App() {
           <Route path="players" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="players/:uid" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
+          <Route path="items" element={<RequirePerm perm="items.read"><ItemsPage /></RequirePerm>} />
+          <Route path="mail" element={<RequirePerm perm="mail.send"><MailAdminPage /></RequirePerm>} />
           <Route path="audit" element={<RequirePerm perm="audit.read"><AuditPage /></RequirePerm>} />
           <Route path="uids" element={<RequirePerm perm="uid.assign"><UidsPage /></RequirePerm>} />
           <Route path="deletions" element={<RequirePerm perm="deletion.manage"><DeletionsPage /></RequirePerm>} />

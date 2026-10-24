@@ -77,7 +77,7 @@ export function ProfilePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_30%,rgba(242,193,78,0.22),transparent_45%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(115deg,transparent_0_38px,rgba(255,241,184,0.04)_38px_40px)]" />
           <div className="relative flex flex-wrap items-center gap-4 p-4 lg:gap-6 lg:p-6">
-            <Avatar index={avatar} frame={user.frame} size={104} />
+            <Avatar index={avatar} frame={user.frame} avatarItem={user.avatarItem} size={104} />
             <div className="min-w-0 flex-1">
               <h1 className="font-display text-2xl font-bold lg:text-3xl">
                 <PlayerName name={user.displayName} badges={user.badges} size={26} />

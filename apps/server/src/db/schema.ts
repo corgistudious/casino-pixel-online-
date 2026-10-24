@@ -5,6 +5,7 @@ import {
   bigserial,
   boolean,
   check,
+  customType,
   index,
   integer,
   jsonb,
@@ -68,6 +69,8 @@ export const users = pgTable(
     /** Local (Asia/Ho_Chi_Minh) date of the last check-in. */
     lastCheckinDate: date('last_checkin_date', { mode: 'string' }),
     lastRescueAt: timestamp('last_rescue_at', { withTimezone: true }),
+    /** Equipped special avatar (catalog item id); null = default avatar `avatar`. */
+    avatarItem: text('avatar_item'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
@@ -111,6 +114,8 @@ export const ledgerEntries = pgTable(
     balanceAfter: bigint('balance_after', { mode: 'number' }).notNull(),
     reason: text('reason').notNull(),
     roundId: uuid('round_id'),
+    /** What caused a non-game movement, e.g. "mail:<uuid>". */
+    ref: text('ref'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index('ledger_user_idx').on(t.userId, t.id)],
@@ -361,3 +366,118 @@ export const maintenanceRuns = pgTable('maintenance_runs', {
   startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
   finishedAt: timestamp('finished_at', { withTimezone: true }),
 });
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
+
+/**
+ * Uploaded images (frames, avatars, collectibles), content-addressed by SHA-256. Stored in
+ * PostgreSQL so backups cover them and every server instance can serve them.
+ */
+export const assets = pgTable('assets', {
+  id: text('id').primaryKey(),
+  mime: text('mime').notNull(),
+  bytes: bytea('bytes').notNull(),
+  width: integer('width').notNull(),
+  height: integer('height').notNull(),
+  size: integer('size').notNull(),
+  animated: boolean('animated').notNull().default(false),
+  createdBy: uuid('created_by'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Everything a player can own. Rows are never deleted (ownership must survive); retire with status "hidden". */
+export const catalogItems = pgTable(
+  'catalog_items',
+  {
+    id: text('id').primaryKey(),
+    /** frame | avatar | collectible */
+    kind: text('kind').notNull(),
+    nameVi: text('name_vi').notNull(),
+    nameEn: text('name_en').notNull(),
+    descVi: text('desc_vi'),
+    descEn: text('desc_en'),
+    rarity: text('rarity').notNull().default('common'),
+    source: text('source').notNull().default('shop'),
+    tradable: boolean('tradable').notNull().default(false),
+    /** draft | released | hidden */
+    status: text('status').notNull().default('draft'),
+    assetId: text('asset_id').references(() => assets.id, { onDelete: 'restrict' }),
+    /** Frame placement for uploaded images: { scale, offsetX, offsetY }. */
+    render: jsonb('render'),
+    /** Built-in drawn frames: { colors, animated }. */
+    style: jsonb('style'),
+    priceSilver: bigint('price_silver', { mode: 'number' }),
+    sort: integer('sort').notNull().default(0),
+    createdBy: uuid('created_by'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    check('catalog_items_kind', sql`${t.kind} IN ('frame', 'avatar', 'collectible')`),
+    check('catalog_items_status', sql`${t.status} IN ('draft', 'released', 'hidden')`),
+    check('catalog_items_price', sql`${t.priceSilver} IS NULL OR ${t.priceSilver} >= 0`),
+  ],
+);
+
+/** Owned item instances. Frames and avatars can be held once per player (unique index). */
+export const inventoryItems = pgTable(
+  'inventory_items',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    itemId: text('item_id')
+      .notNull()
+      .references(() => catalogItems.id, { onDelete: 'restrict' }),
+    /** Copied from the catalog (immutable) so uniqueness can be indexed. */
+    kind: text('kind').notNull(),
+    source: text('source').notNull(),
+    /** e.g. mail id or admin operation id that granted it. */
+    sourceRef: text('source_ref'),
+    acquiredAt: timestamp('acquired_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('inventory_items_user_idx').on(t.userId),
+    index('inventory_items_item_idx').on(t.itemId),
+    uniqueIndex('inventory_items_unique_cosmetic_idx').on(t.userId, t.itemId).where(sql`${t.kind} IN ('frame', 'avatar')`),
+  ],
+);
+
+/** One admin send (to listed UIDs or everyone), for the history view. */
+export const mailBatches = pgTable('mail_batches', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdBy: uuid('created_by'),
+  kind: text('kind').notNull(),
+  subject: text('subject').notNull(),
+  body: text('body').notNull(),
+  attachments: jsonb('attachments').notNull(),
+  target: jsonb('target').notNull(),
+  recipients: integer('recipients').notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Personal mailbox. Attachments are granted only when the player claims them (once). */
+export const mailMessages = pgTable(
+  'mail_messages',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    kind: text('kind').notNull(),
+    subject: text('subject').notNull(),
+    body: text('body').notNull().default(''),
+    attachments: jsonb('attachments').notNull().default(sql`'[]'::jsonb`),
+    batchId: uuid('batch_id').references(() => mailBatches.id, { onDelete: 'restrict' }),
+    createdBy: uuid('created_by'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    readAt: timestamp('read_at', { withTimezone: true }),
+    claimedAt: timestamp('claimed_at', { withTimezone: true }),
+    claimResult: jsonb('claim_result'),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  },
+  (t) => [index('mail_messages_user_idx').on(t.userId, t.createdAt)],
+);

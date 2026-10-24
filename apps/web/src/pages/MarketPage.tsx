@@ -1,9 +1,10 @@
-import { FRAMES, type PublicUser } from '@casino/shared';
+import { type CatalogItem, type PublicUser } from '@casino/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sfx } from '../audio/sfx';
 import { formatChips } from '../lib/format';
 import { api, ApiError } from '../net/api';
+import { itemName, useCatalog } from '../store/catalog';
 import { useSession } from '../store/session';
 import { AppShell, PageHeader } from '../ui/AppShell';
 import { Avatar } from '../ui/Avatar';
@@ -21,6 +22,9 @@ function FramesGrid() {
   const balance = useSession((s) => s.balance);
   const setUser = useSession((s) => s.setUser);
   const [busy, setBusy] = useState<string | null>(null);
+  const catalog = useCatalog((c) => c.items);
+  // Frames currently sold in the shop (released, priced), in catalog order.
+  const frames = Object.values(catalog).filter((i): i is CatalogItem & { priceSilver: number } => i.kind === 'frame' && i.status === 'released' && i.priceSilver !== null);
 
   const call = async (path: string, itemId: string, success?: string) => {
     setBusy(itemId);
@@ -40,7 +44,7 @@ function FramesGrid() {
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:gap-4">
-      {FRAMES.map((frame, i) => {
+      {frames.map((frame, i) => {
         const owned = user.ownedFrames.includes(frame.id);
         const equipped = user.frame === frame.id;
         return (
@@ -55,22 +59,22 @@ function FramesGrid() {
               <div className="absolute bottom-1 h-4 w-28 rounded-[50%] bg-gold-300/25 blur-md xl:w-40" />
               <div className="absolute h-20 w-20 rounded-full bg-gradient-to-b from-white/10 to-transparent lg:h-32 lg:w-32" />
               <div className="lg:hidden">
-                <Avatar index={user.avatar} frame={frame.id} size={76} />
+                <Avatar index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={76} />
               </div>
               <div className="hidden lg:block xl:hidden">
-                <Avatar index={user.avatar} frame={frame.id} size={104} />
+                <Avatar index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={104} />
               </div>
               <div className="hidden xl:block">
-                <Avatar index={user.avatar} frame={frame.id} size={132} />
+                <Avatar index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={132} />
               </div>
             </div>
             <div className="text-center">
-              <div className="font-display text-base leading-tight xl:text-xl">{t(`shop.names.${frame.id}`)}</div>
+              <div className="font-display text-base leading-tight xl:text-xl">{itemName(frame, i18n.language, frame.id)}</div>
               <div className="mt-1 flex justify-center text-sm">
-                {frame.price === 0 ? (
+                {frame.priceSilver === 0 ? (
                   <span className="text-white/50">{t('shop.free')}</span>
                 ) : (
-                  <Amount currency="silver" value={formatChips(frame.price, i18n.language)} size={20} className="font-semibold" />
+                  <Amount currency="silver" value={formatChips(frame.priceSilver, i18n.language)} size={20} className="font-semibold" />
                 )}
               </div>
             </div>
@@ -81,7 +85,7 @@ function FramesGrid() {
                 {t('shop.equip')}
               </Button>
             ) : (
-              <Button variant="gold" size="sm" onClick={() => void call('/api/shop/buy', frame.id, t('shop.bought'))} disabled={busy !== null || balance < frame.price}>
+              <Button variant="gold" size="sm" onClick={() => void call('/api/shop/buy', frame.id, t('shop.bought'))} disabled={busy !== null || balance < frame.priceSilver}>
                 {t('shop.buy')}
               </Button>
             )}
