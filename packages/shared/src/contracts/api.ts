@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ECONOMY, GAME_KEYS, type ErrorCode, type GameKey } from '../economy';
+import { CURRENCIES, ECONOMY, GAME_KEYS, type ErrorCode, type GameKey, type Reward } from '../economy';
 import type { BlackjackView } from '../games/blackjack';
 import type { RouletteResult } from '../games/roulette';
 import type { SicBoResult } from '../games/sicbo';
@@ -15,19 +15,62 @@ export const usernameSchema = z
   .max(20)
   .regex(/^[a-zA-Z0-9_]+$/);
 
-export const registerSchema = z.object({
-  username: usernameSchema,
-  password: z.string().min(8).max(128),
-  displayName: z.string().trim().min(1).max(24).optional(),
-  locale: z.enum(LOCALES).optional(),
-});
+export const emailSchema = z.string().trim().toLowerCase().email().max(254);
+
+/** At least 8 characters with a letter and a digit. */
+export const passwordSchema = z
+  .string()
+  .min(8)
+  .max(128)
+  .regex(/[A-Za-z]/)
+  .regex(/[0-9]/);
+
+export const registerSchema = z
+  .object({
+    username: usernameSchema,
+    displayName: z.string().trim().min(1).max(24),
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    acceptTerms: z.literal(true),
+    locale: z.enum(LOCALES).optional(),
+  })
+  .refine((v) => v.password === v.confirmPassword, { path: ['confirmPassword'], message: 'password_mismatch' });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
+/** Log in with username or email. */
 export const loginSchema = z.object({
-  username: usernameSchema,
+  login: z.string().trim().min(3).max(254),
   password: z.string().min(1).max(128),
 });
 export type LoginInput = z.infer<typeof loginSchema>;
+
+export const verifyEmailSchema = z.union([
+  z.object({ token: z.string().min(16).max(128) }),
+  z.object({ code: z.string().regex(/^\d{6}$/) }),
+]);
+
+export const forgotPasswordSchema = z.object({ email: emailSchema });
+
+export const resetPasswordSchema = z
+  .object({
+    token: z.string().min(16).max(128).optional(),
+    email: emailSchema.optional(),
+    code: z.string().regex(/^\d{6}$/).optional(),
+    password: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((v) => v.token || (v.email && v.code), { message: 'invalid_token' })
+  .refine((v) => v.password === v.confirmPassword, { path: ['confirmPassword'], message: 'password_mismatch' });
+
+/** Legacy accounts without an email can link one (it must then be verified). */
+export const linkEmailSchema = z.object({ email: emailSchema, password: z.string().min(1).max(128) });
+
+export const deletionRequestSchema = z.object({
+  password: z.string().min(1).max(128),
+  reason: z.string().trim().max(500).optional(),
+  confirm: z.literal(true),
+});
 
 export const updateProfileSchema = z.object({
   displayName: z.string().trim().min(1).max(24).optional(),
@@ -75,17 +118,66 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
 export type ClientMessage = z.infer<typeof clientMessageSchema>;
 export type ClientMessageType = ClientMessage['type'];
 
+export const BADGES = ['verified', 'partner'] as const;
+export type Badge = (typeof BADGES)[number];
+
+export interface CheckinState {
+  /** Days completed in the current cycle (0-7). */
+  streak: number;
+  claimedToday: boolean;
+  /** Cycle day (1-7) the next claim will grant. */
+  nextDay: number;
+  /** When the current check-in day ends (ISO). */
+  dayEndsAt: string;
+}
+
+export type AccountStatus = 'pending_verification' | 'pending_activation' | 'active' | 'restricted' | 'deleted';
+
 export interface PublicUser {
   id: string;
+  /** Public UID shown to players. */
+  uid: number;
   username: string;
+  /** Own account only: the linked email and whether it is verified. */
+  email: string | null;
+  emailVerified: boolean;
+  status: AccountStatus;
+  accountType: 'player' | 'system_support';
+  /** Effective permissions (empty for regular players). */
+  permissions: string[];
   displayName: string;
   locale: Locale;
   avatar: number;
   role: 'player' | 'admin';
+  badges: Badge[];
+  /** Cxu Bạc — betting currency. */
   balance: number;
+  /** Cxu Vàng — rare currency. */
+  gold: number;
+  /** Equipped avatar frame id and every frame the player owns. */
+  frame: string;
+  ownedFrames: string[];
   createdAt: string;
-  nextDailyBonusAt: string | null;
+  checkin: CheckinState;
 }
+
+export interface CheckinResult {
+  day: number;
+  reward: Reward;
+  user: PublicUser;
+}
+
+export const shopItemSchema = z.object({ itemId: z.string().min(1).max(32) });
+
+export const adminBadgesSchema = z.object({
+  verified: z.boolean().optional(),
+  partner: z.boolean().optional(),
+});
+
+export const adminGrantSchema = z.object({
+  amount: z.number().int().min(-10_000_000).max(10_000_000),
+  currency: z.enum(CURRENCIES).default('silver'),
+});
 
 export interface FairnessInfo {
   serverSeedHash: string;
@@ -119,14 +211,18 @@ export interface PlayerStats {
 
 export interface LeaderboardEntry {
   rank: number;
+  uid: number;
   username: string;
   displayName: string;
   avatar: number;
+  frame: string;
+  badges: Badge[];
   balance: number;
 }
 
 export interface BigWinEvent {
   displayName: string;
+  badges: Badge[];
   game: GameKey;
   bet: number;
   payout: number;
@@ -153,7 +249,7 @@ export interface ResponseMap {
 }
 
 export type ServerEvent =
-  | { event: 'wallet'; data: { balance: number } }
+  | { event: 'wallet'; data: { balance: number; gold?: number } }
   | { event: 'presence'; data: { online: number } }
   | { event: 'bigwin'; data: BigWinEvent };
 

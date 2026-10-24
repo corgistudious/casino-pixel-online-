@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { ServerMessage } from '@casino/shared';
+import { sql } from 'drizzle-orm';
 import postgres from 'postgres';
 import WebSocket from 'ws';
 import { buildApp } from '../src/app';
@@ -27,7 +28,7 @@ export async function startTestApp(env: Record<string, string> = {}) {
     WS_BURST: '1000',
     ...env,
   });
-  const built = await buildApp(config, { logger: false });
+  const built = await buildApp(config, { logger: process.env.TEST_LOG ? { level: 'error' } : false });
   await built.app.listen({ port: 0, host: '127.0.0.1' });
   const address = built.app.server.address();
   const port = typeof address === 'object' && address ? address.port : 0;
@@ -36,15 +37,55 @@ export async function startTestApp(env: Record<string, string> = {}) {
 
 export type TestApp = Awaited<ReturnType<typeof startTestApp>>;
 
-export async function register(t: TestApp, username = `u_${randomUUID().slice(0, 8)}`) {
+export const randomIp = () => `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
+
+export const TEST_PASSWORD = 'password123';
+
+/** Registers without verifying the email (account stays pending_verification). */
+export async function registerPending(t: TestApp, username = `u_${randomUUID().slice(0, 8)}`, email = `${username}@example.test`) {
   const res = await t.app.inject({
     method: 'POST',
     url: '/api/auth/register',
-    payload: { username, password: 'password123' },
-    remoteAddress: `10.0.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`,
+    payload: { username, displayName: username, email, password: TEST_PASSWORD, confirmPassword: TEST_PASSWORD, acceptTerms: true },
+    remoteAddress: randomIp(),
   });
   if (res.statusCode !== 200) throw new Error(`register failed: ${res.body}`);
-  return res.json() as { token: string; user: { id: string; balance: number; username: string } };
+  return res.json() as { token: string; user: { id: string; uid: number; balance: number; username: string; email: string; status: string } };
+}
+
+/** Latest queued email to an address. */
+export async function lastMail(t: TestApp, to: string) {
+  const rows = await t.db.execute<{ subject: string; body_text: string; template: string }>(
+    sql`SELECT subject, body_text, template FROM email_outbox WHERE to_address = ${to} ORDER BY id DESC LIMIT 1`,
+  );
+  return rows[0];
+}
+
+export function codeIn(text: string): string {
+  const m = text.match(/: (\d{6})\b/);
+  if (!m) throw new Error(`no code in: ${text}`);
+  return m[1]!;
+}
+
+export function tokenIn(text: string): string {
+  const m = text.match(/token=([A-Za-z0-9_\-%]+)/);
+  if (!m) throw new Error(`no token in: ${text}`);
+  return decodeURIComponent(m[1]!);
+}
+
+/** Registers and verifies the email, giving a fully active account with the starter reward. */
+export async function register(t: TestApp, username = `u_${randomUUID().slice(0, 8)}`) {
+  const reg = await registerPending(t, username);
+  const mail = await lastMail(t, reg.user.email);
+  const res = await t.app.inject({
+    method: 'POST',
+    url: '/api/auth/verify-email',
+    headers: { authorization: `Bearer ${reg.token}` },
+    payload: { code: codeIn(mail!.body_text) },
+    remoteAddress: randomIp(),
+  });
+  if (res.statusCode !== 200) throw new Error(`verify failed: ${res.body}`);
+  return { token: reg.token, user: res.json().user as { id: string; uid: number; balance: number; username: string; email: string; status: string } };
 }
 
 /** Minimal request/response WebSocket client used by the tests. */

@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type { Db } from '../db/client';
 import { fail } from '../errors';
+import { activeBan, BannedError } from '../services/accounts';
 import { findUser, type UserRow } from '../services/users';
 
 export interface TokenPayload {
@@ -36,8 +37,9 @@ export async function accountFromToken(app: FastifyInstance, db: Db, token: stri
     throw fail('unauthorized');
   }
   const user = await findUser(db, payload.sub);
-  if (!user || user.tokenVersion !== payload.tv) throw fail('unauthorized');
-  if (user.banned) throw fail('banned');
+  if (!user || user.tokenVersion !== payload.tv || user.status === 'deleted' || user.accountType !== 'player') throw fail('unauthorized');
+  const ban = await activeBan(db, user.id);
+  if (ban) throw new BannedError(ban.endsAt, ban.reason);
   return user;
 }
 
@@ -49,4 +51,10 @@ export function bearer(req: FastifyRequest): string | undefined {
 export function requireAccount(req: FastifyRequest): UserRow {
   if (!req.account) throw fail('unauthorized');
   return req.account;
+}
+
+/** Gameplay, rewards and trading need a fully activated (email-verified) account. */
+export function requireActive(user: UserRow): UserRow {
+  if (user.status !== 'active') throw fail('email_not_verified');
+  return user;
 }

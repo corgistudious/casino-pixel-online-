@@ -8,6 +8,27 @@
       "when": 1792711805913,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792717327138,
+      "tag": "0001_economy_checkin_badges_shop",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792722311417,
+      "tag": "0002_accounts_uid_rbac_audit",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792734006613,
+      "tag": "0003_test_data_mode",
+      "breakpoints": true
     }
   ]
 }

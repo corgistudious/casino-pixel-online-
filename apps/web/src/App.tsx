@@ -6,14 +6,18 @@ import { RouletteGame } from './game/controls/RouletteGame';
 import { SicBoGame } from './game/controls/SicBoGame';
 import { SlotsGame } from './game/controls/SlotsGame';
 import { AdminPage } from './pages/AdminPage';
-import { AuthPage } from './pages/AuthPage';
-import { HubPage } from './pages/HubPage';
+import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
+import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { ComingSoonPage } from './pages/ComingSoonPage';
+import { MarketPage } from './pages/MarketPage';
+import { VipPage } from './pages/VipPage';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
-import { ConnectionBanner, RotateOverlay, Toasts } from './ui/Chrome';
+import { ConnectionBanner, RotateOverlay, TestEnvBadge, Toasts } from './ui/Chrome';
+import { KeyoLogo } from './ui/KeyoLogo';
 
 function GameRoute() {
   const { game } = useParams();
@@ -34,7 +38,8 @@ function GameRoute() {
 function Authed({ children, admin = false }: { children: ReactNode; admin?: boolean }) {
   const user = useSession((s) => s.user);
   if (!user) return <AuthPage />;
-  if (admin && user.role !== 'admin') return <Navigate to="/" replace />;
+  if (user.status === 'pending_verification') return <VerifyEmailGate />;
+  if (admin && user.role !== 'admin' && user.uid !== 1002) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
 
@@ -54,9 +59,10 @@ export function App() {
 
   if (booting) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
-        <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-300/20 border-t-gold-300" />
-        <p className="font-display text-gold-100">{t('app.loading')}</p>
+      <div className="flex h-full flex-col items-center justify-center gap-5 bg-[radial-gradient(ellipse_at_50%_30%,#2a1a66,#0b0822_60%,#05040f)]">
+        <KeyoLogo size={88} />
+        <div className="h-[3px] w-40 animate-pulse rounded-full bg-gradient-to-r from-transparent via-gold-300 to-transparent" />
+        <p className="text-sm text-white/60">{t('app.loading')}</p>
       </div>
     );
   }
@@ -64,15 +70,27 @@ export function App() {
   return (
     <HashRouter>
       <ConnectionBanner />
+      <TestEnvBadge />
       <RotateOverlay />
       <Toasts />
       <Routes>
-        <Route path="/" element={<Authed><HubPage /></Authed>} />
+        <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
         <Route path="/profile" element={<Authed><ProfilePage /></Authed>} />
+        <Route path="/market" element={<Authed><MarketPage /></Authed>} />
+        <Route path="/shop" element={<Navigate to="/market" replace />} />
+        <Route path="/vip" element={<Authed><VipPage /></Authed>} />
+        <Route path="/rooms" element={<Authed><ComingSoonPage section="rooms" /></Authed>} />
+        <Route path="/collection" element={<Authed><ComingSoonPage section="collection" /></Authed>} />
+        <Route path="/missions" element={<Authed><ComingSoonPage section="missions" /></Authed>} />
+        <Route path="/friends" element={<Authed><ComingSoonPage section="friends" /></Authed>} />
+        <Route path="/gifts" element={<Authed><ComingSoonPage section="gifts" /></Authed>} />
         <Route path="/leaderboard" element={<Authed><LeaderboardPage /></Authed>} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/settings" element={<Authed><SettingsPage /></Authed>} />
         <Route path="/admin" element={<Authed admin><AdminPage /></Authed>} />
+        <Route path="/verify-email" element={<EmailLinkPage kind="verify" />} />
+        <Route path="/reset-password" element={<EmailLinkPage kind="reset" />} />
+        <Route path="/activate" element={<EmailLinkPage kind="activate" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>

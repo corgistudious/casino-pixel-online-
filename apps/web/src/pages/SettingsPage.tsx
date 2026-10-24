@@ -4,7 +4,8 @@ import { APP_VERSION } from '../config';
 import { api } from '../net/api';
 import { useSession } from '../store/session';
 import { useSettings } from '../store/settings';
-import { TopBar } from '../ui/Chrome';
+import { AppShell, PageHeader } from '../ui/AppShell';
+import { AccountSection } from './AccountSection';
 
 const LOCALE_NAMES = { vi: 'Tiếng Việt', en: 'English' } as const;
 
@@ -35,10 +36,10 @@ export function SettingsPage() {
   const { t } = useTranslation();
   const { volume, reduceMotion, set } = useSettings();
   return (
-    <div className="flex h-full flex-col">
-      <TopBar title={t('settings.title')} back />
-      <div className="min-h-0 flex-1 overflow-y-auto p-4">
-        <div className="glass mx-auto flex max-w-xl flex-col gap-5 p-6">
+    <AppShell>
+      <div className="flex flex-col gap-4 p-3 lg:p-5">
+        <PageHeader icon="settings" title={t('settings.title')} />
+        <div className="glass flex w-full max-w-xl flex-col gap-5 p-6">
           <div className="flex items-center justify-between gap-4">
             <span>{t('settings.language')}</span>
             <LanguageSwitch />
@@ -64,7 +65,8 @@ export function SettingsPage() {
             <p className="mt-2 text-xs">{t('app.disclaimer')}</p>
           </div>
         </div>
+        <AccountSection />
       </div>
-    </div>
+    </AppShell>
   );
 }

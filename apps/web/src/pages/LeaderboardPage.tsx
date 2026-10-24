@@ -5,7 +5,8 @@ import { formatChips } from '../lib/format';
 import { api } from '../net/api';
 import { useSession } from '../store/session';
 import { Avatar, Medal } from '../ui/Avatar';
-import { TopBar } from '../ui/Chrome';
+import { AppShell, PageHeader } from '../ui/AppShell';
+import { Amount, PlayerName } from '../ui/OfficialAssets';
 
 export function LeaderboardPage() {
   const { t, i18n } = useTranslation();
@@ -17,10 +18,10 @@ export function LeaderboardPage() {
   }, []);
 
   return (
-    <div className="flex h-full flex-col">
-      <TopBar title={t('leaderboard.title')} back />
-      <div className="min-h-0 flex-1 overflow-y-auto p-4">
-        <div className="glass mx-auto max-w-2xl p-2">
+    <AppShell>
+      <div className="flex flex-col gap-4 p-3 lg:p-5">
+        <PageHeader icon="leaderboard" title={t('nav.leaderboard')} />
+        <div className="glass w-full max-w-3xl p-2">
           {entries === null && <p className="p-4 text-center text-white/50">{t('app.loading')}</p>}
           <ul>
             {entries?.map((e, i) => (
@@ -30,14 +31,14 @@ export function LeaderboardPage() {
                 style={{ animationDelay: `${Math.min(i, 20) * 25}ms` }}
               >
                 <Medal rank={e.rank} />
-                <Avatar index={e.avatar} size={34} frame={e.rank <= 3 ? 'gold' : 'none'} animated={e.rank === 1} />
-                <span className="min-w-0 flex-1 truncate">{e.displayName}</span>
-                <span className="font-semibold tabular-nums text-gold-100">{formatChips(e.balance, i18n.language)}</span>
+                <Avatar index={e.avatar} size={34} frame={e.frame} animated={e.rank === 1} />
+                <PlayerName name={e.displayName} badges={e.badges} className="flex-1" />
+                <Amount currency="silver" value={formatChips(e.balance, i18n.language)} size={20} className="font-semibold" />
               </li>
             ))}
           </ul>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 }

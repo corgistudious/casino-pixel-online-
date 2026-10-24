@@ -3,6 +3,10 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        /** Phones in landscape and other short viewports. */
+        short: { raw: '(max-height: 520px)' },
+      },
       fontFamily: {
         sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
         display: ['"Playfair Display"', 'Georgia', 'serif'],
@@ -30,6 +34,7 @@ export default {
         sheen: { '0%': { transform: 'translateX(-120%) skewX(-20deg)' }, '100%': { transform: 'translateX(220%) skewX(-20deg)' } },
         spin: { to: { transform: 'rotate(360deg)' } },
         rise: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'none' } },
+        shake: { '0%,100%': { transform: 'translateX(0)' }, '20%,60%': { transform: 'translateX(-6px)' }, '40%,80%': { transform: 'translateX(6px)' } },
         pulseGlow: { '0%,100%': { boxShadow: '0 0 12px rgba(242,193,78,0.25)' }, '50%': { boxShadow: '0 0 28px rgba(242,193,78,0.6)' } },
       },
       animation: {

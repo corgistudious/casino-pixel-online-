@@ -1,18 +1,32 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { IS_DEMO } from '../demo';
 import { formatChips } from '../lib/format';
+import { api } from '../net/api';
 import { useSession } from '../store/session';
 import { Avatar } from './Avatar';
-import { CoinIcon } from './Icons';
+import { CurrencyIcon } from './OfficialAssets';
+import { KeyoLogo } from './KeyoLogo';
 import { useToasts } from './toast';
 
 export function BalancePill({ compact = false }: { compact?: boolean }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const balance = useSession((s) => s.balance);
+  const gold = useSession((s) => s.gold);
+  const icon = compact ? 20 : 26;
+  const text = `font-semibold tabular-nums ${compact ? 'text-sm' : 'text-base'}`;
   return (
-    <div className={`gold-border flex items-center gap-2 rounded-full ${compact ? 'px-2.5 py-1' : 'px-3.5 py-1.5'}`}>
-      <CoinIcon size={compact ? 16 : 20} />
-      <span className={`font-semibold tabular-nums text-gold-100 ${compact ? 'text-sm' : 'text-base'}`}>{formatChips(balance, i18n.language)}</span>
+    <div className={`gold-border flex items-center rounded-full ${compact ? 'gap-2 px-2 py-0.5' : 'gap-3 px-3 py-1'}`}>
+      <span className="flex items-center gap-1" title={t('currency.silver')}>
+        <CurrencyIcon currency="silver" size={icon} />
+        <span className={`${text} text-white`}>{formatChips(balance, i18n.language)}</span>
+      </span>
+      <span className="h-4 w-px bg-white/15" />
+      <span className="flex items-center gap-1" title={t('currency.gold')}>
+        <CurrencyIcon currency="gold" size={icon} />
+        <span className={`${text} text-gold-100`}>{formatChips(gold, i18n.language)}</span>
+      </span>
     </div>
   );
 }
@@ -29,8 +43,8 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
           ← {t('nav.back')}
         </button>
       ) : (
-        <Link to="/" className="font-display text-lg font-bold text-gold">
-          {t('app.title')}
+        <Link to="/" aria-label={t('app.title')}>
+          <KeyoLogo size={30} />
         </Link>
       )}
       {title && <h1 className="font-display text-lg font-semibold text-white/90">{title}</h1>}
@@ -42,7 +56,7 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
         <BalancePill compact />
         {user && (
           <Link to="/profile" aria-label={t('nav.profile')}>
-            <Avatar index={user.avatar} size={36} />
+            <Avatar index={user.avatar} frame={user.frame} size={36} />
           </Link>
         )}
       </div>
@@ -71,6 +85,28 @@ export function ConnectionBanner() {
   const status = useSession((s) => s.status);
   if (status !== 'offline') return null;
   return <div className="fixed inset-x-0 top-0 z-50 bg-ruby-600/90 py-1 text-center text-xs font-medium backdrop-blur">{t('app.offline')}</div>;
+}
+
+/**
+ * Permanent corner label on servers running with KEYO_DATA_MODE=test, so testers never mistake
+ * test data for the real game. Hidden on production servers and in the UI preview build.
+ */
+export function TestEnvBadge() {
+  const { t } = useTranslation();
+  const [test, setTest] = useState(false);
+  useEffect(() => {
+    if (IS_DEMO) return;
+    void api<{ dataMode?: string }>('/api/health').then((r) => setTest(r.dataMode === 'test'), () => {});
+  }, []);
+  if (!test) return null;
+  return (
+    <div
+      className="pointer-events-none fixed bottom-2 left-2 z-[55] max-w-[min(22rem,calc(100vw-1rem))] rounded-lg border border-neon-cyan/50 bg-ink-950/85 px-2.5 py-1.5 text-[10px] leading-snug text-neon-cyan shadow-lg backdrop-blur"
+      role="note"
+    >
+      <span className="font-bold tracking-wider">{t('env.test')}</span> · <span className="text-white/70">{t('env.testNote')}</span>
+    </div>
+  );
 }
 
 /** Mobile web in portrait: ask the player to rotate (gameplay is landscape-only). */

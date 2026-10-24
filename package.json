@@ -2,7 +2,7 @@
   "name": "casino-pixel-online",
   "private": true,
   "version": "0.1.0",
-  "description": "Casino Pixel Online \u2014 2D HD pixel-art social casino (virtual chips only)",
+  "description": "Keyo Game — premium 2D HD multiplayer social casino (virtual currency only)",
   "packageManager": "pnpm@10.28.0",
   "engines": {
     "node": ">=22"
@@ -13,7 +13,9 @@
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "lint": "pnpm -r typecheck",
-    "db:migrate": "pnpm --filter @casino/server db:migrate"
+    "db:migrate": "pnpm --filter @casino/server db:migrate",
+    "reset:test-data": "pnpm --filter @casino/server reset:test-data",
+    "launch:production": "pnpm --filter @casino/server launch:production"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

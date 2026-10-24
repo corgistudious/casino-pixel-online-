@@ -1,0 +1,14 @@
+[Unit]
+Description=Keyo Game health check
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+# Dedicated account (member of the docker group) that owns /opt/keyo-game.
+User=keyo
+Group=keyo
+Environment=KEYO_ROOT=/opt/keyo-game
+ExecStart=/opt/keyo-game/deploy/vps/scripts/healthcheck.sh
+StandardOutput=append:/opt/keyo-game/logs/healthcheck.log
+StandardError=append:/opt/keyo-game/logs/healthcheck.log
