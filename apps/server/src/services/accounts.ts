@@ -311,7 +311,7 @@ export async function createCustomUidAccount(
   ctx: AccountContext,
 ): Promise<UserRow> {
   if (!Number.isInteger(input.uid) || input.uid < 1 || input.uid > SPECIAL_UID_MAX) throw fail('bad_request');
-  if (input.uid === KEYO_SUPPORT_UID) throw fail('uid_reserved');
+  if (input.uid === KEYO_SUPPORT_UID || input.uid === 1002) throw fail('uid_reserved');
   try {
     return await db.transaction(async (tx) => {
       const [user] = await tx

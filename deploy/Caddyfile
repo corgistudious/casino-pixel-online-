@@ -1,5 +1,5 @@
 # DOMAIN defaults to localhost (self-signed). Set DOMAIN=play.example.com for Let's Encrypt.
-{$DOMAIN:localhost} {
+:80 {
 	encode zstd gzip
 
 	handle /api/* {
