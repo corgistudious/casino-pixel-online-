@@ -17,10 +17,11 @@ import {
 } from '../services/games';
 import { badgesOf, toPublicUser, type UserRow } from '../services/users';
 import type { RealtimeHub } from './hub';
+import { tableRoom, type RoundTableEngine } from '../services/roundTables';
 
 const AUTH_TIMEOUT_MS = 10_000;
 
-export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, limits: { rate: number; burst: number }): void {
+export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, tables: RoundTableEngine, limits: { rate: number; burst: number }): void {
   const { rate: RATE, burst: BURST } = limits;
   app.get('/ws', { websocket: true }, (socket: WebSocket) => {
     let account: UserRow | null = null;
@@ -70,7 +71,21 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
           break;
         case 'blackjack.resume':
           return blackjackResume(db, userId);
+        case 'table.join': {
+          const view = await tables.view(msg.tableId, userId);
+          hub.join(tableRoom(msg.tableId), conn);
+          return view;
+        }
+        case 'table.leave':
+          hub.leave(tableRoom(msg.tableId), conn);
+          return { ok: true };
+        case 'table.bet': {
+          const res = await tables.placeBets(userId, msg.tableId, msg.roundId, msg.bets, msg.id);
+          hub.sendToUser(userId, { type: 'event', event: 'wallet', data: { balance: res.balance } });
+          return res;
+        }
       }
+      if (!outcome) return null;
       // Keep the player's other tabs/devices in sync.
       hub.sendToUser(userId, { type: 'event', event: 'wallet', data: { balance: outcome.envelope.balance } });
       if (outcome.settled && isBigWin(outcome.settled)) {

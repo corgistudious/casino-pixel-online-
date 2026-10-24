@@ -18,6 +18,8 @@ const envSchema = z.object({
   LOG_LEVEL: z.string().default('info'),
   /** Must match environment_state.mode in the database (checked at startup). */
   KEYO_DATA_MODE: z.enum(['test', 'production']).default('test'),
+  /** 'off' stops this instance from driving shared-round tables (tests drive them by hand). */
+  TABLE_SCHEDULER: z.enum(['on', 'off']).default('on'),
   /** Public URL of the web client, used in email links. */
   APP_URL: z.string().url().default('http://localhost:5173'),
   /** e.g. smtps://user:pass@smtp.example.com:465 — without it mail stays queued in email_outbox. */

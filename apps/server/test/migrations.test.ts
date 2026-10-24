@@ -110,3 +110,22 @@ describe('0005_cosmetics_mailbox upgrade keeps frame ownership', () => {
     expect((await rows(sql`SELECT 1 FROM catalog_items WHERE status = 'released'`)).length).toBe(6);
   });
 });
+
+describe('0006_shared_round_tables upgrade', () => {
+  it('adds the default tables without touching players, wallets or history', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(6) }); // 0000–0005
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (100600, 'veteran', 'veteran', 'x', 'Veteran')`);
+    const before = await rows<{ uid: number; balance: string }>(sql`SELECT u.uid, w.balance FROM users u LEFT JOIN wallets w ON w.user_id = u.id ORDER BY 1`);
+    await runMigrations(db);
+    expect(await rows(sql`SELECT u.uid, w.balance FROM users u LEFT JOIN wallets w ON w.user_id = u.id ORDER BY 1`)).toEqual(before);
+    const tables = await rows<{ id: string; game: string; status: string }>(sql`SELECT id, game, status FROM game_tables ORDER BY sort`);
+    expect(tables).toEqual([
+      { id: 'taixiu-1', game: 'taixiu', status: 'open' },
+      { id: 'roulette-1', game: 'roulette', status: 'open' },
+    ]);
+    // Re-running is a no-op.
+    await runMigrations(db);
+    expect((await rows(sql`SELECT 1 FROM game_tables`)).length).toBe(2);
+  });
+});
