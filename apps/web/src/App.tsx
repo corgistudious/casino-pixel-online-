@@ -29,6 +29,8 @@ import { MailboxPage } from './pages/MailboxPage';
 import { VipPage } from './pages/VipPage';
 import { RankPage } from './pages/RankPage';
 import { GiftcodePage } from './pages/GiftcodePage';
+import { CardLobbyPage } from './pages/CardLobbyPage';
+import { CardTablePage } from './pages/CardTablePage';
 import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
@@ -107,7 +109,8 @@ export function App() {
         <Route path="/market" element={<Authed><MarketPage /></Authed>} />
         <Route path="/shop" element={<Navigate to="/market" replace />} />
         <Route path="/vip" element={<Authed><VipPage /></Authed>} />
-        <Route path="/rooms" element={<Authed><ComingSoonPage section="rooms" /></Authed>} />
+        <Route path="/rooms" element={<Authed><CardLobbyPage /></Authed>} />
+        <Route path="/cards/:tableId" element={<Authed><CardTablePage /></Authed>} />
         <Route path="/collection" element={<Authed><CollectionPage /></Authed>} />
         <Route path="/mail" element={<Authed><MailboxPage /></Authed>} />
         <Route path="/missions" element={<Authed><ComingSoonPage section="missions" /></Authed>} />

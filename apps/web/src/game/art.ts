@@ -873,3 +873,63 @@ export function ensureSlotCabinet(scene: Phaser.Scene, w: number, h: number) {
     ctx.fill();
   });
 }
+
+/**
+ * Card back drawn from a cosmetic's colours (Poker, Liêng, Xì Tố). `royal` adds the Vương Giả crown.
+ * Purely decorative: a back never reveals the card.
+ */
+export function ensureCardBackTexture(scene: Phaser.Scene, key: string, colors: string[], royal = false) {
+  hdTexture(scene, key, CARD_W, CARD_H, (ctx) => {
+    const W = CARD_W;
+    const H = CARD_H;
+    const [a = '#7a1630', b = '#3e0816', accent = '#f7d77a'] = colors.length >= 3 ? colors : [...colors, '#f7d77a'];
+    roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4);
+    ctx.fillStyle = '#fbf7ee';
+    ctx.fill();
+    roundRect(ctx, 2, 2, W - 4, H - 4, 3.5);
+    ctx.fillStyle = linear(ctx, 0, 0, W, H, [
+      [0, b],
+      [1, a],
+    ]);
+    ctx.fill();
+    ctx.save();
+    roundRect(ctx, 4, 4, W - 8, H - 8, 2.5);
+    ctx.clip();
+    ctx.strokeStyle = accent;
+    ctx.globalAlpha = 0.3;
+    ctx.lineWidth = 0.5;
+    for (let i = -H; i < W + H; i += 4) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i + H, H);
+      ctx.moveTo(i + H, 0);
+      ctx.lineTo(i, H);
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.strokeStyle = royal ? linear(ctx, 0, 0, W, H, GOLD) : accent;
+    ctx.lineWidth = royal ? 1.4 : 0.9;
+    roundRect(ctx, 4, 4, W - 8, H - 8, 2.5);
+    ctx.stroke();
+    if (royal) {
+      ctx.fillStyle = '#2a0613';
+      ctx.beginPath();
+      ctx.arc(W / 2, H / 2, 11, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = linear(ctx, W / 2 - 8, H / 2 - 6, W / 2 + 8, H / 2 + 6, GOLD);
+      ctx.beginPath();
+      ctx.moveTo(W / 2 - 7, H / 2 + 4);
+      ctx.lineTo(W / 2 - 8, H / 2 - 4);
+      ctx.lineTo(W / 2 - 3.5, H / 2);
+      ctx.lineTo(W / 2, H / 2 - 6);
+      ctx.lineTo(W / 2 + 3.5, H / 2);
+      ctx.lineTo(W / 2 + 8, H / 2 - 4);
+      ctx.lineTo(W / 2 + 7, H / 2 + 4);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.fillStyle = accent;
+      diamondSuit(ctx, W / 2, H / 2, 16);
+    }
+  });
+}
