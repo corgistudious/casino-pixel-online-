@@ -21,13 +21,13 @@ Baseline: `main` @ `6932b19`, đánh giá ngày 2026-10-24. Trạng thái:
 | Hộp thư có đính kèm | ❌ | Giai đoạn 3 |
 | Tài Xỉu / Sicbo | 🟡 mỗi người một ván riêng, kết quả ngay, chưa có chu kỳ chung 30s/5s, chưa có bát úp; nay ✅ bàn chung `taixiu-1`: lắc bát → cược 30 s (cảnh báo 5 s) → nâng bát → trả qua ledger → nghỉ 5 s | Giai đoạn 4a, `docs/MULTIPLAYER.md` |
 | Roulette | 🟡 European, ván riêng từng người, quay ngắn; nay ✅ bàn chung `roulette-1`, quay 15 s (cấu hình được), bi ngược chiều, rơi đúng ô của server | Giai đoạn 4a |
-| Poker Texas Hold'em | ❌ | Giai đoạn 4 |
-| Liêng 3 lá | ❌ | Giai đoạn 4 |
-| Xì Tố | ❌ | Giai đoạn 4 |
+| Poker Texas Hold'em | ❌; nay ✅ bàn có ghế, no-limit, pot phụ, seed kiểm chứng | Giai đoạn 4b, `docs/CARDS.md` |
+| Liêng 3 lá | ❌; nay ✅ Sáp > Liêng > Ảnh > Điểm, 1 vòng cược | Giai đoạn 4b |
+| Xì Tố | ❌; nay ✅ 1 úp + ngửa dần, 4 vòng, bài ngửa mạnh nhất nói trước | Giai đoạn 4b |
 | Blackjack, Slots | ✅ (có từ trước, ngoài danh sách 5 game) | Giữ nguyên |
-| Phòng game nhiều người | ❌; nay 🟡 bàn chung theo vòng (Tài Xỉu, Roulette) có room realtime; bàn có ghế (Poker, Liêng, Xì Tố) chưa có | Giai đoạn 4a ✅, 4b–4c |
+| Phòng game nhiều người | ❌; nay ✅ bàn chung theo vòng (Tài Xỉu, Roulette) và bàn có ghế (Poker, Liêng, Xì Tố), trạng thái lưu DB, tiếp tục sau khi server khởi động lại | Giai đoạn 4a ✅, 4b ✅ |
 | Level 1–999, EXP server, thưởng mốc | ❌; nay ✅ | Giai đoạn Progression, `docs/PROGRESSION.md` |
-| Đấu Rank 40 bậc + Top 3/10/50, 200 RP, bảo vệ điểm, chuỗi 3 thắng, mùa giải, reset mềm | ❌; nay 🟡 engine, mùa, BXH, admin, UI ✅; tìm trận/ghép trận chờ game đối kháng | Progression ✅, ghép trận cùng Poker/Liêng/Xì Tố |
+| Đấu Rank 40 bậc + Top 3/10/50, 200 RP, bảo vệ điểm, chuỗi 3 thắng, mùa giải, reset mềm | ❌; nay ✅ engine, mùa, BXH, admin, UI; tìm trận 1-1 Poker/Liêng/Xì Tố bằng chip trận đấu (không dùng Cxu), xử thua khi rời/AFK | Progression ✅, Giai đoạn 4b ✅ |
 | Hệ thống phần thưởng thống nhất | ❌; nay 🟡 `deliverReward` (thư + ledger khi nhận) dùng cho Level/Mùa; Giftcode/thành tích/VIP sẽ dùng chung | Progression, Giai đoạn Rewards |
 | Ngân hàng | ❌ | Giai đoạn 5 |
 | Chợ sưu tầm | ❌ (chỉ có cửa hàng khung) | Giai đoạn 5 |
