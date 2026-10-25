@@ -19,6 +19,7 @@ import { registerProgressionRoutes } from './routes/progression';
 import { registerGiftcodeRoutes } from './routes/giftcodes';
 import { registerBankRoutes } from './routes/bank';
 import { registerSupportRoutes } from './routes/support';
+import { registerMarketRoutes } from './routes/market';
 import { sweepExpiredEquipment } from './services/catalog';
 import { tickSeasons } from './services/rank';
 import { startMailWorker } from './mail/mailer';
@@ -91,6 +92,7 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerGiftcodeRoutes(app, db, hub);
   registerBankRoutes(app, db, hub);
   registerSupportRoutes(app, db);
+  registerMarketRoutes(app, db);
   let seasonTimer: NodeJS.Timeout | undefined;
   if (config.TABLE_SCHEDULER === 'on') {
     await tables.start();
