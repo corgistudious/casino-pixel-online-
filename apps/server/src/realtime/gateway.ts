@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { clientMessageSchema, type ClientMessage, type ServerMessage } from '@casino/shared';
 import type { FastifyInstance } from 'fastify';
 import type { WebSocket } from 'ws';
-import { accountFromToken } from '../auth/session';
+import { accountFromToken, requireActive } from '../auth/session';
 import type { Db } from '../db/client';
 import { AppError } from '../errors';
 import {
@@ -15,12 +15,15 @@ import {
   playSlots,
   type PlayOutcome,
 } from '../services/games';
-import { toPublicUser, type UserRow } from '../services/users';
+import { badgesOf, toPublicUser, type UserRow } from '../services/users';
 import type { RealtimeHub } from './hub';
+import { notifyProgress } from '../services/progression';
+import { tableRoom, type RoundTableEngine } from '../services/roundTables';
+import { cardRoom, type CardTableEngine } from '../services/cardTables';
 
 const AUTH_TIMEOUT_MS = 10_000;
 
-export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, limits: { rate: number; burst: number }): void {
+export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, tables: RoundTableEngine, cards: CardTableEngine, limits: { rate: number; burst: number }): void {
   const { rate: RATE, burst: BURST } = limits;
   app.get('/ws', { websocket: true }, (socket: WebSocket) => {
     let account: UserRow | null = null;
@@ -31,7 +34,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
     const send = (msg: ServerMessage) => {
       if (socket.readyState === socket.OPEN) socket.send(JSON.stringify(msg));
     };
-    const conn = { userId: '', send };
+    const conn = { userId: '', send, close: (reason: string) => socket.close(4001, reason) };
 
     const authTimer = setTimeout(() => {
       if (!account) socket.close(4001, 'auth timeout');
@@ -48,6 +51,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
       }
       if (msg.type === 'ping') return { now: Date.now() };
       if (!account) throw new AppError('unauthorized', 401);
+      requireActive(account);
       const userId = account.id;
 
       let outcome: PlayOutcome<unknown> | null = null;
@@ -69,12 +73,53 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
           break;
         case 'blackjack.resume':
           return blackjackResume(db, userId);
+        case 'table.join': {
+          const view = await tables.view(msg.tableId, userId);
+          hub.join(tableRoom(msg.tableId), conn);
+          return view;
+        }
+        case 'table.leave':
+          hub.leave(tableRoom(msg.tableId), conn);
+          return { ok: true };
+        case 'card.join': {
+          const view = await cards.view(msg.tableId, userId);
+          hub.join(cardRoom(msg.tableId), conn);
+          return view;
+        }
+        case 'card.leave':
+          hub.leave(cardRoom(msg.tableId), conn);
+          return { ok: true };
+        case 'card.sit':
+          await cards.sit(userId, msg.tableId, msg.seat, msg.buyIn);
+          return cards.view(msg.tableId, userId);
+        case 'card.stand':
+          return cards.stand(userId, msg.tableId);
+        case 'card.back':
+          await cards.back(userId, msg.tableId);
+          return cards.view(msg.tableId, userId);
+        case 'card.act':
+          await cards.act(userId, msg.tableId, msg.handId, { type: msg.action, amount: msg.amount });
+          return { ok: true };
+        case 'card.queue':
+          await cards.queue(userId, msg.game);
+          return { queued: true, game: msg.game };
+        case 'card.unqueue':
+          await cards.unqueue(userId);
+          return { ok: true };
+        case 'table.bet': {
+          const res = await tables.placeBets(userId, msg.tableId, msg.roundId, msg.bets, msg.id);
+          hub.sendToUser(userId, { type: 'event', event: 'wallet', data: { balance: res.balance } });
+          return res;
+        }
       }
+      if (!outcome) return null;
       // Keep the player's other tabs/devices in sync.
       hub.sendToUser(userId, { type: 'event', event: 'wallet', data: { balance: outcome.envelope.balance } });
+      if (outcome.progress) notifyProgress(hub, userId, outcome.progress);
       if (outcome.settled && isBigWin(outcome.settled)) {
         void hub.recordBigWin({
           displayName: account.displayName,
+          badges: badgesOf(account),
           game: outcome.game,
           bet: outcome.settled.bet,
           payout: outcome.settled.payout,

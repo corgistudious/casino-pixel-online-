@@ -10,7 +10,12 @@
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx --env-file-if-exists=../../.env src/db/migrate-cli.ts"
+    "db:migrate": "tsx --env-file-if-exists=../../.env src/db/migrate-cli.ts",
+    "maintenance": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts",
+    "status:data": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts status",
+    "create:test-accounts": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts create-test-accounts",
+    "reset:test-data": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts reset-test-data",
+    "launch:production": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts launch-production"
   },
   "dependencies": {
     "@casino/shared": "workspace:*",
@@ -19,14 +24,17 @@
     "@fastify/jwt": "^10.0.0",
     "@fastify/rate-limit": "^10.3.0",
     "@fastify/websocket": "^11.2.0",
+    "@node-rs/argon2": "2.2.1",
     "drizzle-orm": "^0.45.0",
     "fastify": "^5.6.0",
     "ioredis": "^5.8.0",
+    "nodemailer": "8.0.11",
     "postgres": "^3.4.7",
     "zod": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.18.0",
+    "@types/nodemailer": "^8.0.2",
     "@types/ws": "^8.18.1",
     "drizzle-kit": "^0.31.4",
     "pino-pretty": "^13.1.1",

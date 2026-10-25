@@ -1,10 +1,13 @@
 import type { ErrorCode } from '@casino/shared';
 import { API_URL } from '../config';
+import { demoApi, IS_DEMO } from '../demo';
 
 export class ApiError extends Error {
   constructor(
     public readonly code: ErrorCode | 'network',
     public readonly status = 0,
+    /** Extra fields from the error body, e.g. `endsAt` and `reason` for `banned`. */
+    public readonly details: { endsAt?: string | null; reason?: string } = {},
   ) {
     super(code);
   }
@@ -21,25 +24,34 @@ export function setUnauthorizedHandler(fn: () => void) {
   onUnauthorized = fn;
 }
 
-export async function api<T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<T> {
+export async function api<T>(path: string, init: { method?: string; body?: unknown; headers?: Record<string, string>; raw?: Blob } = {}): Promise<T> {
+  if (IS_DEMO) {
+    try {
+      return (await demoApi(path, init.method ?? 'GET', init.body)) as T;
+    } catch (err) {
+      throw new ApiError((err as { code: ErrorCode }).code ?? 'network');
+    }
+  }
   let res: Response;
   try {
     res = await fetch(API_URL + path, {
       method: init.method ?? 'GET',
       headers: {
-        ...(init.body !== undefined ? { 'content-type': 'application/json' } : {}),
+        ...(init.raw ? { 'content-type': init.raw.type } : init.body !== undefined ? { 'content-type': 'application/json' } : {}),
         ...(authToken ? { authorization: `Bearer ${authToken}` } : {}),
+        ...init.headers,
       },
-      body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
+      // `raw` sends a file as-is (image uploads); everything else is JSON.
+      body: init.raw ?? (init.body !== undefined ? JSON.stringify(init.body) : undefined),
     });
   } catch {
     throw new ApiError('network');
   }
-  const data = (await res.json().catch(() => ({}))) as { error?: { code?: ErrorCode } };
+  const data = (await res.json().catch(() => ({}))) as { error?: { code?: ErrorCode; endsAt?: string | null; reason?: string } };
   if (!res.ok) {
-    const code = data.error?.code ?? 'internal';
+    const { code = 'internal', ...details } = data.error ?? {};
     if (code === 'unauthorized' || code === 'banned') onUnauthorized?.();
-    throw new ApiError(code, res.status);
+    throw new ApiError(code, res.status, details);
   }
   return data as T;
 }

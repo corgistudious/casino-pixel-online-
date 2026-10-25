@@ -6,11 +6,11 @@ import { ensureWheelTextures, hdImage, WHEEL_SIZE } from '../art';
 import { H } from './BaseScene';
 import { TableScene } from './TableScene';
 
-const WHEEL_X = 104;
-const WHEEL_Y = 176;
-const STEP = (Math.PI * 2) / ROULETTE_WHEEL.length;
-const BALL_OUTER = WHEEL_SIZE / 2 - 6;
-const BALL_POCKET = WHEEL_SIZE / 2 - 17;
+export const WHEEL_X = 104;
+export const WHEEL_Y = 176;
+export const STEP = (Math.PI * 2) / ROULETTE_WHEEL.length;
+export const BALL_OUTER = WHEEL_SIZE / 2 - 6;
+export const BALL_POCKET = WHEEL_SIZE / 2 - 17;
 
 const BOARD_X = 214;
 const BOARD_Y = 62;
@@ -21,9 +21,9 @@ const COLOR_FILL = { red: 0xb5132c, black: 0x15131f, green: null } as const;
 
 export class RouletteScene extends TableScene {
   static readonly KEY = 'roulette';
-  private wheel!: Phaser.GameObjects.Image;
-  private ball!: Phaser.GameObjects.Image;
-  private resultText!: Phaser.GameObjects.Text;
+  protected wheel!: Phaser.GameObjects.Image;
+  protected ball!: Phaser.GameObjects.Image;
+  protected resultText!: Phaser.GameObjects.Text;
   private history: Phaser.GameObjects.Container[] = [];
 
   constructor() {
@@ -138,7 +138,7 @@ export class RouletteScene extends TableScene {
     this.interactive = true;
   }
 
-  private pushHistory(n: number) {
+  protected pushHistory(n: number) {
     const color = rouletteColor(n);
     const c = this.add.container(0, 0);
     const fill = color === 'red' ? 0xb5132c : color === 'green' ? 0x0f7a45 : 0x15131f;

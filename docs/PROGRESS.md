@@ -2,6 +2,126 @@
 
 _Cập nhật: 2026-10-23_
 
+## Nhánh & quy trình
+
+- Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
+- Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
+
+## Master Development Prompt v2 — Giai đoạn 3: Khung, avatar, kho đồ, hộp thư (nhánh `claude/keyo-cosmetics`)
+
+- Catalog vật phẩm trong DB (khung, avatar đặc biệt, sưu tầm), có độ hiếm, nguồn nhận, trạng thái nháp/phát hành/ẩn. 6 khung cũ được seed; quyền sở hữu khung cũ được chuyển sang kho đồ mà không mất gì.
+- Upload ảnh an toàn: kiểm tra magic bytes, kích thước, tỷ lệ, dung lượng; không nhận SVG; ảnh lưu trong PostgreSQL.
+- Khung ảnh có thông số `scale`/`offset`, admin xem trước trên avatar mẫu.
+- Kho đồ thật (trang Bộ sưu tập): trang bị/tháo khung và avatar đặc biệt; không nhân đôi vật phẩm unique.
+- Hộp thư có quà đính kèm (Bạc/Vàng/vật phẩm): nhận một lần trong transaction; có hạn dùng; gửi theo UID hoặc toàn bộ người chơi; báo realtime.
+- Admin: trang Vật phẩm (upload, chỉnh vị trí khung, phát hành/ẩn, người sở hữu, tặng/thu hồi) và trang Hộp thư (soạn thư, lịch sử các đợt gửi, tỉ lệ đã nhận).
+- Sửa lỗi phát hiện khi chạy E2E:
+  - CORS không cho phép PUT/DELETE, khiến app Android/Windows không upload, xoá thư hay thu hồi vai trò được;
+  - catalog bị cache 60 giây nên vật phẩm mới không hiện ngay.
+- Chi tiết: `docs/COSMETICS_MAILBOX.md`.
+
+## Master Development Prompt v2 — Giai đoạn 2: Admin Panel (nhánh `claude/keyo-admin`, xếp chồng trên Giai đoạn 1)
+
+- Admin Panel mới (`/admin/*`), thanh điều hướng lọc theo quyền:
+  - **Tổng quan:** số liệu thật từ DB (người chơi, online, đăng ký mới, bị khóa, số ván, cược và trả thưởng 24h, Bạc/Vàng lưu hành), cảnh báo hệ thống, 3 biểu đồ hoạt động 14 ngày có tooltip và bảng, giao dịch gần đây (chỉ với quyền `economy.read`).
+  - **Người chơi:** tìm kiếm; tab tổng quan, kho đồ, ván chơi, sổ cái (`economy.read`), lịch sử bảo mật (`users.pii`), vi phạm (người khóa, người gỡ, bằng chứng). Có ban, cộng Cxu, huy hiệu, cấp vai trò theo quyền; tài khoản được bảo vệ bị khóa thao tác.
+  - **Nhân sự:** danh sách, cấp và thu hồi trong phạm vi rank.
+  - **Nhật ký kiểm toán:** lọc theo hành động, người thực hiện, đối tượng, thời gian.
+  - **UID đặc biệt, Yêu cầu xóa tài khoản, Hệ thống:** gồm hàng đợi email.
+- API mới: `GET /api/admin/dashboard`, `/api/admin/users/:uid/activity`, `/api/admin/users/:uid/ledger`, `/api/admin/audit/search`.
+- Chưa có (sẽ thêm cùng phân hệ tương ứng): số phòng đang hoạt động, tổng số dư ngân hàng, ticket chưa xử lý.
+
+## Master Development Prompt v2 — Giai đoạn 1: Security Foundation (nhánh `claude/keyo-security`)
+
+Baseline `main` @ `6932b19` (đã gồm PR #1–#5 và commit live từ VPS). Bảng đối chiếu toàn bộ yêu cầu: `docs/REQUIREMENTS_MATRIX.md`.
+
+- RBAC mới gồm 5 vai trò có rank, đồng bộ từ code; chống tự nâng quyền; ban, gỡ ban và duyệt xoá đều theo rank.
+- Owner UID 1002 và Keyo Support UID 1000 được bảo vệ bằng trigger DB. Owner tự gắn ở server; có lệnh `create-owner` khi DB chưa có UID 1002.
+- Bỏ việc cấp `super_admin` theo `ADMIN_USERNAMES` (lỗ hổng nghiêm trọng).
+- Xác thực lại cho thao tác nhạy cảm. Cộng/trừ Cxu có lý do bắt buộc và idempotency.
+- Audit log chỉ ghi thêm. Giới hạn tần suất toàn cục. Email chỉ hiện với quyền `users.pii`.
+- Sửa `deploy/Caddyfile` live gộp mọi người chơi thành một IP.
+- Test: 102 test server (27 test bảo mật mới, 1 test nâng cấp migration có dữ liệu cũ).
+- Chi tiết lỗ hổng và cách sửa: `docs/SECURITY_AUDIT.md`.
+
+## KEYO GAME — Master Development (nhánh `claude/keyo-foundation`)
+
+Làm theo thứ tự phụ thuộc trong `docs/AUDIT.md`. **Dự án chưa hoàn tất** — dưới đây là trạng thái thật của từng giai đoạn.
+
+| Giai đoạn | Nội dung | Trạng thái |
+|---|---|---|
+| 0 | Audit source, ma trận còn thiếu, xung đột chính sách | ✅ `docs/AUDIT.md` |
+| 1 | Thương hiệu Keyo Game (tên, logo, splash, manifest, appId Android/Windows) | ✅ |
+| 2 | Tài khoản: email + xác minh, UID, Argon2id, quên mật khẩu, ban có thời hạn, xoá tài khoản, RBAC, audit, Keyo Support UID 1000, email outbox | ✅ đã chạy thật (xem dưới) |
+| 2b | Triển khai VPS dùng chung + môi trường TEST + `reset:test-data` + reset UID Production (nhánh `claude/keyo-deploy`) | ✅ chuẩn bị xong, **chưa deploy, chưa xoá dữ liệu** — xem `docs/DEPLOYMENT_VPS.md`, `docs/TEST_ENVIRONMENT.md` |
+| 3 | Sổ cái kép + ngân hàng | ⏳ tiếp theo |
+| 4+ | Hộp thư, Support Center/ticket, báo cáo, giftcode, bạn bè, phòng nhiều người + 6 game, VIP/nhiệm vụ/thành tựu, giải đấu, Chợ Xa Hoa, Thư viện khung, Reviewer, Admin Dashboard đầy đủ | ⏳ chưa làm |
+
+### Giai đoạn 2b — VPS & dữ liệu TEST (chờ duyệt)
+
+- Bộ triển khai `deploy/vps/`:
+  - compose project riêng `keyo-game`; PostgreSQL và Redis riêng (Redis có tiền tố key `keyo:`);
+  - giới hạn CPU/RAM; chỉ mở cổng `127.0.0.1:18480`;
+  - nginx host lo HTTPS + WebSocket; tự khởi động sau reboot;
+  - backup hằng ngày có kiểm tra; health check; log rotation;
+  - `deploy.sh` chỉ chạy tay và phải xác nhận.
+- Chế độ dữ liệu `test` / `production` do database cưỡng chế bằng trigger; server từ chối chạy khi sai chế độ; mọi tài khoản tạo trong giai đoạn test tự gắn cờ `is_test`.
+- Lệnh `create:test-accounts`, `reset:test-data`, `launch:production`:
+  - mặc định chỉ dry-run; cụm xác nhận gồm tên database và số tài khoản;
+  - `pg_dump` có kiểm tra trước khi xoá; chạy trong một transaction, kiểm tra lại dữ liệu được giữ;
+  - ghi nhật ký `maintenance_runs` và audit;
+  - reset UID về 100000 chỉ được một lần, sau đó database khoá ở production vĩnh viễn.
+- Kiểm chứng: xem `docs/TEST_ENVIRONMENT.md` (mục Đã kiểm thử) và mô tả PR.
+
+### Giai đoạn 2 — đã kiểm chứng
+
+- Server: 61 test ✓ (trong đó 29 test tài khoản: cấp UID đồng thời, Keyo Support, đăng ký/xác minh bằng mã & liên kết, quà tân thủ đúng 1 lần, khoá sau 5 lần sai, nâng hash scrypt → Argon2id, đặt lại mật khẩu + thu hồi phiên, UID đặc biệt + kích hoạt, ban có hạn/vĩnh viễn/gỡ, xoá tài khoản, RBAC, audit). Shared 35 ✓, web 4 ✓. Typecheck + build ✓.
+- E2E trình duyệt với server + PostgreSQL thật: đăng ký → nhận mã trong `email_outbox` → xác minh → 50.000 Cxu Bạc → sảnh hiển thị UID 100000; Cài đặt hiển thị tài khoản; admin (super_admin) tìm người chơi, khoá 1 ngày, audit ghi `ban.create`. 0 lỗi console.
+- Nâng cấp DB có dữ liệu cũ (migration 0001 → 0002): 3 tài khoản cũ được cấp UID 100000–100002, admin cũ → `super_admin`, tài khoản bị khoá cũ → ban vĩnh viễn, không ai nhận quà tân thủ lần hai, không mất dòng nào.
+- Client: form đăng ký mới (email, nhập lại mật khẩu, điều khoản), đăng nhập bằng tên/email, quên & đặt lại mật khẩu (mã hoặc liên kết), kích hoạt UID đặc biệt, màn hình chờ xác minh, mục Tài khoản trong Cài đặt (liên kết email, đăng xuất mọi thiết bị, yêu cầu/huỷ xoá), bảng admin theo UID và theo quyền, thông báo khoá có ngày kết thúc.
+- Bản build thật không còn hiển thị số VIP EXP / Điểm Hấp Dẫn mẫu: hiện 0 kèm nhãn "Chưa hoạt động" cho tới khi có backend.
+- Chính sách kinh tế mới: quà tân thủ 50.000 Bạc khi xác minh email; điểm danh 5K/5K/6K/6K/8K/10K/20K theo ngày UTC; Cxu hỗ trợ 2.000/12 giờ khi (khả dụng + đang cược) < 1.000; khung avatar bán bằng Cxu Bạc.
+
+### Giai đoạn 2 — chưa làm / cần cấu hình
+
+- **Email chưa gửi thật** nếu không đặt `SMTP_URL` (thư nằm trong `email_outbox`). Cần SMTP + tên miền có SPF/DKIM.
+- Gỡ/đổi email đã xác minh qua ticket Keyo Support — chờ giai đoạn Support Center.
+- Phê duyệt kép, 2FA nhân viên — giai đoạn Admin Dashboard.
+- Tài liệu: `docs/ACCOUNT_SYSTEM.md`, `docs/SECURITY.md`.
+
+## Game Hub phong cách C — Casino online hiện đại (nhánh `claude/hub-modern-c`) — CHỜ DUYỆT
+
+Chủ dự án **không duyệt** bản UI trước (nhánh `claude/ui-hub-approval`) và chọn phong cách C. Vòng này chỉ thiết kế lại **Game Hub**; các màn hình khác giữ nguyên cho tới khi Game Hub được duyệt.
+
+- Bố cục kiểu màn hình game trên "stage" co giãn (thiết kế 1080p cho PC, 720p cho điện thoại ngang): thanh tài khoản (avatar, tên + huy hiệu, VIP + EXP, Cxu Bạc/Vàng), nút nhanh bên trái (Điểm danh, Nhiệm Vụ, Chợ Xa Hoa), banner 3 slide, 6 thẻ game lớn, dock điều hướng 8 mục.
+- Nền lounge động bằng Canvas (sương tím hoàng gia, tia sáng, bokeh), tự dừng chuyển động khi thiết bị không giữ được nhịp khung hình hoặc khi bật "Giảm chuyển động".
+- Thẻ game nghiêng 3D theo con trỏ, ánh sáng theo vị trí chuột, nhấn có phản hồi; game chưa phát hành hiện "Sắp ra mắt" và báo khi chạm.
+- Artwork: 6 minh họa game + 2 banner vẽ bằng SVG (nguyên bản), dùng asset chính thức Cxu Bạc/Vàng. Không phải tranh raster vẽ tay/render 3D (xem `docs/ART_PIPELINE.md`).
+- Đo FPS trong môi trường không GPU: 60 FPS khi tĩnh; nền động ~25 FPS và tự chuyển sang tĩnh, sau đó ~41–46 FPS khi tương tác. Cần kiểm tra trên thiết bị thật.
+
+## UI approval gate (nhánh `claude/ui-hub-approval`) — KHÔNG ĐƯỢC DUYỆT, đã thay bằng phong cách C
+
+Giao diện **chưa được duyệt**. Gameplay và tính năng mới tạm dừng cho tới khi có xác nhận.
+
+- Sảnh Game mới: banner, 6 trò chơi chính thức (Poker, Tài Xỉu, Roulette, Liêng, Xì Tố, Blackjack 21). Royal Slots ẩn khỏi sảnh, source và route `/play/slots` vẫn giữ.
+- Thanh người chơi: avatar + khung, Player ID, Cxu Bạc/Vàng (asset chính thức), VIP 1–15 + thanh VIP EXP, Điểm Hấp Dẫn, huy hiệu Partner/Verified.
+- Điều hướng 11 mục; Chợ Xa Hoa, Hồ sơ, VIP 15 cấp đã có màn hình; Danh sách phòng, Bộ Sưu Tập, Nhiệm Vụ, Bạn Bè, Quà Tặng là màn hình "Sắp ra mắt".
+- **Chưa có backend**: VIP EXP, Điểm Hấp Dẫn, quyền lợi VIP, Poker/Liêng/Xì Tố, các mục "Sắp ra mắt", các tab Chợ Xa Hoa ngoài Khung avatar. Giá trị VIP EXP/Điểm Hấp Dẫn trên UI là demo và luôn gắn nhãn **DEMO**.
+- Bản Web Preview: `pnpm --filter @casino/web build:preview` (biến `VITE_DEMO=1`) chạy không cần server, dữ liệu demo nằm trong `apps/web/src/demo.ts`, có banner "BẢN XEM TRƯỚC GIAO DIỆN" cố định. Bản build thật không chứa dữ liệu demo.
+- Sửa lỗi có từ trước: nút trong panel điều khiển bàn chơi bị co về chiều cao 0 trên màn hình thấp (iPhone landscape).
+
+## Kinh tế & phần thưởng (PR: Cxu Bạc/Vàng, quà tân thủ, điểm danh, cửa hàng, huy hiệu)
+
+- **Cxu Bạc**: tiền cược của mọi game (thay cho "chip"). **Cxu Vàng**: tiền hiếm, chỉ nhận qua quà tân thủ, điểm danh, admin; dùng ở cửa hàng. Không thể mua bằng tiền thật.
+- **Quà tân thủ**: 10.000 Bạc + 10 Vàng khi đăng ký, có hộp chào mừng.
+- **Điểm danh 7 ngày** (ngày tính theo giờ Việt Nam): 1K → 5K Bạc, ngày 4 +1 Vàng, ngày 7 +5 Vàng; bỏ lỡ một ngày thì quay lại Ngày 1. Thay cho "thưởng hằng ngày" cũ (cột cũ vẫn giữ, không xoá dữ liệu).
+- **Cửa hàng**: 6 khung avatar trang trí, mua bằng Cxu Vàng (không ảnh hưởng gameplay).
+- **Huy hiệu Verified / Partner**: admin cấp/thu hồi; hiển thị cạnh tên ở sảnh, hồ sơ, xếp hạng, big win.
+- Admin: cộng/trừ theo loại tiền, bật/tắt huy hiệu, thống kê Cxu Vàng lưu hành.
+- Sổ cái tách theo loại tiền; test kiểm `sum(ledger) == ví` cho cả Bạc và Vàng; điểm danh và mua hàng an toàn khi gửi đồng thời.
+- Migration `0001` chỉ thêm cột/bảng; đã thử nâng cấp DB có dữ liệu thật: không mất dòng nào.
+- Gameplay (luật game, scene Phaser, dịch vụ game server) **không thay đổi**.
+
 ## ✅ Đã hoàn thành & đã kiểm chứng
 
 - Monorepo pnpm: `shared`, `server`, `web`, `desktop`; TypeScript strict.
@@ -12,7 +132,13 @@ _Cập nhật: 2026-10-23_
 - Electron shell: đã chạy thử trên Linux/Xvfb, load game từ `app://casino`.
 - Bản build server production (`pnpm deploy`) đã chạy thử và trả `/api/health` OK.
 - CI GitHub Actions (typecheck, test có Postgres + Redis, build); workflow build APK & EXE.
-- Kết quả test gần nhất: shared 26 ✓, server 26 ✓ (cả có và không Redis), web 4 ✓. E2E Playwright (desktop 1280×720 & mobile 844×390): đăng ký → chơi cả 4 game → hồ sơ → ranking, 0 lỗi console.
+- Kết quả test gần nhất: shared 33 ✓, server 32 ✓ (cả có và không Redis), web 4 ✓. E2E Playwright (desktop 1280×720 & mobile 844×390): đăng ký → chơi cả 4 game → hồ sơ → ranking, 0 lỗi console.
+
+## Giai đoạn 4a: bàn chơi chung Tài Xỉu & Roulette
+
+- Server: `RoundTableEngine` (đồng hồ server, advisory lock leader, chuyển trạng thái có bảo vệ, provably fair theo ván, hủy ván + hoàn tiền), migration `0006_shared_round_tables` (có rollback).
+- Client: `/tables/:id`, cảnh Tài Xỉu có bát úp, Roulette quay dài theo thời gian server, đồng bộ đồng hồ, cảnh báo 5 giây, tổng cược trực tiếp, lịch sử, provably fair.
+- Chi tiết: `docs/MULTIPLAYER.md`.
 
 ## ⚠️ Chưa kiểm chứng trong môi trường này
 
@@ -24,7 +150,7 @@ _Cập nhật: 2026-10-23_
 
 1. Asset raster chuyên nghiệp (xem `docs/ART_PIPELINE.md`) — cần công cụ tạo ảnh/hoạ sĩ.
 2. Game nhiều người chơi theo bàn: Poker Texas Hold'em, Xì Tố, Liêng (phòng, ghế, lượt, timeout, reconnect).
-3. Thành tựu + huy hiệu, bạn bè, thông báo.
+3. Hệ thống VIP 15 cấp (đã nhận yêu cầu, làm ở PR riêng), nhiệm vụ, thành tựu, bạn bè, thông báo.
 4. Blackjack: split, insurance.
 5. Sao lưu PostgreSQL tự động, giám sát (metrics/log tập trung), staging.
 6. Ký số bản Windows, ký bản phát hành Android (keystore qua GitHub Secrets).

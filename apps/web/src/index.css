@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Typography tokens: never 900 for text (hard to read); Vietnamese diacritics need line-height ≥ 1.35. */
+    --fw-body: 500;
+    --fw-label: 600;
+    --fw-strong: 700;
+    --fw-heading: 800;
+  }
   html,
   body,
   #root {
@@ -10,12 +17,33 @@
   }
   body {
     @apply bg-ink-950 bg-lounge font-sans text-white antialiased;
+    font-weight: var(--fw-body);
+    line-height: 1.45;
     overscroll-behavior: none;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
   input {
     user-select: text;
+  }
+  h1 {
+    font-weight: var(--fw-heading);
+    line-height: 1.25;
+  }
+  h2,
+  h3 {
+    font-weight: var(--fw-strong);
+    line-height: 1.3;
+  }
+  button,
+  label,
+  th,
+  [role='tab'] {
+    font-weight: var(--fw-label);
+  }
+  /* Numbers players care about (balances, RP, levels, rewards) read best bold and tabular. */
+  .tabular-nums {
+    font-weight: var(--fw-label);
   }
 }
 

@@ -1,5 +1,15 @@
-# DOMAIN defaults to localhost (self-signed). Set DOMAIN=play.example.com for Let's Encrypt.
-{$DOMAIN:localhost} {
+# Live layout: plain HTTP on :80 inside the container, published on 127.0.0.1:18481 and
+# reached through the host's HTTPS reverse proxy.
+{
+	servers {
+		# Trust X-Forwarded-For from the host proxy (it arrives over the Docker bridge). Without this
+		# every player shares the proxy's address and per-IP rate limits apply to the whole server.
+		# The host proxy must overwrite the header with the real client address.
+		trusted_proxies static private_ranges
+	}
+}
+
+:80 {
 	encode zstd gzip
 
 	handle /api/* {
