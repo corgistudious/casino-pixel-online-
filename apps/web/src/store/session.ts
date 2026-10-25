@@ -30,6 +30,9 @@ interface SessionStore {
   /** While held, wallet pushes are buffered so the balance updates after the animation. */
   holdBalance(): void;
   releaseBalance(balance?: number): void;
+  /** Level just reached (shows the level-up celebration), cleared when dismissed. */
+  levelUp: number | null;
+  dismissLevelUp(): void;
   setBalance(balance: number): void;
 }
 
@@ -52,6 +55,12 @@ export const useSession = create<SessionStore>((set, get) => {
       case 'bigwin':
         set({ bigWins: [ev.data, ...get().bigWins].slice(0, 20) });
         break;
+      case 'progress': {
+        const user = get().user;
+        if (user) set({ user: { ...user, level: ev.data.level.level } });
+        if (ev.data.levelsGained.length) set({ levelUp: ev.data.level.level });
+        break;
+      }
       case 'mail': {
         const user = get().user;
         if (!user) break;
@@ -73,6 +82,10 @@ export const useSession = create<SessionStore>((set, get) => {
     status: 'idle',
     bigWins: [],
     booting: true,
+    levelUp: null,
+    dismissLevelUp() {
+      set({ levelUp: null });
+    },
 
     async boot() {
       if (IS_DEMO) {

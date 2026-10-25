@@ -4,6 +4,7 @@ import type { BlackjackView } from '../games/blackjack';
 import type { RouletteResult } from '../games/roulette';
 import type { SicBoResult } from '../games/sicbo';
 import type { SlotsResult } from '../games/slots';
+import type { ProgressEvent } from '../progression';
 import { tableBetSchema, type MyTableBet, type TableRoundView } from '../games/tables';
 
 export const LOCALES = ['vi', 'en'] as const;
@@ -174,6 +175,8 @@ export interface PublicUser {
   avatarItem: string | null;
   /** Unread mail count (for the mailbox badge). */
   unreadMail: number;
+  /** Account level (1–999). */
+  level: number;
   createdAt: string;
   checkin: CheckinState;
 }
@@ -285,6 +288,8 @@ export type ServerEvent =
   | { event: 'bigwin'; data: BigWinEvent }
   /** New mail arrived (or a broadcast was sent): the client refreshes its unread count. */
   | { event: 'mail'; data: { unread?: number } }
+  /** EXP gained after a settled round, with any levels reached. */
+  | { event: 'progress'; data: ProgressEvent }
   /** Shared-round table update (phase change, result, live totals). `myBets` is omitted in broadcasts. */
   | { event: 'table'; data: Omit<TableRoundView, 'myBets'> & { myBets?: MyTableBet[] } };
 

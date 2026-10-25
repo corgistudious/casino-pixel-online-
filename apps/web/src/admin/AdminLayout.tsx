@@ -10,6 +10,7 @@ export const ADMIN_SECTIONS: { path: string; key: string; perm: Permission }[] =
   { path: 'dashboard', key: 'dashboard', perm: 'dashboard.read' },
   { path: 'players', key: 'players', perm: 'users.read' },
   { path: 'staff', key: 'staff', perm: 'staff.read' },
+  { path: 'progression', key: 'progression', perm: 'progression.read' },
   { path: 'items', key: 'items', perm: 'items.read' },
   { path: 'mail', key: 'mail', perm: 'mail.send' },
   { path: 'audit', key: 'audit', perm: 'audit.read' },

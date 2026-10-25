@@ -17,6 +17,7 @@ import {
 } from '../services/games';
 import { badgesOf, toPublicUser, type UserRow } from '../services/users';
 import type { RealtimeHub } from './hub';
+import { notifyProgress } from '../services/progression';
 import { tableRoom, type RoundTableEngine } from '../services/roundTables';
 
 const AUTH_TIMEOUT_MS = 10_000;
@@ -88,6 +89,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
       if (!outcome) return null;
       // Keep the player's other tabs/devices in sync.
       hub.sendToUser(userId, { type: 'event', event: 'wallet', data: { balance: outcome.envelope.balance } });
+      if (outcome.progress) notifyProgress(hub, userId, outcome.progress);
       if (outcome.settled && isBigWin(outcome.settled)) {
         void hub.recordBigWin({
           displayName: account.displayName,

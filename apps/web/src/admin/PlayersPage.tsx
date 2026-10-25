@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { adminApi, newIdempotencyKey } from '../net/adminApi';
 import { Button } from '../ui/Button';
 import { BadgeIcon } from '../ui/OfficialAssets';
+import { PlayerProgression } from './PlayerProgression';
 import { Empty, Panel, Pill, Table } from './parts';
 import { useAdminKit } from './useAdmin';
 
@@ -43,7 +44,7 @@ interface Activity {
   security: { id: number; action: string; ip: string | null; createdAt: string }[] | null;
 }
 
-type Tab = 'overview' | 'inventory' | 'rounds' | 'ledger' | 'security' | 'bans';
+type Tab = 'overview' | 'inventory' | 'rounds' | 'ledger' | 'progression' | 'security' | 'bans';
 
 export function PlayersPage() {
   const { t, fail } = useAdminKit();
@@ -125,6 +126,7 @@ function PlayerDetail({ uid }: { uid: number }) {
     { id: 'inventory', show: true },
     { id: 'rounds', show: true },
     { id: 'ledger', show: can('economy.read') },
+    { id: 'progression', show: can('progression.read') },
     { id: 'security', show: can('users.pii') },
     { id: 'bans', show: true },
   ];
@@ -212,6 +214,8 @@ function PlayerDetail({ uid }: { uid: number }) {
       )}
 
       {tab === 'ledger' && <Ledger uid={uid} />}
+
+      {tab === 'progression' && <PlayerProgression uid={uid} isPlayer={u.accountType === 'player' && u.status !== 'deleted'} />}
 
       {tab === 'security' && (
         <Table

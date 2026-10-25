@@ -34,6 +34,10 @@ export const PERMISSIONS = [
   'events.manage',
   'rooms.manage',
   'game.config',
+  /** View level/EXP and rank/RP of players, seasons and level rewards. */
+  'progression.read',
+  /** Seasons, level rewards and EXP/RP corrections. Owner and Super Admin only. */
+  'progression.manage',
   'system.errors',
   /** Global configuration and emergency switches. Owner only. */
   'system.settings',
@@ -79,6 +83,7 @@ export const DEFAULT_ROLES: Record<RoleId, { name: string; description: string; 
       'reports.manage',
       'chat.moderate',
       'rooms.manage',
+      'progression.read',
     ],
   },
   moderator: {

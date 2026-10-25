@@ -18,6 +18,7 @@ import { users, wallets } from '../db/schema';
 import { userPermissions, userRoleIds } from './rbac';
 import { fail } from '../errors';
 import { ownedFrames } from './catalog';
+import { levelOf } from './progression';
 import { unreadCount } from './mailbox';
 import { applyDelta, getWallet } from './wallet';
 
@@ -55,6 +56,7 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
     ownedFrames: await ownedFrames(db, user.id),
     avatarItem: user.avatarItem,
     unreadMail: await unreadCount(db, user.id),
+    level: (await levelOf(db, user.id)).level,
     createdAt: user.createdAt.toISOString(),
     checkin: { ...progress, dayEndsAt: checkinDayEnd(now).toISOString() },
   };

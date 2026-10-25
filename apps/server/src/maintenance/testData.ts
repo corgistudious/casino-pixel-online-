@@ -16,6 +16,11 @@ import { getEnvironmentState } from '../services/environment';
  */
 export const TEST_DATA_TABLES = [
   { table: 'table_bets', column: 'user_id', action: 'delete' },
+  { table: 'exp_events', column: 'user_id', action: 'delete' },
+  { table: 'player_progress', column: 'user_id', action: 'delete' },
+  { table: 'rank_events', column: 'user_id', action: 'delete' },
+  { table: 'rank_season_results', column: 'user_id', action: 'delete' },
+  { table: 'player_ranks', column: 'user_id', action: 'delete' },
   { table: 'game_rounds', column: 'user_id', action: 'delete' },
   { table: 'ledger_entries', column: 'user_id', action: 'delete' },
   { table: 'user_items', column: 'user_id', action: 'delete' },

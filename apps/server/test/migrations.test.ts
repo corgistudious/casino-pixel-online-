@@ -129,3 +129,20 @@ describe('0006_shared_round_tables upgrade', () => {
     expect((await rows(sql`SELECT 1 FROM game_tables`)).length).toBe(2);
   });
 });
+
+describe('0007_progression_rank upgrade', () => {
+  it('adds levels and ranks without touching existing players, mail or ledger', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(7) }); // 0000–0006
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (100700, 'old', 'old', 'x', 'Old')`);
+    await db.execute(sql`INSERT INTO mail_messages (user_id, kind, subject) SELECT id, 'system', 'Hello' FROM users WHERE uid = 100700`);
+    const before = await rows(sql`SELECT u.uid, m.subject, m.claimed_at FROM users u JOIN mail_messages m ON m.user_id = u.id ORDER BY 1`);
+    await runMigrations(db);
+    expect(await rows(sql`SELECT u.uid, m.subject, m.claimed_at FROM users u JOIN mail_messages m ON m.user_id = u.id ORDER BY 1`)).toEqual(before);
+    expect(await rows(sql`SELECT reward_key FROM mail_messages`)).toEqual([{ reward_key: null }]);
+    // Players without a progress row are level 1; history rows cannot be rewritten.
+    expect(await rows(sql`SELECT 1 FROM player_progress`)).toEqual([]);
+    await db.execute(sql`INSERT INTO exp_events (user_id, source, source_key, amount, level_before, level_after) SELECT id, 'admin', 'k', 5, 1, 1 FROM users WHERE uid = 100700`);
+    await expect(db.execute(sql`UPDATE exp_events SET amount = 999`)).rejects.toThrow();
+  });
+});

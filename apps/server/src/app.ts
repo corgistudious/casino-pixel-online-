@@ -13,6 +13,8 @@ import { registerGateway } from './realtime/gateway';
 import { RealtimeHub } from './realtime/hub';
 import { RoundTableEngine } from './services/roundTables';
 import { registerTableRoutes } from './routes/tables';
+import { registerProgressionRoutes } from './routes/progression';
+import { tickSeasons } from './services/rank';
 import { startMailWorker } from './mail/mailer';
 import { BannedError, bootstrapSystemAccounts } from './services/accounts';
 import { assertDataMode } from './services/environment';
@@ -77,12 +79,25 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerCosmeticsRoutes(app, db, hub);
   const tables = new RoundTableEngine(db, client, hub, app.log);
   registerTableRoutes(app, db, tables);
-  if (config.TABLE_SCHEDULER === 'on') await tables.start();
+  registerProgressionRoutes(app, db, hub);
+  let seasonTimer: NodeJS.Timeout | undefined;
+  if (config.TABLE_SCHEDULER === 'on') {
+    await tables.start();
+    // Ranked seasons start and end on their dates (guarded updates: safe on every instance).
+    const tickRank = () => void tickSeasons(db).then(
+      (r) => (r.ended.length || r.started.length) && app.log.info(r, 'rank seasons changed'),
+      (err) => app.log.error({ err }, 'season tick failed'),
+    );
+    tickRank();
+    seasonTimer = setInterval(tickRank, 60_000);
+    seasonTimer.unref();
+  }
   registerGateway(app, db, hub, tables, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
 
   const stopMail = startMailWorker(db, app.log, config.SMTP_URL, config.MAIL_FROM);
   app.addHook('onClose', async () => {
     stopMail();
+    clearInterval(seasonTimer);
     await tables.stop();
     await hub.close();
     await client.end({ timeout: 5 });
