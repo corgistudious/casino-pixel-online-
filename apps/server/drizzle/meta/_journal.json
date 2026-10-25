@@ -78,6 +78,13 @@
       "when": 1792904555907,
       "tag": "0010_card_seat_timeouts",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792904555908,
+      "tag": "0011_giftcode_failure_limits",
+      "breakpoints": true
     }
   ]
 }
