@@ -120,6 +120,13 @@
       "when": 1792904555913,
       "tag": "0016_public_chat",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792904555914,
+      "tag": "0017_achievements",
+      "breakpoints": true
     }
   ]
 }
