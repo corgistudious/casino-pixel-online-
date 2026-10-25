@@ -17,7 +17,7 @@ import type { Db, DbOrTx } from '../db/client';
 import { users, wallets } from '../db/schema';
 import { userPermissions, userRoleIds } from './rbac';
 import { fail } from '../errors';
-import { ownedFrames } from './catalog';
+import { effectiveEquipment, ownedFrames } from './catalog';
 import { levelOf } from './progression';
 import { unreadCount } from './mailbox';
 import { applyDelta, getWallet } from './wallet';
@@ -35,6 +35,7 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
   const wallet = await getWallet(db, user.id);
   const progress = checkinProgress(user.checkinStreak, user.lastCheckinDate, checkinDate(now));
   const permissions = await userPermissions(db, user.id);
+  const gear = await effectiveEquipment(db, user);
   return {
     id: user.id,
     uid: user.uid,
@@ -52,9 +53,12 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
     badges: badgesOf(user),
     balance: wallet.balance,
     gold: wallet.gold,
-    frame: user.frame,
+    frame: gear.frame,
     ownedFrames: await ownedFrames(db, user.id),
-    avatarItem: user.avatarItem,
+    avatarItem: gear.avatarItem,
+    title: gear.title,
+    chatBubble: gear.chatBubble,
+    cardBack: gear.cardBack,
     unreadMail: await unreadCount(db, user.id),
     level: (await levelOf(db, user.id)).level,
     createdAt: user.createdAt.toISOString(),

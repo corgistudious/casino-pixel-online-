@@ -3,6 +3,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { adminApi, newIdempotencyKey } from '../net/adminApi';
 import { assetSrc, useCatalog } from '../store/catalog';
 import { FramedAvatar } from '../ui/Avatar';
+import { CardBack, ChatBubble, TitleBadge } from '../ui/Cosmetics';
 import { Button } from '../ui/Button';
 import { toast } from '../ui/toast';
 import { Empty, Panel, Pill, Table } from './parts';
@@ -25,7 +26,13 @@ interface Draft {
   assetId: string | null;
   assetUrl: string | null;
   render: FrameRender;
+  /** Drawn look (no image): colour stops "#rrggbb, #rrggbb…" and animation. */
+  colors: string;
+  animated: boolean;
 }
+
+const DRAWABLE: ItemKind[] = ['frame', 'title', 'chat_bubble', 'card_back'];
+const parseColors = (v: string) => v.split(/[\s,]+/).filter((c) => /^#[0-9a-f]{6}$/i.test(c));
 
 const EMPTY: Draft = {
   id: '',
@@ -42,6 +49,8 @@ const EMPTY: Draft = {
   assetId: null,
   assetUrl: null,
   render: { scale: 1.25, offsetX: 0, offsetY: 0 },
+  colors: '#fff1b8, #f2c14e',
+  animated: false,
 };
 
 function fromItem(i: AdminItem): Draft {
@@ -58,6 +67,8 @@ function fromItem(i: AdminItem): Draft {
     tradable: i.tradable,
     price: i.priceSilver === null ? '' : String(i.priceSilver),
     assetId: i.assetUrl ? i.assetUrl.split('/').pop()! : null,
+    colors: i.style?.colors.join(', ') ?? EMPTY.colors,
+    animated: i.style?.animated ?? false,
     assetUrl: i.assetUrl,
     render: i.render ?? EMPTY.render,
   };
@@ -127,9 +138,12 @@ export function ItemsPage() {
   );
 }
 
-function ItemThumb({ item, size }: { item: Pick<CatalogItem, 'kind' | 'assetUrl' | 'render' | 'id'>; size: number }) {
+function ItemThumb({ item, size }: { item: Pick<CatalogItem, 'kind' | 'assetUrl' | 'render' | 'id' | 'style'> & Partial<Pick<CatalogItem, 'name'>>; size: number }) {
   if (item.kind === 'frame') return <FramedAvatar index={3} size={size} frame={item.id} frameItem={item} />;
-  if (item.kind === 'avatar') return <FramedAvatar index={3} size={size} frame="none" avatarSrc={assetSrc(item.assetUrl)} />;
+  if (item.kind === 'avatar') return <FramedAvatar index={3} size={size} frame="none" avatarSrc={assetSrc(item.assetUrl)} avatarArt={!item.assetUrl && item.style?.art === 'vuong_gia' ? 'vuong_gia' : undefined} />;
+  if (item.kind === 'title') return <TitleBadge itemId={item.id} item={item} size={size > 80 ? 'md' : 'sm'} />;
+  if (item.kind === 'chat_bubble') return <ChatBubble itemId={item.id} item={item}>Keyo</ChatBubble>;
+  if (item.kind === 'card_back') return <CardBack itemId={item.id} item={item} width={Math.round(size * 0.7)} />;
   return item.assetUrl ? <img src={assetSrc(item.assetUrl)} alt="" className="object-contain" style={{ width: size, height: size }} /> : null;
 }
 
@@ -168,6 +182,7 @@ function Editor({ initial, isNew, builtIn, onSaved }: { initial: Draft; isNew: b
       priceSilver: d.price === '' ? null : Number(d.price),
       ...(d.kind === 'frame' && !builtIn ? { render: d.render } : {}),
       ...(d.assetId && !builtIn ? { assetId: d.assetId } : {}),
+      ...(!d.assetId && DRAWABLE.includes(d.kind) && parseColors(d.colors).length >= 2 ? { style: { colors: parseColors(d.colors), animated: d.animated } } : {}),
     };
     try {
       if (isNew) await adminApi('/api/admin/items', { method: 'POST', body: { id: d.id, kind: d.kind, ...common } });
@@ -181,7 +196,9 @@ function Editor({ initial, isNew, builtIn, onSaved }: { initial: Draft; isNew: b
     }
   };
 
-  const previewItem = { id: d.id || 'preview', kind: d.kind, assetUrl: d.assetUrl, render: d.render };
+  const drawn = !d.assetUrl && DRAWABLE.includes(d.kind);
+  const style = drawn && parseColors(d.colors).length >= 2 ? { colors: parseColors(d.colors), animated: d.animated } : null;
+  const previewItem = { id: d.id || 'preview', kind: d.kind, assetUrl: d.assetUrl, render: d.render, style, name: { vi: d.nameVi || d.id, en: d.nameEn || d.id } };
   return (
     <Panel title={isNew ? t('admin.items.create') : d.id}>
       <form onSubmit={save} className="flex flex-col gap-3">
@@ -262,7 +279,19 @@ function Editor({ initial, isNew, builtIn, onSaved }: { initial: Draft; isNew: b
             <input type="file" accept="image/png,image/webp,image/gif" onChange={(e) => void upload(e.target.files?.[0])} className="text-sm text-white/70 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-1.5 file:text-white" />
           </label>
         )}
-        {d.kind === 'frame' && !builtIn && (
+        {drawn && editable && (
+          <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+            <label className="flex flex-col gap-1 text-xs text-white/55">
+              {t('admin.items.colors')}
+              <input className="field font-mono" value={d.colors} onChange={(e) => set('colors', e.target.value)} placeholder="#fff1b8, #f2c14e" />
+            </label>
+            <label className="flex items-center gap-2 self-end pb-2 text-sm text-white/75">
+              <input type="checkbox" className="accent-gold-300" checked={d.animated} onChange={(e) => set('animated', e.target.checked)} />
+              {t('admin.items.animated')}
+            </label>
+          </div>
+        )}
+        {d.kind === 'frame' && !builtIn && d.assetUrl && (
           <div className="grid gap-2 sm:grid-cols-3">
             {(
               [
@@ -292,7 +321,7 @@ function Editor({ initial, isNew, builtIn, onSaved }: { initial: Draft; isNew: b
         </div>
         {d.status === 'hidden' && <p className="text-xs text-white/45">{t('admin.items.hideNote')}</p>}
         {editable && (
-          <Button type="submit" variant="gold" disabled={busy || (isNew && !d.assetId)}>
+          <Button type="submit" variant="gold" disabled={busy || (isNew && !d.assetId && !style)}>
             {t('admin.items.save')}
           </Button>
         )}

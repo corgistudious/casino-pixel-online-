@@ -61,6 +61,10 @@ export const useSession = create<SessionStore>((set, get) => {
         if (ev.data.levelsGained.length) set({ levelUp: ev.data.level.level });
         break;
       }
+      case 'profile':
+        // A timed item expired (or similar): show the server's current profile.
+        void api<{ user: PublicUser }>('/api/me').then(({ user }) => get().user && set({ user }), () => {});
+        break;
       case 'mail': {
         const user = get().user;
         if (!user) break;

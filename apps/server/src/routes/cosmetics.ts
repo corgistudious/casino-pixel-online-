@@ -6,7 +6,7 @@ import type { Db } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { loadAsset } from '../services/assets';
-import { equip, inventoryOf, publicCatalog } from '../services/catalog';
+import { effectiveEquipment, equip, inventoryOf, publicCatalog } from '../services/catalog';
 import { claimAll, claimMail, deleteMail, listMail, markRead, unreadCount } from '../services/mailbox';
 import { toPublicUser } from '../services/users';
 import { makeGuards } from './guards';
@@ -44,7 +44,7 @@ export function registerCosmeticsRoutes(app: FastifyInstance, db: Db, hub: Realt
 
   app.get('/api/me/inventory', { preHandler: authed }, async (req) => {
     const user = requireAccount(req);
-    return { items: await inventoryOf(db, user.id), equipped: { frame: user.frame, avatarItem: user.avatarItem } };
+    return { items: await inventoryOf(db, user.id), equipped: await effectiveEquipment(db, user) };
   });
 
   /** Equip or remove (itemId null) a frame or special avatar. */

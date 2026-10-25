@@ -177,6 +177,10 @@ export interface PublicUser {
   unreadMail: number;
   /** Account level (1–999). */
   level: number;
+  /** Equipped title, chat bubble and card back (catalog item ids; expired items are never returned). */
+  title: string | null;
+  chatBubble: string | null;
+  cardBack: string | null;
   createdAt: string;
   checkin: CheckinState;
 }
@@ -290,6 +294,8 @@ export type ServerEvent =
   | { event: 'mail'; data: { unread?: number } }
   /** EXP gained after a settled round, with any levels reached. */
   | { event: 'progress'; data: ProgressEvent }
+  /** The player's profile changed on the server (e.g. a timed item expired): refetch /api/me. */
+  | { event: 'profile'; data: { reason: 'equipment' } }
   /** Shared-round table update (phase change, result, live totals). `myBets` is omitted in broadcasts. */
   | { event: 'table'; data: Omit<TableRoundView, 'myBets'> & { myBets?: MyTableBet[] } };
 

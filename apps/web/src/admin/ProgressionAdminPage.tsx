@@ -1,4 +1,4 @@
-import { DEFAULT_RANK_RULES, LEVEL_MAX, RANK_TIERS, TOP_TITLES, type MailAttachment, type RankLadderEntry, type RankRules } from '@casino/shared';
+import { addMonths, DEFAULT_RANK_RULES, LEVEL_MAX, OFFICIAL_SEASON_REWARDS, SEASON_BRACKETS, SEASON_LENGTH_MONTHS, type MailAttachment, type RankLadderEntry, type RankRules, type SeasonBracket } from '@casino/shared';
 import { useEffect, useState, type FormEvent } from 'react';
 import { adminApi } from '../net/adminApi';
 import { Button } from '../ui/Button';
@@ -16,7 +16,7 @@ interface Season {
   endsAt: string;
   endedAt: string | null;
   rules: RankRules;
-  rewards: { tiers: Record<string, MailAttachment[]>; top: Record<string, MailAttachment[]> };
+  rewards: { brackets: Partial<Record<SeasonBracket, MailAttachment[]>> };
 }
 interface LevelReward {
   level: number;
@@ -84,14 +84,9 @@ export function ProgressionAdminPage() {
             date(s.endedAt ?? s.endsAt),
             `+${s.rules.winRp} / −${s.rules.lossRp} · ↓${s.rules.softResetDivisions}`,
             <span key="r" className="flex flex-col gap-1">
-              {Object.entries(s.rewards.tiers ?? {}).map(([tier, a]) => (
-                <span key={tier} className="flex items-center gap-1 text-[11px]">
-                  {t(`rank.tiers.${tier}`)}: <AttachmentPills value={a} />
-                </span>
-              ))}
-              {Object.entries(s.rewards.top ?? {}).map(([top, a]) => (
-                <span key={top} className="flex items-center gap-1 text-[11px] text-gold-100">
-                  {t(`rank.top.${top}`)}: <AttachmentPills value={a} />
+              {Object.entries(s.rewards.brackets ?? {}).map(([b, a]) => (
+                <span key={b} className="flex flex-wrap items-center gap-1 text-[11px]">
+                  {t(`seasonRewards.bracket.${b}`)}: <AttachmentPills value={a ?? []} />
                 </span>
               ))}
             </span>,
@@ -170,10 +165,10 @@ function NewSeason({ onCreated }: { onCreated: () => void }) {
   const { t, fail } = useAdminKit();
   const [name, setName] = useState('');
   const [startsAt, setStartsAt] = useState(() => toLocalInput(new Date()));
-  const [endsAt, setEndsAt] = useState(() => toLocalInput(new Date(Date.now() + 30 * 86_400_000)));
+  const [endsAt, setEndsAt] = useState(() => toLocalInput(addMonths(new Date(), SEASON_LENGTH_MONTHS)));
   const [rules, setRules] = useState<RankRules>(DEFAULT_RANK_RULES);
-  const [tiers, setTiers] = useState<Record<string, MailAttachment[]>>({});
-  const [top, setTop] = useState<Record<string, MailAttachment[]>>({});
+  // Pre-filled with the official reward table; editable before creating the season.
+  const [brackets, setBrackets] = useState<Record<string, MailAttachment[]>>(() => structuredClone(OFFICIAL_SEASON_REWARDS));
   const [busy, setBusy] = useState(false);
 
   const submit = async (e: FormEvent) => {
@@ -183,12 +178,10 @@ function NewSeason({ onCreated }: { onCreated: () => void }) {
       const clean = (r: Record<string, MailAttachment[]>) => Object.fromEntries(Object.entries(r).filter(([, a]) => a.length));
       await adminApi('/api/admin/rank/seasons', {
         method: 'POST',
-        body: { name: name.trim(), startsAt: new Date(startsAt).toISOString(), endsAt: new Date(endsAt).toISOString(), rules, rewards: { tiers: clean(tiers), top: clean(top) } },
+        body: { name: name.trim(), startsAt: new Date(startsAt).toISOString(), endsAt: new Date(endsAt).toISOString(), rules, rewards: { brackets: clean(brackets) } },
       });
       toast(t('admin.done'), 'success');
       setName('');
-      setTiers({});
-      setTop({});
       onCreated();
     } catch (err) {
       fail(err);
@@ -225,19 +218,11 @@ function NewSeason({ onCreated }: { onCreated: () => void }) {
           {num('lossRp')}
           {num('softResetDivisions')}
         </div>
-        <details className="rounded-xl border border-white/10 p-3">
-          <summary className="cursor-pointer text-sm">{t('progressionAdmin.tierRewards')}</summary>
+        <details className="rounded-xl border border-white/10 p-3" open>
+          <summary className="cursor-pointer text-sm font-semibold">{t('seasonRewards.title')}</summary>
           <div className="mt-3 grid gap-4 md:grid-cols-2">
-            {RANK_TIERS.map((tier) => (
-              <AttachmentEditor key={tier.id} label={t(`rank.tiers.${tier.id}`)} value={tiers[tier.id] ?? []} onChange={(v) => setTiers({ ...tiers, [tier.id]: v })} />
-            ))}
-          </div>
-        </details>
-        <details className="rounded-xl border border-white/10 p-3">
-          <summary className="cursor-pointer text-sm">{t('progressionAdmin.topRewards')}</summary>
-          <div className="mt-3 grid gap-4 md:grid-cols-3">
-            {TOP_TITLES.map((tt) => (
-              <AttachmentEditor key={tt.id} label={`${t(`rank.top.${tt.id}`)} (${t(`rank.topRange.${tt.id}`)})`} value={top[tt.id] ?? []} onChange={(v) => setTop({ ...top, [tt.id]: v })} />
+            {SEASON_BRACKETS.map((b) => (
+              <AttachmentEditor key={b.id} label={t(`seasonRewards.bracket.${b.id}`)} value={brackets[b.id] ?? []} onChange={(v) => setBrackets({ ...brackets, [b.id]: v })} />
             ))}
           </div>
         </details>

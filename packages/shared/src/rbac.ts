@@ -38,6 +38,8 @@ export const PERMISSIONS = [
   'progression.read',
   /** Seasons, level rewards and EXP/RP corrections. Owner and Super Admin only. */
   'progression.manage',
+  /** Create, disable and export giftcodes. Owner and Super Admin only (they hand out rewards). */
+  'giftcode.manage',
   'system.errors',
   /** Global configuration and emergency switches. Owner only. */
   'system.settings',

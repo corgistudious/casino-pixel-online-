@@ -107,7 +107,7 @@ describe('0005_cosmetics_mailbox upgrade keeps frame ownership', () => {
     ]);
     expect((await rows(sql`SELECT 1 FROM user_items`)).length).toBe(2);
     expect((await rows<{ frame: string }>(sql`SELECT frame FROM users WHERE uid = 100500`))[0]!.frame).toBe('sapphire');
-    expect((await rows(sql`SELECT 1 FROM catalog_items WHERE status = 'released'`)).length).toBe(6);
+    expect((await rows(sql`SELECT 1 FROM catalog_items WHERE status = 'released' AND id IN ('classic', 'silver', 'emerald', 'ruby', 'sapphire', 'royal')`)).length).toBe(6);
   });
 });
 
@@ -144,5 +144,20 @@ describe('0007_progression_rank upgrade', () => {
     expect(await rows(sql`SELECT 1 FROM player_progress`)).toEqual([]);
     await db.execute(sql`INSERT INTO exp_events (user_id, source, source_key, amount, level_before, level_after) SELECT id, 'admin', 'k', 5, 1, 1 FROM users WHERE uid = 100700`);
     await expect(db.execute(sql`UPDATE exp_events SET amount = 999`)).rejects.toThrow();
+  });
+});
+
+describe('0008_rewards_cosmetics upgrade', () => {
+  it('keeps inventories and seasons, makes owned items permanent, seeds the Vương Giả set', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(8) }); // 0000–0007
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name, frame) VALUES (100800, 'keeper', 'keeper', 'x', 'Keeper', 'ruby')`);
+    await db.execute(sql`INSERT INTO inventory_items (user_id, item_id, kind, source) SELECT id, 'ruby', 'frame', 'shop' FROM users WHERE uid = 100800`);
+    await db.execute(sql`INSERT INTO rank_seasons (name, status, starts_at, ends_at, rules, rewards) VALUES ('Old', 'active', now(), now() + interval '1 day', '{}', '{"tiers":{},"top":{}}')`);
+    await runMigrations(db);
+    expect(await rows(sql`SELECT i.item_id, i.expires_at, u.frame FROM inventory_items i JOIN users u ON u.id = i.user_id`)).toEqual([{ item_id: 'ruby', expires_at: null, frame: 'ruby' }]);
+    const s = await rows<{ rewards: { brackets: Record<string, unknown[]> } }>(sql`SELECT rewards FROM rank_seasons`);
+    expect(s[0]!.rewards.brackets.top1).toHaveLength(6);
+    expect((await rows(sql`SELECT 1 FROM catalog_items WHERE id LIKE 'vuong_gia_%' AND NOT tradable AND price_silver IS NULL`)).length).toBe(4);
   });
 });

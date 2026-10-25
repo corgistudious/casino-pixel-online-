@@ -1,10 +1,10 @@
-import { KEYO_SUPPORT_UID, type MailAttachment, type MailKind, type MailMessage } from '@casino/shared';
+import { KEYO_SUPPORT_UID, resolveDurations, type MailAttachment, type MailKind, type MailMessage } from '@casino/shared';
 import { and, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import type { Db, DbOrTx, Tx } from '../db/client';
 import { mailBatches, mailMessages, users } from '../db/schema';
 import { fail } from '../errors';
 import { audit } from './audit';
-import { grantItem, itemsExist } from './catalog';
+import { grantItem, itemsExist, type GrantOutcome } from './catalog';
 import { applyDelta, getWallet } from './wallet';
 
 type MailRow = typeof mailMessages.$inferSelect;
@@ -74,10 +74,10 @@ async function claimInTx(tx: Tx, userId: string, mailId: string) {
   const attachments = mail.attachments as MailAttachment[];
   if (!attachments.length) throw fail('bad_request', 'nothing to claim');
   const ref = `mail:${mail.id}`;
-  const result: { index: number; outcome: 'granted' | 'already_owned' }[] = [];
+  const result: { index: number; outcome: GrantOutcome }[] = [];
   for (const [index, a] of attachments.entries()) {
     if (a.type === 'item') {
-      result.push({ index, outcome: await grantItem(tx, userId, a.itemId, 'mail', ref) });
+      result.push({ index, outcome: await grantItem(tx, userId, a.itemId, 'mail', ref, a.expiresAt ? new Date(a.expiresAt) : null) });
     } else {
       await applyDelta(tx, userId, a.amount, 'mail', null, a.type, ref);
       result.push({ index, outcome: 'granted' });
@@ -151,7 +151,9 @@ export interface SendMailInput {
  * Sends one mail per recipient in a single transaction (INSERT … SELECT for "all"), recorded as a
  * batch and audited. Attachments are only promises here: the ledger moves when each player claims.
  */
-export async function sendMail(tx: Tx, actorId: string, input: SendMailInput, ip?: string) {
+export async function sendMail(tx: Tx, actorId: string, rawInput: SendMailInput, ip?: string) {
+  // Timed items given as a duration count from sending, never from claiming.
+  const input = { ...rawInput, attachments: resolveDurations(rawInput.attachments, new Date()) };
   const itemIds = [...new Set(input.attachments.flatMap((a) => (a.type === 'item' ? [a.itemId] : [])))];
   const known = await itemsExist(tx, itemIds);
   const missing = itemIds.filter((id) => !known.has(id));

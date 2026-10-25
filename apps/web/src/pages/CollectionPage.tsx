@@ -1,4 +1,4 @@
-import { DEFAULT_FRAME, type CatalogItem, type InventoryEntry, type ItemKind, type PublicUser, type Rarity } from '@casino/shared';
+import { DEFAULT_FRAME, type CatalogItem, type EquipSlot, type InventoryEntry, type ItemKind, type PublicUser, type Rarity } from '@casino/shared';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { errorText } from '../lib/errors';
@@ -7,10 +7,15 @@ import { assetSrc, itemName, useCatalog } from '../store/catalog';
 import { useSession } from '../store/session';
 import { AppShell, PageHeader } from '../ui/AppShell';
 import { Avatar } from '../ui/Avatar';
+import { CardBack, ChatBubble, TitleBadge } from '../ui/Cosmetics';
 import { Button } from '../ui/Button';
 import { toast } from '../ui/toast';
 
-const KINDS: ItemKind[] = ['frame', 'avatar', 'collectible'];
+const KINDS: ItemKind[] = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'collectible'];
+
+/** The player's equipped item per slot (PublicUser field). */
+const equippedIn = (u: PublicUser, kind: ItemKind): string | null =>
+  ({ frame: u.frame, avatar: u.avatarItem, title: u.title, chat_bubble: u.chatBubble, card_back: u.cardBack, collectible: null })[kind];
 
 /** Text/border tone per rarity (text tokens on the dark surface, never color alone: the name is shown too). */
 export const RARITY_TONE: Record<Rarity, string> = {
@@ -56,9 +61,12 @@ export function CollectionPage() {
   }, [inventory, catalog, kind]);
 
   const current = owned.find((o) => o.itemId === selected) ?? owned[0];
-  const equippedId = kind === 'frame' ? user.frame : kind === 'avatar' ? user.avatarItem : null;
+  const equippedId = equippedIn(user, kind);
+  /** Usable now: permanent, or a timed copy that has not expired. */
+  const activeOf = (o: Owned | undefined) => !o || o.itemId === DEFAULT_FRAME || o.entries.some((e) => e.active);
+  const expiryOf = (o: Owned | undefined) => (o?.entries.some((e) => e.active && !e.expiresAt) ? null : (o?.entries.map((e) => e.expiresAt).filter(Boolean).sort().at(-1) ?? null));
 
-  const equip = async (slot: 'frame' | 'avatar', itemId: string | null) => {
+  const equip = async (slot: EquipSlot, itemId: string | null) => {
     setBusy(true);
     try {
       const { user: fresh } = await api<{ user: PublicUser }>('/api/me/equip', { method: 'POST', body: { slot, itemId } });
@@ -74,6 +82,9 @@ export function CollectionPage() {
     if (!o) return null;
     if (kind === 'frame') return <Avatar index={user.avatar} avatarItem={user.avatarItem} frame={o.itemId} size={size} />;
     if (kind === 'avatar') return <Avatar index={user.avatar} avatarItem={o.itemId} frame={user.frame} size={size} />;
+    if (kind === 'title') return <TitleBadge itemId={o.itemId} size={size > 100 ? 'md' : 'sm'} />;
+    if (kind === 'chat_bubble') return <ChatBubble itemId={o.itemId}>{t('collection.bubbleSample')}</ChatBubble>;
+    if (kind === 'card_back') return <CardBack itemId={o.itemId} width={size > 100 ? 96 : 52} />;
     return o.item?.assetUrl ? <img src={assetSrc(o.item.assetUrl)} alt="" className="object-contain" style={{ width: size, height: size }} /> : null;
   };
 
@@ -122,7 +133,7 @@ export function CollectionPage() {
                   equipped={equippedId === o.itemId}
                   equippedLabel={t('collection.equipped')}
                   rarity={o.item?.rarity}
-                  count={kind === 'collectible' && o.entries.length > 1 ? t('collection.count', { count: o.entries.length }) : undefined}
+                  count={kind === 'collectible' && o.entries.length > 1 ? t('collection.count', { count: o.entries.length }) : !activeOf(o) ? t('collection.expired') : undefined}
                   onClick={() => setSelected(o.itemId)}
                 >
                   {preview(o, 72)}
@@ -163,21 +174,23 @@ export function CollectionPage() {
                     )
                   )}
                   {current.item?.status === 'hidden' && <p className="text-xs text-white/45">{t('collection.retired')}</p>}
+                  {expiryOf(current) && (
+                    <p className={`rounded-lg px-2 py-1 text-xs font-semibold ${activeOf(current) ? 'bg-gold-300/10 text-gold-100' : 'bg-red-950/50 text-red-200'}`}>
+                      {activeOf(current) ? t('collection.expires', { date: new Date(expiryOf(current)!).toLocaleString(i18n.language) }) : t('collection.expiredOn', { date: new Date(expiryOf(current)!).toLocaleString(i18n.language) })}
+                    </p>
+                  )}
+                  {current.item && !current.item.tradable && current.item.source === 'season' && <p className="text-[11px] text-white/45">{t('collection.exclusive')}</p>}
                   {kind !== 'collectible' &&
                     (equippedId === current.itemId ? (
-                      kind === 'frame' ? (
-                        <Button disabled={busy} onClick={() => void equip('frame', null)}>
-                          {t('collection.unequip')}
-                        </Button>
-                      ) : (
-                        <Button disabled={busy} onClick={() => void equip('avatar', null)}>
-                          {t('collection.unequip')}
-                        </Button>
-                      )
-                    ) : (
-                      <Button variant="gold" disabled={busy} onClick={() => void equip(kind as 'frame' | 'avatar', current.itemId)}>
+                      <Button disabled={busy} onClick={() => void equip(kind as EquipSlot, null)}>
+                        {t('collection.unequip')}
+                      </Button>
+                    ) : activeOf(current) ? (
+                      <Button variant="gold" disabled={busy} onClick={() => void equip(kind as EquipSlot, current.itemId)}>
                         {t('collection.equip')}
                       </Button>
+                    ) : (
+                      <Button disabled>{t('collection.expired')}</Button>
                     ))}
                   {kind === 'frame' && user.frame === 'none' && <p className="text-xs text-white/45">{t('collection.noFrame')}</p>}
                 </>

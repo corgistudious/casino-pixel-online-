@@ -14,6 +14,8 @@ import { RealtimeHub } from './realtime/hub';
 import { RoundTableEngine } from './services/roundTables';
 import { registerTableRoutes } from './routes/tables';
 import { registerProgressionRoutes } from './routes/progression';
+import { registerGiftcodeRoutes } from './routes/giftcodes';
+import { sweepExpiredEquipment } from './services/catalog';
 import { tickSeasons } from './services/rank';
 import { startMailWorker } from './mail/mailer';
 import { BannedError, bootstrapSystemAccounts } from './services/accounts';
@@ -80,14 +82,22 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   const tables = new RoundTableEngine(db, client, hub, app.log);
   registerTableRoutes(app, db, tables);
   registerProgressionRoutes(app, db, hub);
+  registerGiftcodeRoutes(app, db, hub);
   let seasonTimer: NodeJS.Timeout | undefined;
   if (config.TABLE_SCHEDULER === 'on') {
     await tables.start();
     // Ranked seasons start and end on their dates (guarded updates: safe on every instance).
-    const tickRank = () => void tickSeasons(db).then(
-      (r) => (r.ended.length || r.started.length) && app.log.info(r, 'rank seasons changed'),
-      (err) => app.log.error({ err }, 'season tick failed'),
-    );
+    const tickRank = () => {
+      void tickSeasons(db).then(
+        (r) => (r.ended.length || r.started.length) && app.log.info(r, 'rank seasons changed'),
+        (err) => app.log.error({ err }, 'season tick failed'),
+      );
+      // Timed cosmetics (e.g. the 60-day Vương Giả set) are unequipped everywhere once expired.
+      void sweepExpiredEquipment(db).then(
+        (ids) => ids.forEach((id) => hub.sendToUser(id, { type: 'event', event: 'profile', data: { reason: 'equipment' } })),
+        (err) => app.log.error({ err }, 'expiry sweep failed'),
+      );
+    };
     tickRank();
     seasonTimer = setInterval(tickRank, 60_000);
     seasonTimer.unref();

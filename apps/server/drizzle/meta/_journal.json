@@ -57,6 +57,13 @@
       "when": 1792885548670,
       "tag": "0007_progression_rank",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792898015182,
+      "tag": "0008_rewards_cosmetics",
+      "breakpoints": true
     }
   ]
 }

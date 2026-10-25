@@ -221,6 +221,8 @@ export interface ProgressView {
     topPosition: number | null;
     topTitle: TopTitleId | null;
     rules: RankRules;
+    /** Cxu Bạc per valid ranked match (0 = off). */
+    participation: { playSilver: number; winSilver: number; dailyMatchCap: number };
   } | null;
 }
 

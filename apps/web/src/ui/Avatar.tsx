@@ -1,6 +1,7 @@
 import { DEFAULT_FRAME, findFrame, type CatalogItem } from '@casino/shared';
 import { useId } from 'react';
 import { assetSrc, useCatalog } from '../store/catalog';
+import { usesVuongGiaArt, VuongGiaAvatarArt, VuongGiaFrame } from './Cosmetics';
 
 /** 16 vector emblems: gradient pairs and glyph paths (24×24 viewBox). */
 const PALETTES: [string, string][] = [
@@ -48,7 +49,17 @@ export function Avatar({
 }) {
   const items = useCatalog((c) => c.items);
   const special = avatarItem ? items[avatarItem] : undefined;
-  return <FramedAvatar index={index} size={size} frame={frame} frameItem={items[frame]} avatarSrc={assetSrc(special?.assetUrl)} animated={animated} />;
+  return (
+    <FramedAvatar
+      index={index}
+      size={size}
+      frame={frame}
+      frameItem={items[frame]}
+      avatarSrc={assetSrc(special?.assetUrl)}
+      avatarArt={!special?.assetUrl && usesVuongGiaArt(special) ? 'vuong_gia' : undefined}
+      animated={animated}
+    />
+  );
 }
 
 /**
@@ -62,19 +73,24 @@ export function FramedAvatar({
   frame,
   frameItem,
   avatarSrc,
+  avatarArt,
   animated = false,
 }: {
   index: number;
   size: number;
   frame: string;
-  frameItem?: Pick<CatalogItem, 'assetUrl' | 'render'>;
+  frameItem?: Pick<CatalogItem, 'assetUrl' | 'render'> & Partial<Pick<CatalogItem, 'style'>>;
   avatarSrc?: string;
+  /** Built-in artwork avatar (e.g. the Vương Giả set) instead of an uploaded image. */
+  avatarArt?: 'vuong_gia';
   animated?: boolean;
 }) {
   const id = useId();
   const palette = PALETTES[index % PALETTES.length]!;
   const glyph = GLYPHS[(index + Math.floor(index / PALETTES.length) * 3) % GLYPHS.length]!;
-  const inner = avatarSrc ? (
+  const inner = avatarArt === 'vuong_gia' ? (
+    <VuongGiaAvatarArt />
+  ) : avatarSrc ? (
     <img src={avatarSrc} alt="" draggable={false} className="h-full w-full rounded-full object-cover" />
   ) : (
     <svg viewBox="0 0 48 48" width="100%" height="100%" className="rounded-full">
@@ -96,6 +112,14 @@ export function FramedAvatar({
     </svg>
   );
   if (frame === 'none') return <div className="shrink-0" style={{ width: size, height: size }}>{inner}</div>;
+  if (!frameItem?.assetUrl && frameItem?.style?.art === 'vuong_gia') {
+    return (
+      <div className="relative shrink-0" style={{ width: size, height: size }}>
+        <div className="absolute inset-[2px] overflow-hidden rounded-full ring-2 ring-[#2a0613]">{inner}</div>
+        <VuongGiaFrame size={size} />
+      </div>
+    );
+  }
   if (frameItem?.assetUrl) {
     const r = frameItem.render ?? { scale: 1.25, offsetX: 0, offsetY: 0 };
     const w = size * r.scale;

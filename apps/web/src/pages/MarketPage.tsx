@@ -1,5 +1,5 @@
-import { type CatalogItem, type PublicUser } from '@casino/shared';
-import { useState } from 'react';
+import { type CatalogItem, type InventoryEntry, type PublicUser } from '@casino/shared';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sfx } from '../audio/sfx';
 import { formatChips } from '../lib/format';
@@ -9,11 +9,14 @@ import { useSession } from '../store/session';
 import { AppShell, PageHeader } from '../ui/AppShell';
 import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
+import { CardBack, ChatBubble, TitleBadge } from '../ui/Cosmetics';
 import { NavIcon } from '../ui/NavIcons';
 import { Amount } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
 
-const TABS = ['frames', 'cardBacks', 'tables', 'effects'] as const;
+const TABS = ['frames', 'cardBacks', 'titles', 'bubbles', 'tables', 'effects'] as const;
+const LIVE: Tab[] = ['frames', 'cardBacks', 'titles', 'bubbles'];
+const KIND_OF: Partial<Record<Tab, 'card_back' | 'title' | 'chat_bubble'>> = { cardBacks: 'card_back', titles: 'title', bubbles: 'chat_bubble' };
 type Tab = (typeof TABS)[number];
 
 function FramesGrid() {
@@ -96,6 +99,70 @@ function FramesGrid() {
   );
 }
 
+/** Shop grid for titles, chat bubbles and card backs: buy with Cxu Bạc (server debits via the ledger), then equip. */
+function CosmeticGrid({ kind }: { kind: 'card_back' | 'title' | 'chat_bubble' }) {
+  const { t, i18n } = useTranslation();
+  const user = useSession((s) => s.user)!;
+  const balance = useSession((s) => s.balance);
+  const setUser = useSession((s) => s.setUser);
+  const catalog = useCatalog((c) => c.items);
+  const [owned, setOwned] = useState<Set<string> | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
+  const items = Object.values(catalog).filter((i): i is CatalogItem & { priceSilver: number } => i.kind === kind && i.status === 'released' && i.priceSilver !== null);
+  const equipped = kind === 'card_back' ? user.cardBack : kind === 'title' ? user.title : user.chatBubble;
+
+  const loadOwned = () =>
+    void api<{ items: InventoryEntry[] }>('/api/me/inventory').then((r) => setOwned(new Set(r.items.filter((e) => e.active).map((e) => e.itemId))), () => setOwned(new Set()));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(loadOwned, []);
+
+  const act = async (itemId: string, buy: boolean) => {
+    setBusy(itemId);
+    try {
+      if (buy) {
+        await api('/api/shop/buy', { method: 'POST', body: { itemId } });
+        sfx.win();
+        toast(t('shop.bought'), 'success');
+      }
+      const { user: fresh } = await api<{ user: PublicUser }>('/api/me/equip', { method: 'POST', body: { slot: kind, itemId } });
+      setUser(fresh);
+      loadOwned();
+    } catch (err) {
+      toast(t(`errors.${err instanceof ApiError ? err.code : 'internal'}`), 'error');
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:gap-4">
+      {items.map((item) => {
+        const has = owned?.has(item.id) ?? false;
+        return (
+          <div key={item.id} className={`glass flex flex-col items-center gap-2 p-3 ${equipped === item.id ? 'border-gold-300/60 shadow-glow' : ''}`}>
+            <div className="flex h-28 w-full items-center justify-center">
+              {kind === 'card_back' ? <CardBack itemId={item.id} width={64} /> : kind === 'title' ? <TitleBadge itemId={item.id} /> : <ChatBubble itemId={item.id}>{t('collection.bubbleSample')}</ChatBubble>}
+            </div>
+            <div className="text-center font-display text-base font-bold leading-tight">{itemName(item, i18n.language, item.id)}</div>
+            {item.priceSilver === 0 ? <span className="text-sm text-white/50">{t('shop.free')}</span> : <Amount currency="silver" value={formatChips(item.priceSilver, i18n.language)} size={20} className="font-bold" />}
+            {equipped === item.id ? (
+              <span className="rounded-full bg-gold-300/15 px-3 py-1 text-xs font-bold text-gold-200">{t('shop.equipped')}</span>
+            ) : has ? (
+              <Button size="sm" disabled={busy !== null} onClick={() => void act(item.id, false)}>
+                {t('shop.equip')}
+              </Button>
+            ) : (
+              <Button variant="gold" size="sm" disabled={busy !== null || owned === null || balance < item.priceSilver} onClick={() => void act(item.id, true)}>
+                {t('shop.buy')}
+              </Button>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function SoonPanel({ text }: { text: string }) {
   const { t } = useTranslation();
   return (
@@ -127,7 +194,7 @@ export function MarketPage() {
               }`}
             >
               {t(`market.tabs.${key}`)}
-              {key === 'frames' ? (
+              {LIVE.includes(key) ? (
                 <span className={`rounded px-1 text-[9px] font-bold uppercase ${tab === key ? 'bg-ink-900/20' : 'bg-emerald-500/20 text-emerald-400'}`}>{t('market.live')}</span>
               ) : (
                 <span className={`rounded px-1 text-[9px] font-bold uppercase ${tab === key ? 'bg-ink-900/20' : 'bg-white/10 text-white/50'}`}>{t('hub.comingSoon')}</span>
@@ -135,7 +202,7 @@ export function MarketPage() {
             </button>
           ))}
         </div>
-        {tab === 'frames' ? <FramesGrid /> : <SoonPanel text={t('market.tabSoon')} />}
+        {tab === 'frames' ? <FramesGrid /> : KIND_OF[tab] ? <CosmeticGrid key={tab} kind={KIND_OF[tab]!} /> : <SoonPanel text={t('market.tabSoon')} />}
         <p className="text-[11px] text-white/35">{t('app.disclaimer')}</p>
       </div>
     </AppShell>

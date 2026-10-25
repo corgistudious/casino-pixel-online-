@@ -1,9 +1,14 @@
 import { z } from 'zod';
 
-/** Kinds of owned things. Frames and avatars are unique per player; collectibles may be held several times. */
-export const ITEM_KINDS = ['frame', 'avatar', 'collectible'] as const;
+/**
+ * Kinds of owned things. Everything equippable is unique per player (one row, which also keeps the
+ * ownership history); collectibles may be held several times.
+ */
+export const ITEM_KINDS = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'collectible'] as const;
 export type ItemKind = (typeof ITEM_KINDS)[number];
-export const UNIQUE_ITEM_KINDS: readonly ItemKind[] = ['frame', 'avatar'];
+export const EQUIP_SLOTS = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back'] as const;
+export type EquipSlot = (typeof EQUIP_SLOTS)[number];
+export const UNIQUE_ITEM_KINDS: readonly ItemKind[] = EQUIP_SLOTS;
 
 export const RARITIES = ['common', 'rare', 'epic', 'legendary', 'mythic'] as const;
 export type Rarity = (typeof RARITIES)[number];
@@ -12,7 +17,7 @@ export type Rarity = (typeof RARITIES)[number];
 export const ITEM_STATUSES = ['draft', 'released', 'hidden'] as const;
 export type ItemStatus = (typeof ITEM_STATUSES)[number];
 
-export const ITEM_SOURCES = ['shop', 'event', 'mail', 'vip', 'achievement', 'tournament', 'admin', 'legacy'] as const;
+export const ITEM_SOURCES = ['shop', 'event', 'mail', 'vip', 'achievement', 'tournament', 'admin', 'legacy', 'season', 'giftcode'] as const;
 export type ItemSource = (typeof ITEM_SOURCES)[number];
 
 /** Where an uploaded frame image sits relative to the avatar circle (1 = same size as the avatar). */
@@ -23,8 +28,17 @@ export const frameRenderSchema = z.object({
 });
 export type FrameRender = z.infer<typeof frameRenderSchema>;
 
-/** Built-in frames drawn by the client (no image): conic gradient stops. */
-export const legacyFrameStyleSchema = z.object({ colors: z.array(z.string().regex(/^#[0-9a-f]{6}$/i)).min(2).max(8), animated: z.boolean() });
+/**
+ * Look of items drawn by the client (no uploaded image): colour stops, animation, and optionally a
+ * built-in artwork key (e.g. the Vương Giả set). Used by frames, titles, chat bubbles and card backs.
+ */
+export const legacyFrameStyleSchema = z.object({
+  colors: z.array(z.string().regex(/^#[0-9a-f]{6}$/i)).min(2).max(8),
+  animated: z.boolean(),
+  art: z.string().regex(/^[a-z0-9_]{2,30}$/).optional(),
+});
+export const itemStyleSchema = legacyFrameStyleSchema;
+export type ItemStyle = z.infer<typeof itemStyleSchema>;
 
 export interface CatalogItem {
   id: string;
@@ -50,11 +64,15 @@ export interface InventoryEntry {
   kind: ItemKind;
   source: ItemSource;
   acquiredAt: string;
+  /** Timed items (e.g. season rewards): usable until this instant; null = permanent. */
+  expiresAt: string | null;
+  /** False once a timed item has expired (kept for the ownership history, cannot be equipped). */
+  active: boolean;
 }
 
 export const itemIdSchema = z.string().regex(/^[a-z0-9_]{2,40}$/);
 
-export const equipSchema = z.object({ slot: z.enum(['frame', 'avatar']), itemId: itemIdSchema.nullable() });
+export const equipSchema = z.object({ slot: z.enum(EQUIP_SLOTS), itemId: itemIdSchema.nullable() });
 
 export const ASSET_MIME = ['image/png', 'image/webp', 'image/gif'] as const;
 export const ASSET_MAX_BYTES = 1_048_576;
@@ -69,7 +87,17 @@ export type MailKind = (typeof MAIL_KINDS)[number];
 export const mailAttachmentSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('silver'), amount: z.number().int().min(1).max(10_000_000) }),
   z.object({ type: z.literal('gold'), amount: z.number().int().min(1).max(100_000) }),
-  z.object({ type: z.literal('item'), itemId: itemIdSchema }),
+  z.object({
+    type: z.literal('item'),
+    itemId: itemIdSchema,
+    /** Timed item: usable until this instant, whenever the mail is claimed (a late claim never extends it). */
+    expiresAt: z.string().datetime().optional(),
+    /**
+     * Template only (level rewards, season rewards, giftcodes): turned into `expiresAt` when the reward
+     * is delivered — from the delivery time, or from the next season's start for season rewards.
+     */
+    durationDays: z.number().int().min(1).max(3650).optional(),
+  }),
 ]);
 export type MailAttachment = z.infer<typeof mailAttachmentSchema>;
 
@@ -89,5 +117,5 @@ export interface MailMessage {
   readAt: string | null;
   claimedAt: string | null;
   /** Per attachment after claiming: granted, or skipped because a unique item was already owned. */
-  claimResult: { index: number; outcome: 'granted' | 'already_owned' }[] | null;
+  claimResult: { index: number; outcome: 'granted' | 'already_owned' | 'extended' | 'expired' }[] | null;
 }

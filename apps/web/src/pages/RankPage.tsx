@@ -16,6 +16,7 @@ import { api } from '../net/api';
 import { useSession } from '../store/session';
 import { AppShell, PageHeader } from '../ui/AppShell';
 import { RankEmblem, useRankName } from '../ui/RankEmblem';
+import { SeasonRewardsTable } from '../ui/SeasonRewardsTable';
 
 interface LevelEntry {
   position: number;
@@ -211,6 +212,8 @@ export function RankPage() {
           </p>
           <p className="mt-2 rounded-lg border border-neon-cyan/30 bg-neon-cyan/5 px-3 py-2 text-xs text-neon-cyan/90">{t('rank.modeNote')}</p>
         </section>
+
+        <SeasonRewardsTable />
 
         {/* Tabs */}
         <section className="glass p-3">
