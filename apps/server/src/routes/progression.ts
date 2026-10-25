@@ -1,4 +1,4 @@
-import { DEFAULT_RANK_RULES, idempotencyKeySchema, LEVEL_MAX, MAIL_MAX_ATTACHMENTS, mailAttachmentSchema, RANK_TIERS, TOP_TITLES } from '@casino/shared';
+import { addMonths, DEFAULT_PARTICIPATION, DEFAULT_RANK_RULES, idempotencyKeySchema, LEVEL_MAX, MAIL_MAX_ATTACHMENTS, mailAttachmentSchema, OFFICIAL_SEASON_REWARDS, participationSchema, SEASON_LENGTH_MONTHS, seasonRewardsSchema } from '@casino/shared';
 import { asc, desc, eq, ne, sql } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
@@ -12,7 +12,7 @@ import { runOnce } from '../services/adminOps';
 import { audit } from '../services/audit';
 import { itemsExist } from '../services/catalog';
 import { addExp, levelLadder, levelOf, notifyProgress, recentExpEvents } from '../services/progression';
-import { adjustRank, endSeason, listSeasons, mySeasonResults, progressRank, publicSeason, rankHistory, rankLadder, startSeason } from '../services/rank';
+import { adjustRank, deliverSeasonRewards, endSeason, recentRewardFlags, seasonProjection, seasonRewardReport, setDisqualified, listSeasons, mySeasonResults, progressRank, publicSeason, rankHistory, rankLadder, startSeason } from '../services/rank';
 import { makeGuards } from './guards';
 
 const attachments = z.array(mailAttachmentSchema).max(MAIL_MAX_ATTACHMENTS);
@@ -21,19 +21,20 @@ const rulesSchema = z.object({
   lossRp: z.number().int().min(0).max(200),
   softResetDivisions: z.number().int().min(0).max(39),
 });
-const rewardsSchema = z.object({
-  tiers: z.partialRecord(z.enum(RANK_TIERS.map((t) => t.id) as [string, ...string[]]), attachments).default({}),
-  top: z.partialRecord(z.enum(TOP_TITLES.map((t) => t.id) as [string, ...string[]]), attachments).default({}),
-});
+const rewardsSchema = seasonRewardsSchema;
+/** Defaults: 2-month season, official rewards, participation rewards off until the Owner sets them. */
 const seasonSchema = z
   .object({
     name: z.string().trim().min(2).max(60),
     startsAt: z.string().datetime(),
-    endsAt: z.string().datetime(),
+    endsAt: z.string().datetime().optional(),
     rules: rulesSchema.default(DEFAULT_RANK_RULES),
-    rewards: rewardsSchema.default({ tiers: {}, top: {} }),
+    rewards: rewardsSchema.default({ brackets: OFFICIAL_SEASON_REWARDS }),
+    participation: participationSchema.default(DEFAULT_PARTICIPATION),
+    autoRollover: z.boolean().default(true),
   })
-  .refine((s) => Date.parse(s.endsAt) > Date.parse(s.startsAt), { path: ['endsAt'], message: 'endsAt must be after startsAt' });
+  .refine((s) => !s.endsAt || Date.parse(s.endsAt) > Date.parse(s.startsAt), { path: ['endsAt'], message: 'endsAt must be after startsAt' });
+const bracketLists = (r: z.infer<typeof rewardsSchema>) => Object.values(r.brackets);
 const reasonSchema = z.string().trim().min(5).max(300);
 const idParam = z.object({ id: z.coerce.number().int().positive() });
 const uidParam = z.object({ uid: z.coerce.number().int().positive() });
@@ -62,7 +63,8 @@ export function registerProgressionRoutes(app: FastifyInstance, db: Db, hub: Rea
 
   app.get('/api/leaderboard/level', async () => ({ entries: await levelLadder(db) }));
 
-  app.get('/api/rank/seasons', async () => ({ seasons: (await listSeasons(db)).map(({ rewards: _r, ...s }) => s) }));
+  /** Public: seasons with their reward table and participation rewards (what players can earn). */
+  app.get('/api/rank/seasons', async () => ({ seasons: await listSeasons(db) }));
 
   /** Ladder of a season (default: the active one, else the latest). */
   app.get('/api/rank/ladder', async (req) => {
@@ -105,10 +107,20 @@ export function registerProgressionRoutes(app: FastifyInstance, db: Db, hub: Rea
 
   app.post('/api/admin/rank/seasons', { preHandler: canReauth('progression.manage') }, async (req) => {
     const input = seasonSchema.parse(req.body);
-    await assertItems(db, [...Object.values(input.rewards.tiers), ...Object.values(input.rewards.top)]);
+    await assertItems(db, bracketLists(input.rewards));
+    const startsAt = new Date(input.startsAt);
     const [row] = await db
       .insert(rankSeasons)
-      .values({ name: input.name, startsAt: new Date(input.startsAt), endsAt: new Date(input.endsAt), rules: input.rules, rewards: input.rewards, createdBy: req.account!.id })
+      .values({
+        name: input.name,
+        startsAt,
+        endsAt: input.endsAt ? new Date(input.endsAt) : addMonths(startsAt, SEASON_LENGTH_MONTHS),
+        rules: input.rules,
+        rewards: input.rewards,
+        participation: input.participation,
+        autoRollover: input.autoRollover,
+        createdBy: req.account!.id,
+      })
       .returning();
     await audit(db, { actorId: req.account!.id, action: 'rank.season_create', targetType: 'rank_season', targetId: String(row!.id), details: input, ip: req.ip });
     return { season: publicSeason(row!) };
@@ -118,19 +130,35 @@ export function registerProgressionRoutes(app: FastifyInstance, db: Db, hub: Rea
   app.patch('/api/admin/rank/seasons/:id', { preHandler: canReauth('progression.manage') }, async (req) => {
     const { id } = idParam.parse(req.params);
     const input = z
-      .object({ name: z.string().trim().min(2).max(60).optional(), startsAt: z.string().datetime().optional(), endsAt: z.string().datetime().optional(), rules: rulesSchema.optional(), rewards: rewardsSchema.optional() })
+      .object({
+        name: z.string().trim().min(2).max(60).optional(),
+        startsAt: z.string().datetime().optional(),
+        endsAt: z.string().datetime().optional(),
+        rules: rulesSchema.optional(),
+        rewards: rewardsSchema.optional(),
+        participation: participationSchema.optional(),
+        autoRollover: z.boolean().optional(),
+      })
       .parse(req.body);
     const [season] = await db.select().from(rankSeasons).where(eq(rankSeasons.id, id));
     if (!season) throw fail('not_found');
     if (season.status === 'ended') throw fail('bad_request', 'season ended');
-    if (season.status === 'active' && (input.name || input.startsAt || input.rules)) throw fail('bad_request', 'a running season can only change its end date and rewards');
-    if (input.rewards) await assertItems(db, [...Object.values(input.rewards.tiers), ...Object.values(input.rewards.top)]);
+    if (season.status === 'active' && (input.name || input.startsAt || input.rules)) throw fail('bad_request', 'a running season can only change its end date, rewards and participation rewards');
+    if (input.rewards) await assertItems(db, bracketLists(input.rewards));
     const startsAt = input.startsAt ? new Date(input.startsAt) : season.startsAt;
     const endsAt = input.endsAt ? new Date(input.endsAt) : season.endsAt;
     if (endsAt <= startsAt) throw fail('bad_request', 'endsAt must be after startsAt');
     const [row] = await db
       .update(rankSeasons)
-      .set({ name: input.name ?? season.name, startsAt, endsAt, rules: input.rules ?? season.rules, rewards: input.rewards ?? season.rewards })
+      .set({
+        name: input.name ?? season.name,
+        startsAt,
+        endsAt,
+        rules: input.rules ?? season.rules,
+        rewards: input.rewards ?? season.rewards,
+        participation: input.participation ?? season.participation,
+        autoRollover: input.autoRollover ?? season.autoRollover,
+      })
       .where(eq(rankSeasons.id, id))
       .returning();
     await audit(db, { actorId: req.account!.id, action: 'rank.season_update', targetType: 'rank_season', targetId: String(id), details: input, ip: req.ip });
@@ -151,7 +179,44 @@ export function registerProgressionRoutes(app: FastifyInstance, db: Db, hub: Rea
     const res = await db.transaction((tx) => endSeason(tx, id));
     if (!res) throw fail('season_inactive');
     await audit(db, { actorId: req.account!.id, action: 'rank.season_end', targetType: 'rank_season', targetId: String(id), details: { reason, ...res }, ip: req.ip });
+    const delivery = await deliverSeasonRewards(db);
+    return { ...res, delivery };
+  });
+
+  // ---------------------------------------------------------------- admin: season rewards
+  /** What the season would pay if it ended now (Owner preview of the issuance). */
+  app.get('/api/admin/rank/seasons/:id/projection', { preHandler: can('progression.read') }, async (req) => {
+    const { id } = idParam.parse(req.params);
+    return seasonProjection(db, id);
+  });
+
+  /** Reward records of an ended season: recipients, delivery/claim state, Cxu planned and claimed. */
+  app.get('/api/admin/rank/seasons/:id/rewards', { preHandler: can('progression.read') }, async (req) => {
+    const { id } = idParam.parse(req.params);
+    return seasonRewardReport(db, id);
+  });
+
+  /** Retries mail delivery of pending rewards now (also retried automatically every minute). */
+  app.post('/api/admin/rank/rewards/retry', { preHandler: canReauth('progression.manage') }, async (req) => {
+    const res = await deliverSeasonRewards(db);
+    await audit(db, { actorId: req.account!.id, action: 'rank.rewards_retry', details: res, ip: req.ip });
     return res;
+  });
+
+  app.get('/api/admin/rank/flags', { preHandler: can('progression.read') }, async () => ({ flags: await recentRewardFlags(db) }));
+
+  /** Verified cheating: exclude a player from the season ladder, Top titles and rewards (or restore). */
+  app.post('/api/admin/rank/seasons/:id/disqualify', { preHandler: canReauth('progression.manage') }, async (req) => {
+    const { id } = idParam.parse(req.params);
+    const input = z.object({ uid: z.number().int().positive(), disqualified: z.boolean(), reason: reasonSchema }).parse(req.body);
+    const target = await findByUid(db, input.uid);
+    if (!target) throw fail('not_found');
+    const row = await db.transaction(async (tx) => {
+      const r = await setDisqualified(tx, id, target.id, input.disqualified, input.reason);
+      await audit(tx, { actorId: req.account!.id, action: input.disqualified ? 'rank.disqualify' : 'rank.requalify', targetType: 'user', targetId: String(input.uid), details: { seasonId: id, reason: input.reason }, ip: req.ip });
+      return r;
+    });
+    return { disqualified: row.disqualified };
   });
 
   // ---------------------------------------------------------------- admin: a player's progression

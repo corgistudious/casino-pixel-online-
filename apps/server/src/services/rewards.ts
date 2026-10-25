@@ -1,4 +1,4 @@
-import type { Locale, MailAttachment, MailKind } from '@casino/shared';
+import { resolveDurations, type Locale, type MailAttachment, type MailKind } from '@casino/shared';
 import { eq, sql } from 'drizzle-orm';
 import type { Tx } from '../db/client';
 import { users } from '../db/schema';
@@ -28,7 +28,9 @@ export interface RewardDelivery {
 /** Delivers the reward; returns the mail id, or null when this reward was already delivered. */
 export async function deliverReward(tx: Tx, r: RewardDelivery): Promise<string | null> {
   if (!r.attachments.length) return null;
-  const itemIds = [...new Set(r.attachments.flatMap((a) => (a.type === 'item' ? [a.itemId] : [])))];
+  // Timed items given as a duration count from delivery (callers may resolve them earlier, e.g. season start).
+  const attachments = resolveDurations(r.attachments, new Date());
+  const itemIds = [...new Set(attachments.flatMap((a) => (a.type === 'item' ? [a.itemId] : [])))];
   if (itemIds.length) {
     const known = await itemsExist(tx, itemIds);
     const missing = itemIds.filter((id) => !known.has(id));
@@ -40,7 +42,7 @@ export async function deliverReward(tx: Tx, r: RewardDelivery): Promise<string |
   const expiresAt = r.expiresInDays ? new Date(Date.now() + r.expiresInDays * 86_400_000).toISOString() : null;
   const rows = (await tx.execute(sql`
     INSERT INTO mail_messages (user_id, kind, subject, body, attachments, created_by, expires_at, reward_key)
-    VALUES (${r.userId}, ${r.kind}, ${text.subject}, ${text.body}, ${JSON.stringify(r.attachments)}::jsonb, ${r.actorId ?? null}, ${expiresAt}::timestamptz, ${r.key})
+    VALUES (${r.userId}, ${r.kind}, ${text.subject}, ${text.body}, ${JSON.stringify(attachments)}::jsonb, ${r.actorId ?? null}, ${expiresAt}::timestamptz, ${r.key})
     ON CONFLICT (user_id, reward_key) WHERE reward_key IS NOT NULL DO NOTHING
     RETURNING id`)) as unknown as { id: string }[];
   return rows[0]?.id ?? null;

@@ -71,6 +71,10 @@ export const users = pgTable(
     lastRescueAt: timestamp('last_rescue_at', { withTimezone: true }),
     /** Equipped special avatar (catalog item id); null = default avatar `avatar`. */
     avatarItem: text('avatar_item'),
+    /** Equipped title, chat bubble and card back (catalog item ids). */
+    equippedTitle: text('equipped_title'),
+    equippedBubble: text('equipped_bubble'),
+    equippedCardBack: text('equipped_card_back'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
@@ -413,7 +417,7 @@ export const catalogItems = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
-    check('catalog_items_kind', sql`${t.kind} IN ('frame', 'avatar', 'collectible')`),
+    check('catalog_items_kind', sql`${t.kind} IN ('frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'collectible')`),
     check('catalog_items_status', sql`${t.status} IN ('draft', 'released', 'hidden')`),
     check('catalog_items_price', sql`${t.priceSilver} IS NULL OR ${t.priceSilver} >= 0`),
   ],
@@ -436,11 +440,14 @@ export const inventoryItems = pgTable(
     /** e.g. mail id or admin operation id that granted it. */
     sourceRef: text('source_ref'),
     acquiredAt: timestamp('acquired_at', { withTimezone: true }).notNull().defaultNow(),
+    /** Timed items: usable until then (the row stays as ownership history); null = permanent. */
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
   },
   (t) => [
     index('inventory_items_user_idx').on(t.userId),
     index('inventory_items_item_idx').on(t.itemId),
-    uniqueIndex('inventory_items_unique_cosmetic_idx').on(t.userId, t.itemId).where(sql`${t.kind} IN ('frame', 'avatar')`),
+    uniqueIndex('inventory_items_unique_cosmetic_idx').on(t.userId, t.itemId).where(sql`${t.kind} IN ('frame', 'avatar', 'title', 'chat_bubble', 'card_back')`),
+    index('inventory_items_expiry_idx').on(t.expiresAt).where(sql`${t.expiresAt} IS NOT NULL`),
   ],
 );
 
@@ -630,6 +637,10 @@ export const rankSeasons = pgTable(
     rules: jsonb('rules').notNull(),
     /** End-of-season rewards: { tiers: { [tierId]: MailAttachment[] }, top: { [topTitle]: MailAttachment[] } } */
     rewards: jsonb('rewards').notNull(),
+    /** ParticipationRules: Cxu Bạc per valid ranked match and anti-farming caps. */
+    participation: jsonb('participation').notNull().default(sql`'{"playSilver":0,"winSilver":0,"dailyMatchCap":20,"samePairDailyCap":3}'::jsonb`),
+    /** Open the next season automatically when this one ends. */
+    autoRollover: boolean('auto_rollover').notNull().default(true),
     createdBy: uuid('created_by'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     endedAt: timestamp('ended_at', { withTimezone: true }),
@@ -655,6 +666,9 @@ export const playerRanks = pgTable(
     peakDivision: smallint('peak_division').notNull(),
     /** Best Top-50 position reached this season (null = never in the Top). */
     peakTopPosition: integer('peak_top_position'),
+    /** Verified cheating: excluded from the ladder, titles and season rewards. */
+    disqualified: boolean('disqualified').notNull().default(false),
+    disqualifiedReason: text('disqualified_reason'),
     /** When the current RP was reached: earlier wins Top-ladder ties. */
     rpAt: timestamp('rp_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
@@ -690,6 +704,10 @@ export const rankEvents = pgTable(
     streakAfter: smallint('streak_after').notNull(),
     promoted: boolean('promoted').notNull().default(false),
     demoted: boolean('demoted').notNull().default(false),
+    /** Other players of the match (anti-farming checks). */
+    opponentIds: uuid('opponent_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    /** Participation reward paid for this match (Cxu Bạc, via the ledger). */
+    rewardSilver: integer('reward_silver').notNull().default(0),
     actorId: uuid('actor_id'),
     note: text('note'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -718,4 +736,97 @@ export const rankSeasonResults = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [primaryKey({ columns: [t.seasonId, t.userId] })],
+);
+
+/**
+ * Immutable end-of-season reward record per player: decided once when the season closes, then
+ * delivered by mail (retried until delivered; delivery is keyed so it never duplicates).
+ */
+export const seasonRewards = pgTable(
+  'season_rewards',
+  {
+    seasonId: integer('season_id')
+      .notNull()
+      .references(() => rankSeasons.id, { onDelete: 'restrict' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    topPosition: integer('top_position'),
+    /** top1 | top2 | top3 | top4_10 | top11_50 | rest */
+    bracket: text('bracket').notNull(),
+    attachments: jsonb('attachments').notNull(),
+    silver: bigint('silver', { mode: 'number' }).notNull(),
+    gold: bigint('gold', { mode: 'number' }).notNull(),
+    /** pending | delivered */
+    status: text('status').notNull().default('pending'),
+    mailId: uuid('mail_id'),
+    attempts: integer('attempts').notNull().default(0),
+    lastError: text('last_error'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    deliveredAt: timestamp('delivered_at', { withTimezone: true }),
+  },
+  (t) => [primaryKey({ columns: [t.seasonId, t.userId] }), index('season_rewards_pending_idx').on(t.status).where(sql`${t.status} = 'pending'`)],
+);
+
+/** Suspicious reward patterns (farming, shared IPs, AFK) for staff review. */
+export const rewardFlags = pgTable(
+  'reward_flags',
+  {
+    id: bigserial('id', { mode: 'number' }).primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    /** same_opponent | daily_cap | shared_ip | afk */
+    kind: text('kind').notNull(),
+    seasonId: integer('season_id'),
+    matchKey: text('match_key'),
+    details: jsonb('details'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('reward_flags_created_idx').on(t.createdAt), index('reward_flags_user_idx').on(t.userId)],
+);
+
+/** Gift codes. `uses` is updated under a row lock, so limits hold under concurrency. */
+export const giftcodes = pgTable(
+  'giftcodes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    /** Normalised: upper case, no spaces or dashes. */
+    code: text('code').notNull(),
+    campaign: text('campaign').notNull(),
+    attachments: jsonb('attachments').notNull(),
+    startsAt: timestamp('starts_at', { withTimezone: true }).notNull().defaultNow(),
+    endsAt: timestamp('ends_at', { withTimezone: true }),
+    /** Total redemptions allowed (null = unlimited). */
+    maxUses: integer('max_uses'),
+    perUserLimit: integer('per_user_limit').notNull().default(1),
+    uses: integer('uses').notNull().default(0),
+    enabled: boolean('enabled').notNull().default(true),
+    createdBy: uuid('created_by'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex('giftcodes_code_idx').on(t.code),
+    index('giftcodes_campaign_idx').on(t.campaign),
+    check('giftcodes_limits', sql`${t.perUserLimit} >= 1 AND (${t.maxUses} IS NULL OR ${t.maxUses} >= 1) AND ${t.uses} >= 0 AND (${t.maxUses} IS NULL OR ${t.uses} <= ${t.maxUses})`),
+  ],
+);
+
+export const giftcodeRedemptions = pgTable(
+  'giftcode_redemptions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    giftcodeId: uuid('giftcode_id')
+      .notNull()
+      .references(() => giftcodes.id, { onDelete: 'restrict' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    /** 1…perUserLimit: the n-th use of this code by this player. */
+    seq: integer('seq').notNull(),
+    mailId: uuid('mail_id'),
+    ip: text('ip'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('giftcode_redemptions_once_idx').on(t.giftcodeId, t.userId, t.seq), index('giftcode_redemptions_user_idx').on(t.userId, t.createdAt)],
 );

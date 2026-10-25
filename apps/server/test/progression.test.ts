@@ -22,7 +22,7 @@ const progress = async (token: string) => (await t.app.inject({ url: '/api/me/pr
 const asOwner = async (method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', url: string, payload?: object) =>
   t.app.inject({ method, url, payload, headers: await reauthHeaders(t, owner.token), remoteAddress: randomIp() });
 const setRank = (userId: string, seasonId: number, division: number, rp: number, streak = 0) =>
-  t.db.execute(sql`INSERT INTO player_ranks (season_id, user_id, division, rp, streak, peak_division) VALUES (${seasonId}, ${userId}, ${division}, ${rp}, ${streak}, ${division})
+  t.db.execute(sql`INSERT INTO player_ranks (season_id, user_id, division, rp, streak, peak_division, wins) VALUES (${seasonId}, ${userId}, ${division}, ${rp}, ${streak}, ${division}, 1)
     ON CONFLICT (season_id, user_id) DO UPDATE SET division = EXCLUDED.division, rp = EXCLUDED.rp, streak = EXCLUDED.streak, rp_at = now()`);
 
 describe('level & EXP', () => {
@@ -102,7 +102,7 @@ describe('ranked seasons', () => {
       name: 'Mùa 1',
       startsAt: new Date(Date.now() - 60_000).toISOString(),
       endsAt: new Date(Date.now() + 86_400_000).toISOString(),
-      rewards: { tiers: { bronze: [{ type: 'silver', amount: 100 }], wargod: [{ type: 'gold', amount: 50 }] }, top: { vuong_gia: [{ type: 'gold', amount: 500 }] } },
+      autoRollover: false,
     });
     expect(create.statusCode).toBe(200);
     seasonId = create.json().season.id;
@@ -199,8 +199,8 @@ describe('ranked seasons', () => {
     const res = await one<{ top_position: number; top_title: string }>(sql`SELECT top_position, top_title FROM rank_season_results WHERE season_id = ${seasonId} AND user_id = ${p.user.id}`);
     expect(res).toEqual({ top_position: 1, top_title: 'vuong_gia' });
     const mail = await rows<{ reward_key: string }>(sql`SELECT reward_key FROM mail_messages WHERE user_id = ${p.user.id} ORDER BY reward_key`);
-    expect(mail.map((m) => m.reward_key)).toEqual([`season:${seasonId}:tier`, `season:${seasonId}:top`]);
-    // Bronze players got the bronze reward too; nobody got anything twice.
+    expect(mail.map((m) => m.reward_key)).toEqual([`season:${seasonId}:reward`]);
+    // Nobody got anything twice.
     const dup = await one<{ n: number }>(sql`SELECT count(*)::int AS n FROM (SELECT user_id, reward_key FROM mail_messages WHERE reward_key LIKE 'season:%' GROUP BY 1, 2 HAVING count(*) > 1) d`);
     expect(dup.n).toBe(0);
 

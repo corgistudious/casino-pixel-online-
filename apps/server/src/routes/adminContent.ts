@@ -2,6 +2,7 @@ import {
   ASSET_MAX_BYTES,
   ASSET_MIME,
   frameRenderSchema,
+  itemStyleSchema,
   idempotencyKeySchema,
   ITEM_KINDS,
   ITEM_SOURCES,
@@ -42,10 +43,16 @@ const itemFields = {
   status: z.enum(ITEM_STATUSES),
   assetId: assetIdSchema.optional(),
   render: frameRenderSchema.nullable().optional(),
+  /** Drawn look (colours, animation) for frames, titles, chat bubbles and card backs without an image. */
+  style: itemStyleSchema.nullable().optional(),
   priceSilver: z.number().int().min(0).max(100_000_000).nullable().optional(),
   sort: z.number().int().min(-1000).max(100_000).optional(),
 };
-const createItemSchema = z.object({ id: itemIdSchema, kind: z.enum(ITEM_KINDS), ...itemFields, assetId: assetIdSchema });
+/** Images are required for avatars and collectibles; the other kinds may be drawn from a style instead. */
+const DRAWABLE_KINDS = ['frame', 'title', 'chat_bubble', 'card_back'];
+const createItemSchema = z
+  .object({ id: itemIdSchema, kind: z.enum(ITEM_KINDS), ...itemFields })
+  .refine((v) => !!v.assetId || (!!v.style && DRAWABLE_KINDS.includes(v.kind)), { message: 'an image (or, for frames, titles, bubbles and card backs, a style) is required', path: ['assetId'] });
 const updateItemSchema = z.object(itemFields).partial();
 
 const sendMailSchema = z.object({
@@ -76,7 +83,7 @@ export function registerAdminContentRoutes(app: FastifyInstance, db: Db, hub: Re
 
   app.post('/api/admin/items', { preHandler: can('items.manage') }, async (req) => {
     const input = createItemSchema.parse(req.body);
-    if (!(await loadAsset(db, input.assetId))) throw fail('invalid_asset', 'unknown asset');
+    if (input.assetId && !(await loadAsset(db, input.assetId))) throw fail('invalid_asset', 'unknown asset');
     if (await getCatalogRow(db, input.id)) throw fail('bad_request', 'id already exists');
     const [row] = await db
       .insert(catalogItems)
@@ -91,7 +98,8 @@ export function registerAdminContentRoutes(app: FastifyInstance, db: Db, hub: Re
         source: input.source,
         tradable: input.tradable,
         status: input.status,
-        assetId: input.assetId,
+        assetId: input.assetId ?? null,
+        style: input.style ?? null,
         render: input.kind === 'frame' ? (input.render ?? frameRenderSchema.parse({})) : null,
         priceSilver: input.priceSilver ?? null,
         sort: input.sort ?? 0,
