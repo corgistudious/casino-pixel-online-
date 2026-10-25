@@ -1,11 +1,11 @@
-import { MAIL_KINDS, MAIL_MAX_ATTACHMENTS, type MailAttachment, type MailKind } from '@casino/shared';
+import { MAIL_KINDS, type MailAttachment, type MailKind } from '@casino/shared';
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { adminApi, newIdempotencyKey } from '../net/adminApi';
 import { itemName, useCatalog } from '../store/catalog';
 import { Button } from '../ui/Button';
-import { CurrencyIcon } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
+import { AttachmentEditor } from './AttachmentEditor';
 import { Panel, Pill, Table } from './parts';
 import { useAdminKit } from './useAdmin';
 
@@ -38,7 +38,6 @@ export function MailAdminPage() {
   const [batches, setBatches] = useState<Batch[]>([]);
   // One key per composed mail: a retry after a network error cannot send it twice.
   const [key, setKey] = useState(newIdempotencyKey);
-  const items = Object.values(catalog).filter((i) => i.status === 'released');
 
   const loadBatches = () => {
     if (can('mail.read')) void adminApi<{ batches: Batch[] }>('/api/admin/mail/batches').then((r) => setBatches(r.batches), fail);
@@ -80,8 +79,6 @@ export function MailAdminPage() {
     }
   };
 
-  const update = (i: number, a: MailAttachment) => setAttachments((list) => list.map((x, j) => (j === i ? a : x)));
-  const add = (a: MailAttachment) => setAttachments((list) => (list.length < MAIL_MAX_ATTACHMENTS ? [...list, a] : list));
 
   return (
     <>
@@ -111,53 +108,7 @@ export function MailAdminPage() {
             <input className="field" placeholder={t('admin.mailAdmin.subject')} value={subject} onChange={(e) => setSubject(e.target.value)} maxLength={120} required aria-label={t('admin.mailAdmin.subject')} />
           </div>
           <textarea className="field min-h-28" placeholder={t('admin.mailAdmin.body')} value={body} onChange={(e) => setBody(e.target.value)} maxLength={4000} aria-label={t('admin.mailAdmin.body')} />
-          <div className="flex flex-col gap-2">
-            <span className="text-xs text-white/55">{t('admin.mailAdmin.attachments')}</span>
-            {attachments.map((a, i) => (
-              <div key={i} className="flex flex-wrap items-center gap-2">
-                {a.type === 'item' ? (
-                  <select className="field max-w-xs" value={a.itemId} onChange={(e) => update(i, { type: 'item', itemId: e.target.value })}>
-                    {items.map((it) => (
-                      <option key={it.id} value={it.id}>
-                        {itemName(it, i18n.language, it.id)} ({t(`admin.items.kinds.${it.kind}`)})
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <>
-                    <CurrencyIcon currency={a.type} size={22} />
-                    <input
-                      className="field max-w-40"
-                      inputMode="numeric"
-                      placeholder={t('admin.mailAdmin.amount')}
-                      value={a.amount || ''}
-                      onChange={(e) => update(i, { type: a.type, amount: Number(e.target.value.replace(/\D/g, '')) })}
-                    />
-                  </>
-                )}
-                <Button type="button" size="sm" onClick={() => setAttachments((list) => list.filter((_, j) => j !== i))}>
-                  {t('admin.mailAdmin.remove')}
-                </Button>
-              </div>
-            ))}
-            <div className="flex flex-wrap gap-2">
-              {can('economy.grant') && (
-                <>
-                  <Button type="button" size="sm" onClick={() => add({ type: 'silver', amount: 1000 })}>
-                    {t('admin.mailAdmin.addSilver')}
-                  </Button>
-                  <Button type="button" size="sm" onClick={() => add({ type: 'gold', amount: 1 })}>
-                    {t('admin.mailAdmin.addGold')}
-                  </Button>
-                </>
-              )}
-              {can('items.grant') && items[0] && (
-                <Button type="button" size="sm" onClick={() => add({ type: 'item', itemId: items[0]!.id })}>
-                  {t('admin.mailAdmin.addItem')}
-                </Button>
-              )}
-            </div>
-          </div>
+          <AttachmentEditor value={attachments} onChange={setAttachments} />
           <label className="flex max-w-xs flex-col gap-1 text-xs text-white/55">
             {t('admin.mailAdmin.expires')}
             <input className="field" inputMode="numeric" value={expires} onChange={(e) => setExpires(e.target.value.replace(/\D/g, '').slice(0, 3))} />

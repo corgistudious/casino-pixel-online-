@@ -40,7 +40,7 @@ const DOCK: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/market', icon: 'market', label: 'nav.market' },
   { to: '/collection', icon: 'collection', label: 'nav.collection' },
   { to: '/vip', icon: 'vip', label: 'nav.vip' },
-  { to: '/missions', icon: 'missions', label: 'nav.missions' },
+  { to: '/rank', icon: 'rank', label: 'nav.rank' },
   { to: '/leaderboard', icon: 'leaderboard', label: 'nav.leaderboard' },
   { to: '/profile', icon: 'profile', label: 'nav.profile' },
 ];
@@ -83,7 +83,8 @@ function Hud({ s }: { s: Sizes }) {
           <div style={{ fontSize: s.name }}>
             <PlayerName name={user.displayName} badges={user.badges} size={s.name * 0.95} className="max-w-[11em] font-bold" />
           </div>
-          <div className="tabular-nums text-white/55" style={{ fontSize: s.small }}>
+          <div className="flex items-center gap-2 tabular-nums text-white/55" style={{ fontSize: s.small }}>
+            <span className="rounded-full border border-gold-300/50 bg-black/40 px-2 font-bold text-gold-100">{t('level.short', { level: user.level })}</span>
             {t('player.id', { id: user.uid })}
           </div>
         </div>

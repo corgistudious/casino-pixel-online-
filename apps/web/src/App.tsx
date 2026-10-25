@@ -14,6 +14,7 @@ import { PlayersPage } from './admin/PlayersPage';
 import { StaffPage } from './admin/StaffPage';
 import { ItemsPage } from './admin/ItemsPage';
 import { MailAdminPage } from './admin/MailAdminPage';
+import { ProgressionAdminPage } from './admin/ProgressionAdminPage';
 import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
 import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
@@ -24,10 +25,11 @@ import { MarketPage } from './pages/MarketPage';
 import { CollectionPage } from './pages/CollectionPage';
 import { MailboxPage } from './pages/MailboxPage';
 import { VipPage } from './pages/VipPage';
+import { RankPage } from './pages/RankPage';
 import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
-import { ConnectionBanner, RotateOverlay, TestEnvBadge, Toasts } from './ui/Chrome';
+import { ConnectionBanner, LevelUpBanner, RotateOverlay, TestEnvBadge, Toasts } from './ui/Chrome';
 import { KeyoLogo } from './ui/KeyoLogo';
 
 function GameRoute() {
@@ -93,6 +95,7 @@ export function App() {
       <TestEnvBadge />
       <RotateOverlay />
       <Toasts />
+      <LevelUpBanner />
       <Routes>
         <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
@@ -108,12 +111,14 @@ export function App() {
         <Route path="/friends" element={<Authed><ComingSoonPage section="friends" /></Authed>} />
         <Route path="/gifts" element={<Authed><ComingSoonPage section="gifts" /></Authed>} />
         <Route path="/leaderboard" element={<Authed><LeaderboardPage /></Authed>} />
+        <Route path="/rank" element={<Authed><RankPage /></Authed>} />
         <Route path="/settings" element={<Authed><SettingsPage /></Authed>} />
         <Route path="/admin" element={<Authed admin><AdminLayout /></Authed>}>
           <Route path="dashboard" element={<RequirePerm perm="dashboard.read"><DashboardPage /></RequirePerm>} />
           <Route path="players" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="players/:uid" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
+          <Route path="progression" element={<RequirePerm perm="progression.read"><ProgressionAdminPage /></RequirePerm>} />
           <Route path="items" element={<RequirePerm perm="items.read"><ItemsPage /></RequirePerm>} />
           <Route path="mail" element={<RequirePerm perm="mail.send"><MailAdminPage /></RequirePerm>} />
           <Route path="audit" element={<RequirePerm perm="audit.read"><AuditPage /></RequirePerm>} />

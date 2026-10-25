@@ -18,6 +18,7 @@ export const NAV_ITEMS: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/mail', icon: 'mail', label: 'nav.mail' },
   { to: '/missions', icon: 'missions', label: 'nav.missions' },
   { to: '/vip', icon: 'vip', label: 'nav.vip' },
+  { to: '/rank', icon: 'rank', label: 'nav.rank' },
   { to: '/leaderboard', icon: 'leaderboard', label: 'nav.leaderboard' },
   { to: '/profile', icon: 'profile', label: 'nav.profile' },
   { to: '/friends', icon: 'friends', label: 'nav.friends' },
@@ -94,7 +95,9 @@ function PlayerBar() {
         <Avatar index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={40} />
         <div className="hidden min-w-0 sm:block">
           <PlayerName name={user.displayName} badges={user.badges} size={16} className="max-w-[11rem] text-sm font-semibold" />
-          <div className="text-[11px] leading-tight text-white/45 tabular-nums">{t('player.id', { id: user.uid })}</div>
+          <div className="text-[11px] leading-tight text-white/45 tabular-nums">
+            <span className="font-semibold text-gold-100">{t('level.short', { level: user.level })}</span> · {t('player.id', { id: user.uid })}
+          </div>
         </div>
       </NavLink>
       <span className="hidden h-8 w-px bg-white/10 md:block" />

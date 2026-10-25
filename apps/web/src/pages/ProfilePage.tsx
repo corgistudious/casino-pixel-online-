@@ -6,6 +6,7 @@ import { DEMO_EXTRAS, IS_DEMO } from '../demo';
 import { formatChips } from '../lib/format';
 import { api, ApiError } from '../net/api';
 import { useSession } from '../store/session';
+import { ProgressStrip } from '../ui/ProgressStrip';
 import { AppShell, CharmIcon, DemoTag, VipMeter } from '../ui/AppShell';
 import { Avatar, avatarCount } from '../ui/Avatar';
 import { Button } from '../ui/Button';
@@ -89,6 +90,9 @@ export function ProfilePage() {
               </div>
               <div className="mt-3">
                 <VipMeter />
+              </div>
+              <div className="mt-2">
+                <ProgressStrip />
               </div>
             </div>
             <div className="grid w-full grid-cols-3 gap-2 sm:w-auto">

@@ -7,6 +7,7 @@ interface Dashboard {
   players: { total: number; newToday: number; new7d: number; pendingVerification: number; test: number; banned: number };
   rounds: { total: number; last24h: number; open: number; wagered24h: number; paid24h: number };
   circulation: { silver: number; gold: number };
+  progression: { maxLevel: number; level10: number; season: string | null; ranked: number; topEligible: number };
   online: number;
   series: { day: string; registrations: number; rounds: number; wagered: number; activePlayers: number }[];
   alerts: { level: 'info' | 'warning' | 'critical'; code: string; count?: number }[];
@@ -42,6 +43,9 @@ export function DashboardPage() {
         <Stat label={t('admin.dash.wagered24h')} value={n(d.rounds.wagered24h)} hint={`${t('admin.dash.paid24h')}: ${n(d.rounds.paid24h)}`} />
         <Stat label={t('admin.dash.silver')} value={n(d.circulation.silver)} />
         <Stat label={t('admin.dash.gold')} value={n(d.circulation.gold)} hint={d.rounds.open ? `${t('admin.dash.openRounds')}: ${n(d.rounds.open)}` : undefined} />
+        <Stat label={t('admin.dash.season')} value={d.progression.season ?? '—'} hint={`${t('admin.dash.rankedPlayers')}: ${n(d.progression.ranked)}`} />
+        <Stat label={t('admin.dash.topEligible')} value={n(d.progression.topEligible)} />
+        <Stat label={t('admin.dash.maxLevel')} value={n(d.progression.maxLevel)} hint={`${t('admin.dash.level10')}: ${n(d.progression.level10)}`} />
       </div>
 
       <Panel title={t('admin.dash.alerts')}>

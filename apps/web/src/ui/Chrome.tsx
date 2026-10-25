@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IS_DEMO } from '../demo';
 import { formatChips } from '../lib/format';
 import { api } from '../net/api';
+import { sfx } from '../audio/sfx';
 import { useSession } from '../store/session';
 import { Avatar } from './Avatar';
 import { CurrencyIcon } from './OfficialAssets';
@@ -121,5 +122,37 @@ export function RotateOverlay() {
       </svg>
       <p className="font-display text-xl text-gold-100">{t('app.rotate')}</p>
     </div>
+  );
+}
+
+/** Level-up celebration: a short, non-blocking banner (the game keeps running underneath). */
+export function LevelUpBanner() {
+  const { t } = useTranslation();
+  const level = useSession((s) => s.levelUp);
+  const dismiss = useSession((s) => s.dismissLevelUp);
+  useEffect(() => {
+    if (level === null) return;
+    sfx.win();
+    const id = setTimeout(dismiss, 3800);
+    return () => clearTimeout(id);
+  }, [level, dismiss]);
+  if (level === null) return null;
+  return (
+    <button
+      type="button"
+      onClick={dismiss}
+      role="status"
+      aria-live="polite"
+      className="fixed left-1/2 top-24 z-50 flex -translate-x-1/2 animate-rise items-center gap-4 rounded-2xl border border-gold-300/70 bg-gradient-to-br from-[#3b2470] via-[#1a1040] to-[#0b0822] px-6 py-3 text-left shadow-[0_0_40px_rgba(242,193,78,0.45)]"
+    >
+      <span className="relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold-300 bg-[radial-gradient(circle_at_35%_30%,#ffe08a,#a8700f)] font-display text-2xl font-bold text-ink-900">
+        <span className="absolute inset-0 animate-ping rounded-full border-2 border-gold-300/60 motion-reduce:hidden" />
+        {level}
+      </span>
+      <span>
+        <span className="block font-display text-xl font-bold text-gold-100">{t('level.up')}</span>
+        <span className="block text-sm text-white/75">{t('level.upBody', { level })}</span>
+      </span>
+    </button>
   );
 }

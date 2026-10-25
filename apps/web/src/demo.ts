@@ -4,6 +4,7 @@ import {
   ECONOMY,
   findFrame,
   FRAMES,
+  levelFromExp,
   type BigWinEvent,
   type FairnessInfo,
   type LeaderboardEntry,
@@ -39,6 +40,7 @@ let user: PublicUser = {
   roles: [],
   avatarItem: null,
   unreadMail: 0,
+  level: 1,
   locale: 'vi',
   avatar: 3,
   role: 'player',
@@ -115,6 +117,14 @@ export async function demoApi(path: string, method: string, body: unknown): Prom
       return { rounds: history };
     case 'GET /api/me/fairness':
       return fairness;
+    case 'GET /api/me/progress':
+      return { level: levelFromExp(0), rank: null };
+    case 'GET /api/rank/ladder':
+      return { season: null, entries: [] };
+    case 'GET /api/leaderboard/level':
+    case 'GET /api/me/rank/history':
+    case 'GET /api/me/rank/seasons':
+      return { entries: [], events: [], results: [] };
     case 'GET /api/leaderboard':
       return { entries: leaderboard };
     case 'GET /api/bigwins':
