@@ -26,6 +26,9 @@ Baseline: `main` @ `6932b19`, đánh giá ngày 2026-10-24. Trạng thái:
 | Xì Tố | ❌ | Giai đoạn 4 |
 | Blackjack, Slots | ✅ (có từ trước, ngoài danh sách 5 game) | Giữ nguyên |
 | Phòng game nhiều người | ❌; nay 🟡 bàn chung theo vòng (Tài Xỉu, Roulette) có room realtime; bàn có ghế (Poker, Liêng, Xì Tố) chưa có | Giai đoạn 4a ✅, 4b–4c |
+| Level 1–999, EXP server, thưởng mốc | ❌; nay ✅ | Giai đoạn Progression, `docs/PROGRESSION.md` |
+| Đấu Rank 40 bậc + Top 3/10/50, 200 RP, bảo vệ điểm, chuỗi 3 thắng, mùa giải, reset mềm | ❌; nay 🟡 engine, mùa, BXH, admin, UI ✅; tìm trận/ghép trận chờ game đối kháng | Progression ✅, ghép trận cùng Poker/Liêng/Xì Tố |
+| Hệ thống phần thưởng thống nhất | ❌; nay 🟡 `deliverReward` (thư + ledger khi nhận) dùng cho Level/Mùa; Giftcode/thành tích/VIP sẽ dùng chung | Progression, Giai đoạn Rewards |
 | Ngân hàng | ❌ | Giai đoạn 5 |
 | Chợ sưu tầm | ❌ (chỉ có cửa hàng khung) | Giai đoạn 5 |
 | Cửa hàng | 🟡 khung avatar | Giai đoạn 5 |
