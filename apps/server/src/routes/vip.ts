@@ -26,7 +26,7 @@ export function registerVipRoutes(app: FastifyInstance, db: Db): void {
       const rows = await tx.execute<{ exp: string; last_claim_date: string | null }>(sql`
         SELECT exp, last_claim_date FROM vip_progress WHERE user_id = ${user.id}::uuid FOR UPDATE
       `);
-      const today = new Date().toISOString().slice(0, 10);
+      const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
       if (rows[0]?.last_claim_date === today) throw fail('checkin_done');
       const level = vipProgress(Number(rows[0]?.exp ?? 0)).level;
       const reward = VIP_LEVELS[level - 1]!.daily;
