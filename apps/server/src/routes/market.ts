@@ -28,8 +28,9 @@ export function registerMarketRoutes(app: FastifyInstance, db: Db): void {
       const items = await tx.execute<{ item_id: string }>(sql`
         SELECT i.item_id FROM inventory_items i JOIN catalog_items c ON c.id = i.item_id
         WHERE i.id = ${instanceId}::uuid AND i.user_id = ${user.id}::uuid
-          AND c.tradable = true AND i.kind = 'collectible'
+          AND c.tradable = true AND c.status = 'released' AND i.kind = 'collectible'
           AND (i.expires_at IS NULL OR i.expires_at > now())
+          AND NOT EXISTS (SELECT 1 FROM market_listings ml WHERE ml.instance_id = i.id AND ml.status = 'active')
         FOR UPDATE OF i
       `);
       if (!items.length) throw fail('forbidden');
@@ -61,7 +62,7 @@ export function registerMarketRoutes(app: FastifyInstance, db: Db): void {
       if (!listings.length) throw fail('not_found');
       const listing = listings[0]!;
       if (listing.seller_id === user.id) throw fail('forbidden');
-      const owned = await tx.execute(sql`SELECT 1 FROM inventory_items WHERE id = ${listing.instance_id}::uuid AND user_id = ${listing.seller_id}::uuid FOR UPDATE`);
+      const owned = await tx.execute(sql`SELECT 1 FROM inventory_items WHERE id = ${listing.instance_id}::uuid AND user_id = ${listing.seller_id}::uuid AND (expires_at IS NULL OR expires_at > now()) FOR UPDATE`);
       if (!owned.length) throw fail('not_found');
       const price = Number(listing.price_silver);
       if (!Number.isSafeInteger(price)) throw fail('bad_request');
