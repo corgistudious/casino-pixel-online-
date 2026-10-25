@@ -18,6 +18,30 @@ const paging = z.object({ limit: z.coerce.number().int().min(1).max(100).default
 export function registerAdminPanelRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub, config: Config): void {
   const { can } = makeGuards(app, db);
 
+  app.get('/api/admin/bank/overview', { preHandler: can('bank.read') }, async () => {
+    const totals = await db.execute(sql`
+      SELECT count(*)::int AS accounts, coalesce(sum(silver), 0)::text AS silver,
+        coalesce(sum(gold), 0)::text AS gold FROM bank_accounts
+    `);
+    return { totals: totals[0] ?? { accounts: 0, silver: '0', gold: '0' } };
+  });
+
+  app.get('/api/admin/market/listings', { preHandler: can('market.manage') }, async () => {
+    const listings = await db.execute(sql`
+      SELECT id, seller_id, buyer_id, item_id, price_silver, status, created_at, completed_at
+      FROM market_listings ORDER BY created_at DESC LIMIT 100
+    `);
+    return { listings };
+  });
+
+  app.get('/api/admin/support/summary', { preHandler: can('support.read') }, async () => {
+    const counts = await db.execute(sql`
+      SELECT status, count(*)::int AS count FROM support_tickets GROUP BY status
+    `);
+    return { counts };
+  });
+
+
   app.get('/api/admin/dashboard', { preHandler: can('dashboard.read') }, async (req) => {
     const perms = await userPermissions(db, req.account!.id);
     const [metrics, series, alerts] = await Promise.all([dashboardMetrics(db), activitySeries(db, 14), systemAlerts(db, { smtpConfigured: !!config.SMTP_URL })]);
