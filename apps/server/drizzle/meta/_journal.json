@@ -64,6 +64,20 @@
       "when": 1792898015182,
       "tag": "0008_rewards_cosmetics",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792903451798,
+      "tag": "0009_card_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792904555907,
+      "tag": "0010_card_seat_timeouts",
+      "breakpoints": true
     }
   ]
 }

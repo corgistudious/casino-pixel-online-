@@ -830,3 +830,107 @@ export const giftcodeRedemptions = pgTable(
   },
   (t) => [uniqueIndex('giftcode_redemptions_once_idx').on(t.giftcodeId, t.userId, t.seq), index('giftcode_redemptions_user_idx').on(t.userId, t.createdAt)],
 );
+
+/** Seated card tables (Poker, Liêng, Xì Tố). Casual tables use Cxu Bạc buy-ins; ranked tables use match chips. */
+export const cardTables = pgTable('card_tables', {
+  id: text('id').primaryKey(),
+  game: text('game').notNull(),
+  nameVi: text('name_vi').notNull(),
+  nameEn: text('name_en').notNull(),
+  /** CardTableConfig: blinds, ante, buy-in range, seats, turn time. */
+  config: jsonb('config').notNull(),
+  /** casual | ranked */
+  mode: text('mode').notNull().default('casual'),
+  /** open | paused | closed */
+  status: text('status').notNull().default('open'),
+  /** Seat holding the dealer button for the next hand. */
+  button: integer('button').notNull().default(0),
+  sort: integer('sort').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const cardSeats = pgTable(
+  'card_seats',
+  {
+    tableId: text('table_id')
+      .notNull()
+      .references(() => cardTables.id, { onDelete: 'restrict' }),
+    seat: integer('seat').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    /** Chips at the table between hands (the running hand keeps its own copy until it settles). */
+    stack: bigint('stack', { mode: 'number' }).notNull(),
+    /** active | sitting_out | leaving */
+    status: text('status').notNull().default('active'),
+    /** Consecutive turn timeouts across hands; any real action resets it. */
+    timeouts: integer('timeouts').notNull().default(0),
+    joinedAt: timestamp('joined_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.tableId, t.seat] }),
+    uniqueIndex('card_seats_table_user_idx').on(t.tableId, t.userId),
+    index('card_seats_user_idx').on(t.userId),
+    check('card_seats_stack_nonnegative', sql`${t.stack} >= 0`),
+  ],
+);
+
+/** One hand. `state` is the server-only engine state (deck and hidden cards included). */
+export const cardHands = pgTable(
+  'card_hands',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tableId: text('table_id')
+      .notNull()
+      .references(() => cardTables.id, { onDelete: 'restrict' }),
+    seq: integer('seq').notNull(),
+    state: jsonb('state').notNull(),
+    /** Number of actions applied (clients keep the newest view). */
+    version: integer('version').notNull().default(0),
+    serverSeed: text('server_seed').notNull(),
+    seedHash: text('seed_hash').notNull(),
+    /** active | done | void */
+    status: text('status').notNull().default('active'),
+    deadline: timestamp('deadline', { withTimezone: true }),
+    startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    endedAt: timestamp('ended_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('card_hands_table_seq_idx').on(t.tableId, t.seq),
+    uniqueIndex('card_hands_one_active_idx').on(t.tableId).where(sql`${t.status} = 'active'`),
+    index('card_hands_deadline_idx').on(t.deadline).where(sql`${t.status} = 'active'`),
+  ],
+);
+
+/** Ranked matchmaking queue (one entry per player). */
+export const rankedQueue = pgTable('ranked_queue', {
+  userId: uuid('user_id')
+    .primaryKey()
+    .references(() => users.id, { onDelete: 'restrict' }),
+  game: text('game').notNull(),
+  division: integer('division').notNull(),
+  joinedAt: timestamp('joined_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** A ranked heads-up match: match chips only (never Cxu); the result goes to the season ladder. */
+export const rankedMatches = pgTable(
+  'ranked_matches',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    game: text('game').notNull(),
+    tableId: text('table_id')
+      .notNull()
+      .references(() => cardTables.id, { onDelete: 'restrict' }),
+    seasonId: integer('season_id').notNull(),
+    players: uuid('players').array().notNull(),
+    /** active | done | void */
+    status: text('status').notNull().default('active'),
+    winnerId: uuid('winner_id'),
+    /** Who forfeited (left or AFK), if anyone. */
+    forfeitId: uuid('forfeit_id'),
+    hands: integer('hands').notNull().default(0),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    endedAt: timestamp('ended_at', { withTimezone: true }),
+  },
+  (t) => [index('ranked_matches_status_idx').on(t.status), index('ranked_matches_table_idx').on(t.tableId)],
+);

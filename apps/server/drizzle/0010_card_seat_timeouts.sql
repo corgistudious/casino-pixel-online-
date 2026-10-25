@@ -1,0 +1,1 @@
+ALTER TABLE "card_seats" ADD COLUMN "timeouts" integer DEFAULT 0 NOT NULL;

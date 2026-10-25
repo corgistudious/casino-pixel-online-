@@ -19,10 +19,11 @@ import { badgesOf, toPublicUser, type UserRow } from '../services/users';
 import type { RealtimeHub } from './hub';
 import { notifyProgress } from '../services/progression';
 import { tableRoom, type RoundTableEngine } from '../services/roundTables';
+import { cardRoom, type CardTableEngine } from '../services/cardTables';
 
 const AUTH_TIMEOUT_MS = 10_000;
 
-export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, tables: RoundTableEngine, limits: { rate: number; burst: number }): void {
+export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, tables: RoundTableEngine, cards: CardTableEngine, limits: { rate: number; burst: number }): void {
   const { rate: RATE, burst: BURST } = limits;
   app.get('/ws', { websocket: true }, (socket: WebSocket) => {
     let account: UserRow | null = null;
@@ -79,6 +80,31 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
         }
         case 'table.leave':
           hub.leave(tableRoom(msg.tableId), conn);
+          return { ok: true };
+        case 'card.join': {
+          const view = await cards.view(msg.tableId, userId);
+          hub.join(cardRoom(msg.tableId), conn);
+          return view;
+        }
+        case 'card.leave':
+          hub.leave(cardRoom(msg.tableId), conn);
+          return { ok: true };
+        case 'card.sit':
+          await cards.sit(userId, msg.tableId, msg.seat, msg.buyIn);
+          return cards.view(msg.tableId, userId);
+        case 'card.stand':
+          return cards.stand(userId, msg.tableId);
+        case 'card.back':
+          await cards.back(userId, msg.tableId);
+          return cards.view(msg.tableId, userId);
+        case 'card.act':
+          await cards.act(userId, msg.tableId, msg.handId, { type: msg.action, amount: msg.amount });
+          return { ok: true };
+        case 'card.queue':
+          await cards.queue(userId, msg.game);
+          return { queued: true, game: msg.game };
+        case 'card.unqueue':
+          await cards.unqueue(userId);
           return { ok: true };
         case 'table.bet': {
           const res = await tables.placeBets(userId, msg.tableId, msg.roundId, msg.bets, msg.id);
