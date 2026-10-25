@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS bank_accounts (
  gold bigint NOT NULL DEFAULT 0 CHECK (gold >= 0),
  updated_at timestamptz NOT NULL DEFAULT now()
 );
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS bank_transfers (
  id uuid PRIMARY KEY,
  user_id uuid NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
@@ -15,4 +16,5 @@ CREATE TABLE IF NOT EXISTS bank_transfers (
  bank_after bigint NOT NULL CHECK (bank_after >= 0),
  created_at timestamptz NOT NULL DEFAULT now()
 );
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS bank_transfers_user_date_idx ON bank_transfers(user_id, created_at DESC);
