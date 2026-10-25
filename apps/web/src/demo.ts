@@ -82,6 +82,9 @@ const stats: PlayerStats = {
     sicbo: { rounds: 140, wagered: 410_000, won: 388_450 },
     blackjack: { rounds: 82, wagered: 334_000, won: 298_000 },
     taixiu: { rounds: 0, wagered: 0, won: 0 },
+    poker: { rounds: 0, wagered: 0, won: 0 },
+    lieng: { rounds: 0, wagered: 0, won: 0 },
+    xito: { rounds: 0, wagered: 0, won: 0 },
   },
 };
 

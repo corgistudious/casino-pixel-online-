@@ -22,15 +22,22 @@ import { Stage } from './Stage';
 type GameId = 'poker' | 'sicbo' | 'roulette' | 'lieng' | 'xito' | 'blackjack';
 
 /** Live games open their shared multiplayer table; the solo versions stay reachable from it. */
-const LIVE_ROUTE: Partial<Record<GameId, string>> = { sicbo: '/tables/taixiu-1', roulette: '/tables/roulette-1', blackjack: '/play/blackjack' };
+const LIVE_ROUTE: Partial<Record<GameId, string>> = {
+  sicbo: '/tables/taixiu-1',
+  roulette: '/tables/roulette-1',
+  blackjack: '/play/blackjack',
+  poker: '/rooms?game=poker',
+  lieng: '/rooms?game=lieng',
+  xito: '/rooms?game=xito',
+};
 
 /** Official line-up. Royal Slots keeps its code and route but is not listed. */
 const GAMES: { id: GameId; live: boolean; Art: () => JSX.Element }[] = [
-  { id: 'poker', live: false, Art: PokerArt },
+  { id: 'poker', live: true, Art: PokerArt },
   { id: 'sicbo', live: true, Art: SicBoArt },
   { id: 'roulette', live: true, Art: RouletteArt },
-  { id: 'lieng', live: false, Art: LiengArt },
-  { id: 'xito', live: false, Art: XiToArt },
+  { id: 'lieng', live: true, Art: LiengArt },
+  { id: 'xito', live: true, Art: XiToArt },
   { id: 'blackjack', live: true, Art: BlackjackArt },
 ];
 

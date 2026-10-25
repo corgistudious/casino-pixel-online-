@@ -5,6 +5,7 @@ import type { RouletteResult } from '../games/roulette';
 import type { SicBoResult } from '../games/sicbo';
 import type { SlotsResult } from '../games/slots';
 import type { ProgressEvent } from '../progression';
+import { CARD_GAMES, type CardGame, type CardTableView } from '../games/seated';
 import { tableBetSchema, type MyTableBet, type TableRoundView } from '../games/tables';
 
 export const LOCALES = ['vi', 'en'] as const;
@@ -118,6 +119,21 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('blackjack.resume'), id: requestId }),
   z.object({ type: z.literal('table.join'), id: requestId, tableId: z.string().min(1).max(40) }),
   z.object({ type: z.literal('table.leave'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({ type: z.literal('card.join'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({ type: z.literal('card.leave'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({ type: z.literal('card.sit'), id: requestId, tableId: z.string().min(1).max(40), seat: z.number().int().min(0).max(9), buyIn: z.number().int().positive().max(100_000_000) }),
+  z.object({ type: z.literal('card.stand'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({ type: z.literal('card.back'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({
+    type: z.literal('card.act'),
+    id: requestId,
+    tableId: z.string().min(1).max(40),
+    handId: z.string().uuid(),
+    action: z.enum(['fold', 'check', 'call', 'bet', 'raise', 'allin']),
+    amount: z.number().int().positive().max(1_000_000_000).optional(),
+  }),
+  z.object({ type: z.literal('card.queue'), id: requestId, game: z.enum(CARD_GAMES) }),
+  z.object({ type: z.literal('card.unqueue'), id: requestId }),
   z.object({
     type: z.literal('table.bet'),
     id: requestId,
@@ -284,6 +300,14 @@ export interface ResponseMap {
   'table.join': TableRoundView;
   'table.leave': { ok: true };
   'table.bet': { myBets: MyTableBet[]; balance: number };
+  'card.join': CardTableView;
+  'card.leave': { ok: true };
+  'card.sit': CardTableView;
+  'card.stand': { cashedOut: number | null; leaving: boolean };
+  'card.back': CardTableView;
+  'card.act': { ok: true };
+  'card.queue': { queued: true; game: CardGame };
+  'card.unqueue': { ok: true };
 }
 
 export type ServerEvent =
@@ -294,6 +318,10 @@ export type ServerEvent =
   | { event: 'mail'; data: { unread?: number } }
   /** EXP gained after a settled round, with any levels reached. */
   | { event: 'progress'; data: ProgressEvent }
+  /** Card table update; private views (with own hole cards) go to each seated player only. */
+  | { event: 'card'; data: CardTableView }
+  /** Ranked matchmaking found an opponent. */
+  | { event: 'cardMatch'; data: { tableId: string; game: CardGame } }
   /** The player's profile changed on the server (e.g. a timed item expired): refetch /api/me. */
   | { event: 'profile'; data: { reason: 'equipment' } }
   /** Shared-round table update (phase change, result, live totals). `myBets` is omitted in broadcasts. */

@@ -50,7 +50,10 @@ export class RealtimeHub {
       this.sub = new Redis(redisUrl, { lazyConnect: false, maxRetriesPerRequest: 2 });
       this.pub.on('error', (err) => this.log.warn({ err }, 'redis pub error'));
       this.sub.on('error', (err) => this.log.warn({ err }, 'redis sub error'));
-      void this.sub.subscribe(this.keys.channel);
+      // Subscribe on every (re)connect: if Redis is down at boot the first attempt fails, and that must neither
+      // crash the process (unhandled rejection) nor leave this instance deaf once Redis comes back.
+      const subscribe = () => void this.sub!.subscribe(this.keys.channel).catch((err) => this.log.warn({ err }, 'redis subscribe failed'));
+      this.sub.on('ready', subscribe);
       this.sub.on('message', (_ch, raw) => this.onRemote(raw));
     }
     this.timer = setInterval(() => void this.heartbeat(), 10_000);
