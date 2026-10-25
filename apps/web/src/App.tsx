@@ -28,6 +28,7 @@ import { CollectionPage } from './pages/CollectionPage';
 import { MailboxPage } from './pages/MailboxPage';
 import { VipPage } from './pages/VipPage';
 import { BankPage } from './pages/BankPage';
+import { SupportPage } from './pages/SupportPage';
 import { RankPage } from './pages/RankPage';
 import { GiftcodePage } from './pages/GiftcodePage';
 import { CardLobbyPage } from './pages/CardLobbyPage';
@@ -111,6 +112,7 @@ export function App() {
         <Route path="/shop" element={<Navigate to="/market" replace />} />
         <Route path="/vip" element={<Authed><VipPage /></Authed>} />
         <Route path="/bank" element={<Authed><BankPage /></Authed>} />
+        <Route path="/support" element={<Authed><SupportPage /></Authed>} />
         <Route path="/rooms" element={<Authed><CardLobbyPage /></Authed>} />
         <Route path="/cards/:tableId" element={<Authed><CardTablePage /></Authed>} />
         <Route path="/collection" element={<Authed><CollectionPage /></Authed>} />
