@@ -311,6 +311,8 @@ export interface ResponseMap {
 }
 
 export type ServerEvent =
+  | { event: 'chat'; data: { id: number; uid: number; body: string } }
+  | { event: 'chatRemoved'; data: { id: number } }
   | { event: 'wallet'; data: { balance: number; gold?: number } }
   | { event: 'presence'; data: { online: number } }
   | { event: 'bigwin'; data: BigWinEvent }
