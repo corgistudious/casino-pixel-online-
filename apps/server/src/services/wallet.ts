@@ -5,7 +5,7 @@ import { ledgerEntries } from '../db/schema';
 import { fail } from '../errors';
 
 // 'signup' and 'daily_bonus' are legacy reasons kept for existing ledger rows.
-export type LedgerReason = 'signup' | 'daily_bonus' | 'welcome' | 'checkin' | 'shop' | 'rescue' | 'bet' | 'payout' | 'admin_adjust' | 'mail' | 'refund' | 'rank_reward' | 'table_buyin' | 'table_cashout';
+export type LedgerReason = 'signup' | 'daily_bonus' | 'welcome' | 'checkin' | 'shop' | 'rescue' | 'bet' | 'payout' | 'admin_adjust' | 'mail' | 'refund' | 'rank_reward' | 'table_buyin' | 'table_cashout' | 'bank_deposit' | 'bank_withdraw';
 
 /**
  * Atomically applies a balance change and records it in the ledger.
