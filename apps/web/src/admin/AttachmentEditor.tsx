@@ -19,13 +19,27 @@ export function AttachmentEditor({ value, onChange, label }: { value: MailAttach
       {value.map((a, i) => (
         <div key={i} className="flex flex-wrap items-center gap-2">
           {a.type === 'item' ? (
-            <select className="field max-w-xs" value={a.itemId} onChange={(e) => update(i, { type: 'item', itemId: e.target.value })}>
-              {items.map((it) => (
-                <option key={it.id} value={it.id}>
-                  {itemName(it, i18n.language, it.id)} ({t(`admin.items.kinds.${it.kind}`)})
-                </option>
-              ))}
-            </select>
+            <>
+              <select className="field max-w-xs" value={a.itemId} onChange={(e) => update(i, { ...a, itemId: e.target.value })}>
+                {items.map((it) => (
+                  <option key={it.id} value={it.id}>
+                    {itemName(it, i18n.language, it.id)} ({t(`admin.items.kinds.${it.kind}`)})
+                  </option>
+                ))}
+              </select>
+              <input
+                className="field w-36"
+                inputMode="numeric"
+                placeholder={t('admin.mailAdmin.durationDays')}
+                title={t('admin.mailAdmin.durationHint')}
+                value={a.durationDays ?? ''}
+                onChange={(e) => {
+                  const d = Number(e.target.value.replace(/\D/g, '').slice(0, 4));
+                  const { durationDays: _d, ...rest } = a;
+                  update(i, d ? { ...rest, durationDays: d } : rest);
+                }}
+              />
+            </>
           ) : (
             <>
               <CurrencyIcon currency={a.type} size={22} />

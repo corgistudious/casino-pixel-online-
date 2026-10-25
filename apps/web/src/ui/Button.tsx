@@ -32,7 +32,7 @@ export function Button({
         sfx.click();
         onClick?.(e);
       }}
-      className={`relative inline-flex select-none items-center justify-center gap-2 overflow-hidden font-semibold tracking-wide transition active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40 ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`relative inline-flex select-none items-center justify-center gap-2 overflow-hidden font-strong tracking-wide transition active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40 ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
     >
       {variant === 'gold' && <span className="sheen" />}
       <span className="relative inline-flex items-center gap-2">{children}</span>

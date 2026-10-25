@@ -7,6 +7,16 @@ export default {
         /** Phones in landscape and other short viewports. */
         short: { raw: '(max-height: 520px)' },
       },
+      /**
+       * Typography tokens (Keyo design system): body 500, labels/buttons 600–700, headings 700–800.
+       * Values live in CSS variables (index.css) so one change re-weights the whole game.
+       */
+      fontWeight: {
+        body: 'var(--fw-body)',
+        label: 'var(--fw-label)',
+        strong: 'var(--fw-strong)',
+        heading: 'var(--fw-heading)',
+      },
       fontFamily: {
         sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
         display: ['"Playfair Display"', 'Georgia', 'serif'],

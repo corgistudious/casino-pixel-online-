@@ -7,6 +7,7 @@ import { formatChips } from '../lib/format';
 import { api, ApiError } from '../net/api';
 import { useSession } from '../store/session';
 import { ProgressStrip } from '../ui/ProgressStrip';
+import { TitleBadge } from '../ui/Cosmetics';
 import { AppShell, CharmIcon, DemoTag, VipMeter } from '../ui/AppShell';
 import { Avatar, avatarCount } from '../ui/Avatar';
 import { Button } from '../ui/Button';
@@ -83,6 +84,11 @@ export function ProfilePage() {
               <h1 className="font-display text-2xl font-bold lg:text-3xl">
                 <PlayerName name={user.displayName} badges={user.badges} size={26} />
               </h1>
+              {user.title && (
+                <div className="mt-1">
+                  <TitleBadge itemId={user.title} />
+                </div>
+              )}
               <div className="mt-0.5 flex flex-wrap gap-x-3 text-xs text-white/55">
                 <span className="tabular-nums">{t('player.id', { id: user.uid })}</span>
                 <span>@{user.username}</span>

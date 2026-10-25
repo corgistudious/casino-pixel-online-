@@ -29,7 +29,7 @@ export function assetSrc(path: string | null | undefined): string | undefined {
 }
 
 /** Localised item name with a fallback to the id. */
-export function itemName(item: CatalogItem | undefined, lang: string, fallback: string): string {
-  if (!item) return fallback;
+export function itemName(item: Partial<Pick<CatalogItem, 'name'>> | undefined, lang: string, fallback: string): string {
+  if (!item?.name) return fallback;
   return lang.startsWith('vi') ? item.name.vi : item.name.en;
 }

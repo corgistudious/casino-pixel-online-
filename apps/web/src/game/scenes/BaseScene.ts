@@ -59,7 +59,8 @@ export abstract class BaseScene extends Phaser.Scene {
     const t = this.add.text(x, y, str, {
       fontFamily: opts.display ? FONT_DISPLAY : FONT_UI,
       fontSize: `${opts.size ?? 12}px`,
-      fontStyle: String(opts.weight ?? (opts.display ? 700 : 600)),
+      // Canvas labels: 700 by default (bold and readable on the felt); pass `weight` for lighter text.
+      fontStyle: String(opts.weight ?? 700),
       color: opts.color ?? '#ffffff',
       ...(opts.shadow ? { shadow: { offsetX: 0, offsetY: 1, color: 'rgba(0,0,0,0.7)', blur: 3, fill: true } } : {}),
     });

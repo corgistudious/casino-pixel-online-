@@ -15,6 +15,8 @@ import { StaffPage } from './admin/StaffPage';
 import { ItemsPage } from './admin/ItemsPage';
 import { MailAdminPage } from './admin/MailAdminPage';
 import { ProgressionAdminPage } from './admin/ProgressionAdminPage';
+import { SeasonRewardsPage } from './admin/SeasonRewardsPage';
+import { GiftcodesPage } from './admin/GiftcodesPage';
 import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
 import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
@@ -26,6 +28,7 @@ import { CollectionPage } from './pages/CollectionPage';
 import { MailboxPage } from './pages/MailboxPage';
 import { VipPage } from './pages/VipPage';
 import { RankPage } from './pages/RankPage';
+import { GiftcodePage } from './pages/GiftcodePage';
 import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
@@ -109,7 +112,8 @@ export function App() {
         <Route path="/mail" element={<Authed><MailboxPage /></Authed>} />
         <Route path="/missions" element={<Authed><ComingSoonPage section="missions" /></Authed>} />
         <Route path="/friends" element={<Authed><ComingSoonPage section="friends" /></Authed>} />
-        <Route path="/gifts" element={<Authed><ComingSoonPage section="gifts" /></Authed>} />
+        <Route path="/gifts" element={<Authed><GiftcodePage /></Authed>} />
+        <Route path="/giftcode" element={<Navigate to="/gifts" replace />} />
         <Route path="/leaderboard" element={<Authed><LeaderboardPage /></Authed>} />
         <Route path="/rank" element={<Authed><RankPage /></Authed>} />
         <Route path="/settings" element={<Authed><SettingsPage /></Authed>} />
@@ -119,6 +123,8 @@ export function App() {
           <Route path="players/:uid" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
           <Route path="progression" element={<RequirePerm perm="progression.read"><ProgressionAdminPage /></RequirePerm>} />
+          <Route path="season-rewards" element={<RequirePerm perm="progression.read"><SeasonRewardsPage /></RequirePerm>} />
+          <Route path="giftcodes" element={<RequirePerm perm="giftcode.manage"><GiftcodesPage /></RequirePerm>} />
           <Route path="items" element={<RequirePerm perm="items.read"><ItemsPage /></RequirePerm>} />
           <Route path="mail" element={<RequirePerm perm="mail.send"><MailAdminPage /></RequirePerm>} />
           <Route path="audit" element={<RequirePerm perm="audit.read"><AuditPage /></RequirePerm>} />
