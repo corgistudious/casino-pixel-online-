@@ -6,7 +6,7 @@ import { toast } from '../ui/toast';
 import { useSession } from '../store/session';
 
 type Listing = { id: string; item_id: string; price_silver: string; seller_uid: number };
-type Inventory = { id: string; itemId: string; kind: string; active: boolean };
+type Inventory = { instanceId: string; itemId: string; kind: string; active: boolean };
 export function TradingPage() {
   const { i18n } = useTranslation(); const vi = i18n.language.startsWith('vi');
   const [listings, setListings] = useState<Listing[]>([]);
@@ -41,7 +41,7 @@ export function TradingPage() {
       <h2 className="font-bold">{vi ? 'Đăng bán vật phẩm' : 'List collectible'}</h2>
       <select className="field" value={item} onChange={e => setItem(e.target.value)}>
         <option value="">{vi ? 'Chọn vật phẩm' : 'Choose item'}</option>
-        {inventory.map(i => <option key={i.id} value={i.id}>{i.itemId} ({i.id.slice(0,8)})</option>)}
+        {inventory.map(i => <option key={i.instanceId} value={i.instanceId}>{i.itemId} ({i.instanceId.slice(0,8)})</option>)}
       </select>
       <input className="field" type="number" min="1" max="1000000000" step="1" value={price} onChange={e => setPrice(e.target.value)} placeholder={vi ? 'Giá Cxu Bạc' : 'Silver Cxu price'} />
       <button className="rounded-xl bg-amber-500 p-3 font-bold text-black disabled:opacity-40" disabled={busy || !item || !Number.isSafeInteger(Number(price)) || Number(price) < 1} onClick={() => void run('/api/market', { instanceId:item, priceSilver:Number(price) })}>{vi ? 'Đăng bán' : 'Create listing'}</button>
