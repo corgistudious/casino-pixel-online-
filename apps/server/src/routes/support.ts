@@ -21,7 +21,7 @@ export function registerSupportRoutes(app: FastifyInstance, db: Db): void {
   const { authed } = makeGuards(app, db);
   const staff = async (userId: string) => {
     const permissions = await userPermissions(db, userId);
-    return permissions.includes('admin.access') && (permissions.includes('ticket.manage') || permissions.includes('support.manage'));
+    return permissions.includes('admin.access') && (permissions.includes('support.reply') || permissions.includes('support.manage'));
   };
   const access = async (userId: string, ticketId: string) => {
     const rows = await db.execute<{ user_id: string; status: string }>(sql`
