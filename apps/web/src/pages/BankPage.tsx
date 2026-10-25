@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../net/api';
-import { errorText } from '../lib/errors';
 import { AppShell, PageHeader } from '../ui/AppShell';
 import { toast } from '../ui/toast';
 import { useSession } from '../store/session';
@@ -36,7 +35,7 @@ export function BankPage() {
       useSession.getState().setUser(user);
       setAmount('');
       toast(vi ? 'Giao dịch thành công' : 'Transfer completed', 'success');
-    } catch (err) { toast(errorText((key: string) => key, err, i18n.language), 'error'); }
+    } catch (err) { toast(err instanceof Error ? err.message : 'Transfer failed', 'error'); }
     finally { setBusy(false); }
   };
   return <AppShell><div className="flex flex-col gap-4 p-4">
