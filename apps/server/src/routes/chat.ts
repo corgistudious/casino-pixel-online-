@@ -6,7 +6,9 @@ import { requireAccount, requireActive } from '../auth/session';
 import type { Db } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
-import { userPermissions } from '../services/rbac';
+import { assertOutranks } from '../services/rbac';
+import { users } from '../db/schema';
+import { eq } from 'drizzle-orm';
 import { makeGuards } from './guards';
 
 const sendInput = z.object({ body: z.string().trim().min(1).max(500) });
@@ -54,6 +56,9 @@ export function registerChatRoutes(app: FastifyInstance, db: Db, hub: RealtimeHu
     const { uid, minutes, reason } = muteInput.parse(req.body);
     const target = await db.execute<{ id: string }>(sql`SELECT id FROM users WHERE uid = ${uid} AND uid NOT IN (1000,1002)`);
     if (!target.length) throw fail('protected_account');
+    const [targetUser] = await db.select().from(users).where(eq(users.id, target[0]!.id));
+    if (!targetUser) throw fail('not_found');
+    await assertOutranks(db, actor.id, targetUser);
     await db.execute(sql`
       INSERT INTO public_chat_mutes(user_id, until_at, reason, issued_by)
       VALUES (${target[0]!.id}::uuid, now() + (${minutes} * interval '1 minute'), ${reason}, ${actor.id}::uuid)
