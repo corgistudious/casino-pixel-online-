@@ -1,9 +1,11 @@
 import { VIP_LEVELS, vipProgress } from '@casino/shared';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { api } from '../net/api';
+import { toast } from '../ui/toast';
+import { useSession } from '../store/session';
 import { useTranslation } from 'react-i18next';
-import { DEMO_EXTRAS } from '../demo';
 import { formatChips } from '../lib/format';
-import { AppShell, DemoTag, PageHeader } from '../ui/AppShell';
+import { AppShell, PageHeader } from '../ui/AppShell';
 import { CurrencyIcon } from '../ui/OfficialAssets';
 import { VipEmblem, vipTier } from '../ui/VipEmblem';
 
@@ -12,8 +14,25 @@ const RULES = ['earn', 'noBuy', 'permanent', 'max', 'fair'] as const;
 export function VipPage() {
   const { t, i18n } = useTranslation();
   const fmt = (n: number) => formatChips(n, i18n.language);
-  // VIP is not implemented on the server yet; EXP is demo data.
-  const exp = DEMO_EXTRAS.vipExp;
+  const [exp, setExp] = useState(0);
+  const [claimed, setClaimed] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const refresh = () => void api<{ exp: number; lastClaimDate: string | null }>('/api/vip').then(r => {
+    setExp(r.exp);
+    setClaimed(r.lastClaimDate?.slice(0, 10) === new Date().toISOString().slice(0, 10));
+  }, () => {});
+  useEffect(refresh, []);
+  const claim = async () => {
+    setBusy(true);
+    try {
+      await api('/api/vip/daily', { method: 'POST' });
+      const { user } = await api<{ user: NonNullable<ReturnType<typeof useSession.getState>['user']> }>('/api/me');
+      useSession.getState().setUser(user);
+      refresh();
+      toast(i18n.language.startsWith('vi') ? 'Đã nhận quà VIP' : 'VIP reward claimed', 'success');
+    } catch (err) { toast(err instanceof Error ? err.message : 'Claim failed', 'error'); }
+    finally { setBusy(false); }
+  };
   const vip = vipProgress(exp);
   const [selected, setSelected] = useState(vip.level);
   const level = VIP_LEVELS[selected - 1]!;
@@ -23,7 +42,9 @@ export function VipPage() {
     <AppShell>
       <div className="flex flex-col gap-4 p-3 lg:p-5">
         <PageHeader icon="vip" title={t('vip.title')} subtitle={t('vip.subtitle')} />
-        <p className="rounded-xl border border-neon-cyan/30 bg-neon-cyan/5 px-3 py-2 text-xs text-neon-cyan/90">{t('vip.notLive')}</p>
+        <button disabled={claimed || busy} onClick={() => void claim()} className="rounded-xl bg-amber-500 px-4 py-3 font-bold text-black disabled:opacity-40">
+          {claimed ? (i18n.language.startsWith('vi') ? 'Đã nhận hôm nay' : 'Claimed today') : (i18n.language.startsWith('vi') ? 'Nhận quà VIP hằng ngày' : 'Claim daily VIP reward')}
+        </button>
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
           {/* Current level */}
@@ -36,7 +57,7 @@ export function VipPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-white/50">
-                  {t('vip.yourLevel')} <DemoTag />
+                  {t('vip.yourLevel')}
                 </div>
                 <div className="font-display text-4xl font-bold text-gold">VIP {vip.level}</div>
                 <div className="mt-3 h-3 overflow-hidden rounded-full bg-black/50 ring-1 ring-white/10">
