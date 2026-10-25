@@ -6,4 +6,5 @@ CREATE TABLE IF NOT EXISTS "giftcode_failure_limits" (
   CONSTRAINT "giftcode_failure_limits_pk" PRIMARY KEY ("user_id", "bucket"),
   CONSTRAINT "giftcode_failure_limits_nonnegative" CHECK ("attempts" >= 0)
 );
+--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "giftcode_failure_limits_bucket_idx" ON "giftcode_failure_limits" ("bucket");
