@@ -32,12 +32,18 @@ export async function dashboardMetrics(db: DbOrTx) {
       (SELECT coalesce(sum(bet), 0) FROM game_rounds WHERE status = 'settled' AND settled_at > now() - interval '24 hours') AS wagered_24h,
       (SELECT coalesce(sum(payout), 0) FROM game_rounds WHERE status = 'settled' AND settled_at > now() - interval '24 hours') AS paid_24h,
       (SELECT coalesce(sum(balance), 0) FROM wallets) AS silver,
-      (SELECT coalesce(sum(gold), 0) FROM wallets) AS gold`,
+      (SELECT coalesce(sum(gold), 0) FROM wallets) AS gold,
+      (SELECT coalesce(max(level), 1) FROM player_progress) AS max_level,
+      (SELECT count(*) FROM player_progress WHERE level >= 10) AS level10,
+      (SELECT name FROM rank_seasons WHERE status = 'active') AS season,
+      (SELECT count(*) FROM player_ranks pr JOIN rank_seasons s ON s.id = pr.season_id AND s.status = 'active' WHERE pr.wins + pr.losses > 0) AS ranked_played,
+      (SELECT count(*) FROM player_ranks pr JOIN rank_seasons s ON s.id = pr.season_id AND s.status = 'active' WHERE pr.division = 39 AND pr.rp >= 200) AS top_eligible`,
   );
   return {
     players: { total: num(r.players), newToday: num(r.new_today), new7d: num(r.new_7d), pendingVerification: num(r.pending_verification), test: num(r.test_players), banned: num(r.banned) },
     rounds: { total: num(r.rounds_total), last24h: num(r.rounds_24h), open: num(r.rounds_open), wagered24h: num(r.wagered_24h), paid24h: num(r.paid_24h) },
     circulation: { silver: num(r.silver), gold: num(r.gold) },
+    progression: { maxLevel: num(r.max_level), level10: num(r.level10), season: (r.season as string | null) ?? null, ranked: num(r.ranked_played), topEligible: num(r.top_eligible) },
   };
 }
 

@@ -478,8 +478,16 @@ export const mailMessages = pgTable(
     claimedAt: timestamp('claimed_at', { withTimezone: true }),
     claimResult: jsonb('claim_result'),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
+    /**
+     * Set when the mail delivers an automatic reward (level, season, giftcode, …): one mail per
+     * player and key, so a reward can never be delivered twice.
+     */
+    rewardKey: text('reward_key'),
   },
-  (t) => [index('mail_messages_user_idx').on(t.userId, t.createdAt)],
+  (t) => [
+    index('mail_messages_user_idx').on(t.userId, t.createdAt),
+    uniqueIndex('mail_messages_reward_key_idx').on(t.userId, t.rewardKey).where(sql`${t.rewardKey} IS NOT NULL`),
+  ],
 );
 
 /** Multiplayer tables (shared-round games now, seated card games later). */
@@ -551,4 +559,163 @@ export const tableBets = pgTable(
     uniqueIndex('table_bets_idempotency_idx').on(t.userId, t.idempotencyKey),
     check('table_bets_amount_positive', sql`${t.amount} > 0`),
   ],
+);
+
+/** Account level progress (1–999). `level` is derived from `exp` and stored for ladders. */
+export const playerProgress = pgTable(
+  'player_progress',
+  {
+    userId: uuid('user_id')
+      .primaryKey()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    exp: bigint('exp', { mode: 'number' }).notNull().default(0),
+    level: integer('level').notNull().default(1),
+    /** Gameplay EXP earned on `expDay` (UTC), for the daily cap. */
+    expToday: integer('exp_today').notNull().default(0),
+    expDay: date('exp_day'),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('player_progress_ladder_idx').on(t.exp),
+    check('player_progress_exp_nonnegative', sql`${t.exp} >= 0`),
+    check('player_progress_level_range', sql`${t.level} BETWEEN 1 AND 999`),
+  ],
+);
+
+/** Every EXP change, once per (player, source key). */
+export const expEvents = pgTable(
+  'exp_events',
+  {
+    id: bigserial('id', { mode: 'number' }).primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    /** gameplay | admin | event | achievement | … */
+    source: text('source').notNull(),
+    sourceKey: text('source_key').notNull(),
+    amount: integer('amount').notNull(),
+    levelBefore: integer('level_before').notNull(),
+    levelAfter: integer('level_after').notNull(),
+    actorId: uuid('actor_id'),
+    note: text('note'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('exp_events_source_idx').on(t.userId, t.sourceKey), index('exp_events_user_idx').on(t.userId, t.createdAt)],
+);
+
+/** Rewards for reaching a level, delivered by mail exactly once per player. */
+export const levelRewards = pgTable(
+  'level_rewards',
+  {
+    level: integer('level').primaryKey(),
+    attachments: jsonb('attachments').notNull(),
+    enabled: boolean('enabled').notNull().default(true),
+    updatedBy: uuid('updated_by'),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [check('level_rewards_range', sql`${t.level} BETWEEN 2 AND 999`)],
+);
+
+/** Ranked seasons. At most one is active. */
+export const rankSeasons = pgTable(
+  'rank_seasons',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    name: text('name').notNull(),
+    /** scheduled | active | ended */
+    status: text('status').notNull().default('scheduled'),
+    startsAt: timestamp('starts_at', { withTimezone: true }).notNull(),
+    endsAt: timestamp('ends_at', { withTimezone: true }).notNull(),
+    /** RankRules: { winRp, lossRp, softResetDivisions } */
+    rules: jsonb('rules').notNull(),
+    /** End-of-season rewards: { tiers: { [tierId]: MailAttachment[] }, top: { [topTitle]: MailAttachment[] } } */
+    rewards: jsonb('rewards').notNull(),
+    createdBy: uuid('created_by'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    endedAt: timestamp('ended_at', { withTimezone: true }),
+  },
+  (t) => [uniqueIndex('rank_seasons_one_active_idx').on(t.status).where(sql`${t.status} = 'active'`), check('rank_seasons_dates', sql`${t.endsAt} > ${t.startsAt}`)],
+);
+
+/** A player's rank in a season. */
+export const playerRanks = pgTable(
+  'player_ranks',
+  {
+    seasonId: integer('season_id')
+      .notNull()
+      .references(() => rankSeasons.id, { onDelete: 'restrict' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    division: smallint('division').notNull(),
+    rp: integer('rp').notNull().default(0),
+    streak: smallint('streak').notNull().default(0),
+    wins: integer('wins').notNull().default(0),
+    losses: integer('losses').notNull().default(0),
+    peakDivision: smallint('peak_division').notNull(),
+    /** Best Top-50 position reached this season (null = never in the Top). */
+    peakTopPosition: integer('peak_top_position'),
+    /** When the current RP was reached: earlier wins Top-ladder ties. */
+    rpAt: timestamp('rp_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.seasonId, t.userId] }),
+    index('player_ranks_ladder_idx').on(t.seasonId, t.division, t.rp),
+    check('player_ranks_division_range', sql`${t.division} BETWEEN 0 AND 39`),
+    check('player_ranks_rp_nonnegative', sql`${t.rp} >= 0`),
+    check('player_ranks_streak_range', sql`${t.streak} BETWEEN 0 AND 3`),
+  ],
+);
+
+/** Every rank change (match result, staff adjustment, season start), once per (season, player, key). */
+export const rankEvents = pgTable(
+  'rank_events',
+  {
+    id: bigserial('id', { mode: 'number' }).primaryKey(),
+    seasonId: integer('season_id')
+      .notNull()
+      .references(() => rankSeasons.id, { onDelete: 'restrict' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    matchKey: text('match_key').notNull(),
+    /** win | loss | adjust */
+    result: text('result').notNull(),
+    rpDelta: integer('rp_delta').notNull(),
+    divisionBefore: smallint('division_before').notNull(),
+    divisionAfter: smallint('division_after').notNull(),
+    rpBefore: integer('rp_before').notNull(),
+    rpAfter: integer('rp_after').notNull(),
+    streakAfter: smallint('streak_after').notNull(),
+    promoted: boolean('promoted').notNull().default(false),
+    demoted: boolean('demoted').notNull().default(false),
+    actorId: uuid('actor_id'),
+    note: text('note'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('rank_events_match_idx').on(t.seasonId, t.userId, t.matchKey), index('rank_events_user_idx').on(t.userId, t.createdAt)],
+);
+
+/** Final standing of each player when a season ends (history, rewards, soft reset). */
+export const rankSeasonResults = pgTable(
+  'rank_season_results',
+  {
+    seasonId: integer('season_id')
+      .notNull()
+      .references(() => rankSeasons.id, { onDelete: 'restrict' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'restrict' }),
+    division: smallint('division').notNull(),
+    rp: integer('rp').notNull(),
+    peakDivision: smallint('peak_division').notNull(),
+    topPosition: integer('top_position'),
+    topTitle: text('top_title'),
+    peakTopPosition: integer('peak_top_position'),
+    wins: integer('wins').notNull(),
+    losses: integer('losses').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.seasonId, t.userId] })],
 );

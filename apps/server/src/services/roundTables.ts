@@ -28,6 +28,7 @@ import { fairRng, sha256 } from './fair';
 import { isBigWin } from './games';
 import { badgesOf } from './users';
 import { applyDelta, getWallet } from './wallet';
+import { awardGameplayExp, notifyProgress, type ExpResult } from './progression';
 
 type TableRow = typeof gameTables.$inferSelect;
 type RoundRow = typeof tableRounds.$inferSelect;
@@ -217,8 +218,11 @@ export class RoundTableEngine {
         u.bets.push({ kind: b.kind, value: b.value, amount: b.amount, payout });
         perUser.set(b.userId, u);
       }
+      const progress = new Map<string, ExpResult>();
       for (const [userId, u] of perUser) {
         if (u.payout > 0) await applyDelta(tx, userId, u.payout, 'payout', null, 'silver', `round:${roundId}`);
+        const p = await awardGameplayExp(tx, userId, `table:${roundId}`, u.bet);
+        if (p) progress.set(userId, p);
         // One history row per player and round, so stats, history and the dashboard include table games.
         await tx
           .insert(gameRounds)
@@ -235,11 +239,13 @@ export class RoundTableEngine {
           .onConflictDoNothing();
       }
       await tx.update(tableRounds).set({ status: 'settled', settledAt: new Date() }).where(eq(tableRounds.id, roundId));
-      return { game, perUser };
+      return { game, perUser, progress };
     });
     if (!result) return false;
     for (const [userId, u] of result.perUser) {
       this.hub.sendToUser(userId, { type: 'event', event: 'wallet', data: await getWallet(this.db, userId) });
+      const p = result.progress.get(userId);
+      if (p) notifyProgress(this.hub, userId, p);
       if (isBigWin(u)) {
         const [user] = await this.db.select().from(users).where(eq(users.id, userId));
         if (user) void this.hub.recordBigWin({ displayName: user.displayName, badges: badgesOf(user), game: result.game, bet: u.bet, payout: u.payout, at: new Date().toISOString() });

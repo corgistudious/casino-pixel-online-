@@ -50,6 +50,13 @@
       "when": 1792880554190,
       "tag": "0006_shared_round_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792885548670,
+      "tag": "0007_progression_rank",
+      "breakpoints": true
     }
   ]
 }
