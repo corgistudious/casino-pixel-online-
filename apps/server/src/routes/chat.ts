@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
+import type { ServerMessage } from '@casino/shared';
 import { z } from 'zod';
 import { requireAccount, requireActive } from '../auth/session';
 import type { Db } from '../db/client';
@@ -34,7 +35,7 @@ export function registerChatRoutes(app: FastifyInstance, db: Db, hub: RealtimeHu
       return tx.execute<{ id: string }>(sql`INSERT INTO public_chat_messages(user_id, body) VALUES (${user.id}::uuid, ${body}) RETURNING id`);
     });
     const payload = { id: Number(rows[0]!.id), uid: user.uid, body };
-    hub.broadcast({ type: 'event', event: 'chat', data: payload });
+    hub.broadcast({ type: 'event', event: 'chat', data: payload } as unknown as ServerMessage);
     return payload;
   });
   app.delete('/api/admin/chat/:id', { preHandler: can('chat.moderate') }, async (req) => {
@@ -45,7 +46,7 @@ export function registerChatRoutes(app: FastifyInstance, db: Db, hub: RealtimeHu
       WHERE id = ${id} AND deleted_at IS NULL RETURNING id
     `);
     if (!rows.length) throw fail('not_found');
-    hub.broadcast({ type: 'event', event: 'chatRemoved', data: { id } });
+    hub.broadcast({ type: 'event', event: 'chatRemoved', data: { id } } as unknown as ServerMessage);
     return { id };
   });
   app.post('/api/admin/chat/mute', { preHandler: can('chat.moderate') }, async (req) => {
