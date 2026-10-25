@@ -113,6 +113,13 @@
       "when": 1792904555912,
       "tag": "0015_vip_progress",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1792904555913,
+      "tag": "0016_public_chat",
+      "breakpoints": true
     }
   ]
 }
