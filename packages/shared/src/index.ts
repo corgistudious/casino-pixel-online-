@@ -4,6 +4,7 @@ export * from './shop';
 export * from './cosmetics';
 export * from './vip';
 export * from './rbac';
+export * from './progression';
 export * from './contracts/api';
 export * from './games/rng';
 export * from './games/cards';

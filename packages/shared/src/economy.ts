@@ -80,6 +80,8 @@ export const ERROR_CODES = [
   'table_not_found',
   'betting_closed',
   'table_unavailable',
+  'season_inactive',
+  'season_active',
   'item_not_found',
   'already_owned',
   'not_owned',
