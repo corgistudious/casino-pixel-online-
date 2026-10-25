@@ -31,6 +31,8 @@ import { BankPage } from './pages/BankPage';
 import { SupportPage } from './pages/SupportPage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { RoomsAdminPage } from './admin/RoomsAdminPage';
+import { TradingPage } from './pages/TradingPage';
+import { ChatPage } from './pages/ChatPage';
 import { RankPage } from './pages/RankPage';
 import { GiftcodePage } from './pages/GiftcodePage';
 import { CardLobbyPage } from './pages/CardLobbyPage';
@@ -116,6 +118,8 @@ export function App() {
         <Route path="/bank" element={<Authed><BankPage /></Authed>} />
         <Route path="/support" element={<Authed><SupportPage /></Authed>} />
         <Route path="/achievements" element={<Authed><AchievementsPage /></Authed>} />
+        <Route path="/trading" element={<Authed><TradingPage /></Authed>} />
+        <Route path="/chat" element={<Authed><ChatPage /></Authed>} />
         <Route path="/rooms" element={<Authed><CardLobbyPage /></Authed>} />
         <Route path="/cards/:tableId" element={<Authed><CardTablePage /></Authed>} />
         <Route path="/collection" element={<Authed><CollectionPage /></Authed>} />
