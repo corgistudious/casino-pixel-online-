@@ -78,6 +78,55 @@
       "when": 1792904555907,
       "tag": "0010_card_seat_timeouts",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792904555908,
+      "tag": "0011_giftcode_failure_limits",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792904555909,
+      "tag": "0012_bank_accounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792904555910,
+      "tag": "0013_support_tickets",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792904555911,
+      "tag": "0014_marketplace",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1792904555912,
+      "tag": "0015_vip_progress",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1792904555913,
+      "tag": "0016_public_chat",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792904555914,
+      "tag": "0017_achievements",
+      "breakpoints": true
     }
   ]
 }

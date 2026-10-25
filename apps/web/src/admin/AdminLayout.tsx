@@ -13,6 +13,7 @@ export const ADMIN_SECTIONS: { path: string; key: string; perm: Permission }[] =
   { path: 'progression', key: 'progression', perm: 'progression.read' },
   { path: 'season-rewards', key: 'seasonRewards', perm: 'progression.read' },
   { path: 'giftcodes', key: 'giftcodes', perm: 'giftcode.manage' },
+  { path: 'rooms', key: 'rooms', perm: 'rooms.manage' },
   { path: 'items', key: 'items', perm: 'items.read' },
   { path: 'mail', key: 'mail', perm: 'mail.send' },
   { path: 'audit', key: 'audit', perm: 'audit.read' },
@@ -66,7 +67,7 @@ export function AdminLayout() {
                 `whitespace-nowrap rounded-lg px-3 py-2 text-sm transition ${isActive ? 'bg-gold-300/15 text-gold-100' : 'text-white/65 hover:bg-white/5 hover:text-white'}`
               }
             >
-              {t(`admin.nav.${s.key}`)}
+              {t(`admin.nav.${s.key}`, { defaultValue: s.key === 'rooms' ? 'Bàn chơi / Rooms' : s.key })}
             </NavLink>
           ))}
         </nav>

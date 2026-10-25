@@ -15,6 +15,21 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  { table: 'support_ticket_messages', column: 'author_id', action: 'delete' },
+  { table: 'support_tickets', column: 'user_id', action: 'delete' },
+  { table: 'support_tickets', column: 'assigned_to', action: 'delete' },
+  { table: 'market_operations', column: 'user_id', action: 'delete' },
+  { table: 'market_listings', column: 'seller_id', action: 'delete' },
+  { table: 'market_listings', column: 'buyer_id', action: 'delete' },
+  { table: 'public_chat_messages', column: 'user_id', action: 'delete' },
+  { table: 'public_chat_messages', column: 'deleted_by', action: 'delete' },
+  { table: 'public_chat_mutes', column: 'user_id', action: 'delete' },
+  { table: 'public_chat_mutes', column: 'issued_by', action: 'delete' },
+  { table: 'bank_transfers', column: 'user_id', action: 'delete' },
+  { table: 'bank_accounts', column: 'user_id', action: 'delete' },
+  { table: 'vip_progress', column: 'user_id', action: 'delete' },
+  { table: 'achievement_claims', column: 'user_id', action: 'delete' },
+  { table: 'giftcode_failure_limits', column: 'user_id', action: 'delete' },
   { table: 'table_bets', column: 'user_id', action: 'delete' },
   { table: 'card_seats', column: 'user_id', action: 'delete' },
   { table: 'ranked_queue', column: 'user_id', action: 'delete' },

@@ -1,5 +1,5 @@
 import { giftcodeSchema, MAIL_MAX_ATTACHMENTS, mailAttachmentSchema } from '@casino/shared';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { requireAccount, requireActive } from '../auth/session';
@@ -12,16 +12,27 @@ import { createGiftcodes, giftcodeStats, listGiftcodes, myRedemptions, redeemGif
 import { unreadCount } from '../services/mailbox';
 import { makeGuards } from './guards';
 
-/** Wrong codes allowed per player per hour (on top of the per-IP request limit). */
+/** Shared, PostgreSQL-backed failed-attempt counter across all API instances.
+ * Hourly buckets avoid unbounded in-memory state and survive process restarts.
+ * The account row is locked by the redemption transaction independently.
+ */
 const MAX_FAILURES_PER_HOUR = 20;
-const failures = new Map<string, number[]>();
-function tooManyFailures(userId: string): boolean {
-  const since = Date.now() - 3_600_000;
-  const list = (failures.get(userId) ?? []).filter((t) => t > since);
-  failures.set(userId, list);
-  return list.length >= MAX_FAILURES_PER_HOUR;
+async function tooManyFailures(db: Db, userId: string): Promise<boolean> {
+  const rows = await db.execute<{ attempts: number }>(sql`
+    SELECT coalesce(sum(attempts), 0)::int AS attempts
+    FROM giftcode_failure_limits
+    WHERE user_id = ${userId}::uuid AND bucket >= date_trunc('hour', now()) - interval '1 hour'
+  `);
+  return Number(rows[0]?.attempts ?? 0) >= MAX_FAILURES_PER_HOUR;
 }
-
+async function recordFailure(db: Db, userId: string): Promise<void> {
+  await db.execute(sql`
+    INSERT INTO giftcode_failure_limits (user_id, bucket, attempts)
+    VALUES (${userId}::uuid, date_trunc('hour', now()), 1)
+    ON CONFLICT (user_id, bucket)
+    DO UPDATE SET attempts = giftcode_failure_limits.attempts + 1
+  `);
+}
 const createSchema = z
   .object({
     campaign: z.string().trim().min(2).max(60),
@@ -42,7 +53,7 @@ export function registerGiftcodeRoutes(app: FastifyInstance, db: Db, hub: Realti
   // ---------------------------------------------------------------- player
   app.post('/api/giftcode/redeem', { config: { rateLimit: { max: 10, timeWindow: '1 minute' } }, preHandler: authed }, async (req) => {
     const user = requireActive(requireAccount(req));
-    if (tooManyFailures(user.id)) throw new AppError('rate_limited', 429);
+    if (await tooManyFailures(db, user.id)) throw new AppError('rate_limited', 429);
     const { code } = z.object({ code: giftcodeSchema }).parse(req.body);
     try {
       const res = await redeemGiftcode(db, user.id, code, req.ip);
@@ -50,7 +61,7 @@ export function registerGiftcodeRoutes(app: FastifyInstance, db: Db, hub: Realti
       hub.sendToUser(user.id, { type: 'event', event: 'mail', data: { unread } });
       return { ...res, unread };
     } catch (err) {
-      if (err instanceof AppError && err.code.startsWith('giftcode_')) failures.get(user.id)!.push(Date.now());
+      if (err instanceof AppError && err.code.startsWith('giftcode_')) await recordFailure(db, user.id);
       throw err;
     }
   });
