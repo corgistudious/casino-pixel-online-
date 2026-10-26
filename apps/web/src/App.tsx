@@ -31,6 +31,8 @@ import { BankPage } from './pages/BankPage';
 import { SupportPage } from './support/SupportPage';
 import { SupportAdminPage } from './admin/SupportAdminPage';
 import { MissionConfigPage } from './admin/MissionConfigPage';
+import { BjtLobbyPage } from './bjt/BjtLobbyPage';
+import { BjtTablePage } from './bjt/BjtTablePage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { RoomsAdminPage } from './admin/RoomsAdminPage';
 import { TradingPage } from './pages/TradingPage';
@@ -126,6 +128,8 @@ export function App() {
         <Route path="/trading" element={<Authed><TradingPage /></Authed>} />
         <Route path="/chat" element={<Authed><ChatPage /></Authed>} />
         <Route path="/rooms" element={<Authed><CardLobbyPage /></Authed>} />
+        <Route path="/bjt" element={<Authed><BjtLobbyPage /></Authed>} />
+        <Route path="/bjt/:tableId" element={<Authed><BjtTablePage /></Authed>} />
         <Route path="/cards/:tableId" element={<Authed><CardTablePage /></Authed>} />
         <Route path="/collection" element={<Authed><CollectionPage /></Authed>} />
         <Route path="/mail" element={<Authed><MailboxPage /></Authed>} />

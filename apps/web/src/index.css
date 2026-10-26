@@ -85,3 +85,12 @@
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
 }
+
+/* Cards flying in on the shared Blackjack table. */
+@keyframes dealIn {
+  from { transform: translateY(-48px) rotate(-12deg); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[dealIn_\.35s_ease-out\] { animation: none !important; }
+}
