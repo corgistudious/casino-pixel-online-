@@ -7,7 +7,6 @@ import {
   type GiftsOverview,
   type GiftView,
   type PlayerCard,
-  type PlayerProfileView,
   type PlayerSearchResult,
   type RelationStatus,
 } from '@casino/shared';
@@ -15,6 +14,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
+import { rankBadges } from './rank';
 import { badgesOf } from './users';
 import { applyDelta } from './wallet';
 
@@ -71,6 +71,13 @@ async function areFriends(db: DbOrTx, a: string, b: string): Promise<{ since: Da
   return rows.length ? { since: new Date(rows[0]!.created_at) } : null;
 }
 
+/** Either player blocked the other. */
+export async function blockedBetween(db: DbOrTx, a: string, b: string): Promise<boolean> {
+  const rows = await db.execute(sql`
+    SELECT 1 FROM player_blocks WHERE (blocker_id = ${a}::uuid AND blocked_id = ${b}::uuid) OR (blocker_id = ${b}::uuid AND blocked_id = ${a}::uuid) LIMIT 1`);
+  return rows.length > 0;
+}
+
 export async function isFriend(db: DbOrTx, a: string, b: string): Promise<boolean> {
   return !!(await areFriends(db, a, b));
 }
@@ -95,11 +102,15 @@ export async function friendsOverview(db: Db, hub: RealtimeHub, meId: string): P
       SELECT ${CARD_COLUMNS}, r.created_at FROM friend_requests r JOIN users u ON u.id = r.receiver_id ${CARD_JOIN}
       WHERE r.sender_id = ${meId}::uuid AND ${VISIBLE_PLAYER} ORDER BY r.created_at DESC`),
   ]);
-  const online = await hub.onlineAmong(friends.map((f) => f.user_id));
+  const [online, ranks] = await Promise.all([hub.onlineAmong(friends.map((f) => f.user_id)), rankBadges(db, friends.map((f) => f.user_id))]);
   const request = (r: CardRow & { created_at: string }): FriendRequestView => ({ ...toCard(r), createdAt: iso(r.created_at) });
+  const badge = (id: string) => {
+    const r = ranks.get(id);
+    return r ? { division: r.division, topTitle: r.topTitle } : null;
+  };
   return {
     friends: friends
-      .map((f) => ({ ...toCard(f), online: online.has(f.user_id), since: iso(f.since), giftable: f.giftable }))
+      .map((f) => ({ ...toCard(f), rank: badge(f.user_id), online: online.has(f.user_id), since: iso(f.since), giftable: f.giftable }))
       .sort((a, b) => Number(b.online) - Number(a.online) || a.displayName.localeCompare(b.displayName)),
     incoming: incoming.map(request),
     outgoing: outgoing.map(request),
@@ -140,13 +151,14 @@ async function makeFriends(db: DbOrTx, a: string, b: string) {
 
 /** Sends a request; if the other player already asked me, we simply become friends. */
 export async function sendFriendRequest(db: Db, hub: RealtimeHub, me: { id: string; uid: number }, uid: number): Promise<{ status: 'sent' | 'friends' }> {
-  if (uid === me.uid) throw fail('bad_request');
+  if (uid === me.uid) throw fail('self_social');
   const result = await db.transaction(async (tx) => {
     // Lock both accounts in a fixed order so crossing requests cannot deadlock or double-insert.
     const other = await visiblePlayer(tx, uid);
     if (other.status !== 'active') throw fail('not_found');
     const [first, second] = [me.id, other.user_id].sort();
     await tx.execute(sql`SELECT id FROM users WHERE id IN (${first}::uuid, ${second}::uuid) ORDER BY id FOR UPDATE`);
+    if (await blockedBetween(tx, me.id, other.user_id)) throw fail('blocked');
     if (await areFriends(tx, me.id, other.user_id)) throw fail('already_owned');
     const reverse = await tx.execute(sql`SELECT 1 FROM friend_requests WHERE sender_id = ${other.user_id}::uuid AND receiver_id = ${me.id}::uuid`);
     if (reverse.length) {
@@ -170,6 +182,7 @@ export async function acceptFriendRequest(db: Db, hub: RealtimeHub, me: { id: st
     await tx.execute(sql`SELECT id FROM users WHERE id IN (${first}::uuid, ${second}::uuid) ORDER BY id FOR UPDATE`);
     const pending = await tx.execute(sql`SELECT 1 FROM friend_requests WHERE sender_id = ${other.user_id}::uuid AND receiver_id = ${me.id}::uuid`);
     if (!pending.length) throw fail('not_found');
+    if (await blockedBetween(tx, me.id, other.user_id)) throw fail('blocked');
     await makeFriends(tx, me.id, other.user_id);
     return other.user_id;
   });
@@ -192,47 +205,6 @@ export async function removeFriend(db: Db, hub: RealtimeHub, me: { id: string; u
     RETURNING user_id`);
   if (!rows.length) throw fail('not_found');
   notify(hub, other.user_id, { kind: 'removed', uid: me.uid });
-}
-
-export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid: number): Promise<PlayerProfileView> {
-  const p = await visiblePlayer(db, uid);
-  const [extra] = await db.execute<{
-    created_at: string;
-    relation: RelationStatus;
-    division: number | null;
-    rp: number | null;
-    guild_id: string | null;
-    guild_name: string | null;
-    emblem: string | null;
-    color: string | null;
-    rounds: number;
-    biggest: string | null;
-  }>(sql`
-    SELECT u.created_at,
-      CASE WHEN u.id = ${meId}::uuid THEN 'self'
-           WHEN EXISTS (SELECT 1 FROM friendships f WHERE f.user_id = ${meId}::uuid AND f.friend_id = u.id) THEN 'friend'
-           WHEN EXISTS (SELECT 1 FROM friend_requests r WHERE r.sender_id = ${meId}::uuid AND r.receiver_id = u.id) THEN 'outgoing'
-           WHEN EXISTS (SELECT 1 FROM friend_requests r WHERE r.sender_id = u.id AND r.receiver_id = ${meId}::uuid) THEN 'incoming'
-           ELSE 'none' END AS relation,
-      r.division, r.rp, g.id AS guild_id, g.name AS guild_name, g.emblem, g.color,
-      (SELECT count(*)::int FROM game_rounds gr WHERE gr.user_id = u.id AND gr.status = 'settled') AS rounds,
-      (SELECT max(gr.payout) FROM game_rounds gr WHERE gr.user_id = u.id AND gr.status = 'settled') AS biggest
-    FROM users u
-    LEFT JOIN rank_seasons s ON s.status = 'active'
-    LEFT JOIN player_ranks r ON r.user_id = u.id AND r.season_id = s.id
-    LEFT JOIN guild_members m ON m.user_id = u.id
-    LEFT JOIN guilds g ON g.id = m.guild_id AND g.disbanded_at IS NULL
-    WHERE u.id = ${p.user_id}::uuid`);
-  const online = await hub.onlineAmong([p.user_id]);
-  return {
-    ...toCard(p),
-    online: online.has(p.user_id),
-    relation: extra!.relation,
-    createdAt: iso(extra!.created_at),
-    rank: extra!.division === null ? null : { division: Number(extra!.division), rp: Number(extra!.rp) },
-    guild: extra!.guild_id ? { id: extra!.guild_id, name: extra!.guild_name!, emblem: extra!.emblem as never, color: extra!.color as never } : null,
-    stats: { rounds: extra!.rounds, biggestWin: Number(extra!.biggest ?? 0) },
-  };
 }
 
 // ---------------------------------------------------------------- gifts

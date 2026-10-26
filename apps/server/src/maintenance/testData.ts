@@ -16,6 +16,16 @@ import { getEnvironmentState } from '../services/environment';
  */
 export const TEST_DATA_TABLES = [
   { table: 'bj_seats', column: 'user_id', action: 'delete' },
+  { table: 'player_follows', column: 'follower_id', action: 'delete' },
+  { table: 'player_follows', column: 'followee_id', action: 'delete' },
+  { table: 'profile_likes', column: 'liker_id', action: 'delete' },
+  { table: 'profile_likes', column: 'profile_id', action: 'delete' },
+  { table: 'player_blocks', column: 'blocker_id', action: 'delete' },
+  { table: 'player_blocks', column: 'blocked_id', action: 'delete' },
+  { table: 'profile_settings', column: 'user_id', action: 'delete' },
+  { table: 'player_reports', column: 'reporter_id', action: 'delete' },
+  { table: 'player_reports', column: 'target_id', action: 'delete' },
+  { table: 'player_reports', column: 'handled_by', action: 'delete' },
   { table: 'mission_settings', column: 'updated_by', action: 'reassign_to_support' },
   { table: 'gift_transfers', column: 'sender_id', action: 'delete' },
   { table: 'gift_transfers', column: 'receiver_id', action: 'delete' },

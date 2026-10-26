@@ -24,6 +24,10 @@ export function statusFor(code: ErrorCode): number {
     case 'self_action_forbidden':
     case 'muted':
     case 'not_friends':
+    case 'blocked':
+    case 'room_locked':
+    case 'room_kicked':
+    case 'not_room_owner':
     case 'reauth_required':
       return 403;
     case 'round_not_found':
@@ -43,9 +47,14 @@ export function statusFor(code: ErrorCode): number {
     case 'already_in_guild':
     case 'guild_name_taken':
     case 'already_claimed':
+    case 'report_duplicate':
+    case 'room_limit':
+    case 'room_busy':
+    case 'room_full':
       return 409;
     case 'too_soon':
     case 'too_many_attempts':
+    case 'report_limit':
       return 429;
     case 'rate_limited':
       return 429;

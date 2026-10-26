@@ -24,6 +24,7 @@ import {
   topTitleFor,
   type MailAttachment,
   type ProgressView,
+  type RankBadge,
   type RankLadderEntry,
   type RankRules,
   type RankState,
@@ -610,4 +611,25 @@ export async function tickSeasons(db: Db): Promise<{ ended: number[]; started: n
     }
   }
   return { ended, started };
+}
+
+/**
+ * Current-season rank of each player for lists (friends, rooms, profiles). Top titles come from the
+ * same ranking as the ladder: only MAX Thần Thoại players inside the Top 50 get one.
+ */
+export async function rankBadges(db: DbOrTx, userIds: string[]): Promise<Map<string, RankBadge & { rp: number; position: number | null; wins: number; losses: number }>> {
+  const out = new Map<string, RankBadge & { rp: number; position: number | null; wins: number; losses: number }>();
+  if (!userIds.length) return out;
+  const season = await activeSeason(db);
+  if (!season) return out;
+  const rows = await db.execute<{ user_id: string; division: number; rp: number; wins: number; losses: number; pos: string | null }>(sql`
+    SELECT pr.user_id, pr.division, pr.rp, pr.wins, pr.losses, t.pos
+    FROM player_ranks pr
+    LEFT JOIN (${topRankingSql(season.id)}) t ON t.user_id = pr.user_id AND t.pos <= ${TOP_TITLE_LIMIT}
+    WHERE pr.season_id = ${season.id} AND pr.user_id::text = ANY(string_to_array(${userIds.join(',')}, ','))`);
+  for (const r of rows) {
+    const position = r.pos === null ? null : Number(r.pos);
+    out.set(r.user_id, { division: Number(r.division), rp: Number(r.rp), wins: Number(r.wins), losses: Number(r.losses), position, topTitle: topTitleFor(position) });
+  }
+  return out;
 }
