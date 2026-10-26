@@ -3,6 +3,20 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        /** Phones in landscape and other short viewports. */
+        short: { raw: '(max-height: 520px)' },
+      },
+      /**
+       * Typography tokens (Keyo design system): body 500, labels/buttons 600–700, headings 700–800.
+       * Values live in CSS variables (index.css) so one change re-weights the whole game.
+       */
+      fontWeight: {
+        body: 'var(--fw-body)',
+        label: 'var(--fw-label)',
+        strong: 'var(--fw-strong)',
+        heading: 'var(--fw-heading)',
+      },
       fontFamily: {
         sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
         display: ['"Playfair Display"', 'Georgia', 'serif'],
@@ -30,6 +44,7 @@ export default {
         sheen: { '0%': { transform: 'translateX(-120%) skewX(-20deg)' }, '100%': { transform: 'translateX(220%) skewX(-20deg)' } },
         spin: { to: { transform: 'rotate(360deg)' } },
         rise: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'none' } },
+        shake: { '0%,100%': { transform: 'translateX(0)' }, '20%,60%': { transform: 'translateX(-6px)' }, '40%,80%': { transform: 'translateX(6px)' } },
         pulseGlow: { '0%,100%': { boxShadow: '0 0 12px rgba(242,193,78,0.25)' }, '50%': { boxShadow: '0 0 28px rgba(242,193,78,0.6)' } },
       },
       animation: {

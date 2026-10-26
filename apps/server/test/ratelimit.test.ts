@@ -28,3 +28,21 @@ describe('websocket rate limit', () => {
     s.close();
   });
 });
+
+describe('HTTP rate limit', () => {
+  it('limits every API route per client IP, separately for each IP', async () => {
+    const t2 = await startTestApp({ HTTP_RATE_PER_MIN: '5' });
+    try {
+      const hit = (ip: string) => t2.app.inject({ url: '/api/leaderboard', remoteAddress: ip });
+      const codes = [];
+      for (let i = 0; i < 7; i++) codes.push((await hit('10.9.9.9')).statusCode);
+      expect(codes.slice(0, 5).every((c) => c === 200)).toBe(true);
+      const limited = await hit('10.9.9.9');
+      expect(limited.statusCode).toBe(429);
+      expect(limited.json().error.code).toBe('rate_limited');
+      expect((await hit('10.8.8.8')).statusCode).toBe(200);
+    } finally {
+      await t2.app.close();
+    }
+  });
+});

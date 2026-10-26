@@ -4,9 +4,9 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: casino
+      POSTGRES_USER: keyo
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
-      POSTGRES_DB: casino
+      POSTGRES_DB: keyo_game
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -27,7 +27,7 @@ services:
       redis: { condition: service_started }
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgres://casino:${POSTGRES_PASSWORD}@postgres:5432/casino
+      DATABASE_URL: postgres://keyo:${POSTGRES_PASSWORD}@postgres:5432/keyo_game
       REDIS_URL: redis://redis:6379
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
       CORS_ORIGINS: ${CORS_ORIGINS:-https://localhost,capacitor://localhost,app://casino}
@@ -40,8 +40,7 @@ services:
     environment:
       DOMAIN: ${DOMAIN:-localhost}
     ports:
-      - "80:80"
-      - "443:443"
+      - "127.0.0.1:18481:80"
     volumes:
       - caddy_data:/data
 

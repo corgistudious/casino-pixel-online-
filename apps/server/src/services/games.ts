@@ -25,6 +25,7 @@ import { gameRounds } from '../db/schema';
 import { fail } from '../errors';
 import { takeNonce } from './fair';
 import { isUniqueViolation } from './users';
+import { awardGameplayExp, type ExpResult } from './progression';
 import { applyDelta, getBalance } from './wallet';
 
 export interface PlayOutcome<T> {
@@ -32,6 +33,8 @@ export interface PlayOutcome<T> {
   game: GameKey;
   /** Total stake and payout of a round that settled during this call (null if still running or replayed). */
   settled: { bet: number; payout: number } | null;
+  /** EXP/level change caused by this round (null when none). */
+  progress?: ExpResult | null;
 }
 
 export function assertStake(total: number): void {
@@ -89,7 +92,8 @@ async function playInstant<T extends { payout: number }>(
         settledAt: new Date(),
       });
       const balance = result.payout > 0 ? await applyDelta(tx, userId, result.payout, 'payout', roundId) : await getBalance(tx, userId);
-      return { envelope: { roundId, balance, nonce, result }, game, settled: { bet: stake, payout: result.payout } };
+      const progress = await awardGameplayExp(tx, userId, roundId, stake);
+      return { envelope: { roundId, balance, nonce, result }, game, settled: { bet: stake, payout: result.payout }, progress };
     });
   } catch (err) {
     if (isUniqueViolation(err)) {
@@ -150,10 +154,12 @@ export async function blackjackStart(db: Db, userId: string, key: string, bet: n
       });
       const balance =
         finished && state.payout > 0 ? await applyDelta(tx, userId, state.payout, 'payout', roundId) : await getBalance(tx, userId);
+      const progress = finished ? await awardGameplayExp(tx, userId, roundId, bet) : null;
       return {
         envelope: { roundId, balance, nonce, result: view },
         game: 'blackjack' as const,
         settled: finished ? { bet, payout: state.payout } : null,
+        progress,
       };
     });
   } catch (err) {
@@ -212,10 +218,12 @@ export async function blackjackAct(
       .where(eq(gameRounds.id, roundId));
     const balance =
       finished && next.payout > 0 ? await applyDelta(tx, userId, next.payout, 'payout', roundId) : await getBalance(tx, userId);
+    const progress = finished ? await awardGameplayExp(tx, userId, roundId, stake) : null;
     return {
       envelope: { roundId, balance, nonce: round.nonce ?? 0, result: view },
       game: 'blackjack' as const,
       settled: finished ? { bet: stake, payout: next.payout } : null,
+      progress,
     };
   });
 }

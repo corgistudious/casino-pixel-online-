@@ -1,0 +1,16 @@
+[Unit]
+Description=Keyo Game database backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+# Dedicated account (member of the docker group) that owns /opt/keyo-game.
+User=keyo
+Group=keyo
+Environment=KEYO_ROOT=/opt/keyo-game
+ExecStart=/opt/keyo-game/deploy/vps/scripts/backup.sh
+StandardOutput=append:/opt/keyo-game/logs/backup.log
+StandardError=append:/opt/keyo-game/logs/backup.log
+Nice=10
+IOSchedulingClass=idle

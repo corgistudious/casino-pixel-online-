@@ -1,0 +1,131 @@
+# Keyo Game on a shared VPS (Ubuntu 24.04), installed in /opt/keyo-game.
+#
+# Isolation from other apps on the machine (e.g. Discord bots):
+#   - own compose project "keyo-game" → own network, containers and volumes, all prefixed keyo-game-
+#   - own PostgreSQL and Redis containers, never published to the host
+#   - only the web container is published, and only on 127.0.0.1:${KEYO_HTTP_PORT} for the host reverse proxy
+#   - CPU/RAM limits on every service, log rotation on every container
+#
+# Run from /opt/keyo-game/deploy/vps (see docs/DEPLOYMENT_VPS.md). Nothing here deploys by itself.
+name: keyo-game
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+x-server-env: &server-env
+  NODE_ENV: production
+  DATABASE_URL: postgres://keyo:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-keyo_game}
+  REDIS_URL: redis://redis:6379
+  REDIS_PREFIX: ${REDIS_PREFIX:-keyo:}
+  JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+  KEYO_DATA_MODE: ${KEYO_DATA_MODE:?set KEYO_DATA_MODE to test or production}
+  APP_URL: ${APP_URL:?set APP_URL}
+  CORS_ORIGINS: ${CORS_ORIGINS:?set CORS_ORIGINS}
+  ADMIN_USERNAMES: ${ADMIN_USERNAMES:-}
+  SMTP_URL: ${SMTP_URL:-}
+  MAIL_FROM: ${MAIL_FROM:-Keyo Game <no-reply@keyo.game>}
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: keyo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-keyo_game}
+    command: ["postgres", "-c", "max_connections=50", "-c", "shared_buffers=128MB"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keyo -d ${POSTGRES_DB:-keyo_game}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 768M }
+    logging: *logging
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # Cache and pub/sub only (presence, big wins): nothing here needs to survive a restart.
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    deploy:
+      resources:
+        limits: { cpus: "0.25", memory: 96M }
+    logging: *logging
+
+  server:
+    build:
+      context: ../..
+      target: server
+    image: keyo-game/server:${KEYO_IMAGE_TAG:-local}
+    restart: unless-stopped
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    environment:
+      <<: *server-env
+      NODE_OPTIONS: --max-old-space-size=448
+    deploy:
+      resources:
+        limits: { cpus: "1.5", memory: 640M }
+    logging: *logging
+
+  web:
+    build:
+      context: ../..
+      target: web-vps
+    image: keyo-game/web:${KEYO_IMAGE_TAG:-local}
+    restart: unless-stopped
+    depends_on:
+      server: { condition: service_healthy }
+    ports:
+      # Loopback only: reachable by the host reverse proxy, never directly from the internet.
+      - "127.0.0.1:${KEYO_HTTP_PORT:-18480}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 128M }
+    logging: *logging
+
+  # One-off maintenance commands; never started by `up`. Example:
+  #   docker compose --profile tools run --rm maintenance reset-test-data
+  maintenance:
+    profiles: ["tools"]
+    build:
+      context: ../..
+      target: maintenance
+    image: keyo-game/maintenance:${KEYO_IMAGE_TAG:-local}
+    # Same uid as the operator running scripts/maintenance.sh (the backups directory owner).
+    user: "${KEYO_UID:-70}:${KEYO_GID:-70}"
+    depends_on:
+      postgres: { condition: service_healthy }
+    environment:
+      <<: *server-env
+      KEYO_BACKUP_DIR: /backups
+      KEYO_OPERATOR: ${KEYO_OPERATOR:-}
+      KEYO_TEST_ACCOUNT_PASSWORD: ${KEYO_TEST_ACCOUNT_PASSWORD:-}
+    volumes:
+      - ../../backups:/backups
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 512M }
+    logging: *logging
+
+volumes:
+  pgdata:

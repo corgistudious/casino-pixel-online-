@@ -8,6 +8,139 @@
       "when": 1792711805913,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792717327138,
+      "tag": "0001_economy_checkin_badges_shop",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792722311417,
+      "tag": "0002_accounts_uid_rbac_audit",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792734006613,
+      "tag": "0003_test_data_mode",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792877630091,
+      "tag": "0004_security_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792879273875,
+      "tag": "0005_cosmetics_mailbox",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792880554190,
+      "tag": "0006_shared_round_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792885548670,
+      "tag": "0007_progression_rank",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792898015182,
+      "tag": "0008_rewards_cosmetics",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792903451798,
+      "tag": "0009_card_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792904555907,
+      "tag": "0010_card_seat_timeouts",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792904555908,
+      "tag": "0011_giftcode_failure_limits",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792904555909,
+      "tag": "0012_bank_accounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792904555910,
+      "tag": "0013_support_tickets",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792904555911,
+      "tag": "0014_marketplace",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1792904555912,
+      "tag": "0015_vip_progress",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1792904555913,
+      "tag": "0016_public_chat",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792904555914,
+      "tag": "0017_achievements",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1792904555915,
+      "tag": "0018_auth_rename",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1792904555916,
+      "tag": "0019_social_guild_quests",
+      "breakpoints": true
     }
   ]
 }

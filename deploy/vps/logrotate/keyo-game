@@ -1,0 +1,15 @@
+# Host-side Keyo Game logs (backups, health checks, maintenance). Container logs are rotated by
+# Docker itself (json-file, 10 MB x 5 per container, set in docker-compose.yml), and
+# /var/log/nginx/keyo-game.*.log by Ubuntu's stock /etc/logrotate.d/nginx.
+# Install: sudo cp deploy/vps/logrotate/keyo-game /etc/logrotate.d/keyo-game
+/opt/keyo-game/logs/*.log {
+    weekly
+    rotate 8
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+    su keyo keyo
+}
+
