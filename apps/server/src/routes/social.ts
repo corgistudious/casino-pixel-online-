@@ -1,9 +1,10 @@
-import { giftSchema, guildCreateSchema, guildUpdateSchema, privacySchema, REPORT_STATUSES, reportSchema, reportUpdateSchema, uidSchema } from '@casino/shared';
+import { SOCIAL_RULES, giftSchema, guildCreateSchema, guildUpdateSchema, privacySchema, REPORT_STATUSES, reportSchema, reportUpdateSchema, uidSchema } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { requireAccount, requireActive } from '../auth/session';
 import type { Db } from '../db/client';
+import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import {
   createGuild,
@@ -31,7 +32,7 @@ import {
   sendGift,
 } from '../services/social';
 import { block, blockedList, follow, followList, like, playerProfile, unblock, unfollow, unlike, updatePrivacy } from '../services/profile';
-import { createReport, myReports, staffReports, updateReport } from '../services/reports';
+import { addAttachment, createReport, loadAttachment, myReports, staffReports, updateReport } from '../services/reports';
 import { getWallet } from '../services/wallet';
 import { makeGuards } from './guards';
 
@@ -44,6 +45,8 @@ export function registerSocialRoutes(app: FastifyInstance, db: Db, hub: Realtime
   const { authed, can } = makeGuards(app, db);
   const me = (req: Parameters<typeof requireAccount>[0]) => requireActive(requireAccount(req));
   const limited = (max: number) => ({ preHandler: authed, config: { rateLimit: { max, timeWindow: '1 minute' } } });
+  // Report evidence may be JPEG too (PNG/WebP/GIF already have a raw parser with the same 1 MB limit).
+  app.addContentTypeParser('image/jpeg', { parseAs: 'buffer', bodyLimit: SOCIAL_RULES.report.attachmentMaxBytes + 1024 }, (_req, body, done) => done(null, body));
 
   // ---------------------------------------------------------------- friends
   app.get('/api/friends', { preHandler: authed }, async (req) => friendsOverview(db, hub, requireAccount(req).id));
@@ -92,9 +95,27 @@ export function registerSocialRoutes(app: FastifyInstance, db: Db, hub: Realtime
   // ---------------------------------------------------------------- reports
   app.post('/api/reports', limited(10), async (req) => createReport(db, me(req), reportSchema.parse(req.body)));
   app.get('/api/reports/mine', { preHandler: authed }, async (req) => ({ reports: await myReports(db, requireAccount(req).id) }));
+  // Evidence images: the raw image as the body (any of the accepted image types; checked from the bytes).
+  app.post('/api/reports/:id/attachments', { ...limited(20), bodyLimit: SOCIAL_RULES.report.attachmentMaxBytes + 1024 }, async (req) => {
+    const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
+    if (!Buffer.isBuffer(req.body)) throw fail('invalid_asset');
+    return { attachment: await addAttachment(db, me(req).id, id, req.body) };
+  });
   app.get('/api/admin/reports', { preHandler: can('reports.manage') }, async (req) => {
     const q = z.object({ status: z.enum(REPORT_STATUSES).optional(), uid: z.coerce.number().int().min(1).optional(), before: z.string().datetime().optional() }).parse(req.query);
     return { reports: await staffReports(db, { status: q.status, targetUid: q.uid, before: q.before }) };
+  });
+  app.get('/api/admin/reports/:id/attachments/:aid', { preHandler: can('reports.manage') }, async (req, reply) => {
+    const p = z.object({ id: z.string().uuid(), aid: z.string().uuid() }).parse(req.params);
+    const file = await loadAttachment(db, p.id, p.aid);
+    // Player-supplied bytes: never cached, never sniffed, never run as a document.
+    return reply
+      .header('content-type', file.mime)
+      .header('cache-control', 'private, no-store')
+      .header('x-content-type-options', 'nosniff')
+      .header('content-security-policy', "default-src 'none'; sandbox")
+      .header('content-disposition', 'inline')
+      .send(file.bytes);
   });
   app.post('/api/admin/reports/:id', { preHandler: can('reports.manage'), config: { rateLimit: { max: 120, timeWindow: '1 minute' } } }, async (req) => {
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);

@@ -1,5 +1,5 @@
 import { REPORT_CATEGORIES, SOCIAL_RULES, type ReportCategory } from '@casino/shared';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { errorText } from '../lib/errors';
 import { api } from '../net/api';
@@ -7,18 +7,54 @@ import { Modal } from '../social/parts';
 import { Button } from '../ui/Button';
 import { toast } from '../ui/toast';
 
-/** Report a player: reason, description and where it happened. The server stores it for staff review. */
+/**
+ * Re-encodes an image in the browser: at most 1600 px on the long side, JPEG, under the server's
+ * 1 MB limit. Drawing through a canvas also drops EXIF/location metadata from phone photos.
+ */
+async function prepareEvidence(file: File): Promise<Blob> {
+  const bitmap = await createImageBitmap(file);
+  const max = 1600;
+  let scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.getContext('2d')!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/jpeg', attempt < 3 ? 0.85 : 0.7));
+    if (blob && blob.size <= SOCIAL_RULES.report.attachmentMaxBytes) return blob;
+    scale *= 0.75;
+  }
+  throw new Error('image too large');
+}
+
+/** Report a player: reason, description, where it happened and optional evidence images. */
 export function ReportDialog({ target, context, onClose }: { target: { uid: number; displayName: string }; context?: string; onClose: () => void }) {
   const { t, i18n } = useTranslation();
   const [category, setCategory] = useState<ReportCategory>('harassment');
   const [description, setDescription] = useState('');
   const [busy, setBusy] = useState(false);
-  const { descriptionMin, descriptionMax } = SOCIAL_RULES.report;
+  const [files, setFiles] = useState<{ file: File; url: string }[]>([]);
+  // Preview URLs are freed when an image is removed and when the dialog closes.
+  const urls = useRef<string[]>([]);
+  urls.current = files.map((f) => f.url);
+  useEffect(() => () => urls.current.forEach((u) => URL.revokeObjectURL(u)), []);
+  const { descriptionMin, descriptionMax, maxAttachments } = SOCIAL_RULES.report;
+  const addFiles = (list: FileList | null) => {
+    const picked = [...(list ?? [])].filter((f) => f.type.startsWith('image/')).slice(0, maxAttachments - files.length);
+    setFiles((cur) => [...cur, ...picked.map((file) => ({ file, url: URL.createObjectURL(file) }))]);
+  };
   const valid = description.trim().length >= descriptionMin && description.trim().length <= descriptionMax;
   const submit = async () => {
     setBusy(true);
     try {
-      await api('/api/reports', { method: 'POST', body: { uid: target.uid, category, description: description.trim(), ...(context ? { context } : {}) } });
+      const { id } = await api<{ id: string }>('/api/reports', { method: 'POST', body: { uid: target.uid, category, description: description.trim(), ...(context ? { context } : {}) } });
+      for (const f of files) {
+        try {
+          await api(`/api/reports/${id}/attachments`, { method: 'POST', raw: await prepareEvidence(f.file) });
+        } catch {
+          toast(t('people.reportDialog.uploadFailed', { name: f.file.name }), 'error');
+        }
+      }
       toast(t('people.done.reported'), 'success');
       onClose();
     } catch (err) {
@@ -57,6 +93,26 @@ export function ReportDialog({ target, context, onClose }: { target: { uid: numb
           {description.trim().length}/{descriptionMax}
         </span>
       </label>
+      <div className="flex flex-col gap-1.5 text-xs text-white/60">
+        {t('people.reportDialog.attach', { max: maxAttachments })}
+        <div className="flex flex-wrap gap-2">
+          {files.map((f, i) => (
+            <div key={f.url} className="relative">
+              <img src={f.url} alt="" className="h-16 w-16 rounded-lg object-cover ring-1 ring-white/15" />
+              <button type="button" onClick={() => (URL.revokeObjectURL(f.url), setFiles((cur) => cur.filter((_, j) => j !== i)))} className="absolute -right-1.5 -top-1.5 h-5 w-5 rounded-full bg-ruby-500 text-[11px] leading-5 text-white" aria-label={t('people.reportDialog.attachRemove')}>
+                ×
+              </button>
+            </div>
+          ))}
+          {files.length < maxAttachments && (
+            <label className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-lg border border-dashed border-white/25 text-2xl text-white/50 hover:bg-white/5" title={t('people.reportDialog.attachAdd')}>
+              +
+              <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple className="sr-only" onChange={(e) => (addFiles(e.target.files), (e.target.value = ''))} aria-label={t('people.reportDialog.attachAdd')} />
+            </label>
+          )}
+        </div>
+        <span className="text-[11px] text-white/40">{t('people.reportDialog.attachHint')}</span>
+      </div>
       {context && (
         <p className="text-xs text-white/45">
           {t('people.reportDialog.context')}: <span className="font-mono">{context}</span>

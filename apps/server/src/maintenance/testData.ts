@@ -91,7 +91,8 @@ export const TEST_DATA_TABLES = [
 ] as const satisfies readonly { table: string; column: string; action: 'delete' | 'reassign_to_support' }[];
 
 /** Tables whose foreign keys to the tables above are fine without a registry entry. */
-const REFERENCE_TABLES = new Set(['roles', 'role_permissions']);
+// report_attachments rows cascade with their report (ON DELETE CASCADE).
+const REFERENCE_TABLES = new Set(['roles', 'role_permissions', 'report_attachments']);
 
 /** Accounts removed by a reset: flagged TEST, ordinary players, never Keyo Support (1000) or the Owner (1002). */
 const TARGETS = sql`SELECT id FROM users WHERE is_test AND account_type = 'player' AND uid NOT IN (${sql.join(

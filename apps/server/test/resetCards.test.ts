@@ -85,6 +85,11 @@ describe('reset:test-data with card tables and ranked matches', () => {
     h.runningMatch = runningMatch;
     h.sharedMatch = sharedMatch;
 
+    // A real player's report (with evidence) about a TEST player goes with the TEST data; its images cascade.
+    const [{ id: reportId }] = (await rows<{ id: string }>(sql`
+      INSERT INTO player_reports (reporter_id, target_id, category, description) VALUES (${ids.real}::uuid, ${ids.t1}::uuid, 'cheating', 'evidence attached here') RETURNING id`)) as [{ id: string }];
+    await t.db.execute(sql`INSERT INTO report_attachments (report_id, mime, width, height, size, sha256, bytes) VALUES (${reportId}::uuid, 'image/png', 10, 10, 3, 'x', '\\x010203')`);
+    h.report = reportId;
     let plan = await planReset(t.db);
     expect(plan.cardHands).toEqual({ activeTestOnly: 1, activeMixed: 1, finishedTestOnly: 1, finishedMixed: 1 });
     expect(plan.rankedMatches).toEqual({ activeTestOnly: 0, activeMixed: 1, finishedTestOnly: 1, finishedMixed: 1 });
@@ -129,6 +134,7 @@ describe('reset:test-data with card tables and ranked matches', () => {
     expect((await wallet(real.user.id)) + Number((await rows<{ stack: string }>(sql`SELECT stack FROM card_seats WHERE user_id = ${real.user.id}::uuid`))[0]!.stack)).toBe(realChips);
     expect(await count(sql`SELECT count(*) AS c FROM game_rounds WHERE user_id = ${real.user.id}::uuid`)).toBe(realRounds);
     expect(await count(sql`SELECT count(*) AS c FROM card_seats`)).toBe(1);
+    expect(await count(sql`SELECT count(*) AS c FROM report_attachments WHERE report_id = ${h.report}::uuid`)).toBe(0);
     expect(await uncoveredForeignKeys(t.db)).toEqual([]);
   });
 

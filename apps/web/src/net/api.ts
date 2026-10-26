@@ -55,3 +55,15 @@ export async function api<T>(path: string, init: { method?: string; body?: unkno
   }
   return data as T;
 }
+
+/** Authenticated binary GET (e.g. staff-only evidence images), returned as a Blob. */
+export async function apiBlob(path: string): Promise<Blob> {
+  let res: Response;
+  try {
+    res = await fetch(API_URL + path, { headers: authToken ? { authorization: `Bearer ${authToken}` } : {} });
+  } catch {
+    throw new ApiError('network');
+  }
+  if (!res.ok) throw new ApiError(res.status === 403 ? 'forbidden' : res.status === 404 ? 'not_found' : 'internal', res.status);
+  return res.blob();
+}

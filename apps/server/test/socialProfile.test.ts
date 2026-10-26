@@ -194,4 +194,54 @@ describe('player reports', () => {
     const r2 = await call(target, 'POST', '/api/reports', { uid: mod.user.uid, category: 'other', description: 'Moderator was rude to me.' });
     expect(code(await call(mod, 'POST', `/api/admin/reports/${r2.json().id}`, { status: 'rejected' }))).toBe('self_action_forbidden');
   });
+
+  it('evidence images: reporter only, new pending reports, type from the bytes, at most 3, served to staff only with safe headers', async () => {
+    const [reporter, target, stranger] = [await register(t), await register(t), await register(t)];
+    const res = await call(reporter, 'POST', '/api/reports', { uid: target.user.uid, category: 'cheating', description: 'Screenshot shows impossible cards.' });
+    const id = res.json().id as string;
+    const u32 = (n: number) => { const b = Buffer.alloc(4); b.writeUInt32BE(n); return b; };
+    const png = (w: number, h: number, salt = 0) => Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), u32(13), Buffer.from('IHDR'), u32(w), u32(h), Buffer.from([8, 6, 0, 0, 0, salt]), Buffer.alloc(40, salt)]);
+    const jpeg = (w: number, h: number) => {
+      const sof = Buffer.from([0xff, 0xc0, 0x00, 0x11, 0x08, h >> 8, h & 0xff, w >> 8, w & 0xff, 0x03, 1, 0x22, 0, 2, 0x11, 1, 3, 0x11, 1]);
+      return Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10]), Buffer.from('JFIF\0'), Buffer.alloc(9), sof, Buffer.alloc(32), Buffer.from([0xff, 0xd9])]);
+    };
+    const upload = (p: { token: string }, body: Buffer, type: string, rid = id) =>
+      t.app.inject({ method: 'POST', url: `/api/reports/${rid}/attachments`, payload: body, headers: { authorization: `Bearer ${p.token}`, 'content-type': type }, remoteAddress: randomIp() });
+
+    const a = await upload(reporter, png(1280, 720), 'image/png');
+    expect(a.statusCode, a.body).toBe(200);
+    expect(a.json().attachment).toMatchObject({ mime: 'image/png', width: 1280, height: 720 });
+    const j = await upload(reporter, jpeg(800, 600), 'image/jpeg');
+    expect(j.json().attachment).toMatchObject({ mime: 'image/jpeg', width: 800, height: 600 });
+    // The same bytes again are not stored twice.
+    expect((await upload(reporter, png(1280, 720), 'image/png')).json().attachment.id).toBe(a.json().attachment.id);
+    // The declared type does not matter: a "PNG" that is really text is refused.
+    expect(code(await upload(reporter, Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>'.padEnd(64)), 'image/png'))).toBe('invalid_asset');
+    expect((await upload(reporter, Buffer.alloc(1_100_000, 1), 'image/png')).statusCode).toBe(413);
+    // Only the reporter, on their own report; a third image fills the limit.
+    expect((await upload(stranger, png(10, 10, 7), 'image/png')).statusCode).toBe(404);
+    expect((await upload(target, png(10, 10, 7), 'image/png')).statusCode).toBe(404);
+    expect((await upload(reporter, png(640, 480, 3), 'image/png')).statusCode).toBe(200);
+    expect(code(await upload(reporter, png(640, 480, 4), 'image/png'))).toBe('bad_request');
+    expect((await call(reporter, 'GET', '/api/reports/mine')).json().reports[0].attachments).toBe(3);
+
+    // Staff see the images; players never do.
+    const mod = await createStaff(t, 'moderator');
+    const report = ((await call(mod, 'GET', `/api/admin/reports?uid=${target.user.uid}`)).json().reports as { id: string; attachments: { id: string; mime: string }[] }[])[0]!;
+    expect(report.attachments.map((x) => x.mime)).toEqual(['image/png', 'image/jpeg', 'image/png']);
+    const file = await t.app.inject({ url: `/api/admin/reports/${id}/attachments/${report.attachments[1]!.id}`, headers: { authorization: `Bearer ${mod.token}` }, remoteAddress: randomIp() });
+    expect(file.statusCode).toBe(200);
+    expect(file.headers['content-type']).toBe('image/jpeg');
+    expect(file.headers['x-content-type-options']).toBe('nosniff');
+    expect(file.headers['content-security-policy']).toContain('sandbox');
+    expect(file.headers['cache-control']).toContain('no-store');
+    expect(file.rawPayload.equals(jpeg(800, 600))).toBe(true);
+    for (const p of [reporter, target]) expect((await t.app.inject({ url: `/api/admin/reports/${id}/attachments/${report.attachments[0]!.id}`, headers: { authorization: `Bearer ${p.token}` }, remoteAddress: randomIp() })).statusCode).toBe(403);
+    // Once handled, nothing can be added.
+    await call(mod, 'POST', `/api/admin/reports/${id}`, { status: 'rejected' });
+    const other = await call(reporter, 'POST', '/api/reports', { uid: stranger.user.uid, category: 'spam', description: 'Spams links in chat all day.' });
+    await t.db.execute(sql`UPDATE player_reports SET created_at = now() - interval '1 hour' WHERE id = ${other.json().id}::uuid`);
+    expect(code(await upload(reporter, png(10, 10, 9), 'image/png', other.json().id))).toBe('too_soon');
+    expect(code(await upload(reporter, png(10, 10, 9), 'image/png'))).toBe('too_soon');
+  });
 });

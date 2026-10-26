@@ -1,6 +1,7 @@
-import { REPORT_STATUSES, type ReportStatus, type StaffReportView } from '@casino/shared';
+import { REPORT_STATUSES, type ReportAttachmentView, type ReportStatus, type StaffReportView } from '@casino/shared';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { apiBlob } from '../net/api';
 import { adminApi } from '../net/adminApi';
 import { Button } from '../ui/Button';
 import { Panel } from './parts';
@@ -61,6 +62,16 @@ export function ReportsAdminPage() {
             </div>
           </div>
           <p className="whitespace-pre-wrap rounded-xl bg-black/25 p-3 text-sm text-white/85">{r.description}</p>
+          {r.attachments.length > 0 && (
+            <div>
+              <div className="mb-1 text-xs text-white/55">{t('admin.reports.attachments')}</div>
+              <div className="flex flex-wrap gap-2">
+                {r.attachments.map((a) => (
+                  <Evidence key={a.id} reportId={r.id} a={a} />
+                ))}
+              </div>
+            </div>
+          )}
           {r.handledBy && <p className="text-xs text-white/50">{t('admin.reports.handledBy', { name: `${r.handledBy.displayName} (UID ${r.handledBy.uid})` })}</p>}
           {r.resolution && <p className="text-xs text-white/70">{t('admin.reports.resolution')}: {r.resolution}</p>}
           {(r.status === 'pending' || r.status === 'reviewing') && (
@@ -84,5 +95,23 @@ export function ReportsAdminPage() {
         </Panel>
       ))}
     </div>
+  );
+}
+
+/** A staff-only evidence image, fetched with the session token and shown from a local object URL. */
+function Evidence({ reportId, a }: { reportId: string; a: ReportAttachmentView }) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let made: string | null = null;
+    void apiBlob(`/api/admin/reports/${reportId}/attachments/${a.id}`).then((b) => setUrl((made = URL.createObjectURL(b))), () => setUrl(null));
+    return () => {
+      if (made) URL.revokeObjectURL(made);
+    };
+  }, [reportId, a.id]);
+  if (!url) return <div className="h-24 w-24 animate-pulse rounded-lg bg-white/5" />;
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer" title={`${a.width}×${a.height} · ${Math.round(a.size / 1024)} KB`}>
+      <img src={url} alt="" className="h-24 w-24 rounded-lg object-cover ring-1 ring-white/15 hover:ring-gold-300/60" />
+    </a>
   );
 }

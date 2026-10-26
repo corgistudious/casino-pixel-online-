@@ -36,6 +36,10 @@ export const SOCIAL_RULES = {
     dailyPerReporter: 10,
     descriptionMin: 10,
     descriptionMax: 1_000,
+    /** Evidence images per report, each at most 1 MB, added by the reporter shortly after sending. */
+    maxAttachments: 3,
+    attachmentMaxBytes: 1_048_576,
+    attachmentWindowMinutes: 30,
   },
   /** Items a player may pin on their public profile. */
   showcaseMax: 6,
@@ -175,6 +179,15 @@ export type PrivacyInput = z.infer<typeof privacySchema>;
 
 export const REPORT_CATEGORIES = ['cheating', 'harassment', 'spam', 'inappropriate', 'exploit', 'impersonation', 'other'] as const;
 export type ReportCategory = (typeof REPORT_CATEGORIES)[number];
+export const REPORT_ATTACHMENT_MIME = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'] as const;
+export interface ReportAttachmentView {
+  id: string;
+  mime: (typeof REPORT_ATTACHMENT_MIME)[number];
+  width: number;
+  height: number;
+  size: number;
+}
+
 export const REPORT_STATUSES = ['pending', 'reviewing', 'resolved', 'rejected'] as const;
 export type ReportStatus = (typeof REPORT_STATUSES)[number];
 
@@ -199,6 +212,7 @@ export interface MyReportView {
   category: ReportCategory;
   status: ReportStatus;
   createdAt: string;
+  attachments: number;
 }
 
 /** A report in the staff queue. */
@@ -216,6 +230,7 @@ export interface StaffReportView {
   handledBy: { uid: number; displayName: string } | null;
   /** Open reports against the same target (context for staff; never acted on automatically). */
   targetOpen: number;
+  attachments: ReportAttachmentView[];
 }
 
 export interface GiftView {

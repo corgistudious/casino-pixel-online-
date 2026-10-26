@@ -7,7 +7,7 @@ Bản nâng cấp này dùng lại các hệ thống sẵn có: đăng nhập, r
 - Một component dùng chung (`apps/web/src/players/PlayerActions.tsx`):
   - `PlayerTrigger` bọc tên hoặc avatar.
   - `PlayerActionHost` hiển thị popover và chỉ gắn một lần trong `App`, nên không bao giờ có nhiều menu chồng nhau.
-- **Áp dụng tại:** chat Server / Guild / Riêng, danh sách bạn bè, lời mời đến và đi, tìm người chơi, thành viên bang hội, Bảng Xếp Hạng, bảng Rank và bảng Level, ghế bàn Blackjack, danh sách người chơi trong phòng (bàn bài và Blackjack), danh sách người theo dõi và đang theo dõi, chủ phòng trong danh sách phòng.
+- **Áp dụng tại:** chat Server / Guild / Riêng, danh sách bạn bè, lời mời đến và đi, tìm người chơi, thành viên bang hội, Bảng Xếp Hạng, bảng Rank và bảng Level, ghế bàn Blackjack, **ghế bàn Poker / Liêng / Xì Tố** (chạm vào avatar hoặc bảng tên trong khung Phaser mở menu ngay tại điểm chạm), danh sách người chơi trong phòng (bàn bài và Blackjack), danh sách người theo dõi và đang theo dõi, chủ phòng trong danh sách phòng.
 - **Hành động thay đổi theo quan hệ:**
   - Chưa kết bạn: Thêm bạn bè.
   - Đã gửi lời mời: Đang chờ xác nhận / Hủy lời mời.
@@ -58,6 +58,13 @@ Bản nâng cấp này dùng lại các hệ thống sẵn có: đăng nhập, r
   - Mỗi lần đổi trạng thái ghi audit `reports.update`.
   - Nhân viên không thể xử lý tố cáo do chính mình gửi hoặc nhắm vào chính mình.
 - **Không bao giờ tự động khóa tài khoản** dù có bao nhiêu tố cáo.
+- **Ảnh bằng chứng:**
+  - Tối đa 3 ảnh mỗi tố cáo, mỗi ảnh ≤ 1 MB.
+  - Chỉ người tố cáo, chỉ khi tố cáo còn Đang chờ và trong 30 phút sau khi gửi.
+  - Trình duyệt thu nhỏ ảnh (tối đa 1600 px), chuyển thành JPEG và xóa EXIF/vị trí trước khi gửi.
+  - Server xác định loại ảnh từ nội dung tệp (PNG, JPEG, WebP, GIF), không tin loại do client khai báo; SVG và tệp khác bị từ chối.
+  - Ảnh lưu trong bảng `report_attachments`, tự xóa theo tố cáo (ON DELETE CASCADE).
+  - Chỉ nhân viên có `reports.manage` xem được, qua `GET /api/admin/reports/:id/attachments/:aid` với `no-store`, `nosniff` và CSP `sandbox`. Người chơi (kể cả người tố cáo và người bị tố cáo) nhận 403.
 
 ## 4. Phòng riêng: Poker, Xì Tố, Liêng, Blackjack
 
@@ -85,6 +92,13 @@ Bản nâng cấp này dùng lại các hệ thống sẵn có: đăng nhập, r
   - Phòng trống 10 phút thì tự đóng.
   - Vào lại sau khi mất kết nối: đúng ghế, đúng trạng thái.
   - Hai người cùng chọn một ghế: một người ngồi được, người kia nhận `seat_taken` và không mất Cxu.
+
+**Quản trị phòng** (Admin → Bàn chơi, quyền `rooms.manage`):
+- Danh sách phòng đang mở, đã đóng hoặc tất cả; lọc theo trò chơi và UID chủ phòng. Không bao giờ hiển thị mật khẩu.
+- Tạm dừng hoặc mở lại: không bắt đầu ván mới, ván đang chơi vẫn chơi hết.
+- Chuyển chủ phòng cho người đang ở trong phòng (đang ngồi hoặc đã có quyền vào), miễn là người đó không đang làm chủ phòng khác.
+- Đóng phòng kèm lý do. An toàn kể cả giữa ván: ván chơi hết, sau đó engine trả chip của mọi ghế về ví. Người chơi được đưa về danh sách phòng.
+- Mọi thao tác ghi audit `rooms.pause`, `rooms.resume`, `rooms.transfer`, `rooms.close`.
 
 ## 5. Rank: Thần Thoại và danh hiệu Top
 
@@ -122,6 +136,10 @@ Bản nâng cấp này dùng lại các hệ thống sẵn có: đăng nhập, r
 | POST | `/api/reports` | Gửi tố cáo |
 | GET | `/api/reports/mine` | Tố cáo của tôi |
 | GET / POST | `/api/admin/reports`, `/api/admin/reports/:id` | Cần `reports.manage`, có audit |
+| POST | `/api/reports/:id/attachments` | Ảnh bằng chứng (body là ảnh), chỉ người tố cáo |
+| GET | `/api/admin/reports/:id/attachments/:aid` | Xem ảnh, cần `reports.manage` |
+| GET | `/api/admin/rooms` | Danh sách phòng cho nhân viên, cần `rooms.manage` |
+| POST | `/api/admin/rooms/:id/pause`, `/transfer`, `/close` | Tạm dừng/mở lại, chuyển chủ, đóng phòng (có audit) |
 | GET / POST | `/api/rooms` | Danh sách (lọc theo trò chơi, công khai, riêng tư, còn chỗ) và tạo phòng |
 | GET | `/api/rooms/:id`, `/api/rooms/by-table/:engine/:tableId` | Thông tin phòng |
 | POST | `/api/rooms/:id/join` | `{ password? }` |
@@ -141,11 +159,18 @@ Bản nâng cấp này dùng lại các hệ thống sẵn có: đăng nhập, r
 |---|---|---|
 | `0025_rank_mythic` | Nới CHECK `player_ranks.division` lên 0–40. Chuyển Chiến Thần I có RP ≥ 200 thành Thần Thoại với phần dư (bậc 39 + R RP → bậc 40 + (R − 200) RP), **tổng RP của mỗi người giữ nguyên** | `drizzle/rollback/0025_rank_mythic.down.sql` (khôi phục tổng RP, cần triển khai lại code bản trước) |
 | `0026_social_profile` | `player_follows`, `profile_likes`, `player_blocks`, `profile_settings`, `player_reports` | `drizzle/rollback/0026_social_profile.down.sql` |
+| `0028_report_attachments` | `report_attachments` (ảnh bằng chứng, xóa theo tố cáo) | `drizzle/rollback/0028_report_attachments.down.sql` |
 | `0027_private_rooms` | `card_tables.kind`, `bj_tables.kind` (mặc định `official`), `game_rooms`, `room_access`, `room_join_attempts` | `drizzle/rollback/0027_private_rooms.down.sql` (đóng phòng, chờ hết người ngồi rồi mới xóa) |
 
 - Mọi bảng mới có khóa ngoại, index, unique hoặc CHECK cần thiết.
 - Không có `DROP` hoặc `TRUNCATE` trong migration lên. Không đổi UID, ví hay Bank.
 - `TEST_DATA_TABLES` đã đăng ký mọi khóa ngoại mới. Phòng của tài khoản TEST được chuyển cho Keyo Support khi reset (người thật có thể đang ngồi trong phòng đó).
+- **Reset dữ liệu TEST với bàn bài và trận Rank:** `card_hands.state.players[].userId` và `ranked_matches.players` / `winner_id` / `forfeit_id` chứa ID người chơi mà không có khóa ngoại. Áp dụng đúng quy tắc của `bj_rounds`:
+  - Ván hoặc trận đang chạy có cả TEST và người thật: preflight chặn reset, kèm lý do.
+  - Chỉ có TEST: xóa.
+  - Đã xong và có người thật: giữ lại; ID của TEST thành `null` (kể cả người thắng hoặc người bỏ cuộc).
+  - Các dòng đang chạy được khóa trước bảng `users`.
+  - Sau reset, kiểm tra phần của người thật và kết quả trận không đổi; sai thì rollback.
 - **Lưu ý về danh hiệu Top sau migration 0025:** người chơi đang ở Chiến Thần I với 200–399 RP sẽ thành Thần Thoại chưa MAX, nên tạm mất danh hiệu Top cho đến khi đủ 200 RP ở Thần Thoại. Không ai mất điểm.
 
 ## 8. Triển khai Production an toàn
@@ -153,7 +178,7 @@ Bản nâng cấp này dùng lại các hệ thống sẵn có: đăng nhập, r
 1. Owner duyệt và merge PR vào `Corgi-Casino`. Không tự triển khai.
 2. Sao lưu: `pg_dump -Fc` database Production và kiểm tra file sao lưu (giống quy trình trong `docs/DEPLOY.md`).
 3. Thông báo bảo trì ngắn. Dừng game server để không có ván Rank nào đang quyết toán khi migration 0025 chạy.
-4. Triển khai bản build mới. Server tự chạy migration 0025 → 0027 khi khởi động, theo thứ tự trong journal.
+4. Triển khai bản build mới. Server tự chạy migration 0025 → 0028 khi khởi động, theo thứ tự trong journal.
 5. Kiểm tra:
    - `SELECT division, count(*) FROM player_ranks GROUP BY 1` (có bậc 40 nếu trước đó có người Chiến Thần I ≥ 200 RP).
    - `SELECT count(*) FROM card_tables WHERE kind <> 'official'` phải bằng 0 trước khi người chơi tạo phòng.
@@ -163,7 +188,8 @@ Bản nâng cấp này dùng lại các hệ thống sẵn có: đăng nhập, r
 ## 9. Rollback không mất dữ liệu
 
 - **Chỉ code:** triển khai lại bản trước. Lưu ý bản trước chỉ biết 40 bậc Rank: nếu đã có người ở Thần Thoại, phải chạy rollback 0025 trước.
-- **Database** (Owner duyệt và đã sao lưu), theo thứ tự ngược 0027 → 0026 → 0025, dùng các file trong `apps/server/drizzle/rollback/`:
+- **Database** (Owner duyệt và đã sao lưu), theo thứ tự ngược 0028 → 0027 → 0026 → 0025, dùng các file trong `apps/server/drizzle/rollback/`:
+  - 0028: chỉ xóa ảnh bằng chứng; tố cáo vẫn còn.
   - 0027: đóng mọi phòng và chờ hết người ngồi. Chip ở bàn phòng được engine trả về ví khi người chơi rời ghế. Bảng ván, ledger và `game_rounds` giữ nguyên.
   - 0026: nên xuất `player_reports` ra CSV trước nếu cần giữ lịch sử kiểm duyệt.
   - 0025: chuyển Thần Thoại về Chiến Thần I với cùng tổng RP.
@@ -177,7 +203,11 @@ Bản nâng cấp này dùng lại các hệ thống sẵn có: đăng nhập, r
   - Không tự làm với chính mình; theo dõi và thích đồng thời; UID 1000.
   - Chặn.
   - Tố cáo: trùng, giới hạn ngày, đồng thời, người bị tố cáo không thấy gì; hàng chờ quản trị, audit, không tự khóa.
-- `apps/server/test/rooms.test.ts` (7 test):
+- `apps/server/test/socialProfile.test.ts` còn có test ảnh bằng chứng: chỉ người tố cáo; loại ảnh xác định từ nội dung (SVG giả PNG bị từ chối); tối đa 3 ảnh; không lưu trùng; quá 1 MB bị từ chối; nhân viên xem được với header an toàn; người chơi nhận 403; tố cáo đã xử lý hoặc quá 30 phút thì không thêm được.
+- `apps/server/test/resetCards.test.ts` (2 test):
+  - Bị chặn khi ván bài hoặc trận Rank đang chạy có người thật; xóa ván chỉ có TEST; ẩn danh TEST trong ván đã xong và trận Rank (kể cả người thắng).
+  - Ảnh bằng chứng xóa theo tố cáo; chip và lịch sử của người thật không đổi; bàn vẫn chạy sau reset.
+- `apps/server/test/rooms.test.ts` (8 test, gồm test quản trị phòng: quyền, tạm dừng, chuyển chủ, đóng giữa ván không mất Cxu, audit):
   - Mật khẩu không lộ, mỗi người một phòng, sảnh chính thức không đổi.
   - Cổng truy cập qua WS và API; giới hạn đoán mật khẩu.
   - Tranh ghế đồng thời.
