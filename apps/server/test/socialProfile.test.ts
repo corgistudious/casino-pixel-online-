@@ -157,7 +157,7 @@ describe('player reports', () => {
     expect(code(await call(a, 'POST', '/api/reports', { ...body, description: 'short' }))).toBe('bad_request');
     // The target sees no reports and no reporter anywhere.
     expect((await call(b, 'GET', '/api/reports/mine')).json().reports).toEqual([]);
-    expect(JSON.stringify((await call(b, 'GET', `/api/players/${b.user.uid}`)).json())).not.toContain(a.user.displayName);
+    expect(JSON.stringify((await call(b, 'GET', `/api/players/${b.user.uid}`)).json())).not.toContain(a.user.username);
     expect((await call(b, 'GET', '/api/admin/reports')).statusCode).toBe(403);
     // Daily limit: 10 per reporter.
     for (let i = 0; i < 9; i++) {

@@ -28,6 +28,7 @@ import { effectiveEquipment } from './catalog';
 import { fairRng, sha256 } from './fair';
 import { awardGameplayExp, notifyProgress, type ExpResult } from './progression';
 import { activeSeason, recordRankedMatch } from './rank';
+import { assertRoomAccess } from './roomAccess';
 import { applyDelta, getWallet } from './wallet';
 
 type TableRow = typeof cardTables.$inferSelect;
@@ -130,7 +131,7 @@ export class CardTableEngine {
   // ---------------------------------------------------------------- views
 
   async lobby(): Promise<CardTableSummary[]> {
-    const rows = await this.db.select().from(cardTables).where(and(eq(cardTables.mode, 'casual'), ne(cardTables.status, 'closed'))).orderBy(asc(cardTables.sort));
+    const rows = await this.db.select().from(cardTables).where(and(eq(cardTables.mode, 'casual'), eq(cardTables.kind, 'official'), ne(cardTables.status, 'closed'))).orderBy(asc(cardTables.sort));
     const counts = await this.db.select({ tableId: cardSeats.tableId, n: count() }).from(cardSeats).groupBy(cardSeats.tableId);
     const by = new Map(counts.map((c) => [c.tableId, c.n]));
     return rows.map((t) => summary(t, by.get(t.id) ?? 0));
@@ -179,6 +180,7 @@ export class CardTableEngine {
       const [t] = await tx.select().from(cardTables).where(eq(cardTables.id, tableId)).for('update');
       if (!t || t.status === 'closed') throw fail('table_not_found');
       if (t.mode !== 'casual' || t.status !== 'open') throw fail('table_unavailable');
+      await assertRoomAccess(tx, 'card', tableId, userId);
       const cfg = configOf(t);
       if (seat < 0 || seat >= cfg.seats) throw fail('bad_request', 'no such seat');
       if (!Number.isSafeInteger(buyIn) || buyIn < cfg.minBuyIn || buyIn > cfg.maxBuyIn) throw fail('buyin_range');

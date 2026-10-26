@@ -33,6 +33,7 @@ import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { fairRng, sha256 } from './fair';
 import { awardGameplayExp, notifyProgress, type ExpResult } from './progression';
+import { assertRoomAccess } from './roomAccess';
 import { applyDelta, getWallet } from './wallet';
 
 export const bjtRoom = (tableId: string) => `bjt:${tableId}`;
@@ -141,7 +142,7 @@ export class BlackjackTableEngine {
 
   async lobby(): Promise<BjtTableSummary[]> {
     const rows = await this.db.execute<TableRow & { seated: number }>(sql`
-      SELECT t.*, (SELECT count(*)::int FROM bj_seats s WHERE s.table_id = t.id) AS seated FROM bj_tables t WHERE t.status <> 'closed' ORDER BY t.sort, t.id`);
+      SELECT t.*, (SELECT count(*)::int FROM bj_seats s WHERE s.table_id = t.id) AS seated FROM bj_tables t WHERE t.status <> 'closed' AND t.kind = 'official' ORDER BY t.sort, t.id`);
     return rows.map((t) => summary(t, t.seated));
   }
 
@@ -184,6 +185,7 @@ export class BlackjackTableEngine {
     await this.db.transaction(async (tx) => {
       const t = await this.table(tx, tableId);
       if (t.status !== 'open') throw fail('table_unavailable');
+      await assertRoomAccess(tx, 'bj', tableId, userId);
       if (!Number.isInteger(seat) || seat < 0 || seat >= Math.min(t.seats, BJT_SEATS)) throw fail('bad_request');
       const mine = await tx.execute<{ table_id: string }>(sql`SELECT table_id FROM bj_seats WHERE user_id = ${userId}::uuid`);
       if (mine.length) throw fail('already_seated');

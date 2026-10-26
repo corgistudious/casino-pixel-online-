@@ -227,3 +227,27 @@ describe('0025_rank_mythic upgrade', () => {
     await expect(db.execute(sql`UPDATE player_ranks SET division = 41`)).rejects.toThrow();
   });
 });
+
+describe('0026_social_profile and 0027_private_rooms upgrade', () => {
+  it('marks every existing table official and keeps seats, stacks and friendships as they were', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(26) }); // 0000–0025
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (101100, 'sitter', 'sitter', 'x', 'Sitter'), (101101, 'pal', 'pal', 'x', 'Pal')`);
+    await db.execute(sql`INSERT INTO card_seats (table_id, seat, user_id, stack) SELECT 'poker-1', 2, id, 4321 FROM users WHERE uid = 101100`);
+    await db.execute(sql`INSERT INTO bj_seats (table_id, seat, user_id) SELECT 'bj-1', 1, id FROM users WHERE uid = 101101`);
+    await db.execute(sql`INSERT INTO friendships (user_id, friend_id) SELECT a.id, b.id FROM users a, users b WHERE a.uid = 101100 AND b.uid = 101101`);
+    const snapshot = sql`SELECT (SELECT json_agg(json_build_object('t', table_id, 's', seat, 'k', stack) ORDER BY table_id) FROM card_seats) AS cards,
+      (SELECT json_agg(json_build_object('t', table_id, 's', seat) ORDER BY table_id) FROM bj_seats) AS bj, (SELECT count(*) FROM friendships) AS friends,
+      (SELECT count(*) FROM card_tables) AS card_tables, (SELECT count(*) FROM bj_tables) AS bj_tables`;
+    const before = await rows(snapshot);
+    await runMigrations(db);
+    expect(await rows(snapshot)).toEqual(before);
+    expect(await rows(sql`SELECT DISTINCT kind FROM card_tables UNION SELECT DISTINCT kind FROM bj_tables`)).toEqual([{ kind: 'official' }]);
+    for (const table of ['game_rooms', 'room_access', 'player_follows', 'profile_likes', 'player_blocks', 'player_reports', 'profile_settings']) {
+      expect(await rows(sql`SELECT count(*)::int AS n FROM ${sql.identifier(table)}`)).toEqual([{ n: 0 }]);
+    }
+    // A private room must carry a password hash, and a follow cannot point at oneself.
+    await expect(db.execute(sql`INSERT INTO game_rooms (id, engine, table_id, game, name, owner_id, visibility, stake) SELECT 'card:r-00000001', 'card', 'x', 'poker', 'Bad', id, 'private', 100 FROM users WHERE uid = 101100`)).rejects.toThrow();
+    await expect(db.execute(sql`INSERT INTO player_follows (follower_id, followee_id) SELECT id, id FROM users WHERE uid = 101100`)).rejects.toThrow();
+  });
+});

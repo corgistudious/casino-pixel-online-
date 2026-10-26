@@ -15,6 +15,11 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  { table: 'room_join_attempts', column: 'user_id', action: 'delete' },
+  { table: 'room_access', column: 'user_id', action: 'delete' },
+  { table: 'room_access', column: 'invited_by', action: 'delete' },
+  // A TEST player's room keeps running (real players may sit in it) under Keyo Support until it passes on or closes.
+  { table: 'game_rooms', column: 'owner_id', action: 'reassign_to_support' },
   { table: 'bj_seats', column: 'user_id', action: 'delete' },
   { table: 'player_follows', column: 'follower_id', action: 'delete' },
   { table: 'player_follows', column: 'followee_id', action: 'delete' },

@@ -842,6 +842,8 @@ export const cardTables = pgTable('card_tables', {
   config: jsonb('config').notNull(),
   /** casual | ranked */
   mode: text('mode').notNull().default('casual'),
+  /** official (staff tables) | room (player-created, see game_rooms) */
+  kind: text('kind').notNull().default('official'),
   /** open | paused | closed */
   status: text('status').notNull().default('open'),
   /** Seat holding the dealer button for the next hand. */

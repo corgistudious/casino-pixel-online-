@@ -21,6 +21,7 @@ import { notifyProgress } from '../services/progression';
 import { tableRoom, type RoundTableEngine } from '../services/roundTables';
 import { cardRoom, type CardTableEngine } from '../services/cardTables';
 import { bjtRoom, type BlackjackTableEngine } from '../services/blackjackTables';
+import { assertRoomAccess } from '../services/roomAccess';
 
 const AUTH_TIMEOUT_MS = 10_000;
 
@@ -83,6 +84,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
           hub.leave(tableRoom(msg.tableId), conn);
           return { ok: true };
         case 'bjt.join': {
+          await assertRoomAccess(db, 'bj', msg.tableId, userId);
           const view = await bjt.view(msg.tableId, userId);
           hub.join(bjtRoom(msg.tableId), conn);
           return view;
@@ -102,6 +104,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
           await bjt.act(userId, msg.tableId, msg.roundId, msg.action, msg.amount ?? 0, msg.id);
           return { ok: true };
         case 'card.join': {
+          await assertRoomAccess(db, 'card', msg.tableId, userId);
           const view = await cards.view(msg.tableId, userId);
           hub.join(cardRoom(msg.tableId), conn);
           return view;
