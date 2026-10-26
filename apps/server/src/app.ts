@@ -36,6 +36,7 @@ import { registerCosmeticsRoutes } from './routes/cosmetics';
 import { registerApiRoutes } from './routes/api';
 import { registerAuthRoutes } from './routes/auth';
 import { registerSocialRoutes } from './routes/social';
+import { registerMissionRoutes } from './routes/missions';
 
 export async function buildApp(config: Config, opts: { logger?: FastifyServerOptions['logger']; migrate?: boolean } = {}) {
   const app = Fastify({
@@ -95,11 +96,12 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerProgressionRoutes(app, db, hub);
   registerGiftcodeRoutes(app, db, hub);
   registerBankRoutes(app, db, hub);
-  registerSupportRoutes(app, db);
+  registerSupportRoutes(app, db, hub);
   registerMarketRoutes(app, db);
   registerVipRoutes(app, db);
   registerChatRoutes(app, db, hub);
   registerSocialRoutes(app, db, hub);
+  registerMissionRoutes(app, db, hub);
   registerAchievementRoutes(app, db);
   let seasonTimer: NodeJS.Timeout | undefined;
   if (config.TABLE_SCHEDULER === 'on') {

@@ -19,8 +19,11 @@ type Envelope = { origin: string } & (
 const MAX_BIG_WINS = 20;
 
 /** Redis keys and channels used by the hub, all under one namespace so the instance can share a Redis server safely. */
+/** Per-account online flag lifetime; refreshed by every instance's 10 s heartbeat. */
+const USER_ONLINE_TTL_S = 30;
+
 export function redisKeys(prefix: string) {
-  return { channel: `${prefix}events`, bigWins: `${prefix}bigwins`, presence: `${prefix}presence:` };
+  return { channel: `${prefix}events`, bigWins: `${prefix}bigwins`, presence: `${prefix}presence:`, userOnline: `${prefix}online:` };
 }
 
 /**
@@ -74,7 +77,10 @@ export class RealtimeHub {
     if (!set) this.byUser.set(conn.userId, (set = new Set()));
     set.add(conn);
     conn.send({ type: 'event', event: 'presence', data: { online: this.online } });
-    if (isNewUser) this.broadcastPresence();
+    if (isNewUser) {
+      this.broadcastPresence();
+      this.pub?.set(this.keys.userOnline + conn.userId, '1', 'EX', USER_ONLINE_TTL_S).catch(() => {});
+    }
   }
 
   remove(conn: Connection): void {
@@ -88,7 +94,24 @@ export class RealtimeHub {
     if (set.size === 0) {
       this.byUser.delete(conn.userId);
       this.broadcastPresence();
+      // Another instance may still hold a socket for this user; its heartbeat re-sets the key.
+      this.pub?.del(this.keys.userOnline + conn.userId).catch(() => {});
     }
+  }
+
+  /** Which of these accounts have a live connection (this instance, or any instance via Redis). */
+  async onlineAmong(userIds: readonly string[]): Promise<Set<string>> {
+    const online = new Set(userIds.filter((id) => this.byUser.has(id)));
+    const rest = userIds.filter((id) => !online.has(id));
+    if (this.pub && rest.length) {
+      try {
+        const values = await this.pub.mget(rest.map((id) => this.keys.userOnline + id));
+        rest.forEach((id, i) => values[i] && online.add(id));
+      } catch (err) {
+        this.log.warn({ err }, 'redis presence lookup failed');
+      }
+    }
+    return online;
   }
 
   sendToUser(userId: string, msg: ServerMessage): void {
@@ -204,6 +227,11 @@ export class RealtimeHub {
     if (!this.pub) return;
     try {
       await this.pub.set(this.keys.presence + this.instanceId, String(this.localOnline), 'EX', 30);
+      if (this.byUser.size) {
+        const batch = this.pub.multi();
+        for (const id of this.byUser.keys()) batch.set(this.keys.userOnline + id, '1', 'EX', USER_ONLINE_TTL_S);
+        await batch.exec();
+      }
       const keys = (await this.pub.keys(this.keys.presence + '*')).filter((k) => k !== this.keys.presence + this.instanceId);
       const values = keys.length ? await this.pub.mget(keys) : [];
       const remote = values.reduce((s, v) => s + Number(v ?? 0), 0);

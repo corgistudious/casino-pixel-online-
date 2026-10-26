@@ -22,6 +22,9 @@ export function BlackjackGame() {
   const [round, setRound] = useState<RoundEnvelope<BlackjackView> | null>(null);
   const { busy, run } = usePlay();
   const inHand = round?.result.phase === 'player';
+  const balance = useSession((st) => st.balance);
+  // Doubling or splitting stakes the active hand's bet again.
+  const handBet = round ? (round.result.hands?.[round.result.active]?.bet ?? round.result.bet) : 0;
   const tr = (key: string) => t(key);
 
   const addChip = () => {
@@ -79,20 +82,24 @@ export function BlackjackGame() {
       panel={
         inHand ? (
           <>
-            <Stat label={t('play.bet')} value={formatChips(round!.result.bet * (round!.result.doubled ? 2 : 1), i18n.language)} accent />
+            <Stat label={t('play.bet')} value={formatChips(round!.result.bet, i18n.language)} accent />
+            {(round!.result.hands?.length ?? 1) > 1 && (
+              <p className="text-xs text-white/60">{t('blackjack.playingHand', { n: round!.result.active + 1, total: round!.result.hands.length })}</p>
+            )}
             <Button variant="gold" size="lg" onClick={() => void act('hit')} disabled={busy}>
               {t('play.hit')}
             </Button>
             <Button variant="emerald" size="lg" onClick={() => void act('stand')} disabled={busy}>
               {t('play.stand')}
             </Button>
-            <Button
-              variant="ruby"
-              onClick={() => void act('double')}
-              disabled={busy || !round!.result.canDouble || useSession.getState().balance < round!.result.bet}
-            >
-              {t('play.double')}
-            </Button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="ruby" onClick={() => void act('double')} disabled={busy || !round!.result.canDouble || balance < handBet}>
+                {t('play.double')}
+              </Button>
+              <Button onClick={() => void act('split')} disabled={busy || !round!.result.canSplit || balance < handBet}>
+                {t('play.split')}
+              </Button>
+            </div>
           </>
         ) : (
           <>

@@ -17,8 +17,11 @@ const transferSchema = z.object({
 export function registerBankRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub): void {
   const { authed } = makeGuards(app, db);
   app.get('/api/bank', { preHandler: authed }, async (req) => bankOverview(db, requireAccount(req).id));
-  app.get('/api/bank/history', { preHandler: authed }, async (req) => bankHistory(db, requireAccount(req).id));
-  app.post('/api/bank/transfer', { preHandler: authed }, async (req) => {
+  app.get('/api/bank/history', { preHandler: authed }, async (req) => {
+    const { before } = z.object({ before: z.string().datetime().optional() }).parse(req.query);
+    return bankHistory(db, requireAccount(req).id, before);
+  });
+  app.post('/api/bank/transfer', { preHandler: authed, config: { rateLimit: { max: 30, timeWindow: '1 minute' } } }, async (req) => {
     const user = requireActive(requireAccount(req));
     const input = transferSchema.parse(req.body);
     const transfer = await moveBankFunds(db, user.id, input.idempotencyKey, input.currency, input.direction, input.amount);

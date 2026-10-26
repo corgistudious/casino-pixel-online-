@@ -21,6 +21,9 @@ export function statusFor(code: ErrorCode): number {
     case 'email_not_verified':
     case 'system_account':
     case 'protected_account':
+    case 'self_action_forbidden':
+    case 'muted':
+    case 'not_friends':
     case 'reauth_required':
       return 403;
     case 'round_not_found':
@@ -37,6 +40,9 @@ export function statusFor(code: ErrorCode): number {
     case 'deletion_pending':
     case 'idempotency_conflict':
     case 'last_super_admin':
+    case 'already_in_guild':
+    case 'guild_name_taken':
+    case 'already_claimed':
       return 409;
     case 'too_soon':
     case 'too_many_attempts':

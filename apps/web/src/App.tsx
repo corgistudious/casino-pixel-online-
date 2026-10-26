@@ -28,12 +28,15 @@ import { CollectionPage } from './pages/CollectionPage';
 import { MailboxPage } from './pages/MailboxPage';
 import { VipPage } from './pages/VipPage';
 import { BankPage } from './pages/BankPage';
-import { SupportPage } from './pages/SupportPage';
+import { SupportPage } from './support/SupportPage';
+import { SupportAdminPage } from './admin/SupportAdminPage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { RoomsAdminPage } from './admin/RoomsAdminPage';
 import { TradingPage } from './pages/TradingPage';
-import { ChatPage } from './pages/ChatPage';
-import { FriendsPage, GuildPage, MissionsPage } from './pages/SocialPage';
+import { MissionsPage } from './pages/MissionsPage';
+import { ChatPage } from './social/ChatPage';
+import { FriendsPage } from './social/FriendsPage';
+import { GuildPage } from './social/GuildPage';
 import { RankPage } from './pages/RankPage';
 import { GiftcodePage } from './pages/GiftcodePage';
 import { CardLobbyPage } from './pages/CardLobbyPage';
@@ -43,7 +46,6 @@ import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, LevelUpBanner, RotateOverlay, TestEnvBadge, Toasts } from './ui/Chrome';
 import { KeyoLogo } from './ui/KeyoLogo';
-import { SocialBubble } from './ui/SocialBubble';
 
 function GameRoute() {
   const { game } = useParams();
@@ -109,7 +111,6 @@ export function App() {
       <RotateOverlay />
       <Toasts />
       <LevelUpBanner />
-      <SocialBubble />
       <Routes>
         <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
@@ -140,6 +141,7 @@ export function App() {
           <Route path="players" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="players/:uid" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
+          <Route path="support" element={<RequirePerm perm="support.read"><SupportAdminPage /></RequirePerm>} />
           <Route path="progression" element={<RequirePerm perm="progression.read"><ProgressionAdminPage /></RequirePerm>} />
           <Route path="season-rewards" element={<RequirePerm perm="progression.read"><SeasonRewardsPage /></RequirePerm>} />
           <Route path="giftcodes" element={<RequirePerm perm="giftcode.manage"><GiftcodesPage /></RequirePerm>} />

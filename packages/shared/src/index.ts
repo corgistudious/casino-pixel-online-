@@ -17,3 +17,5 @@ export * from './games/tables';
 export * from './games/handEval';
 export * from './games/seated';
 export * from './i18n';
+export * from './social';
+export * from './missions';

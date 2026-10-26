@@ -1,29 +1,34 @@
 import { vipProgress } from '@casino/shared';
-import { useId, type ReactNode } from 'react';
+import { useEffect, useId, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { DEMO_EXTRAS, IS_DEMO } from '../demo';
 import { formatChips } from '../lib/format';
 import { useSession } from '../store/session';
+import { useSocial } from '../store/social';
+import { startVipSync, useVip } from '../store/vip';
 import { Avatar } from './Avatar';
 import { NavIcon, type NavIconName } from './NavIcons';
 import { CurrencyIcon, PlayerName } from './OfficialAssets';
 import { VipEmblem } from './VipEmblem';
+import { ChatButton } from './ChatButton';
 
 export const NAV_ITEMS: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/', icon: 'hub', label: 'nav.hub' },
   { to: '/rooms', icon: 'rooms', label: 'nav.rooms' },
   { to: '/market', icon: 'market', label: 'nav.market' },
-  { to: '/bank', icon: 'collection', label: 'nav.bank' },
+  { to: '/bank', icon: 'bank', label: 'nav.bank' },
   { to: '/collection', icon: 'collection', label: 'nav.collection' },
   { to: '/mail', icon: 'mail', label: 'nav.mail' },
   { to: '/missions', icon: 'missions', label: 'nav.missions' },
   { to: '/vip', icon: 'vip', label: 'nav.vip' },
   { to: '/rank', icon: 'rank', label: 'nav.rank' },
   { to: '/leaderboard', icon: 'leaderboard', label: 'nav.leaderboard' },
-  { to: '/profile', icon: 'profile', label: 'nav.profile' },
+  { to: '/guild', icon: 'guild', label: 'nav.guild' },
   { to: '/friends', icon: 'friends', label: 'nav.friends' },
+  { to: '/support', icon: 'support', label: 'nav.support' },
   { to: '/gifts', icon: 'gifts', label: 'nav.gifts' },
+  { to: '/profile', icon: 'profile', label: 'nav.profile' },
   { to: '/settings', icon: 'settings', label: 'nav.settings' },
 ];
 
@@ -54,17 +59,19 @@ export function CharmIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-/** VIP level, EXP bar. VIP is not implemented on the server, so the EXP is demo data. */
+/** VIP level and EXP bar from the server (demo data only in the preview build). */
 export function VipMeter({ compact = false }: { compact?: boolean }) {
   const { t, i18n } = useTranslation();
-  const vip = vipProgress(DEMO_EXTRAS.vipExp);
+  const exp = useVip((v) => v.exp);
+  useEffect(startVipSync, []);
+  const vip = vipProgress(exp ?? 0);
   return (
     <NavLink to="/vip" className="group flex items-center gap-2" title={t('nav.vip')}>
       <VipEmblem level={vip.level} size={compact ? 34 : 40} />
       <div className={compact ? 'w-20' : 'w-32 xl:w-40'}>
         <div className="flex items-center justify-between gap-1 text-[10px] leading-none text-white/55">
           <span className="font-semibold tracking-wide text-gold-200">{t('player.vipExp')}</span>
-          <DemoTag />
+          {IS_DEMO && <DemoTag />}
         </div>
         <div className="relative mt-1 h-2 overflow-hidden rounded-full bg-black/50 ring-1 ring-white/10">
           <div
@@ -75,7 +82,7 @@ export function VipMeter({ compact = false }: { compact?: boolean }) {
         </div>
         {!compact && (
           <div className="mt-1 truncate text-[10px] leading-none tabular-nums text-white/45">
-            {vip.next ? `${formatChips(DEMO_EXTRAS.vipExp, i18n.language)} / ${formatChips(vip.next.exp, i18n.language)}` : t('player.maxLevel')}
+            {vip.next ? `${formatChips(exp ?? 0, i18n.language)} / ${formatChips(vip.next.exp, i18n.language)}` : t('player.maxLevel')}
           </div>
         )}
       </div>
@@ -115,6 +122,7 @@ function PlayerBar() {
           <span className="text-[10px] text-white/45">{t('player.charm')}</span>
           <DemoTag />
         </div>
+        <ChatButton />
         {(['silver', 'gold'] as const).map((c) => (
           <div key={c} className="gold-border flex items-center gap-1.5 rounded-full py-0.5 pl-0.5 pr-3" title={t(`currency.${c}`)}>
             <CurrencyIcon currency={c} size={28} />
@@ -128,6 +136,7 @@ function PlayerBar() {
 
 function NavRail() {
   const { t } = useTranslation();
+  const badges: Record<string, number> = { '/support': useSocial((s) => s.unreadSupport) };
   return (
     <nav className="relative flex w-[60px] shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-gold-300/10 bg-ink-950/70 px-1.5 py-2 backdrop-blur-xl lg:w-52 lg:px-3 lg:py-4">
       {NAV_ITEMS.map((item) => (
@@ -145,7 +154,10 @@ function NavRail() {
           {({ isActive }) => (
             <>
               {isActive && <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-full bg-gold-sheen shadow-glow" />}
-              <NavIcon name={item.icon} active={isActive} size={22} />
+              <span className="relative">
+                <NavIcon name={item.icon} active={isActive} size={22} />
+                {!!badges[item.to] && <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-ruby-500 ring-2 ring-ink-950" aria-label={String(badges[item.to])} />}
+              </span>
               <span className="hidden truncate text-sm font-medium lg:inline">{t(item.label)}</span>
             </>
           )}
