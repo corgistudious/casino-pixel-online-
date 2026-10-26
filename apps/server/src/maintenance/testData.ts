@@ -15,6 +15,17 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  { table: 'friendships', column: 'user_id', action: 'delete' },
+  { table: 'friendships', column: 'friend_id', action: 'delete' },
+  { table: 'friend_requests', column: 'sender_id', action: 'delete' },
+  { table: 'friend_requests', column: 'receiver_id', action: 'delete' },
+  { table: 'direct_messages', column: 'sender_id', action: 'delete' },
+  { table: 'direct_messages', column: 'receiver_id', action: 'delete' },
+  { table: 'guild_messages', column: 'user_id', action: 'delete' },
+  { table: 'guild_win_events', column: 'user_id', action: 'delete' },
+  { table: 'guild_members', column: 'user_id', action: 'delete' },
+  { table: 'quest_claims', column: 'user_id', action: 'delete' },
+  { table: 'guilds', column: 'owner_id', action: 'delete' }
   { table: 'support_ticket_messages', column: 'author_id', action: 'delete' },
   { table: 'support_tickets', column: 'user_id', action: 'delete' },
   { table: 'support_tickets', column: 'assigned_to', action: 'delete' },
