@@ -118,6 +118,7 @@ export const en = {
     hit: 'Hit',
     stand: 'Stand',
     double: 'Double',
+    split: 'Split',
     clear: 'Clear',
     rebet: 'Rebet',
     chip: 'Chip',
@@ -178,7 +179,9 @@ export const en = {
       bust: 'Bust!',
       dealer_blackjack: 'Dealer blackjack',
     },
-    rules: 'Dealer stands on 17 · Blackjack pays 3:2 · Double on first two cards',
+    rules: 'Dealer stands on 17 · Blackjack pays 3:2 · Double on first two cards · Split up to 4 hands',
+    hand: 'Hand {{n}}',
+    playingHand: 'Playing hand {{n}}/{{total}}',
   },
   profile: {
     title: 'Profile',

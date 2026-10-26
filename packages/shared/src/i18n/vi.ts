@@ -120,6 +120,7 @@ export const vi: Translation = {
     hit: 'Rút',
     stand: 'Dừng',
     double: 'Gấp đôi',
+    split: 'Tách bài',
     clear: 'Xóa',
     rebet: 'Cược lại',
     chip: 'Chip',
@@ -180,7 +181,9 @@ export const vi: Translation = {
       bust: 'Quắc!',
       dealer_blackjack: 'Nhà cái Blackjack',
     },
-    rules: 'Nhà cái dừng ở 17 · Blackjack trả 3:2 · Gấp đôi ở hai lá đầu',
+    rules: 'Nhà cái dừng ở 17 · Blackjack trả 3:2 · Gấp đôi ở hai lá đầu · Tách đôi tối đa 4 tay',
+    hand: 'Tay {{n}}',
+    playingHand: 'Đang chơi tay {{n}}/{{total}}',
   },
   profile: {
     title: 'Hồ sơ',
