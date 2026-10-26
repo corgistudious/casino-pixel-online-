@@ -482,7 +482,7 @@ export const en = {
     claimed: 'Checked in! Day {{day}}',
     done: 'Come back tomorrow',
     resetIn: 'New day in {{time}}',
-    streakInfo: 'Check in every day — missing a day restarts the cycle at Day 1.',
+    streakInfo: 'Daily login reward: 30,000 Silver Cxu, once per day (resets 00:00 UTC).',
   },
   welcome: {
     title: 'Welcome to Keyo Game!',

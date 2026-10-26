@@ -484,7 +484,7 @@ export const vi: Translation = {
     claimed: 'Điểm danh thành công! Ngày {{day}}',
     done: 'Quay lại vào ngày mai',
     resetIn: 'Ngày mới sau {{time}}',
-    streakInfo: 'Điểm danh mỗi ngày — bỏ lỡ một ngày sẽ quay lại Ngày 1.',
+    streakInfo: 'Thưởng đăng nhập 30.000 Cxu Bạc mỗi ngày, nhận một lần mỗi ngày (làm mới 00:00 UTC).',
   },
   welcome: {
     title: 'Chào mừng đến Keyo Game!',

@@ -13,15 +13,12 @@ export interface Reward {
 }
 
 /** 7-day streak (UTC days). Missing a day restarts at day 1; after day 7 the cycle repeats. */
-export const CHECKIN_REWARDS: readonly Reward[] = [
-  { silver: 5_000, gold: 0 },
-  { silver: 5_000, gold: 0 },
-  { silver: 6_000, gold: 0 },
-  { silver: 6_000, gold: 0 },
-  { silver: 8_000, gold: 0 },
-  { silver: 10_000, gold: 0 },
-  { silver: 20_000, gold: 0 },
-];
+/**
+ * Daily login reward: 30,000 Cxu Bạc every day, claimable once per server day (UTC). This is the
+ * only daily login reward; the 7-day cycle is kept for the calendar display but every day pays the same.
+ */
+export const DAILY_LOGIN_SILVER = 30_000;
+export const CHECKIN_REWARDS: readonly Reward[] = Array.from({ length: 7 }, () => ({ silver: DAILY_LOGIN_SILVER, gold: 0 }));
 
 export const ECONOMY = {
   /** Starter reward, granted once when the account's email is verified. */

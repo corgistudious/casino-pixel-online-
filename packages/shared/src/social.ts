@@ -12,9 +12,9 @@ export const SOCIAL_RULES = {
   gift: {
     /** Cxu Bạc per gift. Cxu Vàng cannot be gifted (premium currency, Owner decision). */
     minSilver: 100,
-    maxSilver: 100_000,
-    /** Per sender, per server day (UTC). */
-    dailySilver: 200_000,
+    maxSilver: 5_000,
+    /** Per sender, per server day (UTC): at most 5,000 Cxu Bạc in total, however it is split. */
+    dailySilver: 5_000,
     dailyCount: 20,
     /** Players must have been friends this long before gifting (blocks throwaway-account farming). */
     friendForHours: 24,
