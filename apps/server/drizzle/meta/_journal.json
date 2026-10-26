@@ -141,6 +141,13 @@
       "when": 1792904555916,
       "tag": "0019_social_guild_quests",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1792904555917,
+      "tag": "0020_social_upgrade",
+      "breakpoints": true
     }
   ]
 }

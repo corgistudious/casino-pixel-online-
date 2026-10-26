@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { CURRENCIES, ECONOMY, GAME_KEYS, type ErrorCode, type GameKey, type Reward } from '../economy';
 import type { BlackjackView } from '../games/blackjack';
+import type { ChatChannel, ChatMessageView } from '../social';
 import type { RouletteResult } from '../games/roulette';
 import type { SicBoResult } from '../games/sicbo';
 import type { SlotsResult } from '../games/slots';
@@ -315,8 +316,10 @@ export interface ResponseMap {
 }
 
 export type ServerEvent =
-  | { event: 'chat'; data: { id: number; uid: number; body: string } }
-  | { event: 'chatRemoved'; data: { id: number } }
+  | { event: 'chatMessage'; data: ChatMessageView & { peerUid?: number } }
+  | { event: 'chatRemoved'; data: { id: number; channel: ChatChannel } }
+  /** Friends, gifts and guild changes; the client refetches what it shows. */
+  | { event: 'social'; data: { kind: string; uid?: number; guildId?: string } }
   | { event: 'wallet'; data: { balance: number; gold?: number } }
   | { event: 'presence'; data: { online: number } }
   | { event: 'bigwin'; data: BigWinEvent }

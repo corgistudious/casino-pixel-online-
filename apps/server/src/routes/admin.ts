@@ -18,6 +18,7 @@ import {
 } from '../services/accounts';
 import { adminResetPassword, adminUnlinkEmail, maskEmail } from '../services/adminAccounts';
 import { audit } from '../services/audit';
+import { repairGuildsOf } from '../services/guilds';
 import { runOnce } from '../services/adminOps';
 import { grantableRoles, grantStaffRole, isProtected, listStaff, rankOf, revokeStaffRole, userPermissions, userRoleIds } from '../services/rbac';
 import { badgesOf } from '../services/users';
@@ -154,6 +155,8 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     const { uid } = uidParam.parse(req.params);
     const { ban, userId } = await banUser(db, req.account!.id, uid, banSchema.parse(req.body), req.ip);
     hub.kick(userId);
+    // A long or permanent ban hands the player's guild to its next leader.
+    await repairGuildsOf(db, userId);
     return { ban };
   });
 
