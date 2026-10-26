@@ -13,7 +13,7 @@ import { RankEmblem } from '../ui/RankEmblem';
 import { toast } from '../ui/toast';
 import { GuildCrest, Modal, PlayerChip, useFail } from './parts';
 
-const PRESETS = [1_000, 5_000, 10_000, 50_000, 100_000];
+const PRESETS = [500, 1_000, 2_000, 5_000];
 
 /**
  * Two steps: pick the gift, then confirm recipient and content. One idempotency key per opened
@@ -25,7 +25,7 @@ export function GiftDialog({ to, onClose, onSent }: { to: PlayerCard; onClose: (
   const items = useCatalog((c) => c.items);
   const [data, setData] = useState<GiftsOverview | null>(null);
   const [kind, setKind] = useState<'silver' | 'item'>('silver');
-  const [amount, setAmount] = useState(5_000);
+  const [amount, setAmount] = useState(1_000);
   const [instance, setInstance] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [step, setStep] = useState<'pick' | 'confirm'>('pick');
