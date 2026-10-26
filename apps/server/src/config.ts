@@ -11,10 +11,15 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   CORS_ORIGINS: z.string().default('http://localhost:5173'),
   /** Comma-separated usernames promoted to admin on login. */
+  /** Deprecated and ignored (kept so existing .env files still load); see SECURITY_AUDIT.md. */
   ADMIN_USERNAMES: z.string().default(''),
+  /** Requests per minute per client IP across the HTTP API. */
+  HTTP_RATE_PER_MIN: z.coerce.number().int().positive().default(300),
   LOG_LEVEL: z.string().default('info'),
   /** Must match environment_state.mode in the database (checked at startup). */
   KEYO_DATA_MODE: z.enum(['test', 'production']).default('test'),
+  /** 'off' stops this instance from driving shared-round tables (tests drive them by hand). */
+  TABLE_SCHEDULER: z.enum(['on', 'off']).default('on'),
   /** Public URL of the web client, used in email links. */
   APP_URL: z.string().url().default('http://localhost:5173'),
   /** e.g. smtps://user:pass@smtp.example.com:465 — without it mail stays queued in email_outbox. */

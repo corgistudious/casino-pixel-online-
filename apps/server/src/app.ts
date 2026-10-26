@@ -11,13 +11,31 @@ import { runMigrations } from './db/migrate';
 import { AppError } from './errors';
 import { registerGateway } from './realtime/gateway';
 import { RealtimeHub } from './realtime/hub';
+import { RoundTableEngine } from './services/roundTables';
+import { CardTableEngine } from './services/cardTables';
+import { registerCardRoutes } from './routes/cards';
+import { registerTableRoutes } from './routes/tables';
+import { registerProgressionRoutes } from './routes/progression';
+import { registerGiftcodeRoutes } from './routes/giftcodes';
+import { registerBankRoutes } from './routes/bank';
+import { registerSupportRoutes } from './routes/support';
+import { registerMarketRoutes } from './routes/market';
+import { registerVipRoutes } from './routes/vip';
+import { registerChatRoutes } from './routes/chat';
+import { registerAchievementRoutes } from './routes/achievements';
+import { sweepExpiredEquipment } from './services/catalog';
+import { tickSeasons } from './services/rank';
 import { startMailWorker } from './mail/mailer';
 import { BannedError, bootstrapSystemAccounts } from './services/accounts';
 import { assertDataMode } from './services/environment';
-import { bootstrapRoles } from './services/rbac';
+import { bootstrapOwner, bootstrapRoles } from './services/rbac';
 import { registerAdminRoutes } from './routes/admin';
+import { registerAdminPanelRoutes } from './routes/adminPanel';
+import { registerAdminContentRoutes } from './routes/adminContent';
+import { registerCosmeticsRoutes } from './routes/cosmetics';
 import { registerApiRoutes } from './routes/api';
 import { registerAuthRoutes } from './routes/auth';
+import { registerSocialRoutes } from './routes/social';
 
 export async function buildApp(config: Config, opts: { logger?: FastifyServerOptions['logger']; migrate?: boolean } = {}) {
   const app = Fastify({
@@ -34,14 +52,20 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   });
   await bootstrapRoles(db);
   await bootstrapSystemAccounts(db);
+  await bootstrapOwner(db);
   const hub = new RealtimeHub(app.log, config.REDIS_URL, config.REDIS_PREFIX);
 
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(cors, {
     origin: (origin, cb) => cb(null, !origin || config.corsOrigins.includes(origin)),
-    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
+    // PUT (image uploads) and DELETE (mail, roles) are needed by the Android/Windows apps, which call the API cross-origin.
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   });
-  await app.register(rateLimit, { global: false });
+  // Every HTTP route is limited per client IP; auth routes add a stricter limit of their own.
+  await app.register(rateLimit, { global: true, max: config.HTTP_RATE_PER_MIN, timeWindow: '1 minute' });
+  if (config.adminUsernames.size > 0) {
+    app.log.warn('ADMIN_USERNAMES is ignored: roles are no longer granted by username at login (privilege escalation risk). The Owner is UID 1002; staff roles are granted in the admin panel.');
+  }
   await app.register(jwt, { secret: config.JWT_SECRET });
   await app.register(websocket, { options: { maxPayload: 16 * 1024 } });
 
@@ -61,14 +85,53 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerAuthRoutes(app, db, hub, config);
   registerApiRoutes(app, db, hub, config);
   registerAdminRoutes(app, db, hub, config);
-  registerGateway(app, db, hub, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
+  registerAdminPanelRoutes(app, db, hub, config);
+  registerAdminContentRoutes(app, db, hub);
+  registerCosmeticsRoutes(app, db, hub);
+  const tables = new RoundTableEngine(db, client, hub, app.log);
+  registerTableRoutes(app, db, tables);
+  const cards = new CardTableEngine(db, client, hub, app.log);
+  registerCardRoutes(app, db, cards);
+  registerProgressionRoutes(app, db, hub);
+  registerGiftcodeRoutes(app, db, hub);
+  registerBankRoutes(app, db, hub);
+  registerSupportRoutes(app, db);
+  registerMarketRoutes(app, db);
+  registerVipRoutes(app, db);
+  registerChatRoutes(app, db, hub);
+  registerSocialRoutes(app, db, hub);
+  registerAchievementRoutes(app, db);
+  let seasonTimer: NodeJS.Timeout | undefined;
+  if (config.TABLE_SCHEDULER === 'on') {
+    await tables.start();
+    await cards.start();
+    // Ranked seasons start and end on their dates (guarded updates: safe on every instance).
+    const tickRank = () => {
+      void tickSeasons(db).then(
+        (r) => (r.ended.length || r.started.length) && app.log.info(r, 'rank seasons changed'),
+        (err) => app.log.error({ err }, 'season tick failed'),
+      );
+      // Timed cosmetics (e.g. the 60-day Vương Giả set) are unequipped everywhere once expired.
+      void sweepExpiredEquipment(db).then(
+        (ids) => ids.forEach((id) => hub.sendToUser(id, { type: 'event', event: 'profile', data: { reason: 'equipment' } })),
+        (err) => app.log.error({ err }, 'expiry sweep failed'),
+      );
+    };
+    tickRank();
+    seasonTimer = setInterval(tickRank, 60_000);
+    seasonTimer.unref();
+  }
+  registerGateway(app, db, hub, tables, cards, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
 
   const stopMail = startMailWorker(db, app.log, config.SMTP_URL, config.MAIL_FROM);
   app.addHook('onClose', async () => {
     stopMail();
+    clearInterval(seasonTimer);
+    await tables.stop();
+    await cards.stop();
     await hub.close();
     await client.end({ timeout: 5 });
   });
 
-  return { app, db, hub };
+  return { app, db, hub, tables, cards };
 }

@@ -1,4 +1,4 @@
-import { KEYO_SUPPORT_UID, PLAYER_UID_START } from '@casino/shared';
+import { KEYO_SUPPORT_UID, PLAYER_UID_START, PROTECTED_UIDS } from '@casino/shared';
 import { eq, sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { maintenanceRuns } from '../db/schema';
@@ -15,10 +15,40 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  { table: 'support_ticket_messages', column: 'author_id', action: 'delete' },
+  { table: 'support_tickets', column: 'user_id', action: 'delete' },
+  { table: 'support_tickets', column: 'assigned_to', action: 'delete' },
+  { table: 'market_operations', column: 'user_id', action: 'delete' },
+  { table: 'market_listings', column: 'seller_id', action: 'delete' },
+  { table: 'market_listings', column: 'buyer_id', action: 'delete' },
+  { table: 'public_chat_messages', column: 'user_id', action: 'delete' },
+  { table: 'public_chat_messages', column: 'deleted_by', action: 'delete' },
+  { table: 'public_chat_mutes', column: 'user_id', action: 'delete' },
+  { table: 'public_chat_mutes', column: 'issued_by', action: 'delete' },
+  { table: 'bank_transfers', column: 'user_id', action: 'delete' },
+  { table: 'bank_accounts', column: 'user_id', action: 'delete' },
+  { table: 'vip_progress', column: 'user_id', action: 'delete' },
+  { table: 'achievement_claims', column: 'user_id', action: 'delete' },
+  { table: 'giftcode_failure_limits', column: 'user_id', action: 'delete' },
+  { table: 'table_bets', column: 'user_id', action: 'delete' },
+  { table: 'card_seats', column: 'user_id', action: 'delete' },
+  { table: 'ranked_queue', column: 'user_id', action: 'delete' },
+  { table: 'giftcode_redemptions', column: 'user_id', action: 'delete' },
+  { table: 'reward_flags', column: 'user_id', action: 'delete' },
+  { table: 'season_rewards', column: 'user_id', action: 'delete' },
+  { table: 'exp_events', column: 'user_id', action: 'delete' },
+  { table: 'player_progress', column: 'user_id', action: 'delete' },
+  { table: 'rank_events', column: 'user_id', action: 'delete' },
+  { table: 'rank_season_results', column: 'user_id', action: 'delete' },
+  { table: 'player_ranks', column: 'user_id', action: 'delete' },
   { table: 'game_rounds', column: 'user_id', action: 'delete' },
   { table: 'ledger_entries', column: 'user_id', action: 'delete' },
   { table: 'user_items', column: 'user_id', action: 'delete' },
+  { table: 'inventory_items', column: 'user_id', action: 'delete' },
+  { table: 'mail_messages', column: 'user_id', action: 'delete' },
   { table: 'fair_seeds', column: 'user_id', action: 'delete' },
+  { table: 'keyo_rename_state', column: 'user_id', action: 'delete' },
+  { table: 'keyo_rename_cards', column: 'user_id', action: 'delete' },
   { table: 'wallets', column: 'user_id', action: 'delete' },
   { table: 'user_roles', column: 'user_id', action: 'delete' },
   { table: 'bans', column: 'user_id', action: 'delete' },
@@ -29,8 +59,11 @@ export const TEST_DATA_TABLES = [
 /** Tables whose foreign keys to the tables above are fine without a registry entry. */
 const REFERENCE_TABLES = new Set(['roles', 'role_permissions']);
 
-/** Accounts removed by a reset: flagged TEST, ordinary players, never UID 1000. */
-const TARGETS = sql`SELECT id FROM users WHERE is_test AND account_type = 'player' AND uid <> ${KEYO_SUPPORT_UID}`;
+/** Accounts removed by a reset: flagged TEST, ordinary players, never Keyo Support (1000) or the Owner (1002). */
+const TARGETS = sql`SELECT id FROM users WHERE is_test AND account_type = 'player' AND uid NOT IN (${sql.join(
+  PROTECTED_UIDS.map((u) => sql`${u}`),
+  sql`, `,
+)})`;
 
 export interface TableCount {
   table: string;

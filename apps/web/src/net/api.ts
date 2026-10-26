@@ -24,7 +24,7 @@ export function setUnauthorizedHandler(fn: () => void) {
   onUnauthorized = fn;
 }
 
-export async function api<T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<T> {
+export async function api<T>(path: string, init: { method?: string; body?: unknown; headers?: Record<string, string>; raw?: Blob } = {}): Promise<T> {
   if (IS_DEMO) {
     try {
       return (await demoApi(path, init.method ?? 'GET', init.body)) as T;
@@ -37,10 +37,12 @@ export async function api<T>(path: string, init: { method?: string; body?: unkno
     res = await fetch(API_URL + path, {
       method: init.method ?? 'GET',
       headers: {
-        ...(init.body !== undefined ? { 'content-type': 'application/json' } : {}),
+        ...(init.raw ? { 'content-type': init.raw.type } : init.body !== undefined ? { 'content-type': 'application/json' } : {}),
         ...(authToken ? { authorization: `Bearer ${authToken}` } : {}),
+        ...init.headers,
       },
-      body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
+      // `raw` sends a file as-is (image uploads); everything else is JSON.
+      body: init.raw ?? (init.body !== undefined ? JSON.stringify(init.body) : undefined),
     });
   } catch {
     throw new ApiError('network');

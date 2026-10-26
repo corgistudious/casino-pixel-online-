@@ -5,7 +5,7 @@ import { ledgerEntries } from '../db/schema';
 import { fail } from '../errors';
 
 // 'signup' and 'daily_bonus' are legacy reasons kept for existing ledger rows.
-export type LedgerReason = 'signup' | 'daily_bonus' | 'welcome' | 'checkin' | 'shop' | 'rescue' | 'bet' | 'payout' | 'admin_adjust';
+export type LedgerReason = 'signup' | 'daily_bonus' | 'welcome' | 'checkin' | 'shop' | 'rescue' | 'bet' | 'payout' | 'admin_adjust' | 'mail' | 'refund' | 'rank_reward' | 'table_buyin' | 'table_cashout' | 'bank_deposit' | 'bank_withdraw' | 'guild_create' | 'quest_reward';
 
 /**
  * Atomically applies a balance change and records it in the ledger.
@@ -18,6 +18,8 @@ export async function applyDelta(
   reason: LedgerReason,
   roundId: string | null = null,
   currency: Currency = 'silver',
+  /** What caused a non-game movement, e.g. "mail:<uuid>" (stored on the ledger row). */
+  ref: string | null = null,
 ): Promise<number> {
   if (!Number.isSafeInteger(delta)) throw new Error('delta must be a safe integer');
   // Column names come from a fixed whitelist, never from input.
@@ -31,7 +33,7 @@ export async function applyDelta(
   if (!row) throw fail('insufficient_funds');
   const balance = Number(row.value);
   if (delta !== 0) {
-    await tx.insert(ledgerEntries).values({ userId, currency, delta, balanceAfter: balance, reason, roundId });
+    await tx.insert(ledgerEntries).values({ userId, currency, delta, balanceAfter: balance, reason, roundId, ref });
   }
   return balance;
 }

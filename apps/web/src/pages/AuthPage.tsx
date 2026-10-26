@@ -83,7 +83,6 @@ export function AuthPage() {
   const locale = useSettings((s) => s.locale);
   const [mode, setMode] = useState<Mode>('login');
   const [login, setLogin] = useState('');
-  const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -109,7 +108,7 @@ export function AuthPage() {
         const res = await api<{ token: string; user: PublicUser }>('/api/auth/login', { method: 'POST', body: { login, password } });
         signIn(res.token, res.user);
       } else if (mode === 'register') {
-        const body = { username, displayName: displayName.trim() || username, email, password, confirmPassword: confirm, acceptTerms: true, locale };
+        const body = { displayName: displayName.trim(), ...(email.trim() ? { email: email.trim() } : {}), password, confirmPassword: confirm, acceptTerms: true, locale };
         const res = await api<{ token: string; user: PublicUser }>('/api/auth/register', { method: 'POST', body });
         signIn(res.token, res.user, true);
       } else if (mode === 'forgot') {
@@ -138,7 +137,7 @@ export function AuthPage() {
 
       {mode === 'login' && (
         <>
-          <Field label={t('auth.login_field')}>
+          <Field label={locale === 'vi' ? 'UID hoặc email đã xác minh' : 'UID or verified email'}>
             <input className="field" value={login} onChange={(e) => setLogin(e.target.value)} autoComplete="username" required maxLength={254} />
           </Field>
           <Field label={t('auth.password')}>
@@ -149,15 +148,13 @@ export function AuthPage() {
 
       {mode === 'register' && (
         <>
-          <Field label={t('auth.username')} hint={t('auth.usernameHint')}>
-            <input className="field" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required minLength={3} maxLength={20} pattern="[A-Za-z0-9_]+" />
-          </Field>
           <Field label={t('auth.displayName')}>
-            <input className="field" value={displayName} onChange={(e) => setDisplayName(e.target.value)} maxLength={24} placeholder={username} autoComplete="nickname" />
+            <input className="field" value={displayName} onChange={(e) => setDisplayName(e.target.value)} maxLength={24} placeholder="Keyo Player" autoComplete="nickname" required />
           </Field>
           <Field label={t('auth.email')}>
-            <input className="field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required maxLength={254} />
+            <input className="field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" maxLength={254} />
           </Field>
+          <p className="text-xs text-white/55">{locale === 'vi' ? 'Email không bắt buộc, có thể liên kết sau trong Bảo mật.' : 'Email is optional; link it later in Security.'}</p>
           <Field label={t('auth.password')} hint={t('auth.passwordHint')}>
             <input {...PASSWORD_PROPS} value={password} onChange={(e) => setPassword(e.target.value)} />
           </Field>

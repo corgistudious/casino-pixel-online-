@@ -5,15 +5,14 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { hashPassword } from '../src/auth/password';
 import { users } from '../src/db/schema';
 import { banEnd, bootstrapSystemAccounts } from '../src/services/accounts';
-import { codeIn, lastMail, randomIp, register, registerPending, startTestApp, TestSocket, TEST_PASSWORD, tokenIn, type TestApp } from './helpers';
+import { codeIn, createOwner, createStaff, lastMail, randomIp, register, registerPending, startTestApp, TestSocket, TEST_PASSWORD, tokenIn, type TestApp } from './helpers';
 
 let t: TestApp;
-let admin: { authorization: string };
+let admin: Record<string, string>;
 beforeAll(async () => {
   t = await startTestApp();
-  await register(t, 'boss');
-  const res = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'boss', password: TEST_PASSWORD } });
-  admin = { authorization: `Bearer ${res.json().token}` };
+  // The Owner (UID 1002) has every permission; sensitive routes also need the re-auth header it carries.
+  admin = (await createOwner(t)).headers;
 });
 afterAll(async () => {
   await t.app.close();
@@ -60,29 +59,49 @@ describe('Keyo Support UID 1000', () => {
     const login = await post('/api/auth/login', { login: 'keyo_support', password: '!disabled' });
     expect(login.statusCode).toBe(401);
     const ban = await post(`/api/admin/users/${KEYO_SUPPORT_UID}/bans`, { duration: 'permanent', reason: 'nope' }, admin);
-    expect(ban.json().error.code).toBe('system_account');
+    expect(ban.json().error.code).toBe('protected_account');
     const custom = await post('/api/admin/accounts', { uid: KEYO_SUPPORT_UID, username: 'fake_support', displayName: 'Fake', email: 'fake@example.test' }, admin);
     expect(custom.json().error.code).toBe('uid_reserved');
   });
 
-  it('reserves official usernames', async () => {
+  it('reserves official display names', async () => {
     const res = await post('/api/auth/register', {
-      username: 'Keyo_Support',
-      displayName: 'x',
-      email: `x${randomUUID().slice(0, 6)}@example.test`,
+      displayName: 'Keyo Support',
       password: TEST_PASSWORD,
       confirmPassword: TEST_PASSWORD,
       acceptTerms: true,
     });
+
+    expect(res.statusCode).not.toBe(200);
     expect(res.json().error.code).toBe('username_taken');
   });
+
 });
 
 describe('registration and email verification', () => {
   it('validates the form: terms, password confirmation and strength', async () => {
-    const base = { username: 'formcheck', displayName: 'F', email: 'form@example.test', password: TEST_PASSWORD, confirmPassword: TEST_PASSWORD, acceptTerms: true };
-    for (const bad of [{ acceptTerms: false }, { confirmPassword: 'different1' }, { password: 'short1', confirmPassword: 'short1' }, { password: 'lettersonly', confirmPassword: 'lettersonly' }, { email: 'nope' }]) {
-      const res = await post('/api/auth/register', { ...base, ...bad });
+    const base = {
+      displayName: 'FormCheck',
+      email: 'form@example.test',
+      password: TEST_PASSWORD,
+      confirmPassword: TEST_PASSWORD,
+      acceptTerms: true,
+    };
+
+    const invalidCases = [
+      { acceptTerms: false },
+      { confirmPassword: 'different1' },
+      { password: 'short1', confirmPassword: 'short1' },
+      { password: 'lettersonly', confirmPassword: 'lettersonly' },
+      { email: 'nope' },
+    ];
+
+    for (const bad of invalidCases) {
+      const res = await post('/api/auth/register', {
+        ...base,
+        ...bad,
+      });
+
       expect(res.statusCode, JSON.stringify(bad)).toBe(400);
     }
   });
@@ -100,16 +119,27 @@ describe('registration and email verification', () => {
     expect(res.json().error.code).toBe('email_taken');
   });
 
-  it('keeps new accounts pending: no starter reward, no gameplay, no rewards', async () => {
+  it('activates new accounts immediately and grants the welcome reward once', async () => {
     const { token, user } = await registerPending(t);
-    expect(user.status).toBe('pending_verification');
-    expect(user.balance).toBe(0);
-    const checkin = await post('/api/me/checkin', {}, auth(token));
-    expect(checkin.json().error.code).toBe('email_not_verified');
-    const s = await TestSocket.connect(t.port, token);
-    const spin = await s.request({ type: 'slots.spin', bet: 100 });
-    expect(spin.ok ? null : spin.error.code).toBe('email_not_verified');
-    s.close();
+
+    expect(user.status).toBe('active');
+    expect(user.balance).toBe(ECONOMY.welcome.silver);
+
+    const me = await t.app.inject({
+      url: '/api/me',
+      headers: auth(token),
+    });
+
+    expect(me.statusCode).toBe(200);
+
+    const ledger = await t.db.execute<{ n: string }>(sql`
+      SELECT count(*) AS n
+      FROM ledger_entries
+      WHERE user_id = ${user.id}
+        AND reason = 'welcome'
+    `);
+
+    expect(Number(ledger[0]!.n)).toBe(1);
   });
 
   it('verifies by code, activates the account and grants the starter reward once', async () => {
@@ -322,20 +352,20 @@ describe('account deletion', () => {
 });
 
 describe('RBAC and audit', () => {
-  it('a moderator can ban but cannot grant currency or manage roles', async () => {
-    const mod = await register(t);
+  it('an admin can ban players but cannot grant currency or manage roles; a moderator cannot ban', async () => {
+    const adminStaff = await createStaff(t, 'admin');
+    const mod = await createStaff(t, 'moderator');
     const target = await register(t);
-    expect((await post(`/api/admin/users/${mod.user.uid}/roles`, { roleId: 'moderator' }, admin)).statusCode).toBe(200);
-    const h = auth(mod.token);
-    expect((await post(`/api/admin/users/${target.user.uid}/bans`, { duration: { unit: 'day', amount: 1 }, reason: 'test mod' }, h)).statusCode).toBe(200);
-    expect((await post(`/api/admin/users/${target.user.uid}/grant`, { amount: 100 }, h)).json().error.code).toBe('forbidden');
-    expect((await post(`/api/admin/users/${target.user.uid}/roles`, { roleId: 'admin' }, h)).json().error.code).toBe('forbidden');
-    expect(await auditCount('role.grant', mod.user.uid)).toBe(1);
+    const h = adminStaff.headers;
+    expect((await post(`/api/admin/users/${target.user.uid}/bans`, { duration: { unit: 'day', amount: 1 }, reason: 'test ban' }, h)).statusCode).toBe(200);
+    expect((await post(`/api/admin/users/${target.user.uid}/grant`, { amount: 100, reason: 'nope', idempotencyKey: randomUUID() }, h)).json().error.code).toBe('forbidden');
+    expect((await post(`/api/admin/users/${target.user.uid}/roles`, { roleId: 'support' }, h)).json().error.code).toBe('forbidden');
+    expect((await post(`/api/admin/users/${target.user.uid}/bans`, { duration: 'permanent', reason: 'mod ban' }, mod.headers)).json().error.code).toBe('forbidden');
   });
 
   it('admin grants go through the ledger and are audited', async () => {
     const { user } = await register(t);
-    const res = await post(`/api/admin/users/${user.uid}/grant`, { amount: 500 }, admin);
+    const res = await post(`/api/admin/users/${user.uid}/grant`, { amount: 500, reason: 'event prize', idempotencyKey: randomUUID() }, admin);
     expect(res.json().balance).toBe(ECONOMY.welcome.silver + 500);
     const ledger = await t.db.execute<{ n: string }>(sql`SELECT count(*) AS n FROM ledger_entries WHERE user_id = ${user.id} AND reason = 'admin_adjust'`);
     expect(Number(ledger[0]!.n)).toBe(1);

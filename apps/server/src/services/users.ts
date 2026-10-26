@@ -1,3 +1,4 @@
+import { renameInfo } from './rename';
 import {
   checkinDate,
   checkinDayEnd,
@@ -15,9 +16,11 @@ import {
 import { and, desc, eq, sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { users, wallets } from '../db/schema';
-import { userPermissions } from './rbac';
+import { userPermissions, userRoleIds } from './rbac';
 import { fail } from '../errors';
-import { ownedFrames } from './shop';
+import { effectiveEquipment, ownedFrames } from './catalog';
+import { levelOf } from './progression';
+import { unreadCount } from './mailbox';
 import { applyDelta, getWallet } from './wallet';
 
 export type UserRow = typeof users.$inferSelect;
@@ -31,14 +34,18 @@ export function badgesOf(user: { isVerified: boolean; isPartner: boolean }): Bad
 
 export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()): Promise<PublicUser> {
   const wallet = await getWallet(db, user.id);
+  const rename = await renameInfo(db as Db, user.id);
   const progress = checkinProgress(user.checkinStreak, user.lastCheckinDate, checkinDate(now));
   const permissions = await userPermissions(db, user.id);
+  const gear = await effectiveEquipment(db, user);
   return {
     id: user.id,
     uid: user.uid,
     username: user.username,
     email: user.email,
     emailVerified: !!user.emailVerifiedAt,
+    age: user.age,
+    ...rename,
     status: user.status as AccountStatus,
     accountType: user.accountType as PublicUser['accountType'],
     permissions,
@@ -46,11 +53,18 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
     locale: user.locale as Locale,
     avatar: user.avatar,
     role: permissions.includes('admin.access') ? 'admin' : 'player',
+    roles: await userRoleIds(db, user.id),
     badges: badgesOf(user),
     balance: wallet.balance,
     gold: wallet.gold,
-    frame: user.frame,
+    frame: gear.frame,
     ownedFrames: await ownedFrames(db, user.id),
+    avatarItem: gear.avatarItem,
+    title: gear.title,
+    chatBubble: gear.chatBubble,
+    cardBack: gear.cardBack,
+    unreadMail: await unreadCount(db, user.id),
+    level: (await levelOf(db, user.id)).level,
     createdAt: user.createdAt.toISOString(),
     checkin: { ...progress, dayEndsAt: checkinDayEnd(now).toISOString() },
   };
@@ -63,7 +77,9 @@ export async function findUser(db: DbOrTx, id: string): Promise<UserRow | undefi
 
 export async function updateProfile(db: Db, userId: string, input: UpdateProfileInput): Promise<UserRow> {
   const patch: Partial<typeof users.$inferInsert> = {};
-  if (input.displayName !== undefined) patch.displayName = input.displayName;
+  // Display name is changed exclusively through the rename service (cooldown/card checks).
+  if (input.displayName !== undefined) throw fail('forbidden');
+  if (input.age !== undefined) patch.age = input.age;
   if (input.locale !== undefined) patch.locale = input.locale;
   if (input.avatar !== undefined) patch.avatar = input.avatar;
   if (Object.keys(patch).length === 0) return (await findUser(db, userId))!;
@@ -117,6 +133,7 @@ export async function leaderboard(db: Db, limit = 50): Promise<LeaderboardEntry[
       displayName: users.displayName,
       avatar: users.avatar,
       frame: users.frame,
+      avatarItem: users.avatarItem,
       isVerified: users.isVerified,
       isPartner: users.isPartner,
       balance: wallets.balance,

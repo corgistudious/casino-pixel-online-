@@ -6,6 +6,8 @@ import { DEMO_EXTRAS, IS_DEMO } from '../demo';
 import { formatChips } from '../lib/format';
 import { api, ApiError } from '../net/api';
 import { useSession } from '../store/session';
+import { ProgressStrip } from '../ui/ProgressStrip';
+import { TitleBadge } from '../ui/Cosmetics';
 import { AppShell, CharmIcon, DemoTag, VipMeter } from '../ui/AppShell';
 import { Avatar, avatarCount } from '../ui/Avatar';
 import { Button } from '../ui/Button';
@@ -45,14 +47,30 @@ export function ProfilePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [renameBusy, setRenameBusy] = useState(false);
+  const [useRenameCard, setUseRenameCard] = useState(false);
   const save = async () => {
     try {
-      const { user: fresh } = await api<{ user: PublicUser }>('/api/me', { method: 'PATCH', body: { displayName, avatar } });
+      const { user: fresh } = await api<{ user: PublicUser }>('/api/me', { method: 'PATCH', body: { avatar } });
       setUser(fresh);
       toast(t('profile.saved'), 'success');
     } catch (err) {
       fail(err);
     }
+  };
+
+  const rename = async () => {
+    setRenameBusy(true);
+    try {
+      const {user:fresh}=await api<{user:PublicUser}>('/api/me/rename',{method:'POST',body:{displayName:displayName.trim(),useCard:useRenameCard}});
+      setUser(fresh);setUseRenameCard(false);toast('Đổi tên thành công / Name changed','success');
+    } catch(err){fail(err);} finally {setRenameBusy(false);}
+  };
+  const buyRenameCard = async () => {
+    setRenameBusy(true);
+    try { const {user:fresh}=await api<{user:PublicUser}>('/api/shop/rename-card',{method:'POST'});
+      setUser(fresh);toast('Đã mua Thẻ Đổi Tên / Rename Card purchased','success');
+    } catch(err){fail(err);} finally{setRenameBusy(false);}
   };
 
   const rotate = async () => {
@@ -77,11 +95,16 @@ export function ProfilePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_30%,rgba(242,193,78,0.22),transparent_45%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(115deg,transparent_0_38px,rgba(255,241,184,0.04)_38px_40px)]" />
           <div className="relative flex flex-wrap items-center gap-4 p-4 lg:gap-6 lg:p-6">
-            <Avatar index={avatar} frame={user.frame} size={104} />
+            <Avatar index={avatar} frame={user.frame} avatarItem={user.avatarItem} size={104} />
             <div className="min-w-0 flex-1">
               <h1 className="font-display text-2xl font-bold lg:text-3xl">
                 <PlayerName name={user.displayName} badges={user.badges} size={26} />
               </h1>
+              {user.title && (
+                <div className="mt-1">
+                  <TitleBadge itemId={user.title} />
+                </div>
+              )}
               <div className="mt-0.5 flex flex-wrap gap-x-3 text-xs text-white/55">
                 <span className="tabular-nums">{t('player.id', { id: user.uid })}</span>
                 <span>@{user.username}</span>
@@ -89,6 +112,9 @@ export function ProfilePage() {
               </div>
               <div className="mt-3">
                 <VipMeter />
+              </div>
+              <div className="mt-2">
+                <ProgressStrip />
               </div>
             </div>
             <div className="grid w-full grid-cols-3 gap-2 sm:w-auto">
@@ -192,6 +218,16 @@ export function ProfilePage() {
                 <span className="text-white/60">{t('auth.displayName')}</span>
                 <input className="field" value={displayName} maxLength={24} onChange={(e) => setDisplayName(e.target.value)} />
               </label>
+              <div className="rounded-xl border border-gold-300/20 p-3 text-xs text-white/70">
+                <img src="/assets/official/rename-card.png" alt="Rename Card" className="mx-auto h-20 object-contain" />
+                <p>{user.renameFreeAvailable ? 'Đổi tên lần đầu miễn phí / First rename free' : user.renameAvailableAt && new Date(user.renameAvailableAt)>new Date() ? `Miễn phí lại sau / Free after: ${new Date(user.renameAvailableAt).toLocaleDateString()}` : 'Đã hết thời gian chờ / Free rename available'}</p>
+                <p>Thẻ Đổi Tên / Rename Cards: {user.renameCards}</p>
+                <label className="flex items-center gap-2 py-2"><input type="checkbox" checked={useRenameCard} onChange={e=>setUseRenameCard(e.target.checked)} /> Dùng thẻ nếu đang chờ 60 ngày / Use card to skip cooldown</label>
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="gold" disabled={renameBusy||displayName.trim()===user.displayName} onClick={()=>void rename()}>Đổi tên / Rename</Button>
+                  <Button variant="gold" disabled={renameBusy||user.gold<300} onClick={()=>void buyRenameCard()}>Mua thẻ / Buy · 300 Cxu Vàng</Button>
+                </div>
+              </div>
               <div>
                 <p className="mb-2 text-sm text-white/60">{t('profile.avatar')}</p>
                 <div className="grid grid-cols-8 gap-2">

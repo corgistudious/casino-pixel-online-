@@ -1,5 +1,7 @@
-import { DEFAULT_FRAME, findFrame } from '@casino/shared';
+import { DEFAULT_FRAME, findFrame, type CatalogItem } from '@casino/shared';
 import { useId } from 'react';
+import { assetSrc, useCatalog } from '../store/catalog';
+import { usesVuongGiaArt, VuongGiaAvatarArt, VuongGiaFrame } from './Cosmetics';
 
 /** 16 vector emblems: gradient pairs and glyph paths (24×24 viewBox). */
 const PALETTES: [string, string][] = [
@@ -28,12 +30,69 @@ export function avatarCount() {
   return PALETTES.length * 2;
 }
 
-/** `frame` is a shop frame id, or 'none'. Animated shop frames always spin; `animated` forces it for others. */
-export function Avatar({ index, size = 48, frame = DEFAULT_FRAME, animated = false }: { index: number; size?: number; frame?: string; animated?: boolean }) {
+/**
+ * Round avatar with its frame. `frame` is a catalog frame id or 'none'; `avatarItem` is an owned
+ * special avatar (catalog image) shown instead of the default emblem `index`.
+ */
+export function Avatar({
+  index,
+  size = 48,
+  frame = DEFAULT_FRAME,
+  animated = false,
+  avatarItem = null,
+}: {
+  index: number;
+  size?: number;
+  frame?: string;
+  animated?: boolean;
+  avatarItem?: string | null;
+}) {
+  const items = useCatalog((c) => c.items);
+  const special = avatarItem ? items[avatarItem] : undefined;
+  return (
+    <FramedAvatar
+      index={index}
+      size={size}
+      frame={frame}
+      frameItem={items[frame]}
+      avatarSrc={assetSrc(special?.assetUrl)}
+      avatarArt={!special?.assetUrl && usesVuongGiaArt(special) ? 'vuong_gia' : undefined}
+      animated={animated}
+    />
+  );
+}
+
+/**
+ * Rendering core, fed explicit data (the admin editor previews unreleased items with it).
+ * Uploaded frames are drawn around the circle with their render settings (scale/offset), centred
+ * on the avatar so they never cover the face or distort; built-in frames are gradient rings.
+ */
+export function FramedAvatar({
+  index,
+  size,
+  frame,
+  frameItem,
+  avatarSrc,
+  avatarArt,
+  animated = false,
+}: {
+  index: number;
+  size: number;
+  frame: string;
+  frameItem?: Pick<CatalogItem, 'assetUrl' | 'render'> & Partial<Pick<CatalogItem, 'style'>>;
+  avatarSrc?: string;
+  /** Built-in artwork avatar (e.g. the Vương Giả set) instead of an uploaded image. */
+  avatarArt?: 'vuong_gia';
+  animated?: boolean;
+}) {
   const id = useId();
   const palette = PALETTES[index % PALETTES.length]!;
   const glyph = GLYPHS[(index + Math.floor(index / PALETTES.length) * 3) % GLYPHS.length]!;
-  const inner = (
+  const inner = avatarArt === 'vuong_gia' ? (
+    <VuongGiaAvatarArt />
+  ) : avatarSrc ? (
+    <img src={avatarSrc} alt="" draggable={false} className="h-full w-full rounded-full object-cover" />
+  ) : (
     <svg viewBox="0 0 48 48" width="100%" height="100%" className="rounded-full">
       <defs>
         <radialGradient id={`${id}bg`} cx="35%" cy="30%" r="80%">
@@ -52,7 +111,31 @@ export function Avatar({ index, size = 48, frame = DEFAULT_FRAME, animated = fal
       <ellipse cx="24" cy="12" rx="17" ry="9" fill={`url(#${id}gl)`} />
     </svg>
   );
-  if (frame === 'none') return <div style={{ width: size, height: size }}>{inner}</div>;
+  if (frame === 'none') return <div className="shrink-0" style={{ width: size, height: size }}>{inner}</div>;
+  if (!frameItem?.assetUrl && frameItem?.style?.art === 'vuong_gia') {
+    return (
+      <div className="relative shrink-0" style={{ width: size, height: size }}>
+        <div className="absolute inset-[2px] overflow-hidden rounded-full ring-2 ring-[#2a0613]">{inner}</div>
+        <VuongGiaFrame size={size} />
+      </div>
+    );
+  }
+  if (frameItem?.assetUrl) {
+    const r = frameItem.render ?? { scale: 1.25, offsetX: 0, offsetY: 0 };
+    const w = size * r.scale;
+    return (
+      <div className="relative shrink-0" style={{ width: size, height: size }}>
+        <div className="absolute inset-0 overflow-hidden rounded-full">{inner}</div>
+        <img
+          src={assetSrc(frameItem.assetUrl)}
+          alt=""
+          draggable={false}
+          className="pointer-events-none absolute max-w-none select-none object-contain"
+          style={{ width: w, height: w, left: (size - w) / 2 + r.offsetX * size, top: (size - w) / 2 + r.offsetY * size }}
+        />
+      </div>
+    );
+  }
   return (
     <div className="relative shrink-0 rounded-full" style={{ width: size, height: size }}>
       <FrameRing frame={frame} animated={animated} />
@@ -62,12 +145,15 @@ export function Avatar({ index, size = 48, frame = DEFAULT_FRAME, animated = fal
   );
 }
 
+/** Built-in gradient ring: catalog style when loaded, otherwise the shared defaults. */
 export function FrameRing({ frame, animated = false }: { frame: string; animated?: boolean }) {
-  const item = findFrame(frame) ?? findFrame(DEFAULT_FRAME)!;
-  const stops = [...item.colors, item.colors[0]].join(', ');
+  const fromCatalog = useCatalog((c) => c.items[frame]?.style);
+  const fallback = findFrame(frame) ?? findFrame(DEFAULT_FRAME)!;
+  const style = fromCatalog ?? { colors: fallback.colors, animated: fallback.animated };
+  const stops = [...style.colors, style.colors[0]].join(', ');
   return (
     <div
-      className={`absolute inset-0 rounded-full ${item.animated || animated ? 'animate-spin-slow' : ''} ${item.animated ? 'shadow-glow' : ''}`}
+      className={`absolute inset-0 rounded-full ${style.animated || animated ? 'animate-spin-slow' : ''} ${style.animated ? 'shadow-glow' : ''}`}
       style={{ background: `conic-gradient(from 0deg, ${stops})` }}
     />
   );

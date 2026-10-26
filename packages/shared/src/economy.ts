@@ -38,7 +38,7 @@ export const ECONOMY = {
   bigWin: { multiplier: 10, minPayout: 5_000 },
 } as const;
 
-export const GAME_KEYS = ['slots', 'roulette', 'sicbo', 'blackjack'] as const;
+export const GAME_KEYS = ['slots', 'roulette', 'sicbo', 'blackjack', 'taixiu', 'poker', 'lieng', 'xito'] as const;
 export type GameKey = (typeof GAME_KEYS)[number];
 
 export const ERROR_CODES = [
@@ -69,6 +69,31 @@ export const ERROR_CODES = [
   'uid_reserved',
   'system_account',
   'deletion_pending',
+  'protected_account',
+  'reauth_required',
+  'idempotency_conflict',
+  'last_super_admin',
+  'mail_claimed',
+  'mail_expired',
+  'invalid_asset',
+  'not_tradable',
+  'table_not_found',
+  'betting_closed',
+  'table_unavailable',
+  'season_inactive',
+  'season_active',
+  'giftcode_invalid',
+  'giftcode_expired',
+  'giftcode_used_up',
+  'giftcode_already_redeemed',
+  'item_expired',
+  'seat_taken',
+  'already_seated',
+  'not_seated',
+  'buyin_range',
+  'hand_not_found',
+  'illegal_action',
+  'queue_unavailable',
   'item_not_found',
   'already_owned',
   'not_owned',

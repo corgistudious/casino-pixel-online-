@@ -8,8 +8,10 @@ import {
   verifyEmailSchema,
 } from '@casino/shared';
 import { eq } from 'drizzle-orm';
+import { z } from 'zod';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
-import { requireAccount, signToken } from '../auth/session';
+import { requireAccount, signReauthToken, signToken } from '../auth/session';
+import { verifyPassword } from '../auth/password';
 import type { Config } from '../config';
 import type { Db } from '../db/client';
 import { users } from '../db/schema';
@@ -29,12 +31,14 @@ import {
   type AccountContext,
 } from '../services/accounts';
 import { toPublicUser } from '../services/users';
+import { audit } from '../services/audit';
+import { fail } from '../errors';
 import { makeGuards } from './guards';
 
 export function registerAuthRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub, config: Config): void {
   const { authed } = makeGuards(app, db);
   const strict = { rateLimit: { max: 10, timeWindow: '1 minute' } };
-  const ctx = (req: FastifyRequest): AccountContext => ({ appUrl: config.APP_URL, admins: config.adminUsernames, ip: req.ip });
+  const ctx = (req: FastifyRequest): AccountContext => ({ appUrl: config.APP_URL, ip: req.ip });
 
   app.post('/api/auth/register', { config: strict }, async (req) => {
     const input = registerSchema.parse(req.body);
@@ -92,6 +96,21 @@ export function registerAuthRoutes(app: FastifyInstance, db: Db, hub: RealtimeHu
     const input = resetPasswordSchema.parse(req.body);
     const user = await setPasswordWithToken(db, 'activate', input, ctx(req));
     return { token: signToken(app, user), user: await toPublicUser(db, user) };
+  });
+
+  /**
+   * Step-up: re-enter the password to unlock sensitive admin actions for 10 minutes. The returned
+   * token goes in the x-keyo-reauth header and is useless as a session token.
+   */
+  app.post('/api/auth/reauth', { config: strict, preHandler: authed }, async (req) => {
+    const { password } = z.object({ password: z.string().min(1).max(128) }).parse(req.body);
+    const user = requireAccount(req);
+    if (!(await verifyPassword(password, user.passwordHash))) {
+      await audit(db, { actorId: user.id, action: 'auth.reauth_failed', targetType: 'user', targetId: user.uid, ip: req.ip });
+      throw fail('invalid_credentials');
+    }
+    await audit(db, { actorId: user.id, action: 'auth.reauth', targetType: 'user', targetId: user.uid, ip: req.ip });
+    return signReauthToken(app, user);
   });
 
   /** Invalidates every token issued to this account (all devices). */

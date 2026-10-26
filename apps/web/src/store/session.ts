@@ -24,11 +24,15 @@ interface SessionStore {
   boot(): Promise<void>;
   signIn(token: string, user: PublicUser, registered?: boolean): void;
   dismissWelcome(): void;
+  setUnread(count: number): void;
   signOut(): void;
   setUser(user: PublicUser): void;
   /** While held, wallet pushes are buffered so the balance updates after the animation. */
   holdBalance(): void;
   releaseBalance(balance?: number): void;
+  /** Level just reached (shows the level-up celebration), cleared when dismissed. */
+  levelUp: number | null;
+  dismissLevelUp(): void;
   setBalance(balance: number): void;
 }
 
@@ -51,6 +55,23 @@ export const useSession = create<SessionStore>((set, get) => {
       case 'bigwin':
         set({ bigWins: [ev.data, ...get().bigWins].slice(0, 20) });
         break;
+      case 'progress': {
+        const user = get().user;
+        if (user) set({ user: { ...user, level: ev.data.level.level } });
+        if (ev.data.levelsGained.length) set({ levelUp: ev.data.level.level });
+        break;
+      }
+      case 'profile':
+        // A timed item expired (or similar): show the server's current profile.
+        void api<{ user: PublicUser }>('/api/me').then(({ user }) => get().user && set({ user }), () => {});
+        break;
+      case 'mail': {
+        const user = get().user;
+        if (!user) break;
+        if (ev.data.unread !== undefined) set({ user: { ...user, unreadMail: ev.data.unread } });
+        else void api<{ unread: number }>('/api/mail').then(({ unread }) => get().user && set({ user: { ...get().user!, unreadMail: unread } }), () => {});
+        break;
+      }
     }
   };
   setUnauthorizedHandler(() => get().signOut());
@@ -65,6 +86,10 @@ export const useSession = create<SessionStore>((set, get) => {
     status: 'idle',
     bigWins: [],
     booting: true,
+    levelUp: null,
+    dismissLevelUp() {
+      set({ levelUp: null });
+    },
 
     async boot() {
       if (IS_DEMO) {
@@ -101,6 +126,11 @@ export const useSession = create<SessionStore>((set, get) => {
       held = false;
       pendingBalance = null;
       set({ token: null, user: null, balance: 0, gold: 0, justRegistered: false });
+    },
+
+    setUnread(unreadMail) {
+      const user = get().user;
+      if (user) set({ user: { ...user, unreadMail } });
     },
 
     dismissWelcome() {

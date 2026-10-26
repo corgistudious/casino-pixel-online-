@@ -5,8 +5,8 @@ import { parseKey } from '../../lib/bets';
 import { ensureDiceTextures, hdImage, hdScale } from '../art';
 import { TableScene } from './TableScene';
 
-const BOWL_X = 112;
-const BOWL_Y = 176;
+export const BOWL_X = 112;
+export const BOWL_Y = 176;
 const BX = 226;
 const BW = 404;
 const FELT: number | null = null;
@@ -14,8 +14,8 @@ const DARK = 0x0a3d26;
 
 export class SicBoScene extends TableScene {
   static readonly KEY = 'sicbo';
-  private dice: Phaser.GameObjects.Image[] = [];
-  private resultText!: Phaser.GameObjects.Text;
+  protected dice: Phaser.GameObjects.Image[] = [];
+  protected resultText!: Phaser.GameObjects.Text;
 
   constructor() {
     super(SicBoScene.KEY);
@@ -35,7 +35,7 @@ export class SicBoScene extends TableScene {
       this.dice.push(hdImage(this, BOWL_X + dx, BOWL_Y + (i === 1 ? -16 : 12), `die-${i + 1}`, 0.95));
     });
     this.resultText = this.text(BOWL_X, BOWL_Y + 96, '', { size: 15, display: true, shadow: true });
-    this.text(BX, 44, 'SIC BO', { size: 20, display: true, color: '#ffe08a', originX: 0, shadow: true });
+    this.text(BX, 44, this.title(), { size: 20, display: true, color: '#ffe08a', originX: 0, shadow: true });
 
     // Row 1: small · odd · any triple · even · big
     const y1 = 64;
@@ -70,6 +70,10 @@ export class SicBoScene extends TableScene {
       hdImage(this, x + sw / 2, y3 + 24, `die-${face}`, 0.7);
     }
     this.label(BX + BW / 2, y3 + 70, 'sicbo.single', { size: 9, color: '#f7e2a8' });
+  }
+
+  protected title() {
+    return 'SIC BO';
   }
 
   async roll(result: SicBoResult): Promise<void> {

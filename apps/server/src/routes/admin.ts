@@ -1,9 +1,10 @@
-import { adminBadgesSchema, adminGrantSchema, PERMISSIONS, SPECIAL_UID_MAX, usernameSchema, emailSchema } from '@casino/shared';
-import { and, desc, eq, ilike, or, sql } from 'drizzle-orm';
+import { adminBadgesSchema, adminGrantSchema, DEFAULT_ROLES, PERMISSIONS, roleRank, SPECIAL_UID_MAX, usernameSchema, emailSchema } from '@casino/shared';
+import { desc, eq, ilike, or, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import type { Db } from '../db/client';
-import { auditLogs, bans, emailOutbox, rolePermissions, roles, userRoles, users } from '../db/schema';
+import { auditLogs, bans, emailOutbox, rolePermissions, roles, users } from '../db/schema';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import {
@@ -16,7 +17,8 @@ import {
   updateBanEnd,
 } from '../services/accounts';
 import { audit } from '../services/audit';
-import { grantRole, userRoleIds } from '../services/rbac';
+import { runOnce } from '../services/adminOps';
+import { grantableRoles, grantStaffRole, isProtected, listStaff, rankOf, revokeStaffRole, userPermissions, userRoleIds } from '../services/rbac';
 import { badgesOf } from '../services/users';
 import { applyDelta, getWallet } from '../services/wallet';
 import type { Config } from '../config';
@@ -26,7 +28,14 @@ const uidParam = z.object({ uid: z.coerce.number().int().positive() });
 const page = z.object({ q: z.string().trim().max(100).optional(), limit: z.coerce.number().int().min(1).max(100).default(25), offset: z.coerce.number().int().min(0).default(0) });
 
 export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub, config: Config): void {
-  const { can } = makeGuards(app, db);
+  const { can, canReauth } = makeGuards(app, db);
+
+  /** Who am I in the admin panel: roles, rank, permissions and which roles I may hand out. */
+  app.get('/api/admin/me', { preHandler: can() }, async (req) => {
+    const me = req.account!;
+    const rank = await rankOf(db, me.id);
+    return { uid: me.uid, roles: await userRoleIds(db, me.id), rank, permissions: await userPermissions(db, me.id), grantableRoles: grantableRoles(rank) };
+  });
 
   app.get('/api/admin/overview', { preHandler: can('admin.access') }, async () => {
     const [row] = await db.execute<Record<string, string>>(sql`
@@ -65,13 +74,16 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
   // ---------------------------------------------------------------- players
   app.get('/api/admin/users', { preHandler: can('users.read') }, async (req) => {
     const { q, limit, offset } = page.parse(req.query);
+    // Email addresses are personal data: searchable and visible only with users.pii.
+    const pii = (await userPermissions(db, req.account!.id)).includes('users.pii');
+    const like = q ? `%${q.toLowerCase().replace(/[\\%_]/g, (c) => `\\${c}`)}%` : '';
     const where = q
       ? /^\d+$/.test(q)
         ? eq(users.uid, Number(q))
-        : or(ilike(users.usernameLower, `%${q.toLowerCase()}%`), ilike(users.emailLower, `%${q.toLowerCase()}%`), ilike(users.displayName, `%${q}%`))
+        : or(ilike(users.usernameLower, like), ilike(users.displayName, like), pii ? ilike(users.emailLower, like) : undefined)
       : undefined;
     const rows = await db
-      .select({ uid: users.uid, username: users.username, displayName: users.displayName, email: users.email, status: users.status, accountType: users.accountType, isTest: users.isTest, createdAt: users.createdAt })
+      .select({ uid: users.uid, username: users.username, displayName: users.displayName, email: pii ? users.email : sql<null>`NULL`, status: users.status, accountType: users.accountType, isTest: users.isTest, createdAt: users.createdAt })
       .from(users)
       .where(where)
       .orderBy(users.uid)
@@ -84,14 +96,39 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     const { uid } = uidParam.parse(req.params);
     const user = await findByUid(db, uid);
     if (!user) throw fail('not_found');
-    const userBans = await db.select().from(bans).where(eq(bans.userId, user.id)).orderBy(desc(bans.createdAt));
+    const viewerPerms = await userPermissions(db, req.account!.id);
+    const pii = viewerPerms.includes('users.pii');
+    // Violation history with who issued / lifted each ban.
+    const issuer = alias(users, 'issuer');
+    const lifter = alias(users, 'lifter');
+    const userBans = await db
+      .select({
+        id: bans.id,
+        reason: bans.reason,
+        evidence: bans.evidence,
+        startsAt: bans.startsAt,
+        endsAt: bans.endsAt,
+        revokedAt: bans.revokedAt,
+        revokeReason: bans.revokeReason,
+        createdAt: bans.createdAt,
+        issuedByUid: issuer.uid,
+        issuedByName: issuer.username,
+        revokedByUid: lifter.uid,
+        revokedByName: lifter.username,
+      })
+      .from(bans)
+      .leftJoin(issuer, eq(issuer.id, bans.issuedBy))
+      .leftJoin(lifter, eq(lifter.id, bans.revokedBy))
+      .where(eq(bans.userId, user.id))
+      .orderBy(desc(bans.createdAt));
     return {
       user: {
         uid: user.uid,
         username: user.username,
         displayName: user.displayName,
-        email: user.email,
+        email: pii ? user.email : null,
         emailVerified: !!user.emailVerifiedAt,
+        protected: isProtected(user),
         status: user.status,
         accountType: user.accountType,
         isTest: user.isTest,
@@ -140,7 +177,7 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     return { special: rows, nextPlayerUid: Number(next) };
   });
 
-  app.post('/api/admin/accounts', { preHandler: can('uid.assign') }, async (req) => {
+  app.post('/api/admin/accounts', { preHandler: canReauth('uid.assign') }, async (req) => {
     const input = z
       .object({
         uid: z.number().int().min(1).max(SPECIAL_UID_MAX),
@@ -150,42 +187,40 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
         isTest: z.boolean().optional(),
       })
       .parse(req.body);
-    const user = await createCustomUidAccount(db, req.account!.id, input, { appUrl: config.APP_URL, admins: config.adminUsernames, ip: req.ip });
+    const user = await createCustomUidAccount(db, req.account!.id, input, { appUrl: config.APP_URL, ip: req.ip });
     return { uid: user.uid, status: user.status };
   });
 
-  // ---------------------------------------------------------------- roles
-  app.get('/api/admin/roles', { preHandler: can('roles.manage') }, async () => {
+  // ---------------------------------------------------------------- staff & roles
+  app.get('/api/admin/staff', { preHandler: can('staff.read') }, async () => ({ staff: await listStaff(db) }));
+
+  app.get('/api/admin/roles', { preHandler: can('staff.read') }, async () => {
     const rows = await db.select().from(roles).orderBy(roles.id);
     const perms = await db.select().from(rolePermissions);
-    return { roles: rows.map((r) => ({ ...r, permissions: perms.filter((p) => p.roleId === r.id).map((p) => p.permission) })), catalogue: PERMISSIONS };
+    return {
+      roles: rows
+        .map((r) => ({ ...r, rank: roleRank(r.id), builtIn: r.id in DEFAULT_ROLES, permissions: perms.filter((p) => p.roleId === r.id).map((p) => p.permission) }))
+        .sort((a, b) => b.rank - a.rank),
+      catalogue: PERMISSIONS,
+    };
   });
 
-  app.post('/api/admin/users/:uid/roles', { preHandler: can('roles.manage') }, async (req) => {
+  const roleBody = z.object({ roleId: z.string().min(1).max(40) });
+
+  /** Grant a staff role. Only roles strictly below the actor's rank, never Owner, never to oneself. */
+  app.post('/api/admin/users/:uid/roles', { preHandler: canReauth('staff.manage') }, async (req) => {
     const { uid } = uidParam.parse(req.params);
-    const { roleId } = z.object({ roleId: z.string().min(1).max(40) }).parse(req.body);
-    const user = await findByUid(db, uid);
-    if (!user) throw fail('not_found');
-    if (user.accountType !== 'player') throw fail('system_account');
-    const [role] = await db.select().from(roles).where(eq(roles.id, roleId));
-    if (!role) throw fail('not_found');
-    await db.transaction(async (tx) => {
-      await grantRole(tx, user.id, roleId, req.account!.id);
-      await audit(tx, { actorId: req.account!.id, action: 'role.grant', targetType: 'user', targetId: uid, details: { roleId }, ip: req.ip });
-    });
-    return { roles: await userRoleIds(db, user.id) };
+    const { roleId } = roleBody.parse(req.body);
+    return { roles: await grantStaffRole(db, req.account!.id, uid, roleId, req.ip) };
   });
 
-  app.delete('/api/admin/users/:uid/roles/:roleId', { preHandler: can('roles.manage') }, async (req) => {
+  app.delete('/api/admin/users/:uid/roles/:roleId', { preHandler: canReauth('staff.manage') }, async (req) => {
     const { uid, roleId } = z.object({ uid: z.coerce.number().int().positive(), roleId: z.string().min(1).max(40) }).parse(req.params);
-    const user = await findByUid(db, uid);
-    if (!user) throw fail('not_found');
-    if (user.id === req.account!.id && roleId === 'super_admin') throw fail('forbidden');
-    await db.transaction(async (tx) => {
-      await tx.delete(userRoles).where(and(eq(userRoles.userId, user.id), eq(userRoles.roleId, roleId)));
-      await audit(tx, { actorId: req.account!.id, action: 'role.revoke', targetType: 'user', targetId: uid, details: { roleId }, ip: req.ip });
-    });
-    return { roles: await userRoleIds(db, user.id) };
+    const result = await revokeStaffRole(db, req.account!.id, uid, roleId, req.ip);
+    const target = await findByUid(db, uid);
+    // Permissions are re-read on every request; closing sockets makes the change immediate everywhere.
+    if (target) hub.kick(target.id);
+    return { roles: result };
   });
 
   // ---------------------------------------------------------------- deletion requests
@@ -194,7 +229,7 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     return { requests: await listDeletionRequests(db, status) };
   });
 
-  app.post('/api/admin/deletion-requests/:id/decide', { preHandler: can('deletion.manage') }, async (req) => {
+  app.post('/api/admin/deletion-requests/:id/decide', { preHandler: canReauth('deletion.manage') }, async (req) => {
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     const { approve, note } = z.object({ approve: z.boolean(), note: z.string().trim().min(3).max(500) }).parse(req.body);
     const result = await decideDeletion(db, req.account!.id, id, approve, note, req.ip);
@@ -219,18 +254,31 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     return { badges: badgesOf(row) };
   });
 
-  app.post('/api/admin/users/:uid/grant', { preHandler: can('economy.grant') }, async (req) => {
+  /**
+   * Add or remove Cxu. Owner/Super Admin only (economy.grant), password re-confirmed, with a
+   * reason, through the ledger, and at most once per idempotency key.
+   */
+  app.post('/api/admin/users/:uid/grant', { preHandler: canReauth('economy.grant') }, async (req) => {
     const { uid } = uidParam.parse(req.params);
-    const { amount, currency } = adminGrantSchema.parse(req.body);
+    const input = adminGrantSchema.parse(req.body);
     const target = await findByUid(db, uid);
     if (!target) throw fail('not_found');
-    await db.transaction(async (tx) => {
-      await applyDelta(tx, target.id, amount, 'admin_adjust', null, currency);
-      await audit(tx, { actorId: req.account!.id, action: 'economy.grant', targetType: 'user', targetId: uid, details: { amount, currency }, ip: req.ip });
+    if (target.status === 'deleted' || target.accountType !== 'player') throw fail('system_account');
+    const actorId = req.account!.id;
+    const { result, replayed } = await runOnce(db, input.idempotencyKey, actorId, 'economy.grant', { uid, amount: input.amount, currency: input.currency, reason: input.reason }, async (tx) => {
+      await applyDelta(tx, target.id, input.amount, 'admin_adjust', null, input.currency);
+      await audit(tx, {
+        actorId,
+        action: 'economy.grant',
+        targetType: 'user',
+        targetId: uid,
+        details: { amount: input.amount, currency: input.currency, reason: input.reason, idempotencyKey: input.idempotencyKey },
+        ip: req.ip,
+      });
+      return getWallet(tx, target.id);
     });
-    const wallet = await getWallet(db, target.id);
-    hub.sendToUser(target.id, { type: 'event', event: 'wallet', data: wallet });
-    return wallet;
+    if (!replayed) hub.sendToUser(target.id, { type: 'event', event: 'wallet', data: result });
+    return { ...result, replayed };
   });
 
   // ---------------------------------------------------------------- audit & mail

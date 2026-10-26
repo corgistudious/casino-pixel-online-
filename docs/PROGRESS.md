@@ -7,6 +7,43 @@ _Cập nhật: 2026-10-23_
 - Nhánh chính thức: **`Corgi-Casino`** (default branch trên GitHub).
 - Mọi thay đổi làm trên nhánh feature riêng và mở Pull Request vào `Corgi-Casino` để chủ dự án duyệt. Không reset, force-push hay xoá nhánh khi chưa được phép.
 
+## Master Development Prompt v2 — Giai đoạn 3: Khung, avatar, kho đồ, hộp thư (nhánh `claude/keyo-cosmetics`)
+
+- Catalog vật phẩm trong DB (khung, avatar đặc biệt, sưu tầm), có độ hiếm, nguồn nhận, trạng thái nháp/phát hành/ẩn. 6 khung cũ được seed; quyền sở hữu khung cũ được chuyển sang kho đồ mà không mất gì.
+- Upload ảnh an toàn: kiểm tra magic bytes, kích thước, tỷ lệ, dung lượng; không nhận SVG; ảnh lưu trong PostgreSQL.
+- Khung ảnh có thông số `scale`/`offset`, admin xem trước trên avatar mẫu.
+- Kho đồ thật (trang Bộ sưu tập): trang bị/tháo khung và avatar đặc biệt; không nhân đôi vật phẩm unique.
+- Hộp thư có quà đính kèm (Bạc/Vàng/vật phẩm): nhận một lần trong transaction; có hạn dùng; gửi theo UID hoặc toàn bộ người chơi; báo realtime.
+- Admin: trang Vật phẩm (upload, chỉnh vị trí khung, phát hành/ẩn, người sở hữu, tặng/thu hồi) và trang Hộp thư (soạn thư, lịch sử các đợt gửi, tỉ lệ đã nhận).
+- Sửa lỗi phát hiện khi chạy E2E:
+  - CORS không cho phép PUT/DELETE, khiến app Android/Windows không upload, xoá thư hay thu hồi vai trò được;
+  - catalog bị cache 60 giây nên vật phẩm mới không hiện ngay.
+- Chi tiết: `docs/COSMETICS_MAILBOX.md`.
+
+## Master Development Prompt v2 — Giai đoạn 2: Admin Panel (nhánh `claude/keyo-admin`, xếp chồng trên Giai đoạn 1)
+
+- Admin Panel mới (`/admin/*`), thanh điều hướng lọc theo quyền:
+  - **Tổng quan:** số liệu thật từ DB (người chơi, online, đăng ký mới, bị khóa, số ván, cược và trả thưởng 24h, Bạc/Vàng lưu hành), cảnh báo hệ thống, 3 biểu đồ hoạt động 14 ngày có tooltip và bảng, giao dịch gần đây (chỉ với quyền `economy.read`).
+  - **Người chơi:** tìm kiếm; tab tổng quan, kho đồ, ván chơi, sổ cái (`economy.read`), lịch sử bảo mật (`users.pii`), vi phạm (người khóa, người gỡ, bằng chứng). Có ban, cộng Cxu, huy hiệu, cấp vai trò theo quyền; tài khoản được bảo vệ bị khóa thao tác.
+  - **Nhân sự:** danh sách, cấp và thu hồi trong phạm vi rank.
+  - **Nhật ký kiểm toán:** lọc theo hành động, người thực hiện, đối tượng, thời gian.
+  - **UID đặc biệt, Yêu cầu xóa tài khoản, Hệ thống:** gồm hàng đợi email.
+- API mới: `GET /api/admin/dashboard`, `/api/admin/users/:uid/activity`, `/api/admin/users/:uid/ledger`, `/api/admin/audit/search`.
+- Chưa có (sẽ thêm cùng phân hệ tương ứng): số phòng đang hoạt động, tổng số dư ngân hàng, ticket chưa xử lý.
+
+## Master Development Prompt v2 — Giai đoạn 1: Security Foundation (nhánh `claude/keyo-security`)
+
+Baseline `main` @ `6932b19` (đã gồm PR #1–#5 và commit live từ VPS). Bảng đối chiếu toàn bộ yêu cầu: `docs/REQUIREMENTS_MATRIX.md`.
+
+- RBAC mới gồm 5 vai trò có rank, đồng bộ từ code; chống tự nâng quyền; ban, gỡ ban và duyệt xoá đều theo rank.
+- Owner UID 1002 và Keyo Support UID 1000 được bảo vệ bằng trigger DB. Owner tự gắn ở server; có lệnh `create-owner` khi DB chưa có UID 1002.
+- Bỏ việc cấp `super_admin` theo `ADMIN_USERNAMES` (lỗ hổng nghiêm trọng).
+- Xác thực lại cho thao tác nhạy cảm. Cộng/trừ Cxu có lý do bắt buộc và idempotency.
+- Audit log chỉ ghi thêm. Giới hạn tần suất toàn cục. Email chỉ hiện với quyền `users.pii`.
+- Sửa `deploy/Caddyfile` live gộp mọi người chơi thành một IP.
+- Test: 102 test server (27 test bảo mật mới, 1 test nâng cấp migration có dữ liệu cũ).
+- Chi tiết lỗ hổng và cách sửa: `docs/SECURITY_AUDIT.md`.
+
 ## KEYO GAME — Master Development (nhánh `claude/keyo-foundation`)
 
 Làm theo thứ tự phụ thuộc trong `docs/AUDIT.md`. **Dự án chưa hoàn tất** — dưới đây là trạng thái thật của từng giai đoạn.
@@ -96,6 +133,12 @@ Giao diện **chưa được duyệt**. Gameplay và tính năng mới tạm d�
 - Bản build server production (`pnpm deploy`) đã chạy thử và trả `/api/health` OK.
 - CI GitHub Actions (typecheck, test có Postgres + Redis, build); workflow build APK & EXE.
 - Kết quả test gần nhất: shared 33 ✓, server 32 ✓ (cả có và không Redis), web 4 ✓. E2E Playwright (desktop 1280×720 & mobile 844×390): đăng ký → chơi cả 4 game → hồ sơ → ranking, 0 lỗi console.
+
+## Giai đoạn 4a: bàn chơi chung Tài Xỉu & Roulette
+
+- Server: `RoundTableEngine` (đồng hồ server, advisory lock leader, chuyển trạng thái có bảo vệ, provably fair theo ván, hủy ván + hoàn tiền), migration `0006_shared_round_tables` (có rollback).
+- Client: `/tables/:id`, cảnh Tài Xỉu có bát úp, Roulette quay dài theo thời gian server, đồng bộ đồng hồ, cảnh báo 5 giây, tổng cược trực tiếp, lịch sử, provably fair.
+- Chi tiết: `docs/MULTIPLAYER.md`.
 
 ## ⚠️ Chưa kiểm chứng trong môi trường này
 

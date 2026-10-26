@@ -26,19 +26,14 @@ export function KeyoCrest({ size = 64 }: { size?: number }) {
   );
 }
 
-/** Crest + wordmark. */
+/** Official supplied transparent Keyo Game artwork. */
 export function KeyoLogo({ size = 48, className = '' }: { size?: number; className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-3 ${className}`}>
-      <KeyoCrest size={size} />
-      <span className="flex flex-col leading-none">
-        <span className="font-display font-black tracking-[0.12em] text-gold" style={{ fontSize: size * 0.62 }}>
-          KEYO
-        </span>
-        <span className="font-semibold tracking-[0.5em] text-white/70" style={{ fontSize: size * 0.22 }}>
-          GAME
-        </span>
-      </span>
-    </span>
+    <img
+      src="/assets/official/keyo-game-logo.png"
+      alt="Keyo Game"
+      className={`inline-block max-w-full object-contain ${className}`}
+      style={{ height: size, width: 'auto' }}
+    />
   );
 }

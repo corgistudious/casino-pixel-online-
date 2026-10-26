@@ -9,7 +9,12 @@ export interface Connection {
   close(reason: string): void;
 }
 
-type Envelope = { origin: string } & ({ kind: 'all'; msg: ServerMessage } | { kind: 'user'; userId: string; msg: ServerMessage } | { kind: 'kick'; userId: string });
+type Envelope = { origin: string } & (
+  | { kind: 'all'; msg: ServerMessage }
+  | { kind: 'user'; userId: string; msg: ServerMessage }
+  | { kind: 'kick'; userId: string }
+  | { kind: 'room'; room: string; msg: ServerMessage }
+);
 
 const MAX_BIG_WINS = 20;
 
@@ -25,6 +30,8 @@ export function redisKeys(prefix: string) {
 export class RealtimeHub {
   private readonly instanceId = randomUUID();
   private readonly byUser = new Map<string, Set<Connection>>();
+  /** Room (e.g. a game table) → sockets watching it on this instance. */
+  private readonly rooms = new Map<string, Set<Connection>>();
   private bigWins: BigWinEvent[] = [];
   private pub?: Redis;
   private sub?: Redis;
@@ -43,7 +50,10 @@ export class RealtimeHub {
       this.sub = new Redis(redisUrl, { lazyConnect: false, maxRetriesPerRequest: 2 });
       this.pub.on('error', (err) => this.log.warn({ err }, 'redis pub error'));
       this.sub.on('error', (err) => this.log.warn({ err }, 'redis sub error'));
-      void this.sub.subscribe(this.keys.channel);
+      // Subscribe on every (re)connect: if Redis is down at boot the first attempt fails, and that must neither
+      // crash the process (unhandled rejection) nor leave this instance deaf once Redis comes back.
+      const subscribe = () => void this.sub!.subscribe(this.keys.channel).catch((err) => this.log.warn({ err }, 'redis subscribe failed'));
+      this.sub.on('ready', subscribe);
       this.sub.on('message', (_ch, raw) => this.onRemote(raw));
     }
     this.timer = setInterval(() => void this.heartbeat(), 10_000);
@@ -68,6 +78,10 @@ export class RealtimeHub {
   }
 
   remove(conn: Connection): void {
+    for (const [room, members] of this.rooms) {
+      members.delete(conn);
+      if (members.size === 0) this.rooms.delete(room);
+    }
     const set = this.byUser.get(conn.userId);
     if (!set) return;
     set.delete(conn);
@@ -90,6 +104,33 @@ export class RealtimeHub {
 
   private kickLocal(userId: string): void {
     for (const conn of [...(this.byUser.get(userId) ?? [])]) conn.close('revoked');
+  }
+
+  join(room: string, conn: Connection): void {
+    let members = this.rooms.get(room);
+    if (!members) this.rooms.set(room, (members = new Set()));
+    members.add(conn);
+  }
+
+  leave(room: string, conn: Connection): void {
+    const members = this.rooms.get(room);
+    members?.delete(conn);
+    if (members?.size === 0) this.rooms.delete(room);
+  }
+
+  /** Sockets watching a room on this instance. */
+  roomSize(room: string): number {
+    return this.rooms.get(room)?.size ?? 0;
+  }
+
+  /** Sends to everyone watching a room, on every instance. */
+  publishRoom(room: string, msg: ServerMessage): void {
+    this.deliverRoom(room, msg);
+    this.publish({ origin: this.instanceId, kind: 'room', room, msg });
+  }
+
+  private deliverRoom(room: string, msg: ServerMessage): void {
+    for (const conn of this.rooms.get(room) ?? []) conn.send(msg);
   }
 
   broadcast(msg: ServerMessage): void {
@@ -151,6 +192,7 @@ export class RealtimeHub {
       if (env.origin === this.instanceId) return;
       if (env.kind === 'all') this.deliverAll(env.msg);
       else if (env.kind === 'kick') this.kickLocal(env.userId);
+      else if (env.kind === 'room') this.deliverRoom(env.room, env.msg);
       else this.deliverToUser(env.userId, env.msg);
     } catch (err) {
       this.log.warn({ err }, 'bad realtime envelope');

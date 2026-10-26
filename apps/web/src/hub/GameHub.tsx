@@ -21,13 +21,23 @@ import { Stage } from './Stage';
 
 type GameId = 'poker' | 'sicbo' | 'roulette' | 'lieng' | 'xito' | 'blackjack';
 
+/** Live games open their shared multiplayer table; the solo versions stay reachable from it. */
+const LIVE_ROUTE: Partial<Record<GameId, string>> = {
+  sicbo: '/tables/taixiu-1',
+  roulette: '/tables/roulette-1',
+  blackjack: '/play/blackjack',
+  poker: '/rooms?game=poker',
+  lieng: '/rooms?game=lieng',
+  xito: '/rooms?game=xito',
+};
+
 /** Official line-up. Royal Slots keeps its code and route but is not listed. */
 const GAMES: { id: GameId; live: boolean; Art: () => JSX.Element }[] = [
-  { id: 'poker', live: false, Art: PokerArt },
+  { id: 'poker', live: true, Art: PokerArt },
   { id: 'sicbo', live: true, Art: SicBoArt },
   { id: 'roulette', live: true, Art: RouletteArt },
-  { id: 'lieng', live: false, Art: LiengArt },
-  { id: 'xito', live: false, Art: XiToArt },
+  { id: 'lieng', live: true, Art: LiengArt },
+  { id: 'xito', live: true, Art: XiToArt },
   { id: 'blackjack', live: true, Art: BlackjackArt },
 ];
 
@@ -37,7 +47,7 @@ const DOCK: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/market', icon: 'market', label: 'nav.market' },
   { to: '/collection', icon: 'collection', label: 'nav.collection' },
   { to: '/vip', icon: 'vip', label: 'nav.vip' },
-  { to: '/missions', icon: 'missions', label: 'nav.missions' },
+  { to: '/rank', icon: 'rank', label: 'nav.rank' },
   { to: '/leaderboard', icon: 'leaderboard', label: 'nav.leaderboard' },
   { to: '/profile', icon: 'profile', label: 'nav.profile' },
 ];
@@ -75,12 +85,13 @@ function Hud({ s }: { s: Sizes }) {
       <div className="pointer-events-none absolute inset-x-0 bottom-3 h-[2px] bg-gradient-to-r from-transparent via-[#f2c14e]/70 to-transparent" />
 
       <Link to="/profile" className="relative flex items-center" style={{ gap: s.gap * 0.7 }}>
-        <Avatar index={user.avatar} frame={user.frame} size={s.avatar} />
+        <Avatar index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={s.avatar} />
         <div className="min-w-0">
           <div style={{ fontSize: s.name }}>
             <PlayerName name={user.displayName} badges={user.badges} size={s.name * 0.95} className="max-w-[11em] font-bold" />
           </div>
-          <div className="tabular-nums text-white/55" style={{ fontSize: s.small }}>
+          <div className="flex items-center gap-2 tabular-nums text-white/55" style={{ fontSize: s.small }}>
+            <span className="rounded-full border border-gold-300/50 bg-black/40 px-2 font-bold text-gold-100">{t('level.short', { level: user.level })}</span>
             {t('player.id', { id: user.uid })}
           </div>
         </div>
@@ -122,15 +133,15 @@ function Hud({ s }: { s: Sizes }) {
             </div>
           </div>
         ))}
-        {(user.uid === 1002 || user.role === 'admin') && (
+        {user.permissions.includes('admin.access') && (
           <Link
             to="/admin"
-            title="Quản trị"
-            aria-label="Quản trị"
+            title={t('nav.admin')}
+            aria-label={t('nav.admin')}
             className="flex items-center justify-center rounded-full border border-[#f2c14e]/70 bg-gradient-to-b from-[#493074] to-[#1c103e] px-3 font-bold text-[#ffe08a] transition hover:brightness-125"
             style={{ height: s.coin * 0.85, fontSize: s.small * 0.85 }}
           >
-            Quản trị
+            {t('nav.admin')}
           </Link>
         )}
         <Link
@@ -185,7 +196,7 @@ function Banner({ s, openCheckin }: { s: Sizes; openCheckin: () => void }) {
   const reduceMotion = useSettings((st) => st.reduceMotion);
   const [index, setIndex] = useState(0);
   const slides: Slide[] = [
-    { key: 'roulette', art: <BannerRouletteArt />, action: () => navigate('/play/roulette') },
+    { key: 'roulette', art: <BannerRouletteArt />, action: () => navigate('/tables/roulette-1') },
     { key: 'welcome', art: <BannerGiftArt />, action: openCheckin },
     {
       key: 'vip',
@@ -309,7 +320,7 @@ function GameCard({ s, game, index, cardW }: { s: Sizes; game: (typeof GAMES)[nu
   };
   const open = () => {
     sfx.click();
-    if (game.live) navigate(`/play/${game.id}`);
+    if (game.live) navigate(LIVE_ROUTE[game.id] ?? `/play/${game.id}`);
     else {
       toast(t('hub.soonToast', { game: name }));
       setShake(true);
@@ -441,7 +452,7 @@ export function GameHub() {
                 <main className="flex min-h-0 flex-1" style={{ paddingInline: s.pad, gap: s.gap, paddingTop: s.gap * 0.5 }}>
                   <div className="flex shrink-0 flex-col items-center justify-center" style={{ width: s.side, gap: s.gap * 1.2 }}>
                     <SideButton s={s} icon="gifts" label={t('checkin.claim')} onClick={() => setCheckinOpen(true)} dot={!user.checkin.claimedToday} />
-                    <SideButton s={s} icon="missions" label={t('nav.missions')} to="/missions" />
+                    <SideButton s={s} icon="mail" label={t('nav.mail')} to="/mail" dot={user.unreadMail > 0} />
                     <SideButton s={s} icon="market" label={t('nav.market')} to="/market" />
                   </div>
                   <div className="shrink-0 animate-rise" style={{ width: `${s.banner * 100}%` }}>

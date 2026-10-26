@@ -154,7 +154,7 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => search(), []);
   useEffect(() => {
-    if (can('roles.manage')) void api<{ roles: { id: string }[] }>('/api/admin/roles').then((r) => setRoles(r.roles.map((x) => x.id)), () => {});
+    if (can('staff.manage')) void api<{ roles: { id: string }[] }>('/api/admin/roles').then((r) => setRoles(r.roles.map((x) => x.id)), () => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -242,7 +242,7 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
               </div>
             )}
 
-            {can('roles.manage') && (
+            {can('staff.manage') && (
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-white/60">{t('admin.roles')}:</span>
                 {detail.user.roles.map((r) => (

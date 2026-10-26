@@ -412,6 +412,72 @@ export function ensureDiceTextures(scene: Phaser.Scene) {
   }
 }
 
+export const BOWL_W = 150;
+export const BOWL_H = 128;
+
+/**
+ * Porcelain Tài Xỉu bowl (bát úp) seen slightly from the front: glazed dome with a blue
+ * cloud band, gold rim and foot ring. Drawn so its rim sits on the dice plate.
+ */
+export function ensureBowlTexture(scene: Phaser.Scene) {
+  hdTexture(scene, 'taixiu-bowl', BOWL_W, BOWL_H, (ctx) => {
+    const cx = BOWL_W / 2;
+    const rimY = BOWL_H - 22;
+    const rx = BOWL_W / 2 - 4;
+    // Contact shadow under the rim.
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.beginPath();
+    ctx.ellipse(cx, rimY + 8, rx, 13, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Dome body.
+    ctx.beginPath();
+    ctx.moveTo(cx - rx, rimY);
+    ctx.bezierCurveTo(cx - rx, 16, cx + rx, 16, cx + rx, rimY);
+    ctx.ellipse(cx, rimY, rx, 12, 0, 0, Math.PI, false);
+    ctx.closePath();
+    ctx.fillStyle = linear(ctx, 0, 10, 0, rimY + 12, [
+      [0, '#ffffff'],
+      [0.45, '#eef1f8'],
+      [1, '#b9c2d6'],
+    ]);
+    ctx.fill();
+    // Cobalt cloud band.
+    ctx.save();
+    ctx.clip();
+    ctx.strokeStyle = 'rgba(28,62,150,0.85)';
+    ctx.lineWidth = 2.2;
+    for (let i = 0; i < 6; i++) {
+      const x = cx - rx + 14 + i * ((rx * 2 - 28) / 5);
+      ctx.beginPath();
+      ctx.arc(x, rimY - 34, 7, Math.PI, 0);
+      ctx.arc(x + 7, rimY - 34, 4, Math.PI, 0);
+      ctx.stroke();
+    }
+    ctx.fillStyle = 'rgba(28,62,150,0.9)';
+    ctx.fillRect(cx - rx, rimY - 22, rx * 2, 3);
+    ctx.fillRect(cx - rx, rimY - 50, rx * 2, 2);
+    ctx.restore();
+    // Gold knob and rim.
+    ctx.fillStyle = linear(ctx, cx - 14, 0, cx + 14, 0, GOLD);
+    ctx.beginPath();
+    ctx.ellipse(cx, 20, 15, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = linear(ctx, cx - rx, 0, cx + rx, 0, GOLD);
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.ellipse(cx, rimY, rx, 12, 0, 0, Math.PI);
+    ctx.stroke();
+    // Glaze highlight.
+    ctx.fillStyle = radial(ctx, cx - rx * 0.4, 38, 0, rx * 0.7, [
+      [0, 'rgba(255,255,255,0.85)'],
+      [1, 'rgba(255,255,255,0)'],
+    ]);
+    ctx.beginPath();
+    ctx.ellipse(cx - rx * 0.35, 44, rx * 0.35, 18, -0.4, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
 // ---------------------------------------------------------------- roulette
 
 export const WHEEL_SIZE = 150;
@@ -805,5 +871,65 @@ export function ensureSlotCabinet(scene: Phaser.Scene, w: number, h: number) {
     ctx.fillStyle = linear(ctx, 0, 0, 0, 40, [[0, 'rgba(255,255,255,0.12)'], [1, 'rgba(255,255,255,0)']]);
     roundRect(ctx, 8, 8, w - 16, 36, 11);
     ctx.fill();
+  });
+}
+
+/**
+ * Card back drawn from a cosmetic's colours (Poker, Liêng, Xì Tố). `royal` adds the Vương Giả crown.
+ * Purely decorative: a back never reveals the card.
+ */
+export function ensureCardBackTexture(scene: Phaser.Scene, key: string, colors: string[], royal = false) {
+  hdTexture(scene, key, CARD_W, CARD_H, (ctx) => {
+    const W = CARD_W;
+    const H = CARD_H;
+    const [a = '#7a1630', b = '#3e0816', accent = '#f7d77a'] = colors.length >= 3 ? colors : [...colors, '#f7d77a'];
+    roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4);
+    ctx.fillStyle = '#fbf7ee';
+    ctx.fill();
+    roundRect(ctx, 2, 2, W - 4, H - 4, 3.5);
+    ctx.fillStyle = linear(ctx, 0, 0, W, H, [
+      [0, b],
+      [1, a],
+    ]);
+    ctx.fill();
+    ctx.save();
+    roundRect(ctx, 4, 4, W - 8, H - 8, 2.5);
+    ctx.clip();
+    ctx.strokeStyle = accent;
+    ctx.globalAlpha = 0.3;
+    ctx.lineWidth = 0.5;
+    for (let i = -H; i < W + H; i += 4) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i + H, H);
+      ctx.moveTo(i + H, 0);
+      ctx.lineTo(i, H);
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.strokeStyle = royal ? linear(ctx, 0, 0, W, H, GOLD) : accent;
+    ctx.lineWidth = royal ? 1.4 : 0.9;
+    roundRect(ctx, 4, 4, W - 8, H - 8, 2.5);
+    ctx.stroke();
+    if (royal) {
+      ctx.fillStyle = '#2a0613';
+      ctx.beginPath();
+      ctx.arc(W / 2, H / 2, 11, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = linear(ctx, W / 2 - 8, H / 2 - 6, W / 2 + 8, H / 2 + 6, GOLD);
+      ctx.beginPath();
+      ctx.moveTo(W / 2 - 7, H / 2 + 4);
+      ctx.lineTo(W / 2 - 8, H / 2 - 4);
+      ctx.lineTo(W / 2 - 3.5, H / 2);
+      ctx.lineTo(W / 2, H / 2 - 6);
+      ctx.lineTo(W / 2 + 3.5, H / 2);
+      ctx.lineTo(W / 2 + 8, H / 2 - 4);
+      ctx.lineTo(W / 2 + 7, H / 2 + 4);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.fillStyle = accent;
+      diamondSuit(ctx, W / 2, H / 2, 16);
+    }
   });
 }

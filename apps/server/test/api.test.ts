@@ -1,7 +1,8 @@
 import { CHECKIN_REWARDS, checkinDate, ECONOMY, FRAMES } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { register, startTestApp, type TestApp } from './helpers';
+import { randomUUID } from 'node:crypto';
+import { createOwner, register, startTestApp, type TestApp } from './helpers';
 
 let t: TestApp;
 beforeAll(async () => {
@@ -27,17 +28,28 @@ describe('auth & profile', () => {
     const { token, user } = await register(t, 'alice');
     expect(user.balance).toBe(ECONOMY.welcome.silver);
     const me = await t.app.inject({ url: '/api/me', headers: { authorization: `Bearer ${token}` } });
-    expect(me.json().user.username).toBe('alice');
+    expect(me.statusCode).toBe(200);
+    expect(me.json().user.uid).toBe(user.uid);
+    expect(me.json().user.username).toBe(user.username);
+    expect(user.username).toMatch(/^player_[a-f0-9]+$/);
   });
 
-  it('rejects duplicate usernames case-insensitively', async () => {
+  it('rejects duplicate emails case-insensitively', async () => {
+    const first = await register(t);
+    const email = first.user.email;
     const res = await t.app.inject({
       method: 'POST',
       url: '/api/auth/register',
-      payload: { username: 'ALICE', displayName: 'A', email: 'other@example.test', password: 'password123', confirmPassword: 'password123', acceptTerms: true },
+      payload: {
+        displayName: 'Another Player',
+        email: email.toUpperCase(),
+        password: 'password123',
+        confirmPassword: 'password123',
+        acceptTerms: true,
+      },
     });
     expect(res.statusCode).toBe(409);
-    expect(res.json().error.code).toBe('username_taken');
+    expect(res.json().error.code).toBe('email_taken');
   });
 
   it('validates input', async () => {
@@ -46,11 +58,22 @@ describe('auth & profile', () => {
     expect(res.json().error.code).toBe('bad_request');
   });
 
-  it('logs in and rejects bad passwords', async () => {
-    const ok = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'Alice', password: 'password123' } });
+  it('logs in by UID and rejects bad passwords', async () => {
+    const player = await register(t);
+    const loginId = String(player.user.uid);
+    const ok = await t.app.inject({
+      method: 'POST',
+      url: '/api/auth/login',
+      payload: { login: loginId, password: 'password123' },
+    });
     expect(ok.statusCode).toBe(200);
     expect(ok.json().token).toBeTypeOf('string');
-    const bad = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'alice', password: 'wrongwrong' } });
+    expect(ok.json().user.uid).toBe(player.user.uid);
+    const bad = await t.app.inject({
+      method: 'POST',
+      url: '/api/auth/login',
+      payload: { login: loginId, password: 'wrongwrong' },
+    });
     expect(bad.statusCode).toBe(401);
     expect(bad.json().error.code).toBe('invalid_credentials');
   });
@@ -60,15 +83,36 @@ describe('auth & profile', () => {
     expect(res.statusCode).toBe(401);
   });
 
-  it('updates profile', async () => {
+  it('updates profile without bypassing rename rules', async () => {
     const { token } = await register(t);
+    const headers = { authorization: `Bearer ${token}` };
+    const before = await t.app.inject({ url: '/api/me', headers });
+    expect(before.statusCode).toBe(200);
+    const originalName = before.json().user.displayName;
+
     const res = await t.app.inject({
       method: 'PATCH',
       url: '/api/me',
-      headers: { authorization: `Bearer ${token}` },
-      payload: { displayName: 'Lucky', locale: 'en', avatar: 3 },
+      headers,
+      payload: { locale: 'en', avatar: 3 },
     });
-    expect(res.json().user).toMatchObject({ displayName: 'Lucky', locale: 'en', avatar: 3 });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().user).toMatchObject({
+      displayName: originalName,
+      locale: 'en',
+      avatar: 3,
+    });
+
+    const forbidden = await t.app.inject({
+      method: 'PATCH',
+      url: '/api/me',
+      headers,
+      payload: { displayName: 'Lucky' },
+    });
+    expect(forbidden.statusCode).not.toBe(200);
+
+    const after = await t.app.inject({ url: '/api/me', headers });
+    expect(after.json().user.displayName).toBe(originalName);
   });
 
   it('logout-all revokes existing tokens', async () => {
@@ -198,11 +242,10 @@ describe('admin', () => {
     const denied = await t.app.inject({ url: '/api/admin/overview', headers: { authorization: `Bearer ${player.token}` } });
     expect(denied.statusCode).toBe(403);
 
-    // ADMIN_USERNAMES grants super_admin on login (registering alone grants nothing).
-    await register(t, 'boss');
-    const login = await t.app.inject({ method: 'POST', url: '/api/auth/login', payload: { login: 'boss', password: 'password123' } });
-    const headers = { authorization: `Bearer ${login.json().token}` };
-    expect(login.json().user.permissions).toContain('admin.access');
+    // Registering grants nothing; the Owner (UID 1002) holds every permission.
+    const owner = await createOwner(t);
+    const headers = owner.headers;
+    expect((await t.app.inject({ url: '/api/me', headers })).json().user.permissions).toContain('admin.access');
     const overview = await t.app.inject({ url: '/api/admin/overview', headers });
     expect(overview.statusCode).toBe(200);
     expect(overview.json().users).toBeGreaterThan(0);
@@ -211,14 +254,14 @@ describe('admin', () => {
       method: 'POST',
       url: `/api/admin/users/${player.user.uid}/grant`,
       headers,
-      payload: { amount: 500 },
+      payload: { amount: 500, reason: 'test grant', idempotencyKey: randomUUID() },
     });
     expect(grant.json().balance).toBe(ECONOMY.welcome.silver + 500);
     const gold = await t.app.inject({
       method: 'POST',
       url: `/api/admin/users/${player.user.uid}/grant`,
       headers,
-      payload: { amount: 7, currency: 'gold' },
+      payload: { amount: 7, currency: 'gold', reason: 'test gold', idempotencyKey: randomUUID() },
     });
     expect(gold.json().gold).toBe(ECONOMY.welcome.gold + 7);
     await ledgerMatches(player.user.id);
