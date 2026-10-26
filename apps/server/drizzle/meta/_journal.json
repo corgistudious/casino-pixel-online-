@@ -148,6 +148,20 @@
       "when": 1792904555917,
       "tag": "0020_social_upgrade",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1792904555918,
+      "tag": "0021_mission_rewards",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1792904555919,
+      "tag": "0022_support_center",
+      "breakpoints": true
     }
   ]
 }

@@ -226,3 +226,47 @@ export const guildUpdateSchema = z.object({
   color: guildText.color.optional(),
   joinPolicy: guildText.joinPolicy.optional(),
 });
+
+// ---------------------------------------------------------------- support center
+
+export const SUPPORT_CATEGORIES = ['account', 'game', 'payment', 'report', 'other'] as const;
+export type SupportCategory = (typeof SUPPORT_CATEGORIES)[number];
+export type SupportStatus = 'open' | 'in_progress' | 'closed';
+/** A player may reopen a closed ticket for this long; after that they open a new one. */
+export const SUPPORT_REOPEN_DAYS = 14;
+
+export interface SupportTicketView {
+  id: string;
+  category: SupportCategory;
+  subject: string;
+  status: SupportStatus;
+  createdAt: string;
+  updatedAt: string;
+  closedAt: string | null;
+  /** A support reply the player has not opened yet. */
+  unread: boolean;
+  lastMessage: string | null;
+}
+
+export interface SupportMessageView {
+  id: string;
+  fromStaff: boolean;
+  /** Players see "Keyo Support" for every staff reply; staff see who wrote it. */
+  author: string;
+  body: string;
+  createdAt: string;
+}
+
+export interface StaffTicketView extends SupportTicketView {
+  player: { uid: number; displayName: string };
+  assignee: { uid: number; displayName: string } | null;
+  /** A player message staff have not opened yet. */
+  awaitingStaff: boolean;
+}
+
+export const supportCreateSchema = z.object({
+  category: z.enum(SUPPORT_CATEGORIES),
+  subject: z.string().trim().min(4).max(140),
+  message: z.string().trim().min(10).max(4000),
+});
+export const supportReplySchema = z.object({ message: z.string().trim().min(1).max(4000) });

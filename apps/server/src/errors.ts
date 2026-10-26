@@ -42,6 +42,7 @@ export function statusFor(code: ErrorCode): number {
     case 'last_super_admin':
     case 'already_in_guild':
     case 'guild_name_taken':
+    case 'already_claimed':
       return 409;
     case 'too_soon':
     case 'too_many_attempts':

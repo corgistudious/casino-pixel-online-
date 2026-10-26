@@ -96,7 +96,7 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerProgressionRoutes(app, db, hub);
   registerGiftcodeRoutes(app, db, hub);
   registerBankRoutes(app, db, hub);
-  registerSupportRoutes(app, db);
+  registerSupportRoutes(app, db, hub);
   registerMarketRoutes(app, db);
   registerVipRoutes(app, db);
   registerChatRoutes(app, db, hub);

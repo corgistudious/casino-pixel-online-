@@ -318,6 +318,8 @@ export interface ResponseMap {
 export type ServerEvent =
   | { event: 'chatMessage'; data: ChatMessageView & { peerUid?: number } }
   | { event: 'chatRemoved'; data: { id: number; channel: ChatChannel } }
+  /** A support reply or status change on one of my tickets. */
+  | { event: 'support'; data: { ticketId: string } }
   /** Friends, gifts and guild changes; the client refetches what it shows. */
   | { event: 'social'; data: { kind: string; uid?: number; guildId?: string } }
   | { event: 'wallet'; data: { balance: number; gold?: number } }
