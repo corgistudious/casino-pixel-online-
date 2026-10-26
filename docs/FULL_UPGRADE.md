@@ -45,7 +45,7 @@ Chủ bang bị ban trên 30 ngày (hoặc vĩnh viễn) sẽ tự chuyển quy�
 - Natural Blackjack trả 3:2.
 - Hit, Stand, Double.
 - **Split:** tối đa 4 tay. Tách Át thì mỗi tay nhận đúng 1 lá. Được Double sau khi Split. 21 sau khi Split trả 1:1.
-- Không có Insurance và Surrender (không có nút).
+- Insurance khi nhà cái ngửa A (xem `docs/BLACKJACK_LIVE.md`). Chưa có Surrender.
 
 **Server:**
 - Tiền cược Double/Split bị trừ qua ledger trước khi hành động; không đủ tiền thì huỷ cả hành động.
@@ -54,7 +54,7 @@ Chủ bang bị ban trên 30 ngày (hoặc vĩnh viễn) sẽ tự chuyển quy�
 - Gửi lại cùng request id thì server phát lại kết quả, không thực hiện lần nữa.
 - Ván cũ lưu theo định dạng một tay vẫn chơi tiếp được.
 
-**Phạm vi:** chỉ có chế độ chơi đơn. Bàn Blackjack nhiều người **chưa làm**.
+**Bàn nhiều người** (tối đa 5 người): xem `docs/BLACKJACK_LIVE.md`.
 
 ## 3. Bank
 
@@ -94,7 +94,7 @@ Chủ bang bị ban trên 30 ngày (hoặc vĩnh viễn) sẽ tự chuyển quy�
   - Tặng được Cxu Bạc hoặc vật phẩm sưu tầm cho phép chuyển nhượng (không đang rao bán, chưa hết hạn).
   - **Cxu Vàng không tặng được.**
   - Phải là bạn bè đủ 24 giờ.
-  - Mỗi lần 100–100.000 Cxu Bạc; mỗi ngày tối đa 200.000 Cxu Bạc và 20 lần.
+  - Mỗi lần 100–5.000 Cxu Bạc; mỗi người gửi tối đa 5.000 Cxu Bạc mỗi ngày (cập nhật trong `docs/BLACKJACK_LIVE.md`).
   - Trừ người gửi và cộng người nhận trong cùng một giao dịch.
   - Mỗi lần tặng có id do client tạo, nên không bao giờ gửi hai lần.
   - Có lịch sử tặng và nhận.
@@ -123,9 +123,9 @@ Chủ bang bị ban trên 30 ngày (hoặc vĩnh viễn) sẽ tự chuyển quy�
 
 - **Tiến độ:** chỉ tính từ ván đã kết thúc (`game_rounds`) và kết quả Rank thật (`rank_events`). Trận bỏ ngang (rời trận hoặc AFK) không được tính.
 - **Nhận thưởng:** mỗi kỳ chỉ nhận một lần (khoá chính trên `quest_claims`); trả qua ledger.
-- **EXP VIP từ nhiệm vụ Rank:** tối đa **100 mỗi tuần** (`MISSION_RULES.vipExpWeeklyCap`).
+- **EXP VIP từ nhiệm vụ Rank:** mặc định tối đa **100 mỗi tuần**; Owner chỉnh trong khoảng 0–300.
 - Ba mã nhiệm vụ cũ vẫn giữ, nên lượt nhận trước bản nâng cấp vẫn được tính.
-- **Cần Owner duyệt mức thưởng** trong `packages/shared/src/missions.ts` trước khi lên Production.
+- Mức thưởng do Owner (UID 1002) cấu hình trong **Admin → Nhiệm vụ** (xem `docs/BLACKJACK_LIVE.md`).
 
 ## 8. Chat
 
@@ -150,6 +150,7 @@ Mỗi migration có file rollback thủ công trong `apps/server/drizzle/rollbac
 | `0020_social_upgrade` | Thông tin bang mới (giới thiệu, huy hiệu, màu, chế độ gia nhập, giải tán); tên bang chỉ phải duy nhất trong các bang đang hoạt động; bảng `guild_invites`, `guild_log`, `gift_transfers`; bỏ trigger tự kết bạn với UID 1000; index tin nhắn chưa đọc |
 | `0021_mission_rewards` | `quest_claims.reward`, `quest_claims.vip_exp` |
 | `0022_support_center` | `support_ticket_messages.from_staff` (điền sẵn cho dữ liệu cũ) và các cột theo dõi đã đọc của ticket |
+| `0023_mission_settings`, `0024_blackjack_tables` | Xem `docs/BLACKJACK_LIVE.md` |
 
 `TEST_DATA_TABLES` đã đăng ký các bảng mới có tham chiếu người dùng.
 
