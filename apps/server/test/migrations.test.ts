@@ -161,3 +161,40 @@ describe('0008_rewards_cosmetics upgrade', () => {
     expect((await rows(sql`SELECT 1 FROM catalog_items WHERE id LIKE 'vuong_gia_%' AND NOT tradable AND price_silver IS NULL`)).length).toBe(4);
   });
 });
+
+describe('0020–0022 social, missions and support upgrade', () => {
+  it('keeps friendships, guilds, claims and tickets; back-fills who wrote each ticket message', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(20) }); // 0000–0019: the live schema before this release
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name, account_type) VALUES (1000, 'keyo_support', 'keyo_support', '!', 'Keyo Support', 'system_support')`);
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES
+      (100900, 'lead', 'lead', 'x', 'Lead'), (100901, 'mate', 'mate', 'x', 'Mate'), (100902, 'agent', 'agent', 'x', 'Agent')`);
+    // The 0019 trigger attached Support as everyone's friend; real friendships exist too.
+    await db.execute(sql`INSERT INTO friendships (user_id, friend_id) SELECT a.id, b.id FROM users a, users b WHERE a.uid = 100900 AND b.uid = 100901`);
+    await db.execute(sql`INSERT INTO guilds (name, owner_id, points) SELECT 'Old Guild', id, 1234 FROM users WHERE uid = 100900`);
+    await db.execute(sql`INSERT INTO guild_members (user_id, guild_id, role) SELECT u.id, g.id, 'owner' FROM users u, guilds g WHERE u.uid = 100900`);
+    await db.execute(sql`INSERT INTO quest_claims (user_id, quest_id, period_key) SELECT id, 'daily_play', '2026-10-01' FROM users WHERE uid = 100901`);
+    await db.execute(sql`INSERT INTO support_tickets (user_id, category, subject) SELECT id, 'game', 'Old ticket' FROM users WHERE uid = 100901`);
+    await db.execute(sql`INSERT INTO support_ticket_messages (ticket_id, author_id, body) SELECT t.id, t.user_id, 'help me' FROM support_tickets t`);
+    await db.execute(sql`INSERT INTO support_ticket_messages (ticket_id, author_id, body) SELECT t.id, u.id, 'we are on it' FROM support_tickets t, users u WHERE u.uid = 100902`);
+    const before = await rows<{ f: string; s: string; g: string; m: string; c: string }>(sql`
+      SELECT (SELECT count(*) FROM friendships) AS f, (SELECT count(*) FROM friendships fr JOIN users u ON u.id = fr.friend_id WHERE u.uid = 1000) AS s,
+             (SELECT count(*) FROM guild_members) AS g, (SELECT count(*) FROM support_ticket_messages) AS m, (SELECT count(*) FROM quest_claims) AS c`);
+    expect(Number(before[0]!.s)).toBeGreaterThan(0);
+
+    await runMigrations(db);
+    const after = await rows<typeof before[0]>(sql`
+      SELECT (SELECT count(*) FROM friendships) AS f, (SELECT count(*) FROM friendships fr JOIN users u ON u.id = fr.friend_id WHERE u.uid = 1000) AS s,
+             (SELECT count(*) FROM guild_members) AS g, (SELECT count(*) FROM support_ticket_messages) AS m, (SELECT count(*) FROM quest_claims) AS c`);
+    expect(after).toEqual(before);
+    expect(await rows(sql`SELECT name, points, description, join_policy, disbanded_at FROM guilds`)).toEqual([{ name: 'Old Guild', points: '1234', description: '', join_policy: 'open', disbanded_at: null }]);
+    expect(await rows(sql`SELECT body, from_staff FROM support_ticket_messages ORDER BY created_at, from_staff`)).toEqual([
+      { body: 'help me', from_staff: false },
+      { body: 'we are on it', from_staff: true },
+    ]);
+    expect(await rows(sql`SELECT vip_exp FROM quest_claims`)).toEqual([{ vip_exp: 0 }]);
+    // New players are no longer attached to Keyo Support.
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (100903, 'fresh', 'fresh', 'x', 'Fresh')`);
+    expect(await rows(sql`SELECT 1 FROM friendships f JOIN users u ON u.id = f.user_id WHERE u.uid = 100903`)).toEqual([]);
+  });
+});
