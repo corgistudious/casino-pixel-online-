@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { CURRENCIES, ECONOMY, GAME_KEYS, type ErrorCode, type GameKey, type Reward } from '../economy';
 import type { BlackjackView } from '../games/blackjack';
+import type { BjtTableView } from '../games/blackjackTable';
 import type { ChatChannel, ChatMessageView } from '../social';
 import type { RouletteResult } from '../games/roulette';
 import type { SicBoResult } from '../games/sicbo';
@@ -137,6 +138,19 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   }),
   z.object({ type: z.literal('card.queue'), id: requestId, game: z.enum(CARD_GAMES) }),
   z.object({ type: z.literal('card.unqueue'), id: requestId }),
+  z.object({ type: z.literal('bjt.join'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({ type: z.literal('bjt.leave'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({ type: z.literal('bjt.sit'), id: requestId, tableId: z.string().min(1).max(40), seat: z.number().int().min(0).max(4) }),
+  z.object({ type: z.literal('bjt.stand'), id: requestId, tableId: z.string().min(1).max(40) }),
+  z.object({ type: z.literal('bjt.bet'), id: requestId, tableId: z.string().min(1).max(40), amount: z.number().int().positive().max(1_000_000_000) }),
+  z.object({
+    type: z.literal('bjt.act'),
+    id: requestId,
+    tableId: z.string().min(1).max(40),
+    roundId: z.string().uuid(),
+    action: z.enum(['hit', 'stand', 'double', 'split', 'insurance']),
+    amount: z.number().int().min(0).max(1_000_000_000).optional(),
+  }),
   z.object({
     type: z.literal('table.bet'),
     id: requestId,
@@ -315,6 +329,12 @@ export interface ResponseMap {
   'card.act': { ok: true };
   'card.queue': { queued: true; game: CardGame };
   'card.unqueue': { ok: true };
+  'bjt.join': BjtTableView;
+  'bjt.leave': { ok: true };
+  'bjt.sit': BjtTableView;
+  'bjt.stand': { leaving: boolean };
+  'bjt.bet': { ok: true };
+  'bjt.act': { ok: true };
 }
 
 export type ServerEvent =
@@ -335,6 +355,8 @@ export type ServerEvent =
   | { event: 'card'; data: CardTableView }
   /** Ranked matchmaking found an opponent. */
   | { event: 'cardMatch'; data: { tableId: string; game: CardGame } }
+  /** Shared Blackjack table state (public: the dealer's hole card stays hidden until settlement). */
+  | { event: 'bjt'; data: BjtTableView }
   /** The player's profile changed on the server (e.g. a timed item expired): refetch /api/me. */
   | { event: 'profile'; data: { reason: 'equipment' } }
   /** Shared-round table update (phase change, result, live totals). `myBets` is omitted in broadcasts. */

@@ -120,12 +120,14 @@ export function isBlackjack(cards: readonly Card[]): boolean {
   return cards.length === 2 && handValue(cards).total === 21;
 }
 
-const cardValue = (c: Card) => {
+/** Blackjack value of one card (Ace 11, faces 10). */
+export const cardValue = (c: Card) => {
   const r = cardRank(c);
   return r === 'A' ? 11 : r === 'J' || r === 'Q' || r === 'K' ? 10 : Number(r);
 };
 
-const newHand = (cards: Card[], bet: number, split = false, splitAces = false): BlackjackHand => ({
+/** A fresh hand record. */
+export const newHand = (cards: Card[], bet: number, split = false, splitAces = false): BlackjackHand => ({
   cards,
   bet,
   doubled: false,
@@ -144,7 +146,8 @@ export function normalizeBlackjack(raw: BlackjackState | LegacyBlackjackState): 
   return { shoe: legacy.shoe, dealer: legacy.dealer, hands: [hand], active: 0, bet: legacy.bet, phase: legacy.phase, outcome: legacy.outcome, payout: legacy.payout, insurance: 0, insurancePayout: 0 };
 }
 
-const stakeOf = (h: BlackjackHand) => h.bet * (h.doubled ? 2 : 1);
+/** What one hand has staked (doubled hands count twice). */
+export const stakeOf = (h: BlackjackHand) => h.bet * (h.doubled ? 2 : 1);
 /** Everything the player has staked in the round so far. */
 export function totalStake(state: BlackjackState): number {
   return state.hands.reduce((s, h) => s + stakeOf(h), 0) + (state.insurance ?? 0);
