@@ -163,6 +163,18 @@ export async function planReset(db: DbOrTx): Promise<ResetPlan> {
   const mail = await one<{ c: string }>(db, sql`SELECT count(*) AS c FROM email_outbox WHERE ${outboxFilter}`);
   const blockers: string[] = [];
   if (mode !== 'test') blockers.push('The database is in production mode; test-data reset is permanently disabled.');
+  // Never remove a TEST-owned guild while real players or their guild history
+  // still reference it. Guild foreign keys use RESTRICT, and the reset must
+  // refuse up front rather than discover the conflict halfway through deletion.
+  const sharedGuilds = await one<{ c: string }>(db, sql`
+    SELECT count(*) AS c FROM guilds g
+    WHERE g.owner_id IN (${TARGETS}) AND (
+      EXISTS (SELECT 1 FROM guild_members m WHERE m.guild_id = g.id AND m.user_id NOT IN (${TARGETS}))
+      OR EXISTS (SELECT 1 FROM guild_messages m WHERE m.guild_id = g.id AND m.user_id NOT IN (${TARGETS}))
+      OR EXISTS (SELECT 1 FROM guild_win_events e WHERE e.guild_id = g.id AND e.user_id NOT IN (${TARGETS}))
+    )
+  `);
+  if (n(sharedGuilds.c) > 0) blockers.push(`${n(sharedGuilds.c)} TEST-owned guild(s) contain real-player memberships or history; resolve ownership and data preservation before resetting TEST accounts.`);
   const uncovered = await uncoveredForeignKeys(db);
   if (uncovered.length) blockers.push(`Tables reference users but are not in the reset registry: ${uncovered.join(', ')}`);
   if (n(acc.support) !== 1) blockers.push('Keyo Support (UID 1000) is missing or not a system account.');
