@@ -26,6 +26,7 @@ import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { bjtRoom, type BlackjackTableEngine } from './blackjackTables';
 import { cardRoom, type CardTableEngine } from './cardTables';
+import { audit } from './audit';
 import { isProtectedDisplayName } from './protectedNames';
 import { blockedBetween, isFriend, visiblePlayer } from './social';
 
@@ -354,6 +355,80 @@ export class RoomService {
     if (!r) return;
     const msg = { type: 'event', event: 'room', data: { ...summaryOf(r), ...(closed || r.closed_at ? { closed: true } : {}) } } as ServerMessage;
     this.hub.publishRoom(r.engine === 'card' ? cardRoom(r.table_id) : bjtRoom(r.table_id), msg);
+  }
+
+  // ---------------------------------------------------------------- staff (rooms.manage)
+
+  /** Every room (open, closed or both) with what staff need; never the password hash. */
+  async adminList(opts: { status: 'open' | 'closed' | 'all'; game?: RoomGame; ownerUid?: number }) {
+    const rows = await this.db.execute<RoomRow & { table_status: string }>(sql`
+      SELECT q.*, CASE WHEN q.engine = 'card' THEN (SELECT status FROM card_tables WHERE id = q.table_id) ELSE (SELECT status FROM bj_tables WHERE id = q.table_id) END AS table_status
+      FROM (${ROOM_SELECT}) q
+      WHERE TRUE
+        ${opts.status === 'open' ? sql`AND q.closed_at IS NULL` : opts.status === 'closed' ? sql`AND q.closed_at IS NOT NULL` : sql``}
+        ${opts.game ? sql`AND q.game = ${opts.game}` : sql``}
+        ${opts.ownerUid ? sql`AND q.owner_uid = ${opts.ownerUid}` : sql``}
+      ORDER BY q.closed_at IS NULL DESC, q.created_at DESC LIMIT 200`);
+    return rows.map((r) => ({ ...summaryOf(r), tableStatus: r.table_status as 'open' | 'paused' | 'closed', closedAt: r.closed_at ? new Date(r.closed_at).toISOString() : null }));
+  }
+
+  private async staffRow(tx: DbOrTx, id: string) {
+    const r = await this.row(tx, id, true);
+    if (r.closed_at) throw fail('room_closed');
+    return r;
+  }
+
+  /**
+   * Closes a room for everyone. Money stays safe: the engines finish a running hand/round, then
+   * cash every seat out to its wallet exactly as when players stand up themselves.
+   */
+  async adminClose(actorId: string, id: string, reason: string, ip?: string): Promise<{ ok: true }> {
+    const r = await this.db.transaction(async (tx) => {
+      const r = await this.staffRow(tx, id);
+      await tx.execute(sql`UPDATE game_rooms SET closed_at = now(), updated_at = now() WHERE id = ${id}`);
+      await audit(tx, { actorId, action: 'rooms.close', targetType: 'game_room', targetId: id, details: { reason, seated: r.seated, playing: r.playing, owner: Number(r.owner_uid) }, ip });
+      return r;
+    });
+    if (r.engine === 'card') await this.cards.setStatus(r.table_id, 'closed');
+    else await this.bjt.setStatus(r.table_id, 'closed');
+    await this.publish(id, true);
+    return { ok: true };
+  }
+
+  /** Pauses a room (no new hand/round starts; a running one finishes) or resumes it. */
+  async adminSetPaused(actorId: string, id: string, paused: boolean, ip?: string): Promise<{ ok: true }> {
+    const r = await this.db.transaction(async (tx) => {
+      const r = await this.staffRow(tx, id);
+      await audit(tx, { actorId, action: paused ? 'rooms.pause' : 'rooms.resume', targetType: 'game_room', targetId: id, ip });
+      return r;
+    });
+    const status = paused ? 'paused' : 'open';
+    if (r.engine === 'card') await this.cards.setStatus(r.table_id, status);
+    else await this.bjt.setStatus(r.table_id, status);
+    await this.publish(id);
+    return { ok: true };
+  }
+
+  /** Gives the room to another player who may be in it (seated or with access) and hosts no other open room. */
+  async adminTransfer(actorId: string, id: string, uid: number, ip?: string): Promise<{ ok: true }> {
+    await this.db.transaction(async (tx) => {
+      const r = await this.staffRow(tx, id);
+      const other = await visiblePlayer(tx, uid);
+      if (other.status !== 'active') throw fail('not_found');
+      if (other.user_id === r.owner_id) throw fail('bad_request', 'already the host');
+      await tx.execute(sql`SELECT id FROM users WHERE id = ${other.user_id}::uuid FOR UPDATE`);
+      const hosts = await tx.execute(sql`SELECT 1 FROM game_rooms WHERE owner_id = ${other.user_id}::uuid AND closed_at IS NULL`);
+      if (hosts.length) throw fail('room_limit');
+      const seatTable = r.engine === 'card' ? sql`card_seats` : sql`bj_seats`;
+      const inRoom = await tx.execute(sql`
+        SELECT 1 WHERE EXISTS (SELECT 1 FROM ${seatTable} s WHERE s.table_id = ${r.table_id} AND s.user_id = ${other.user_id}::uuid)
+          OR EXISTS (SELECT 1 FROM room_access a WHERE a.room_id = ${id} AND a.user_id = ${other.user_id}::uuid AND (a.kicked_until IS NULL OR a.kicked_until <= now()))`);
+      if (!inRoom.length) throw fail('bad_request', 'not in this room');
+      await tx.execute(sql`UPDATE game_rooms SET owner_id = ${other.user_id}::uuid, owner_seen_at = now(), updated_at = now() WHERE id = ${id}`);
+      await audit(tx, { actorId, action: 'rooms.transfer', targetType: 'game_room', targetId: id, details: { from: Number(r.owner_uid), to: uid }, ip });
+    });
+    await this.publish(id);
+    return { ok: true };
   }
 
   // ---------------------------------------------------------------- housekeeping

@@ -2,7 +2,7 @@ import type { CardTableView, Card, Hand, RoomSummary, RoomView } from '@casino/s
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { applyDelta } from '../src/services/wallet';
-import { randomIp, register, startTestApp, TestSocket, type TestApp } from './helpers';
+import { createStaff, randomIp, register, startTestApp, TestSocket, type TestApp } from './helpers';
 
 let t: TestApp;
 beforeAll(async () => {
@@ -228,5 +228,59 @@ describe('player rooms', () => {
     expect((await api(owner, 'POST', '/api/rooms', { game: 'xito', name: 'Again', visibility: 'public', stake: 100 })).statusCode).toBe(200);
     for (const p of [a, b]) p.ws.close();
     back.close();
+  });
+
+  it('staff with rooms.manage list, pause, hand over and close rooms (audited); closing mid-hand settles first and loses no Cxu', async () => {
+    const owner = await player();
+    const room = await createRoom(owner, { game: 'poker', name: 'Staff Check', visibility: 'private', password: 'staffpw1', stake: 100, seats: 3 });
+    const guest = await player();
+    await api(guest, 'POST', `/api/rooms/${enc(room.id)}/join`, { password: 'staffpw1' });
+    await owner.ws.ok({ type: 'card.sit', tableId: room.tableId, seat: 0, buyIn: 2_000 });
+    await guest.ws.ok({ type: 'card.sit', tableId: room.tableId, seat: 1, buyIn: 2_000 });
+    const before = await chipsOf(room.tableId, [owner, guest]);
+
+    // Players and moderators (no rooms.manage) are refused; Admin may manage rooms.
+    expect((await api(owner, 'GET', '/api/admin/rooms')).statusCode).toBe(403);
+    const mod = await createStaff(t, 'moderator');
+    expect((await api(mod, 'GET', '/api/admin/rooms')).statusCode).toBe(403);
+    const admin = await createStaff(t, 'admin');
+    const list = (await api(admin, 'GET', `/api/admin/rooms?uid=${owner.user.uid}`)).json().rooms as (RoomSummary & { tableStatus: string })[];
+    expect(list.map((r) => r.id)).toEqual([room.id]);
+    expect(list[0]).toMatchObject({ seated: 2, tableStatus: 'open', locked: true });
+    expect(JSON.stringify(list)).not.toMatch(/staffpw1|argon|password/i);
+
+    // Pause and resume.
+    expect((await api(admin, 'POST', `/api/admin/rooms/${enc(room.id)}/pause`, { paused: true })).statusCode).toBe(200);
+    expect((await rows<{ status: string }>(sql`SELECT status FROM card_tables WHERE id = ${room.tableId}`))[0]!.status).toBe('paused');
+    await t.cards.tick();
+    expect((await rows(sql`SELECT 1 FROM card_hands WHERE table_id = ${room.tableId} AND status = 'active'`)).length).toBe(0);
+    expect((await api(admin, 'POST', `/api/admin/rooms/${enc(room.id)}/pause`, { paused: false })).statusCode).toBe(200);
+
+    // Hand over to the seated guest; someone outside the room cannot receive it.
+    const outsider = await player();
+    expect((await api(admin, 'POST', `/api/admin/rooms/${enc(room.id)}/transfer`, { uid: outsider.user.uid })).statusCode).toBe(400);
+    expect((await api(admin, 'POST', `/api/admin/rooms/${enc(room.id)}/transfer`, { uid: guest.user.uid })).statusCode).toBe(200);
+    expect((await api(guest, 'GET', `/api/rooms/${enc(room.id)}`)).json().room).toMatchObject({ isOwner: true, owner: { uid: guest.user.uid } });
+
+    // Close during a hand: the hand finishes, then both are cashed out once.
+    await t.cards.tick();
+    const [hand] = await rows<{ id: string }>(sql`SELECT id FROM card_hands WHERE table_id = ${room.tableId} AND status = 'active'`);
+    expect(hand).toBeTruthy();
+    expect((await api(admin, 'POST', `/api/admin/rooms/${enc(room.id)}/close`, { reason: 'Tên phòng vi phạm' })).statusCode).toBe(200);
+    for (let i = 0; i < 20; i++) {
+      const [h] = await rows<{ status: string }>(sql`SELECT status FROM card_hands WHERE id = ${hand!.id}::uuid`);
+      if (h!.status !== 'active') break;
+      await t.db.execute(sql`UPDATE card_hands SET deadline = now() - interval '1 second' WHERE id = ${hand!.id}::uuid`);
+      await t.cards.tick();
+    }
+    await t.db.execute(sql`UPDATE card_hands SET ended_at = now() - interval '1 minute' WHERE table_id = ${room.tableId}`);
+    await t.cards.tick();
+    expect((await rows(sql`SELECT 1 FROM card_seats WHERE table_id = ${room.tableId}`)).length).toBe(0);
+    expect(await chipsOf(room.tableId, [owner, guest])).toBe(before);
+    expect(code(await api(guest, 'GET', `/api/rooms/${enc(room.id)}`))).toBe('room_closed');
+    expect((await api(admin, 'POST', `/api/admin/rooms/${enc(room.id)}/close`, { reason: 'again' })).statusCode).toBe(400);
+    const audits = await rows<{ action: string }>(sql`SELECT action FROM audit_logs WHERE target_id = ${room.id} ORDER BY id`);
+    expect(audits.map((a) => a.action)).toEqual(['rooms.pause', 'rooms.resume', 'rooms.transfer', 'rooms.close']);
+    for (const p of [owner, guest, outsider]) p.ws.close();
   });
 });

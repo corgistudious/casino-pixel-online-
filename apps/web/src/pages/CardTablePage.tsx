@@ -7,6 +7,7 @@ import { PhaserView } from '../game/PhaserView';
 import { CardTableScene, type CardBackLook } from '../game/scenes/CardTableScene';
 import { RoomPasswordPrompt } from '../rooms/RoomForm';
 import { RoomPanel } from '../rooms/RoomPanel';
+import { usePlayerMenu } from '../players/PlayerActions';
 import { errorText } from '../lib/errors';
 import { formatChips } from '../lib/format';
 import { clockOffset } from '../lib/tables';
@@ -169,6 +170,7 @@ function CardTable({ tableId }: { tableId: string }) {
             onReady={(s) => {
               scene.current = s;
               s.setClock(now);
+              s.setSeatHandler((uid, at) => usePlayerMenu.getState().show({ uid, context: `table:card:${tableId}`, rect: { top: at.y, bottom: at.y, left: at.x, right: at.x } }));
               s.setLabels(labels);
               if (viewRef.current) s.render(viewRef.current, backs);
             }}
