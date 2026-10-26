@@ -32,8 +32,10 @@ import { SupportPage } from './pages/SupportPage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { RoomsAdminPage } from './admin/RoomsAdminPage';
 import { TradingPage } from './pages/TradingPage';
-import { ChatPage } from './pages/ChatPage';
-import { FriendsPage, GuildPage, MissionsPage } from './pages/SocialPage';
+import { MissionsPage } from './pages/SocialPage';
+import { ChatPage } from './social/ChatPage';
+import { FriendsPage } from './social/FriendsPage';
+import { GuildPage } from './social/GuildPage';
 import { RankPage } from './pages/RankPage';
 import { GiftcodePage } from './pages/GiftcodePage';
 import { CardLobbyPage } from './pages/CardLobbyPage';
@@ -43,7 +45,6 @@ import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, LevelUpBanner, RotateOverlay, TestEnvBadge, Toasts } from './ui/Chrome';
 import { KeyoLogo } from './ui/KeyoLogo';
-import { SocialBubble } from './ui/SocialBubble';
 
 function GameRoute() {
   const { game } = useParams();
@@ -109,7 +110,6 @@ export function App() {
       <RotateOverlay />
       <Toasts />
       <LevelUpBanner />
-      <SocialBubble />
       <Routes>
         <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />

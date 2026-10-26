@@ -9,21 +9,24 @@ import { Avatar } from './Avatar';
 import { NavIcon, type NavIconName } from './NavIcons';
 import { CurrencyIcon, PlayerName } from './OfficialAssets';
 import { VipEmblem } from './VipEmblem';
+import { ChatButton } from './ChatButton';
 
 export const NAV_ITEMS: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/', icon: 'hub', label: 'nav.hub' },
   { to: '/rooms', icon: 'rooms', label: 'nav.rooms' },
   { to: '/market', icon: 'market', label: 'nav.market' },
-  { to: '/bank', icon: 'collection', label: 'nav.bank' },
+  { to: '/bank', icon: 'bank', label: 'nav.bank' },
   { to: '/collection', icon: 'collection', label: 'nav.collection' },
   { to: '/mail', icon: 'mail', label: 'nav.mail' },
   { to: '/missions', icon: 'missions', label: 'nav.missions' },
   { to: '/vip', icon: 'vip', label: 'nav.vip' },
   { to: '/rank', icon: 'rank', label: 'nav.rank' },
   { to: '/leaderboard', icon: 'leaderboard', label: 'nav.leaderboard' },
-  { to: '/profile', icon: 'profile', label: 'nav.profile' },
+  { to: '/guild', icon: 'guild', label: 'nav.guild' },
   { to: '/friends', icon: 'friends', label: 'nav.friends' },
+  { to: '/support', icon: 'support', label: 'nav.support' },
   { to: '/gifts', icon: 'gifts', label: 'nav.gifts' },
+  { to: '/profile', icon: 'profile', label: 'nav.profile' },
   { to: '/settings', icon: 'settings', label: 'nav.settings' },
 ];
 
@@ -115,6 +118,7 @@ function PlayerBar() {
           <span className="text-[10px] text-white/45">{t('player.charm')}</span>
           <DemoTag />
         </div>
+        <ChatButton />
         {(['silver', 'gold'] as const).map((c) => (
           <div key={c} className="gold-border flex items-center gap-1.5 rounded-full py-0.5 pl-0.5 pr-3" title={t(`currency.${c}`)}>
             <CurrencyIcon currency={c} size={28} />
