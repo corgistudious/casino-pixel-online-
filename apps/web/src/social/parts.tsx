@@ -82,7 +82,7 @@ export function Modal({ title, onClose, children, width = 'max-w-md' }: { title:
   }, [onClose]);
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-ink-950/80 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby={id} onClick={onClose}>
-      <div className={`glass flex max-h-[90vh] w-full ${width} flex-col gap-4 overflow-y-auto p-5`} onClick={(e) => e.stopPropagation()}>
+      <div className={`glass flex max-h-[90vh] w-full ${width} flex-col gap-4 overflow-y-auto p-5 [&>*]:shrink-0`} onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between gap-3">
           <h2 id={id} className="font-display text-xl font-heading text-white">{title}</h2>
           <button type="button" onClick={onClose} className="rounded-lg px-2 text-xl leading-none text-white/50 hover:bg-white/10 hover:text-white" aria-label="×">

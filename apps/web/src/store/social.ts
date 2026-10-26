@@ -8,6 +8,8 @@ import { socket } from '../net/socket';
  */
 interface SocialState {
   unreadDm: number;
+  /** My support tickets with a reply I have not opened. */
+  unreadSupport: number;
   /** UID of the conversation open on screen (its messages are read as they arrive). */
   openPeer: number | null;
   refresh(): void;
@@ -18,11 +20,13 @@ let timer: ReturnType<typeof setTimeout> | null = null;
 
 export const useSocial = create<SocialState>((set, get) => ({
   unreadDm: 0,
+  unreadSupport: 0,
   openPeer: null,
   refresh() {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
       void api<{ dm: number }>('/api/chat/unread').then((r) => set({ unreadDm: r.dm }), () => {});
+      void api<{ count: number }>('/api/support/unread').then((r) => set({ unreadSupport: r.count }), () => {});
     }, 250);
   },
   setOpenPeer(uid) {
@@ -39,5 +43,6 @@ export function startSocialSync() {
   socket.listen((ev) => {
     if (ev.event === 'chatMessage' && ev.data.channel === 'dm') useSocial.getState().refresh();
     else if (ev.event === 'social' && (ev.data.kind === 'dm_read' || ev.data.kind === 'removed')) useSocial.getState().refresh();
+    else if (ev.event === 'support') useSocial.getState().refresh();
   });
 }
