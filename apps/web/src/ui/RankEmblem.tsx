@@ -1,4 +1,4 @@
-import { DIVISIONS, type RankTierId, type TopTitleId } from '@casino/shared';
+import { DIVISIONS, hasRoman, type RankTierId, type TopTitleId } from '@casino/shared';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +13,7 @@ const PALETTE: Record<RankTierId, [string, string, string, string]> = {
   master: ['#ffe0ec', '#ff6f9f', '#7d1238', '#ffb3cd'],
   legend: ['#fff0d6', '#ff9d3a', '#8a3108', '#ffd27a'],
   wargod: ['#ffe1e1', '#ff4a4a', '#5c0710', '#ffd27a'],
+  mythic: ['#e6fffb', '#3fe0d0', '#0b2f4f', '#b8a4ff'],
 };
 const TOP_PALETTE: Record<TopTitleId, [string, string, string, string]> = {
   than_vuong: ['#f3e6ff', '#c58bff', '#43177d', '#ffe08a'],
@@ -20,6 +21,8 @@ const TOP_PALETTE: Record<TopTitleId, [string, string, string, string]> = {
   vuong_gia: ['#ffffff', '#ffe08a', '#b5132c', '#ff8ae8'],
 };
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
+/** Top titles rise in ornament: Thần Vương one crown, Thần Tướng crossed blades, Vương Giả Chí Tôn rays and a slow glow. */
+const TOP_LEVEL: Record<TopTitleId, number> = { than_vuong: 1, than_tuong: 2, vuong_gia: 3 };
 
 /**
  * Rank badge: a shield in the tier's metal with the division numeral. Higher tiers gain wings,
@@ -30,7 +33,9 @@ export function RankEmblem({ division, top = null, size = 48, dim = false }: { d
   const { t } = useTranslation();
   const d = DIVISIONS[Math.min(Math.max(0, division), DIVISIONS.length - 1)]!;
   const [hi, mid, lo, gem] = top ? TOP_PALETTE[top] : PALETTE[d.tier];
-  const label = top ? t(`rank.top.${top}`) : `${t(`rank.tiers.${d.tier}`)} ${ROMAN[d.roman]}`;
+  const mythic = d.tier === 'mythic';
+  const level = top ? TOP_LEVEL[top] : 0;
+  const label = top ? t(`rank.top.${top}`) : `${t(`rank.tiers.${d.tier}`)}${hasRoman(d.index) ? ` ${ROMAN[d.roman]}` : ''}`;
   const wings = top || d.tierIndex >= 3;
   const crown = top || d.tierIndex >= 6;
   return (
@@ -50,7 +55,26 @@ export function RankEmblem({ division, top = null, size = 48, dim = false }: { d
           <stop offset="1" stopColor={gem} stopOpacity="0" />
         </radialGradient>
       </defs>
-      {(top || d.tierIndex >= 7) && <circle cx="32" cy="32" r="30" fill={`url(#${id}g)`} />}
+      {level >= 3 && (
+        <g stroke={gem} strokeWidth="1.3" strokeLinecap="round" opacity="0.8">
+          {Array.from({ length: 12 }, (_, i) => {
+            const a = (i * Math.PI) / 6;
+            return <line key={i} x1={32 + Math.cos(a) * 25} y1={32 + Math.sin(a) * 25} x2={32 + Math.cos(a) * 31} y2={32 + Math.sin(a) * 31} />;
+          })}
+        </g>
+      )}
+      {(top || d.tierIndex >= 7) && (
+        <circle cx="32" cy="32" r="30" fill={`url(#${id}g)`}>
+          {level >= 3 && <animate attributeName="opacity" values="0.55;1;0.55" dur="3.2s" repeatCount="indefinite" />}
+        </circle>
+      )}
+      {mythic && !top && <circle cx="32" cy="32" r="27" fill="none" stroke={gem} strokeOpacity="0.6" strokeWidth="1" strokeDasharray="2 3" />}
+      {level >= 2 && (
+        <g stroke={hi} strokeWidth="2" strokeLinecap="round">
+          <line x1="10" y1="54" x2="26" y2="38" />
+          <line x1="54" y1="54" x2="38" y2="38" />
+        </g>
+      )}
       {wings && (
         <g fill={`url(#${id}m)`} opacity="0.95">
           <path d="M14 22 2 16c1 9 4 15 11 19z" />
@@ -68,6 +92,19 @@ export function RankEmblem({ division, top = null, size = 48, dim = false }: { d
       {top ? (
         <>
           <path d="M32 22l3 6 6.5.9-4.7 4.6 1.1 6.5L32 37l-5.9 3 1.1-6.5-4.7-4.6 6.5-.9z" fill={gem} stroke={hi} strokeWidth="0.8" />
+          {level >= 2 && <circle cx="32" cy="44.5" r="1.8" fill={hi} />}
+          {level >= 3 && <path d="M26.5 44.5h11" stroke={hi} strokeWidth="1.2" strokeLinecap="round" />}
+        </>
+      ) : mythic ? (
+        <>
+          {/* Thần Thoại: a rising sun over a crescent, no numeral. */}
+          <circle cx="32" cy="27" r="5.2" fill={gem} stroke={hi} strokeWidth="0.8" />
+          <path d="M23.5 37.5c3.8 4.6 13.2 4.6 17 0-4.8 2-12.2 2-17 0z" fill={hi} />
+          <g stroke={hi} strokeWidth="1" strokeLinecap="round" opacity="0.85">
+            <line x1="32" y1="18.5" x2="32" y2="20.5" />
+            <line x1="24.5" y1="22" x2="26" y2="23.3" />
+            <line x1="39.5" y1="22" x2="38" y2="23.3" />
+          </g>
         </>
       ) : (
         <>
@@ -82,12 +119,12 @@ export function RankEmblem({ division, top = null, size = 48, dim = false }: { d
   );
 }
 
-/** "Bạch Kim IV" / "Vương Giả". */
+/** "Bạch Kim IV" / "Thần Thoại" / "Vương Giả Chí Tôn". */
 export function useRankName() {
   const { t } = useTranslation();
   return (division: number, top?: TopTitleId | null) => {
     if (top) return t(`rank.top.${top}`);
-    const d = DIVISIONS[division]!;
-    return `${t(`rank.tiers.${d.tier}`)} ${ROMAN[d.roman]}`;
+    const d = DIVISIONS[Math.min(Math.max(0, division), DIVISIONS.length - 1)]!;
+    return hasRoman(d.index) ? `${t(`rank.tiers.${d.tier}`)} ${ROMAN[d.roman]}` : t(`rank.tiers.${d.tier}`);
   };
 }

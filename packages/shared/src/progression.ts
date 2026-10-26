@@ -66,11 +66,13 @@ export const RANK_TIERS = [
   { id: 'master', divisions: 5 },
   { id: 'legend', divisions: 5 },
   { id: 'wargod', divisions: 5 },
+  /** Thần Thoại: one division after Chiến Thần I. Once its RP is full ("MAX") it opens the Top 50 titles. */
+  { id: 'mythic', divisions: 1 },
 ] as const;
 export type RankTierId = (typeof RANK_TIERS)[number]['id'];
 
 export interface Division {
-  /** 0 = Đồng III … 39 = Chiến Thần I. */
+  /** 0 = Đồng III … 39 = Chiến Thần I, 40 = Thần Thoại. */
   index: number;
   tier: RankTierId;
   tierIndex: number;
@@ -82,14 +84,19 @@ export const DIVISIONS: readonly Division[] = RANK_TIERS.flatMap((t, tierIndex) 
   Array.from({ length: t.divisions }, (_, i) => ({ tier: t.id, tierIndex, roman: t.divisions - i })),
 ).map((d, index) => ({ ...d, index }));
 
-export const DIVISION_COUNT = DIVISIONS.length; // 40
+export const DIVISION_COUNT = DIVISIONS.length; // 41
+/** Thần Thoại, the last division. */
 export const MAX_DIVISION = DIVISION_COUNT - 1;
+export const MYTHIC_DIVISION = MAX_DIVISION;
 export const RP_PER_DIVISION = 200;
 
 const lastOf = (tier: RankTierId) => DIVISIONS.filter((d) => d.tier === tier).at(-1)!.index;
 
 /** Đồng III … Vàng I: losses never cost RP or a division. */
 export const PROTECTED_MAX_DIVISION = lastOf('gold');
+
+/** A division has no Roman numeral when its tier has a single division (Thần Thoại). */
+export const hasRoman = (division: number) => RANK_TIERS[DIVISIONS[division]!.tierIndex]!.divisions > 1;
 
 /** Divisions whose promotion also needs a 3-win streak (Bạch Kim I → Kim Cương V, …, Huyền Thoại I → Chiến Thần V). */
 export const SERIES_DIVISIONS: readonly number[] = (['platinum', 'diamond', 'star', 'master', 'legend'] as const).map(lastOf);
@@ -118,7 +125,7 @@ export const DEFAULT_RANK_RULES: RankRules = { winRp: 25, lossRp: 20, softResetD
 
 export interface RankState {
   division: number;
-  /** RP inside the division (0–200; above 200 only at Chiến Thần I, where it is the ladder score). */
+  /** RP inside the division (0–200; above 200 only at Thần Thoại, where it is the ladder score). */
   rp: number;
   /** Wins of the current promotion series (0–3), only while RP is full on a series division. */
   streak: number;
@@ -127,7 +134,10 @@ export interface RankState {
 export const requiresSeries = (division: number) => SERIES_DIVISIONS.includes(division);
 export const isProtected = (division: number) => division <= PROTECTED_MAX_DIVISION;
 export const seriesActive = (s: RankState) => requiresSeries(s.division) && s.rp >= RP_PER_DIVISION;
-/** Eligible for the server-wide Top 50 (Vương Giả / Thần Tướng / Thần Vương): a full Chiến Thần I. */
+/**
+ * MAX Thần Thoại (full RP in the last division): the only players who may hold a Top 50 title
+ * (Vương Giả Chí Tôn / Thần Tướng / Thần Vương). Everyone else keeps their division, Thần Thoại included.
+ */
 export const topEligible = (s: Pick<RankState, 'division' | 'rp'>) => s.division === MAX_DIVISION && s.rp >= RP_PER_DIVISION;
 /** A loss right now would cost a division. */
 export const demotionRisk = (s: RankState, rules: RankRules = DEFAULT_RANK_RULES) => !isProtected(s.division) && s.rp - rules.lossRp < 0;
@@ -149,7 +159,7 @@ export interface RankChange {
  *   the third promotes (RP restarts at 0). A loss resets the streak and costs RP as usual.
  * - Đồng III – Vàng I are protected: a loss changes nothing. From Bạch Kim V a loss costs RP and
  *   can drop a division (Bạch Kim V → Vàng I, where protection applies again).
- * - At Chiến Thần I RP keeps growing: it is the score of the Top 50 ladder.
+ * - At Thần Thoại RP keeps growing past 200 (MAX): it is the score of the Top 50 ladder.
  */
 export function applyRankResult(state: RankState, result: 'win' | 'loss', rules: RankRules = DEFAULT_RANK_RULES): RankChange {
   const before = { ...state };

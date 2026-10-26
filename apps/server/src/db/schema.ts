@@ -677,7 +677,7 @@ export const playerRanks = pgTable(
   (t) => [
     primaryKey({ columns: [t.seasonId, t.userId] }),
     index('player_ranks_ladder_idx').on(t.seasonId, t.division, t.rp),
-    check('player_ranks_division_range', sql`${t.division} BETWEEN 0 AND 39`),
+    check('player_ranks_division_range', sql`${t.division} BETWEEN 0 AND 40`),
     check('player_ranks_rp_nonnegative', sql`${t.rp} >= 0`),
     check('player_ranks_streak_range', sql`${t.streak} BETWEEN 0 AND 3`),
   ],

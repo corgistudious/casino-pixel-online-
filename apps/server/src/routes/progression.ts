@@ -19,7 +19,7 @@ const attachments = z.array(mailAttachmentSchema).max(MAIL_MAX_ATTACHMENTS);
 const rulesSchema = z.object({
   winRp: z.number().int().min(1).max(200),
   lossRp: z.number().int().min(0).max(200),
-  softResetDivisions: z.number().int().min(0).max(39),
+  softResetDivisions: z.number().int().min(0).max(40),
 });
 const rewardsSchema = seasonRewardsSchema;
 /** Defaults: 2-month season, official rewards, participation rewards off until the Owner sets them. */

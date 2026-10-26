@@ -176,6 +176,13 @@
       "when": 1792904555921,
       "tag": "0024_blackjack_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1792904555922,
+      "tag": "0025_rank_mythic",
+      "breakpoints": true
     }
   ]
 }

@@ -74,7 +74,7 @@ async function lockPlayerRank(tx: Tx, season: SeasonRow, userId: string): Promis
   return row!;
 }
 
-/** Top-50 position (eligible players only), or null. */
+/** Top-50 position among MAX Thần Thoại players (the only ones who can hold a Top title), or null. */
 export async function topPosition(db: DbOrTx, seasonId: number, userId: string): Promise<number | null> {
   const [me] = await db.select().from(playerRanks).where(and(eq(playerRanks.seasonId, seasonId), eq(playerRanks.userId, userId)));
   if (!me || me.disqualified || !topEligible(me)) return null;

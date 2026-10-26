@@ -1,4 +1,4 @@
-import { KEYO_OWNER_UID } from '@casino/shared';
+import { KEYO_OWNER_UID, MAX_DIVISION, RP_PER_DIVISION } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import type { DbOrTx } from '../db/client';
 
@@ -37,7 +37,7 @@ export async function dashboardMetrics(db: DbOrTx) {
       (SELECT count(*) FROM player_progress WHERE level >= 10) AS level10,
       (SELECT name FROM rank_seasons WHERE status = 'active') AS season,
       (SELECT count(*) FROM player_ranks pr JOIN rank_seasons s ON s.id = pr.season_id AND s.status = 'active' WHERE pr.wins + pr.losses > 0) AS ranked_played,
-      (SELECT count(*) FROM player_ranks pr JOIN rank_seasons s ON s.id = pr.season_id AND s.status = 'active' WHERE pr.division = 39 AND pr.rp >= 200) AS top_eligible`,
+      (SELECT count(*) FROM player_ranks pr JOIN rank_seasons s ON s.id = pr.season_id AND s.status = 'active' WHERE pr.division = ${MAX_DIVISION} AND pr.rp >= ${RP_PER_DIVISION}) AS top_eligible`,
   );
   return {
     players: { total: num(r.players), newToday: num(r.new_today), new7d: num(r.new_7d), pendingVerification: num(r.pending_verification), test: num(r.test_players), banned: num(r.banned) },

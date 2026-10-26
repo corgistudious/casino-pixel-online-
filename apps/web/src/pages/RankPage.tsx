@@ -195,7 +195,7 @@ export function RankPage() {
                 <div key={tier.id} className={`flex w-20 shrink-0 flex-col items-center gap-1 rounded-xl p-2 ${current ? 'bg-gold-300/10 ring-1 ring-gold-300/50' : ''}`}>
                   <RankEmblem division={first + tier.divisions - 1} size={52} dim={!!st && first > st.division} />
                   <span className="text-center text-[11px] font-semibold text-white/80">{t(`rank.tiers.${tier.id}`)}</span>
-                  <span className="text-[10px] text-white/40">{['', 'I', 'II', 'III', 'IV', 'V'][tier.divisions]} → I</span>
+                  <span className="text-[10px] text-white/40">{tier.divisions > 1 ? `${['', 'I', 'II', 'III', 'IV', 'V'][tier.divisions]} → I` : t('rank.maxNeeded')}</span>
                 </div>
               );
             })}

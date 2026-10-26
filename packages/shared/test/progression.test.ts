@@ -8,6 +8,7 @@ import {
   expToNext,
   LEVEL_MAX,
   levelFromExp,
+  hasRoman,
   MAX_DIVISION,
   PROTECTED_MAX_DIVISION,
   RP_PER_DIVISION,
@@ -37,12 +38,15 @@ describe('level', () => {
 });
 
 describe('rank ladder', () => {
-  it('has 40 divisions: Đồng III … Chiến Thần I', () => {
-    expect(DIVISION_COUNT).toBe(40);
+  it('has 41 divisions: Đồng III … Chiến Thần I, then Thần Thoại', () => {
+    expect(DIVISION_COUNT).toBe(41);
+    expect(DIVISIONS[MAX_DIVISION - 1]).toMatchObject({ tier: 'wargod', roman: 1 });
     expect(DIVISIONS[0]).toMatchObject({ tier: 'bronze', roman: 3 });
     expect(DIVISIONS[PROTECTED_MAX_DIVISION]).toMatchObject({ tier: 'gold', roman: 1 });
     expect(DIVISIONS[PROTECTED_MAX_DIVISION + 1]).toMatchObject({ tier: 'platinum', roman: 5 });
-    expect(DIVISIONS[MAX_DIVISION]).toMatchObject({ tier: 'wargod', roman: 1 });
+    expect(DIVISIONS[MAX_DIVISION]).toMatchObject({ tier: 'mythic', roman: 1 });
+    expect(hasRoman(MAX_DIVISION)).toBe(false);
+    expect(hasRoman(MAX_DIVISION - 1)).toBe(true);
     expect(SERIES_DIVISIONS.map((d) => DIVISIONS[d]!.tier)).toEqual(['platinum', 'diamond', 'star', 'master', 'legend']);
     expect(SERIES_DIVISIONS.every((d) => DIVISIONS[d]!.roman === 1)).toBe(true);
   });
@@ -93,7 +97,17 @@ describe('rank ladder', () => {
     expect(play({ division: idx('gold', 1), rp: 190, streak: 0 }, ['win']).division).toBe(idx('platinum', 5));
   });
 
-  it('Chiến Thần I keeps scoring above 200 and becomes Top-eligible', () => {
+  it('Chiến Thần I promotes to Thần Thoại like any division (no RP lost)', () => {
+    const c = applyRankResult({ division: MAX_DIVISION - 1, rp: 190, streak: 0 }, 'win');
+    expect(c.after).toEqual({ division: MAX_DIVISION, rp: 15, streak: 0 });
+    expect(c.promoted).toBe(true);
+    expect(c.rpDelta).toBe(25);
+    expect(topEligible(c.after)).toBe(false);
+    // A loss at Thần Thoại 0 RP drops back to Chiến Thần I.
+    expect(applyRankResult({ division: MAX_DIVISION, rp: 10, streak: 0 }, 'loss').after).toEqual({ division: MAX_DIVISION - 1, rp: 190, streak: 0 });
+  });
+
+  it('Thần Thoại keeps scoring above 200; only MAX Thần Thoại is Top-eligible', () => {
     const s = play({ division: MAX_DIVISION, rp: 190, streak: 0 }, ['win', 'win']);
     expect(s).toEqual({ division: MAX_DIVISION, rp: 240, streak: 0 });
     expect(topEligible(s)).toBe(true);
