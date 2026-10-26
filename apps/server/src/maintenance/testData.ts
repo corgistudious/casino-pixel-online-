@@ -25,7 +25,7 @@ export const TEST_DATA_TABLES = [
   { table: 'guild_win_events', column: 'user_id', action: 'delete' },
   { table: 'guild_members', column: 'user_id', action: 'delete' },
   { table: 'quest_claims', column: 'user_id', action: 'delete' },
-  { table: 'guilds', column: 'owner_id', action: 'delete' }
+  { table: 'guilds', column: 'owner_id', action: 'delete' },
   { table: 'support_ticket_messages', column: 'author_id', action: 'delete' },
   { table: 'support_tickets', column: 'user_id', action: 'delete' },
   { table: 'support_tickets', column: 'assigned_to', action: 'delete' },
