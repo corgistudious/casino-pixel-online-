@@ -30,6 +30,7 @@ import { VipPage } from './pages/VipPage';
 import { BankPage } from './pages/BankPage';
 import { SupportPage } from './support/SupportPage';
 import { SupportAdminPage } from './admin/SupportAdminPage';
+import { MissionConfigPage } from './admin/MissionConfigPage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { RoomsAdminPage } from './admin/RoomsAdminPage';
 import { TradingPage } from './pages/TradingPage';
@@ -143,6 +144,7 @@ export function App() {
           <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
           <Route path="support" element={<RequirePerm perm="support.read"><SupportAdminPage /></RequirePerm>} />
           <Route path="progression" element={<RequirePerm perm="progression.read"><ProgressionAdminPage /></RequirePerm>} />
+          <Route path="missions" element={<RequirePerm perm="progression.read"><MissionConfigPage /></RequirePerm>} />
           <Route path="season-rewards" element={<RequirePerm perm="progression.read"><SeasonRewardsPage /></RequirePerm>} />
           <Route path="giftcodes" element={<RequirePerm perm="giftcode.manage"><GiftcodesPage /></RequirePerm>} />
           <Route path="rooms" element={<RequirePerm perm="rooms.manage"><RoomsAdminPage /></RequirePerm>} />

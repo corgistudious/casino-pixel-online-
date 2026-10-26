@@ -13,6 +13,7 @@ export const ADMIN_SECTIONS: { path: string; key: string; perm: Permission }[] =
   { path: 'support', key: 'support', perm: 'support.read' },
   { path: 'progression', key: 'progression', perm: 'progression.read' },
   { path: 'season-rewards', key: 'seasonRewards', perm: 'progression.read' },
+  { path: 'missions', key: 'missions', perm: 'progression.read' },
   { path: 'giftcodes', key: 'giftcodes', perm: 'giftcode.manage' },
   { path: 'rooms', key: 'rooms', perm: 'rooms.manage' },
   { path: 'items', key: 'items', perm: 'items.read' },

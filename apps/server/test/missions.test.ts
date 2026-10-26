@@ -2,13 +2,14 @@ import { MISSION_RULES, type MissionsOverview } from '@casino/shared';
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { createOwner, randomIp, register, startTestApp, TestSocket, type TestApp } from './helpers';
+import { createOwner, createStaff, randomIp, register, startTestApp, TestSocket, type TestApp } from './helpers';
 
 let t: TestApp;
 let seasonId: number;
+let owner: Awaited<ReturnType<typeof createOwner>>;
 beforeAll(async () => {
   t = await startTestApp();
-  const owner = await createOwner(t);
+  owner = await createOwner(t);
   const s = await t.app.inject({ method: 'POST', url: '/api/admin/rank/seasons', headers: owner.headers, remoteAddress: randomIp(), payload: { name: 'Mùa Nhiệm Vụ', startsAt: new Date(Date.now() - 60_000).toISOString() } });
   seasonId = s.json().season.id;
   await t.app.inject({ method: 'POST', url: `/api/admin/rank/seasons/${seasonId}/start`, headers: owner.headers, remoteAddress: randomIp() });
@@ -112,5 +113,34 @@ describe('missions', () => {
     } finally {
       await t.db.execute(sql`UPDATE rank_seasons SET status = 'active' WHERE id = ${seasonId}`);
     }
+  });
+
+  it('only the Owner configures rewards; limits are enforced; claims use the new values', async () => {
+    const put = (headers: Record<string, string>, payload: unknown) => t.app.inject({ method: 'PUT', url: '/api/admin/missions/config', headers, payload: payload as object, remoteAddress: randomIp() });
+    const good = { rewards: { daily_play: { silver: 777, gold: 1, vipExp: 0 }, rank_week_win: { silver: 5_000, gold: 0, vipExp: 10 } }, vipExpWeeklyCap: 60 };
+    const superAdmin = await createStaff(t, 'super_admin');
+    expect((await put(superAdmin.headers, good)).statusCode).toBe(403);
+    expect((await put({ authorization: `Bearer ${owner.token}` }, good)).json().error.code).toBe('reauth_required');
+    // VIP EXP must stay small and only on rank missions.
+    expect((await put(owner.headers, { ...good, rewards: { rank_week_win: { silver: 0, gold: 0, vipExp: 51 } } })).statusCode).toBe(400);
+    expect((await put(owner.headers, { ...good, rewards: { daily_play: { silver: 0, gold: 0, vipExp: 5 } } })).statusCode).toBe(400);
+    expect((await put(owner.headers, { ...good, vipExpWeeklyCap: 301 })).statusCode).toBe(400);
+    expect((await put(owner.headers, { ...good, rewards: { nope: { silver: 1, gold: 0, vipExp: 0 } } })).statusCode).toBe(400);
+    expect((await put(owner.headers, good)).statusCode).toBe(200);
+    const [log] = await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM audit_logs WHERE action = 'missions.config'`);
+    expect(log!.n).toBe(1);
+
+    const p = await register(t);
+    const o = await overview(p);
+    expect(o.missions.find((m) => m.id === 'daily_play')!.reward).toEqual({ silver: 777, gold: 1, vipExp: 0 });
+    expect(o.vip.weekCap).toBe(60);
+    const s = await TestSocket.connect(t.port, p.token);
+    for (let i = 0; i < 3; i++) await s.ok({ type: 'slots.spin', bet: 100 });
+    s.close();
+    const before = await silver(p.user.id);
+    expect((await claim(p, 'daily_play')).statusCode).toBe(200);
+    expect(await silver(p.user.id)).toBe(before + 777);
+    // Reset to defaults for the rest of the suite.
+    expect((await put(owner.headers, { rewards: {}, vipExpWeeklyCap: MISSION_RULES.vipExpWeeklyCap })).statusCode).toBe(200);
   });
 });
