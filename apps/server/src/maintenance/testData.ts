@@ -128,11 +128,15 @@ export async function uncoveredForeignKeys(db: DbOrTx): Promise<string[]> {
 async function tableCounts(db: DbOrTx): Promise<TableCount[]> {
   const out: TableCount[] = [];
   for (const t of TEST_DATA_TABLES) {
+    // A row with multiple user references belongs to TEST data if ANY referenced
+    // user is a TEST account. Count kept rows by the whole row, not by one column.
+    const columns = [...new Set(TEST_DATA_TABLES.filter((entry) => entry.table === t.table).map((entry) => entry.column))];
+    const targets = sql.join(columns.map((column) => sql`${sql.identifier(column)} IN (${TARGETS})`), sql` OR `);
     const row = await one<{ test: string; kept: string }>(
       db,
       sql`SELECT
-            count(*) FILTER (WHERE ${sql.identifier(t.column)} IN (${TARGETS})) AS test,
-            count(*) FILTER (WHERE ${sql.identifier(t.column)} NOT IN (${TARGETS})) AS kept
+            count(*) FILTER (WHERE ${targets}) AS test,
+            count(*) FILTER (WHERE NOT (${targets})) AS kept
           FROM ${sql.identifier(t.table)}`,
     );
     out.push({ table: t.table, action: t.action, test: n(row.test), kept: n(row.kept) });
