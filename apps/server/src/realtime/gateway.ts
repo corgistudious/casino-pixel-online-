@@ -69,7 +69,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
           outcome = await blackjackStart(db, userId, msg.id, msg.bet);
           break;
         case 'blackjack.action':
-          outcome = await blackjackAct(db, userId, msg.id, msg.roundId, msg.action);
+          outcome = await blackjackAct(db, userId, msg.id, msg.roundId, msg.action, msg.amount ?? 0);
           break;
         case 'blackjack.resume':
           return blackjackResume(db, userId);

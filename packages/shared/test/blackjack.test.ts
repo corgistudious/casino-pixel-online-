@@ -24,6 +24,8 @@ function fixed(player: Card[], dealer: Card[], shoeTop: Card[] = [], bet = 100):
     phase: 'player',
     outcome: null,
     payout: 0,
+    insurance: 0,
+    insurancePayout: 0,
   };
 }
 const cardsOf = (s: BlackjackState) => s.hands[s.active]!.cards;
@@ -94,6 +96,7 @@ describe('blackjack', () => {
     for (let seed = 0; seed < 20_000; seed++) {
       let s = startBlackjack(seededRng(seed), 10);
       bet += 10;
+      if (s.phase === 'insurance') s = applyBlackjackAction(s, 'insurance', 0);
       while (s.phase === 'player') {
         const total = handValue(cardsOf(s)).total;
         if (total === 11 && cardsOf(s).length === 2) {
@@ -182,6 +185,11 @@ describe('blackjack', () => {
     for (let seed = 0; seed < 3_000; seed++) {
       let s = startBlackjack(seededRng(seed), 10);
       let staked = 10;
+      if (s.phase === 'insurance') {
+        const ins = seed % 2 ? 5 : 0;
+        staked += extraStake(s, 'insurance', ins);
+        s = applyBlackjackAction(s, 'insurance', ins);
+      }
       while (s.phase === 'player') {
         const view = blackjackView(s);
         const action = view.canSplit ? 'split' : view.canDouble && seed % 3 === 0 ? 'double' : view.playerTotal < 17 ? 'hit' : 'stand';
@@ -190,9 +198,72 @@ describe('blackjack', () => {
       }
       expect(totalStake(s)).toBe(staked);
       for (const h of s.hands) expect([0, h.bet * (h.doubled ? 2 : 1), h.bet * (h.doubled ? 4 : 2), 25]).toContain(h.payout);
-      expect(s.payout).toBe(s.hands.reduce((a, h) => a + h.payout, 0));
+      expect([0, s.insurance * 3]).toContain(s.insurancePayout);
+      expect(s.payout).toBe(s.hands.reduce((a, h) => a + h.payout, 0) + s.insurancePayout);
       const view = JSON.stringify(blackjackView(s));
       expect(view).not.toContain('shoe');
     }
+  });
+
+  describe('insurance', () => {
+    /** Dealer shows an Ace; `hole` is the dealer's face-down card. */
+    const aceUp = (player: Card[], hole: Card, shoe: Card[] = [], bet = 100): BlackjackState => ({ ...fixed(player, ['AS', hole], shoe, bet), phase: 'insurance' });
+
+    it('is offered when the dealer shows an Ace, before anything else', () => {
+      const s = aceUp(['10S', '7D'], '9C');
+      const v = blackjackView(s);
+      expect(v.insuranceMax).toBe(50);
+      expect(v.dealer).toEqual(['AS', null]);
+      expect(v.canDouble).toBe(false);
+      expect(() => applyBlackjackAction(s, 'hit')).toThrow();
+    });
+
+    it('pays 2:1 when the dealer has blackjack; the main bet loses', () => {
+      const s = applyBlackjackAction(aceUp(['10S', '7D'], 'KC'), 'insurance', 50);
+      expect(s.phase).toBe('finished');
+      expect(s.outcome).toBe('dealer_blackjack');
+      expect(s.insurancePayout).toBe(150);
+      expect(s.payout).toBe(150); // 100 + 50 staked, 150 back: insurance covered the loss
+      expect(totalStake(s)).toBe(150);
+    });
+
+    it('is lost when the dealer has no blackjack and the hand continues', () => {
+      let s = applyBlackjackAction(aceUp(['10S', '7D'], '6C', ['5H', '9D']), 'insurance', 50);
+      expect(s.phase).toBe('player');
+      expect(s.insurancePayout).toBe(0);
+      s = applyBlackjackAction(s, 'stand'); // dealer A+6 = soft 17, stands; 17 vs 17
+      expect(s.outcome).toBe('push');
+      expect(s.payout).toBe(100); // main bet back, insurance gone
+      expect(totalStake(s)).toBe(150);
+    });
+
+    it('no insurance: dealer blackjack takes the bet; a player natural pushes against it', () => {
+      const lost = applyBlackjackAction(aceUp(['10S', '7D'], 'QH'), 'insurance', 0);
+      expect([lost.outcome, lost.payout]).toEqual(['dealer_blackjack', 0]);
+      const both = applyBlackjackAction(aceUp(['AH', 'KD'], 'QH'), 'insurance', 0);
+      expect([both.outcome, both.payout]).toEqual(['push', 100]);
+      const mine = applyBlackjackAction(aceUp(['AH', 'KD'], '7C'), 'insurance', 0);
+      expect([mine.outcome, mine.payout]).toEqual(['blackjack', 250]);
+    });
+
+    it('cannot exceed half the original bet or be decided twice', () => {
+      const s = aceUp(['10S', '7D'], '9C', [], 101);
+      expect(blackjackView(s).insuranceMax).toBe(50);
+      expect(() => applyBlackjackAction(s, 'insurance', 51)).toThrow();
+      expect(() => applyBlackjackAction(s, 'insurance', -1)).toThrow();
+      const decided = applyBlackjackAction(s, 'insurance', 0);
+      expect(() => applyBlackjackAction(decided, 'insurance', 10)).toThrow();
+    });
+
+    it('a dealt Ace up-card starts in the insurance phase', () => {
+      for (let seed = 0; seed < 300; seed++) {
+        const s = startBlackjack(seededRng(seed), 100);
+        if (s.dealer[0]!.startsWith('A')) {
+          expect(s.phase).toBe('insurance');
+          return;
+        }
+      }
+      throw new Error('no Ace up-card in 300 seeds');
+    });
   });
 });

@@ -114,13 +114,14 @@ describe('websocket games', () => {
     const s = await TestSocket.connect(t.port, token);
     for (let hand = 0; hand < 10; hand++) {
       let env = await s.ok<RoundEnvelope<BlackjackView>>({ type: 'blackjack.start', bet: 100 });
-      if (env.result.phase === 'player') {
+      if (env.result.phase !== 'finished') {
         expect(env.result.dealer[1]).toBeNull();
         const again = await s.request({ type: 'blackjack.start', bet: 100 });
         expect(again.ok ? null : again.error.code).toBe('round_active');
         const resumed = await s.ok<RoundEnvelope<BlackjackView> | null>({ type: 'blackjack.resume' });
         expect(resumed?.roundId).toBe(env.roundId);
       }
+      if (env.result.phase === 'insurance') env = await s.ok({ type: 'blackjack.action', roundId: env.roundId, action: 'insurance', amount: 0 });
       while (env.result.phase === 'player') {
         const action = env.result.playerTotal < 17 ? 'hit' : 'stand';
         env = await s.ok({ type: 'blackjack.action', roundId: env.roundId, action });
@@ -188,7 +189,7 @@ describe('integrity', () => {
     let env: RoundEnvelope<BlackjackView>;
     // Retry until we get a hand that is not settled immediately by a natural.
     do env = await s.ok({ type: 'blackjack.start', bet: 10 });
-    while (env.result.phase !== 'player');
+    while (env.result.phase === 'finished');
     s.close();
     const res = await t.app.inject({ method: 'POST', url: '/api/me/fairness/rotate', headers: { authorization: `Bearer ${token}` } });
     expect(res.json().error.code).toBe('round_active');

@@ -12,6 +12,7 @@ import { PhaserView } from '../PhaserView';
 import { BlackjackScene } from '../scenes/BlackjackScene';
 import { GameLayout, Stat } from './GameLayout';
 import { usePlay } from './usePlay';
+import { InsurancePrompt } from './InsurancePrompt';
 
 export function BlackjackGame() {
   const { t, i18n } = useTranslation();
@@ -22,6 +23,7 @@ export function BlackjackGame() {
   const [round, setRound] = useState<RoundEnvelope<BlackjackView> | null>(null);
   const { busy, run } = usePlay();
   const inHand = round?.result.phase === 'player';
+  const insuring = round?.result.phase === 'insurance';
   const balance = useSession((st) => st.balance);
   // Doubling or splitting stakes the active hand's bet again.
   const handBet = round ? (round.result.hands?.[round.result.active]?.bet ?? round.result.bet) : 0;
@@ -52,11 +54,11 @@ export function BlackjackGame() {
     }
   };
 
-  const act = async (action: BlackjackAction) => {
+  const act = async (action: BlackjackAction, amount?: number) => {
     const s = scene.current;
     if (!s || !round) return;
     const env = await run(
-      () => socket.request('blackjack.action', { roundId: round.roundId, action }),
+      () => socket.request('blackjack.action', { roundId: round.roundId, action, ...(amount !== undefined ? { amount } : {}) }),
       (e) => s.show(e.result, tr),
     );
     if (env) setRound(env);
@@ -80,7 +82,12 @@ export function BlackjackGame() {
         />
       }
       panel={
-        inHand ? (
+        insuring ? (
+          <>
+            <Stat label={t('play.bet')} value={formatChips(round!.result.bet, i18n.language)} accent />
+            <InsurancePrompt key={round!.roundId} max={Math.min(round!.result.insuranceMax ?? 0, balance)} busy={busy} onDecide={(n) => void act('insurance', n)} />
+          </>
+        ) : inHand ? (
           <>
             <Stat label={t('play.bet')} value={formatChips(round!.result.bet, i18n.language)} accent />
             {(round!.result.hands?.length ?? 1) > 1 && (

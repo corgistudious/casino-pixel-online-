@@ -115,7 +115,9 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
     type: z.literal('blackjack.action'),
     id: requestId,
     roundId: z.string().uuid(),
-    action: z.enum(['hit', 'stand', 'double', 'split']),
+    action: z.enum(['hit', 'stand', 'double', 'split', 'insurance']),
+    /** Insurance stake (0 = no insurance); only for action 'insurance'. */
+    amount: z.number().int().min(0).max(1_000_000_000).optional(),
   }),
   z.object({ type: z.literal('blackjack.resume'), id: requestId }),
   z.object({ type: z.literal('table.join'), id: requestId, tableId: z.string().min(1).max(40) }),
