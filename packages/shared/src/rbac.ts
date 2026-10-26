@@ -9,6 +9,10 @@ export const PERMISSIONS = [
   /** Email addresses, login/security history. */
   'users.pii',
   'users.ban',
+  /** Set a new password for another account (revokes its sessions). Owner and Super Admin only. */
+  'users.password_reset',
+  /** Remove the email linked to another account. Owner and Super Admin only. */
+  'users.email_unlink',
   'staff.read',
   /** Grant/revoke staff roles strictly below the actor's own rank. */
   'staff.manage',
@@ -101,6 +105,13 @@ export const DEFAULT_ROLES: Record<RoleId, { name: string; description: string; 
     permissions: ['admin.access', 'users.read', 'support.read', 'support.reply'],
   },
 };
+
+/**
+ * Account-takeover-grade permissions. The server checks the actor's built-in role as well as the
+ * permission, so these can never work through a custom role even if one were granted them.
+ */
+export const HIGH_TRUST_PERMISSIONS = ['users.password_reset', 'users.email_unlink'] as const satisfies readonly Permission[];
+export const HIGH_TRUST_ROLES: readonly RoleId[] = ['owner', 'super_admin'];
 
 /** Rank of a custom (non built-in) role: below every built-in staff role. */
 export const CUSTOM_ROLE_RANK = 10;

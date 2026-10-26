@@ -21,6 +21,7 @@ export function statusFor(code: ErrorCode): number {
     case 'email_not_verified':
     case 'system_account':
     case 'protected_account':
+    case 'self_action_forbidden':
     case 'reauth_required':
       return 403;
     case 'round_not_found':

@@ -70,6 +70,8 @@ export const ERROR_CODES = [
   'system_account',
   'deletion_pending',
   'protected_account',
+  'email_not_linked',
+  'self_action_forbidden',
   'reauth_required',
   'idempotency_conflict',
   'last_super_admin',

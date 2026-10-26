@@ -1,4 +1,4 @@
-import { adminBadgesSchema, adminGrantSchema, DEFAULT_ROLES, PERMISSIONS, roleRank, SPECIAL_UID_MAX, usernameSchema, emailSchema } from '@casino/shared';
+import { adminBadgesSchema, adminGrantSchema, DEFAULT_ROLES, PERMISSIONS, passwordSchema, roleRank, SPECIAL_UID_MAX, usernameSchema, emailSchema } from '@casino/shared';
 import { desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import type { FastifyInstance } from 'fastify';
@@ -16,6 +16,7 @@ import {
   revokeBan,
   updateBanEnd,
 } from '../services/accounts';
+import { adminResetPassword, adminUnlinkEmail, maskEmail } from '../services/adminAccounts';
 import { audit } from '../services/audit';
 import { runOnce } from '../services/adminOps';
 import { grantableRoles, grantStaffRole, isProtected, listStaff, rankOf, revokeStaffRole, userPermissions, userRoleIds } from '../services/rbac';
@@ -127,6 +128,8 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
         username: user.username,
         displayName: user.displayName,
         email: pii ? user.email : null,
+        emailMasked: maskEmail(user.email),
+        hasEmail: !!user.email,
         emailVerified: !!user.emailVerifiedAt,
         protected: isProtected(user),
         status: user.status,
@@ -164,6 +167,24 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     const { endsAt } = z.object({ endsAt: z.string().datetime().nullable() }).parse(req.body);
     return { ban: await updateBanEnd(db, req.account!.id, id, endsAt ? new Date(endsAt) : null, req.ip) };
+  });
+
+  // ---------------------------------------------------------------- account recovery (Owner / Super Admin)
+  const recoverySchema = z.object({ reason: z.string().trim().min(3).max(500) });
+
+  app.post('/api/admin/users/:uid/password', { preHandler: canReauth('users.password_reset') }, async (req) => {
+    const { uid } = uidParam.parse(req.params);
+    const input = recoverySchema.extend({ password: passwordSchema }).parse(req.body);
+    const { userId } = await adminResetPassword(db, req.account!.id, uid, input.password, input.reason, req.ip);
+    hub.kick(userId);
+    return { ok: true };
+  });
+
+  app.post('/api/admin/users/:uid/email/unlink', { preHandler: canReauth('users.email_unlink') }, async (req) => {
+    const { uid } = uidParam.parse(req.params);
+    const { reason } = recoverySchema.parse(req.body);
+    await adminUnlinkEmail(db, req.account!.id, uid, reason, req.ip);
+    return { ok: true };
   });
 
   // ---------------------------------------------------------------- UID registry

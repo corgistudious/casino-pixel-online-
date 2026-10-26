@@ -33,7 +33,7 @@ interface BanRow {
 }
 
 interface Detail {
-  user: PlayerRow & { emailVerified: boolean; protected: boolean; badges: Badge[]; roles: string[]; createdAt: string; wallet: { balance: number; gold: number } };
+  user: PlayerRow & { emailMasked: string | null; hasEmail: boolean; emailVerified: boolean; protected: boolean; badges: Badge[]; roles: string[]; createdAt: string; wallet: { balance: number; gold: number } };
   bans: BanRow[];
 }
 
@@ -184,7 +184,7 @@ function PlayerDetail({ uid }: { uid: number }) {
       {tab === 'overview' && (
         <div className="flex flex-col gap-4">
           <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm md:grid-cols-3">
-            <Field label={t('admin.fields.email')} value={u.email ? `${u.email}${u.emailVerified ? ' ✓' : ''}` : can('users.pii') ? t('account.noEmail') : '—'} />
+            <Field label={t('admin.fields.email')} value={u.email ? `${u.email}${u.emailVerified ? ' ✓' : ''}` : u.emailMasked ? `${u.emailMasked}${u.emailVerified ? ' ✓' : ''}` : t('account.noEmail')} />
             <Field label={t('admin.fields.created')} value={date(u.createdAt)} />
             <Field label={t('admin.fields.status')} value={t(`account.statuses.${u.status}`, { defaultValue: u.status })} />
             {activity && (
@@ -196,6 +196,7 @@ function PlayerDetail({ uid }: { uid: number }) {
             )}
           </dl>
           <Actions detail={detail} call={call} />
+          <Recovery detail={detail} call={call} />
         </div>
       )}
 
@@ -224,7 +225,12 @@ function PlayerDetail({ uid }: { uid: number }) {
         />
       )}
 
-      {tab === 'bans' && <BanHistory bans={detail.bans} canLift={can('users.ban') && !u.protected} call={call} />}
+      {tab === 'bans' && (
+        <>
+          <BanStatus bans={detail.bans} canChange={can('users.ban') && !u.protected} call={call} />
+          <BanHistory bans={detail.bans} canLift={can('users.ban') && !u.protected} call={call} />
+        </>
+      )}
     </Panel>
   );
 }
@@ -345,6 +351,93 @@ function Actions({ detail, call }: { detail: Detail; call: (m: string, p: string
               {t('admin.ban')}
             </Button>
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const HIGH_TRUST = ['owner', 'super_admin'];
+const strongPassword = (p: string) => p.length >= 8 && p.length <= 128 && /[A-Za-z]/.test(p) && /[0-9]/.test(p);
+
+/** Password reset and email unlink. The server re-checks role, rank, protected accounts and re-auth. */
+function Recovery({ detail, call }: { detail: Detail; call: (m: string, p: string, b?: unknown) => Promise<boolean> }) {
+  const { t, can, me } = useAdminKit();
+  const u = detail.user;
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [reason, setReason] = useState('');
+  const [checked, setChecked] = useState(false);
+  const highTrust = me?.roles.some((r) => HIGH_TRUST.includes(r)) ?? false;
+  const eligible = highTrust && !u.protected && u.uid !== me?.uid && u.accountType === 'player' && u.status !== 'deleted';
+  if (!eligible || !(can('users.password_reset') || can('users.email_unlink'))) return null;
+  const reasonOk = reason.trim().length >= 3;
+  const pwError = password && !strongPassword(password) ? t('admin.recovery.weak') : confirm && confirm !== password ? t('admin.recovery.mismatch') : '';
+  const reset = () => {
+    if (!window.confirm(t('admin.recovery.confirmReset', { name: u.displayName }))) return;
+    void call('POST', `/api/admin/users/${u.uid}/password`, { password, reason: reason.trim() }).then((ok) => ok && (setPassword(''), setConfirm(''), setReason(''), setChecked(false)));
+  };
+  const unlink = () => {
+    if (!window.confirm(t('admin.recovery.confirmUnlink', { name: u.displayName }))) return;
+    void call('POST', `/api/admin/users/${u.uid}/email/unlink`, { reason: reason.trim() }).then((ok) => ok && (setReason(''), setChecked(false)));
+  };
+  return (
+    <section className="flex flex-col gap-3 rounded-xl border border-ruby-400/25 bg-ruby-500/5 p-4" aria-labelledby="recovery-title">
+      <div>
+        <h3 id="recovery-title" className="font-display text-base text-white">{t('admin.recovery.title')}</h3>
+        <p className="text-xs text-white/55">{t('admin.recovery.hint')}</p>
+      </div>
+      <input className="field" placeholder={t('admin.recovery.reason')} value={reason} onChange={(e) => setReason(e.target.value)} maxLength={500} />
+      <label className="flex items-center gap-2 text-xs text-white/70">
+        <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} /> {t('admin.recovery.understood')}
+      </label>
+      {can('users.password_reset') && (
+        <div className="flex flex-wrap items-start gap-2">
+          <input className="field max-w-56" type="password" autoComplete="new-password" placeholder={t('admin.recovery.newPassword')} value={password} onChange={(e) => setPassword(e.target.value)} maxLength={128} />
+          <input className="field max-w-56" type="password" autoComplete="new-password" placeholder={t('admin.recovery.confirmPassword')} value={confirm} onChange={(e) => setConfirm(e.target.value)} maxLength={128} />
+          <Button variant="ruby" disabled={!checked || !reasonOk || !strongPassword(password) || password !== confirm} onClick={reset}>
+            {t('admin.recovery.resetPassword')}
+          </Button>
+          {pwError && <p className="w-full text-xs text-ruby-400" role="alert">{pwError}</p>}
+        </div>
+      )}
+      {can('users.email_unlink') && (
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-white/60">{t('admin.recovery.email')}:</span>
+          <code className="text-white/85">{u.emailMasked ?? t('admin.recovery.noEmail')}</code>
+          <Button size="sm" variant="ruby" disabled={!u.hasEmail || !checked || !reasonOk} onClick={unlink}>
+            {t('admin.recovery.unlink')}
+          </Button>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/** Current ban, if any, with a control to extend, shorten or make it permanent. */
+function BanStatus({ bans, canChange, call }: { bans: BanRow[]; canChange: boolean; call: (m: string, p: string, b?: unknown) => Promise<boolean> }) {
+  const { t, date } = useAdminKit();
+  const now = Date.now();
+  const active = bans.find((b) => !b.revokedAt && (!b.endsAt || new Date(b.endsAt).getTime() > now));
+  const [end, setEnd] = useState('');
+  return (
+    <div className={`flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3 text-sm ${active ? 'border-ruby-400/40 bg-ruby-500/10' : 'border-emerald-400/30 bg-emerald-500/10'}`}>
+      <span className="text-xs uppercase tracking-wide text-white/50">{t('admin.banStatus.title')}</span>
+      <strong className={active ? 'text-ruby-300' : 'text-emerald-300'}>
+        {!active ? t('admin.banStatus.clean') : active.endsAt ? t('admin.banStatus.bannedUntil', { date: date(active.endsAt) }) : t('admin.banStatus.bannedForever')}
+      </strong>
+      {active && canChange && (
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          <label className="text-xs text-white/55" htmlFor="ban-end">{t('admin.banStatus.newEnd')}</label>
+          <input id="ban-end" className="field max-w-56" type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} />
+          <Button size="sm" disabled={!end || new Date(end).getTime() <= Date.now()} onClick={() => void call('PATCH', `/api/admin/bans/${active.id}`, { endsAt: new Date(end).toISOString() }).then((ok) => ok && setEnd(''))}>
+            {t('admin.banStatus.save')}
+          </Button>
+          {active.endsAt && (
+            <Button size="sm" variant="ruby" onClick={() => void call('PATCH', `/api/admin/bans/${active.id}`, { endsAt: null })}>
+              {t('admin.banStatus.makePermanent')}
+            </Button>
+          )}
         </div>
       )}
     </div>
