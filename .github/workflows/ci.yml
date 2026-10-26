@@ -16,17 +16,17 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: casino
-          POSTGRES_PASSWORD: casino
-          POSTGRES_DB: casino_test
-        ports: ["5432:5432"]
+          POSTGRES_USER: keyo_test
+          POSTGRES_PASSWORD: keyo_test
+          POSTGRES_DB: keyo_auth_test
+        ports: ["127.0.0.1:25432:5432"]
         options: >-
-          --health-cmd "pg_isready -U casino" --health-interval 5s --health-timeout 5s --health-retries 10
+          --health-cmd "pg_isready -U keyo_test -d keyo_auth_test" --health-interval 5s --health-timeout 5s --health-retries 10
       redis:
         image: redis:7
         ports: ["6379:6379"]
     env:
-      TEST_DATABASE_URL: postgres://casino:casino@localhost:5432/casino_test
+      TEST_DATABASE_URL: postgres://keyo_test:keyo_test@127.0.0.1:25432/keyo_auth_test
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
