@@ -41,6 +41,14 @@ Bản cập nhật tiếp nối `docs/FULL_UPGRADE.md`. Mọi tính năng cũ gi
 - Chỉ một server điều khiển đồng hồ (advisory lock `keyo:bj-tables`).
 - Mọi tiền cược và thưởng đi qua ledger; mỗi ghế mỗi vòng có một dòng `game_rounds` (`bjt:<round>:<seat>`) nên nhiệm vụ, EXP và lịch sử vẫn tính như các game khác. Tiền thưởng chỉ trả một lần.
 
+**Reset dữ liệu TEST (`reset:test-data`):**
+- `bj_seats` có khoá ngoại nên được xoá như các bảng khác. `bj_rounds.state.players[].userId` là JSON, không có khoá ngoại, nên reset tự tìm người chơi TEST trong đó.
+- Ván **đang chơi** có cả người chơi TEST và người chơi thật: **chặn reset ngay từ preflight**, kèm lý do. Phải chờ ván kết thúc rồi chạy lại dry-run; có thể tạm dừng bàn trong Admin để không mở ván mới. Lý do: huỷ ván sẽ hoàn tiền cược thật, còn trả thưởng sớm thì trả cho tay bài chưa xong.
+- Ván chỉ có người chơi TEST (đang chơi hoặc đã xong): xoá. Không hoàn tiền cho ai, vì ví, ledger và `game_rounds` của tài khoản TEST cũng bị xoá.
+- Ván đã xong có cả người chơi thật: giữ nguyên ván và phần của người chơi thật. Phần của người chơi TEST được xoá danh tính (`userId: null`, `removed: true`), bỏ luôn danh sách request id.
+- Reset khoá các ván đang chơi trước khi khoá bảng `users`, cùng thứ tự với engine, nên không có lượt cược, hành động hay thanh toán nào chen vào giữa.
+- Sau khi xoá, reset kiểm tra lại: không ván nào còn trỏ tới tài khoản TEST; phần của người chơi thật trong mọi ván, trạng thái ván, số dư và ledger không đổi. Sai bất kỳ điều gì thì rollback toàn bộ.
+
 ## 3. Tặng quà Cxu Bạc
 
 - Tổng **5.000 Cxu Bạc mỗi ngày** cho mỗi người gửi (ngày UTC); mỗi lần 100–5.000.
@@ -85,4 +93,5 @@ Bản cập nhật tiếp nối `docs/FULL_UPGRADE.md`. Mọi tính năng cũ gi
 | `apps/server/test/blackjackTables.test.ts` | 5 test: chơi thật nhiều người và trả thưởng một lần, Insurance + hết giờ, mất kết nối + vào lại, gửi lại / thiếu tiền / giới hạn cược, rời giữa ván + khởi động lại server |
 | `apps/server/test/social.test.ts` | Giới hạn 5.000/ngày, kể cả 8 yêu cầu đồng thời |
 | `apps/server/test/daily.test.ts` | 5 yêu cầu đồng thời chỉ trả một lần; 8 ngày mỗi ngày 30.000 |
+| `apps/server/test/resetBlackjack.test.ts` | Reset TEST: chặn khi ván đang chơi có cả TEST và người thật (gọi nhiều lần vẫn không đổi gì); người TEST mất kết nối tự Stand sau khi khởi động lại server; xoá ván chỉ có TEST, ẩn danh người TEST trong ván đã xong; số dư, ledger, `game_rounds`, khoá ngoại và idempotency của người thật không đổi; bàn vẫn chạy sau reset và sau khởi động lại; reset lần hai không có gì để làm |
 | `apps/server/test/missions.test.ts` | Chỉ Owner cấu hình, giới hạn, audit log, nhận thưởng theo cấu hình mới |
