@@ -13,7 +13,9 @@ import { registerGateway } from './realtime/gateway';
 import { RealtimeHub } from './realtime/hub';
 import { RoundTableEngine } from './services/roundTables';
 import { CardTableEngine } from './services/cardTables';
+import { BlackjackTableEngine } from './services/blackjackTables';
 import { registerCardRoutes } from './routes/cards';
+import { registerBlackjackTableRoutes } from './routes/blackjackTables';
 import { registerTableRoutes } from './routes/tables';
 import { registerProgressionRoutes } from './routes/progression';
 import { registerGiftcodeRoutes } from './routes/giftcodes';
@@ -92,7 +94,9 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   const tables = new RoundTableEngine(db, client, hub, app.log);
   registerTableRoutes(app, db, tables);
   const cards = new CardTableEngine(db, client, hub, app.log);
+  const bjt = new BlackjackTableEngine(db, client, hub, app.log);
   registerCardRoutes(app, db, cards);
+  registerBlackjackTableRoutes(app, db, bjt);
   registerProgressionRoutes(app, db, hub);
   registerGiftcodeRoutes(app, db, hub);
   registerBankRoutes(app, db, hub);
@@ -107,6 +111,7 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   if (config.TABLE_SCHEDULER === 'on') {
     await tables.start();
     await cards.start();
+    await bjt.start();
     // Ranked seasons start and end on their dates (guarded updates: safe on every instance).
     const tickRank = () => {
       void tickSeasons(db).then(
@@ -123,7 +128,7 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
     seasonTimer = setInterval(tickRank, 60_000);
     seasonTimer.unref();
   }
-  registerGateway(app, db, hub, tables, cards, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
+  registerGateway(app, db, hub, tables, cards, bjt, { rate: config.WS_RATE_PER_SEC, burst: config.WS_BURST });
 
   const stopMail = startMailWorker(db, app.log, config.SMTP_URL, config.MAIL_FROM);
   app.addHook('onClose', async () => {
@@ -131,9 +136,10 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
     clearInterval(seasonTimer);
     await tables.stop();
     await cards.stop();
+    await bjt.stop();
     await hub.close();
     await client.end({ timeout: 5 });
   });
 
-  return { app, db, hub, tables, cards };
+  return { app, db, hub, tables, cards, bjt };
 }

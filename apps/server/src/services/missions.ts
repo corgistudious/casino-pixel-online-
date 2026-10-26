@@ -1,7 +1,8 @@
-import { findMission, MISSION_RULES, MISSIONS, type MissionDef, type MissionMetric, type MissionsOverview, type MissionView } from '@casino/shared';
+import { applyMissionConfig, type MissionConfig, type MissionDef, type MissionMetric, type MissionsOverview, type MissionView } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { fail } from '../errors';
+import { audit } from './audit';
 import { applyDelta } from './wallet';
 
 /**
@@ -9,6 +10,30 @@ import { applyDelta } from './wallet';
  * results, so only play the server already accepted counts. Claims are rows in quest_claims keyed
  * by (player, mission, period): the primary key makes a second claim impossible.
  */
+
+/** The Owner's overrides (mission_settings), or null when everything uses the code defaults. */
+export async function missionConfig(db: DbOrTx): Promise<MissionConfig | null> {
+  const [row] = await db.execute<{ rewards: MissionConfig['rewards']; vip_exp_weekly_cap: number | null }>(sql`SELECT rewards, vip_exp_weekly_cap FROM mission_settings WHERE id = 1`);
+  if (!row) return null;
+  return { rewards: row.rewards ?? {}, vipExpWeeklyCap: row.vip_exp_weekly_cap ?? applyMissionConfig(null).vipExpWeeklyCap };
+}
+
+/** Effective missions and VIP cap: code defaults with the Owner's overrides. */
+async function effective(db: DbOrTx) {
+  return applyMissionConfig(await missionConfig(db));
+}
+
+/** Saves the Owner's configuration (already validated) and audits old → new. */
+export async function saveMissionConfig(db: Db, actorId: string, config: MissionConfig, ip?: string) {
+  await db.transaction(async (tx) => {
+    const before = await missionConfig(tx);
+    await tx.execute(sql`
+      INSERT INTO mission_settings (id, rewards, vip_exp_weekly_cap, updated_by, updated_at)
+      VALUES (1, ${JSON.stringify(config.rewards)}::jsonb, ${config.vipExpWeeklyCap}, ${actorId}::uuid, now())
+      ON CONFLICT (id) DO UPDATE SET rewards = excluded.rewards, vip_exp_weekly_cap = excluded.vip_exp_weekly_cap, updated_by = excluded.updated_by, updated_at = now()`);
+    await audit(tx, { actorId, action: 'missions.config', targetType: 'missions', details: { before, after: config }, ip });
+  });
+}
 
 interface Periods {
   dailyKey: string;
@@ -107,11 +132,12 @@ async function vipWeek(db: DbOrTx, userId: string, weeklyStart: string) {
 
 export async function missionsOverview(db: Db, userId: string): Promise<MissionsOverview> {
   const p = await periods(db);
+  const { missions: defs, vipExpWeeklyCap } = await effective(db);
   const claims = await db.execute<{ quest_id: string; period_key: string }>(sql`SELECT quest_id, period_key FROM quest_claims WHERE user_id = ${userId}::uuid`);
   const claimed = new Set(claims.map((c) => `${c.quest_id}|${c.period_key}`));
   const cache = new Map<string, Promise<number>>();
   const missions = await Promise.all(
-    MISSIONS.map(async (def): Promise<MissionView> => {
+    defs.map(async (def): Promise<MissionView> => {
       const w = window(def, p);
       const cacheKey = `${def.metric}|${w.start}`;
       if (!cache.has(cacheKey)) cache.set(cacheKey, progressOf(db, userId, def, p));
@@ -120,7 +146,7 @@ export async function missionsOverview(db: Db, userId: string): Promise<Missions
     }),
   );
   const vip = await vipWeek(db, userId, p.weeklyStart);
-  return { missions, vip: { exp: vip.exp, weekGranted: vip.granted, weekCap: MISSION_RULES.vipExpWeeklyCap } };
+  return { missions, vip: { exp: vip.exp, weekGranted: vip.granted, weekCap: vipExpWeeklyCap } };
 }
 
 /**
@@ -128,10 +154,12 @@ export async function missionsOverview(db: Db, userId: string): Promise<Missions
  * claim (unique per period), then pays through the ledger. VIP EXP is trimmed to the weekly cap.
  */
 export async function claimMission(db: Db, userId: string, id: string) {
-  const def = findMission(id);
-  if (!def) throw fail('not_found');
   return db.transaction(async (tx) => {
     await tx.execute(sql`SELECT id FROM users WHERE id = ${userId}::uuid FOR UPDATE`);
+    // Rewards as configured at the moment of the claim (the Owner may change them at any time).
+    const { missions, vipExpWeeklyCap } = await effective(tx);
+    const def = missions.find((m) => m.id === id);
+    if (!def) throw fail('not_found');
     const p = await periods(tx);
     const w = window(def, p);
     if (!w.key) throw fail('season_inactive');
@@ -139,7 +167,7 @@ export async function claimMission(db: Db, userId: string, id: string) {
     let vipExp = def.reward.vipExp ?? 0;
     if (vipExp > 0) {
       const week = await vipWeek(tx, userId, p.weeklyStart);
-      vipExp = Math.max(0, Math.min(vipExp, MISSION_RULES.vipExpWeeklyCap - week.granted));
+      vipExp = Math.max(0, Math.min(vipExp, vipExpWeeklyCap - week.granted));
     }
     const inserted = await tx.execute(sql`
       INSERT INTO quest_claims (user_id, quest_id, period_key, reward, vip_exp)

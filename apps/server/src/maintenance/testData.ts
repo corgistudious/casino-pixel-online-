@@ -15,6 +15,8 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  { table: 'bj_seats', column: 'user_id', action: 'delete' },
+  { table: 'mission_settings', column: 'updated_by', action: 'reassign_to_support' },
   { table: 'gift_transfers', column: 'sender_id', action: 'delete' },
   { table: 'gift_transfers', column: 'receiver_id', action: 'delete' },
   { table: 'guild_invites', column: 'user_id', action: 'delete' },
@@ -82,6 +84,39 @@ const TARGETS = sql`SELECT id FROM users WHERE is_test AND account_type = 'playe
   sql`, `,
 )})`;
 
+/**
+ * Shared Blackjack rounds keep their players inside `bj_rounds.state.players[].userId` (JSON, no
+ * foreign key), so the registry above cannot see them. A round is TEST data when any player in it
+ * is a TEST account, and it also involves real money when any other player is not.
+ */
+const bjPlayers = sql`jsonb_array_elements(r.state->'players') p`;
+const bjHasTest = sql`EXISTS (SELECT 1 FROM ${bjPlayers} WHERE (p->>'userId')::uuid IN (${TARGETS}))`;
+const bjHasReal = sql`EXISTS (SELECT 1 FROM ${bjPlayers} WHERE p->>'userId' IS NOT NULL AND (p->>'userId')::uuid NOT IN (${TARGETS}))`;
+
+export interface BjRoundCounts {
+  /** Running rounds with only TEST players: deleted (their stakes left TEST wallets, which are deleted too). */
+  activeTestOnly: number;
+  /** Running rounds with TEST and real players: block the reset until the round ends. */
+  activeMixed: number;
+  /** Finished rounds with only TEST players: deleted. */
+  finishedTestOnly: number;
+  /** Finished rounds with real players too: kept, TEST players' identities are removed. */
+  finishedMixed: number;
+}
+
+async function bjRoundCounts(db: DbOrTx): Promise<BjRoundCounts> {
+  const row = await one<Record<keyof BjRoundCounts, string>>(
+    db,
+    sql`SELECT
+          count(*) FILTER (WHERE r.status = 'active' AND NOT ${bjHasReal}) AS "activeTestOnly",
+          count(*) FILTER (WHERE r.status = 'active' AND ${bjHasReal}) AS "activeMixed",
+          count(*) FILTER (WHERE r.status <> 'active' AND NOT ${bjHasReal}) AS "finishedTestOnly",
+          count(*) FILTER (WHERE r.status <> 'active' AND ${bjHasReal}) AS "finishedMixed"
+        FROM bj_rounds r WHERE ${bjHasTest}`,
+  );
+  return { activeTestOnly: n(row.activeTestOnly), activeMixed: n(row.activeMixed), finishedTestOnly: n(row.finishedTestOnly), finishedMixed: n(row.finishedMixed) };
+}
+
 export interface TableCount {
   table: string;
   action: string;
@@ -97,6 +132,7 @@ export interface ResetPlan {
   keptAccounts: number;
   tables: TableCount[];
   outboxMail: number;
+  bjRounds: BjRoundCounts;
   supportPresent: boolean;
   /** Reasons the reset must not run. Empty means it may run. */
   blockers: string[];
@@ -181,6 +217,10 @@ export async function planReset(db: DbOrTx): Promise<ResetPlan> {
     )
   `);
   if (n(sharedGuilds.c) > 0) blockers.push(`${n(sharedGuilds.c)} TEST-owned guild(s) contain real-player memberships or history; resolve ownership and data preservation before resetting TEST accounts.`);
+  // A running shared Blackjack round with real players cannot lose a seat halfway: voiding it
+  // would refund real stakes and settling it early would pay out a hand that is not finished.
+  const bjRounds = await bjRoundCounts(db);
+  if (bjRounds.activeMixed > 0) blockers.push(`${bjRounds.activeMixed} running shared Blackjack round(s) seat TEST and real players together; wait for the round to finish (or pause the table in Admin so no new round starts) and run the dry-run again.`);
   const uncovered = await uncoveredForeignKeys(db);
   if (uncovered.length) blockers.push(`Tables reference users but are not in the reset registry: ${uncovered.join(', ')}`);
   if (n(acc.support) !== 1) blockers.push('Keyo Support (UID 1000) is missing or not a system account.');
@@ -194,6 +234,7 @@ export async function planReset(db: DbOrTx): Promise<ResetPlan> {
     keptAccounts: n(acc.kept),
     tables: await tableCounts(db),
     outboxMail: n(mail.c),
+    bjRounds,
     supportPresent: n(acc.support) === 1,
     blockers,
     confirmPhrase: `RESET ${database} ${testAccounts}`,
@@ -214,11 +255,25 @@ async function keptSnapshot(db: DbOrTx) {
              OR w.gold <> coalesce((SELECT sum(delta) FROM ledger_entries l WHERE l.user_id = w.user_id AND l.currency = 'gold'), 0)
           )) AS mismatched`,
   );
-  return { kept: n(acc.kept), mismatchedWallets: n(acc.mismatched), tables: Object.fromEntries(tables.map((t) => [t.table, t.kept])) };
+  // Real players' entries in shared Blackjack rounds, with each round's status: must not change.
+  const bj = await one<{ rounds: string; digest: string | null }>(
+    db,
+    sql`SELECT count(DISTINCT r.id) AS rounds,
+          md5(string_agg(r.id::text || r.status || coalesce(r.ended_at::text, '') || p::text, '|' ORDER BY r.id, p->>'seat')) AS digest
+        FROM bj_rounds r, ${bjPlayers}
+        WHERE p->>'userId' IS NOT NULL AND (p->>'userId')::uuid NOT IN (${TARGETS})`,
+  );
+  return {
+    kept: n(acc.kept),
+    mismatchedWallets: n(acc.mismatched),
+    tables: Object.fromEntries(tables.map((t) => [t.table, t.kept])),
+    bjRealRounds: { rounds: n(bj.rounds), digest: bj.digest },
+  };
 }
 
 export interface ResetResult {
   deleted: Record<string, number>;
+  bjRounds: { deleted: number; redacted: number };
   reassigned: Record<string, number>;
   deletedAccounts: number;
   deletedMail: number;
@@ -234,12 +289,24 @@ export async function executeReset(db: Db, expectedPhrase: string, operator: str
   return db.transaction(async (tx) => {
     // Serialises maintenance runs and freezes the mode for the duration of the reset.
     await tx.execute(sql`SELECT mode FROM environment_state WHERE id = 1 FOR UPDATE`);
+    // Running shared Blackjack rounds are frozen (same lock the table engine takes per move), before
+    // the users lock so the order matches the engine's: no bet, move or settlement can slip in.
+    await tx.execute(sql`SELECT id FROM bj_rounds WHERE status = 'active' FOR UPDATE`);
     await tx.execute(sql`LOCK TABLE users IN SHARE ROW EXCLUSIVE MODE`);
     const plan = await planReset(tx);
     if (plan.blockers.length) throw new MaintenanceRefused(plan.blockers.join(' '));
     if (plan.confirmPhrase !== expectedPhrase) throw new MaintenanceRefused(`Confirmation phrase no longer matches (now "${plan.confirmPhrase}"); run the dry-run again.`);
 
     const before = await keptSnapshot(tx);
+    // Rounds with only TEST players go (running ones included: no real stake is in them). Finished
+    // rounds shared with real players stay for the real players' history; TEST players lose their id.
+    const bjDeleted = await tx.execute(sql`DELETE FROM bj_rounds r WHERE ${bjHasTest} AND NOT ${bjHasReal}`);
+    const bjRedacted = await tx.execute(sql`
+      UPDATE bj_rounds r SET state = jsonb_set(r.state - 'keys', '{players}', (
+        SELECT jsonb_agg(CASE WHEN (p->>'userId')::uuid IN (${TARGETS}) THEN p || '{"userId": null, "removed": true}'::jsonb ELSE p END ORDER BY ord)
+        FROM jsonb_array_elements(r.state->'players') WITH ORDINALITY AS x(p, ord)))
+      WHERE r.status <> 'active' AND ${bjHasTest}`);
+    const bjLeft = await one<{ c: string }>(tx, sql`SELECT count(*) AS c FROM bj_rounds r WHERE ${bjHasTest}`);
     const [support] = (await tx.execute(sql`SELECT id FROM users WHERE uid = ${KEYO_SUPPORT_UID}`)) as unknown as { id: string }[];
     const deleted: Record<string, number> = {};
     const reassigned: Record<string, number> = {};
@@ -267,6 +334,9 @@ export async function executeReset(db: Db, expectedPhrase: string, operator: str
       if (!(table in reassigned) && after.tables[table] !== count) problems.push(`kept rows in ${table} changed`);
     }
     if (n(remaining.c) !== 0) problems.push('TEST accounts remain');
+    if (n(bjLeft.c) !== 0) problems.push('shared Blackjack rounds still reference TEST accounts');
+    if (bjDeleted.count !== plan.bjRounds.activeTestOnly + plan.bjRounds.finishedTestOnly || bjRedacted.count !== plan.bjRounds.finishedMixed) problems.push('shared Blackjack rounds changed during the reset');
+    if (JSON.stringify(after.bjRealRounds) !== JSON.stringify(before.bjRealRounds)) problems.push("real players' shared Blackjack rounds changed");
     if (n(supportLeft.c) !== 1) problems.push('Keyo Support is missing');
     if (problems.length) throw new Error(`Post-reset verification failed, rolled back: ${problems.join('; ')}`);
 
@@ -274,10 +344,11 @@ export async function executeReset(db: Db, expectedPhrase: string, operator: str
       action: 'system.reset_test_data',
       targetType: 'database',
       targetId: plan.database,
-      details: { operator, accounts: accounts.count, deleted, reassigned, mail: mail.count },
+      details: { operator, accounts: accounts.count, deleted, reassigned, mail: mail.count, bjRounds: { deleted: bjDeleted.count, redacted: bjRedacted.count } },
     });
     return {
       deleted,
+      bjRounds: { deleted: bjDeleted.count, redacted: bjRedacted.count },
       reassigned,
       deletedAccounts: accounts.count,
       deletedMail: mail.count,

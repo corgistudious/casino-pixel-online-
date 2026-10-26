@@ -104,23 +104,33 @@ describe('gifts', () => {
     const [a, b] = [await register(t), await register(t)];
     await befriend(a, b);
     const [wa, wb] = [await wallet(a.user.id), await wallet(b.user.id)];
-    const gift = { id: randomUUID(), kind: 'silver', uid: b.user.uid, amount: 5_000, message: 'chúc may mắn' };
+    const gift = { id: randomUUID(), kind: 'silver', uid: b.user.uid, amount: 2_000, message: 'chúc may mắn' };
     await ok(a, 'POST', '/api/gifts', gift);
     const replay = await ok(a, 'POST', '/api/gifts', gift);
     expect(replay.replayed).toBe(true);
-    expect((await wallet(a.user.id)).silver).toBe(wa.silver - 5_000);
-    expect((await wallet(b.user.id)).silver).toBe(wb.silver + 5_000);
-    expect(await code(a, 'POST', '/api/gifts', { ...gift, amount: 6_000 })).toBe('idempotency_conflict');
+    expect((await wallet(a.user.id)).silver).toBe(wa.silver - 2_000);
+    expect((await wallet(b.user.id)).silver).toBe(wb.silver + 2_000);
+    expect(await code(a, 'POST', '/api/gifts', { ...gift, amount: 2_500 })).toBe('idempotency_conflict');
     // Both sides see it in their history.
     expect((await ok<{ history: { direction: string }[] }>(b, 'GET', '/api/gifts')).history[0]!.direction).toBe('received');
-    // Concurrent different gifts cannot overdraw.
-    const left = (await wallet(a.user.id)).silver;
+  });
+
+  it('never exceeds 5,000 Cxu Bạc per sender per day, even with many simultaneous gifts', async () => {
+    expect(SOCIAL_RULES.gift.dailySilver).toBe(5_000);
+    const [a, b, c] = [await register(t), await register(t), await register(t)];
+    await befriend(a, b);
+    await befriend(a, c);
+    const start = (await wallet(a.user.id)).silver;
+    // Eight gifts of 1,000 to two friends at once: exactly five can go through.
     const tries = await Promise.all(
-      Array.from({ length: 6 }, () => call(a, 'POST', '/api/gifts', { id: randomUUID(), kind: 'silver', uid: b.user.uid, amount: 40_000 })),
+      Array.from({ length: 8 }, (_, i) => call(a, 'POST', '/api/gifts', { id: randomUUID(), kind: 'silver', uid: (i % 2 ? b : c).user.uid, amount: 1_000 })),
     );
-    const accepted = tries.filter((r) => r.statusCode === 200).length;
-    expect((await wallet(a.user.id)).silver).toBe(left - accepted * 40_000);
-    expect((await wallet(a.user.id)).silver).toBeGreaterThanOrEqual(0);
+    expect(tries.filter((r) => r.statusCode === 200)).toHaveLength(5);
+    expect(tries.filter((r) => r.statusCode !== 200).every((r) => r.json().error.code === 'gift_limit')).toBe(true);
+    expect((await wallet(a.user.id)).silver).toBe(start - 5_000);
+    const [sum] = await t.db.execute<{ s: string }>(sql`SELECT sum(amount) AS s FROM gift_transfers WHERE sender_id = ${a.user.id}`);
+    expect(Number(sum!.s)).toBe(5_000);
+    expect((await call(a, 'POST', '/api/gifts', { id: randomUUID(), kind: 'silver', uid: b.user.uid, amount: 5_001 })).statusCode).toBe(400);
   });
 
   it('refuses strangers, new friendships, gold, over-limit and unaffordable gifts', async () => {
@@ -133,8 +143,8 @@ describe('gifts', () => {
     expect((await call(a, 'POST', '/api/gifts', { id: randomUUID(), kind: 'gold', uid: c.user.uid, amount: 10 })).statusCode).toBe(400);
     expect((await call(a, 'POST', '/api/gifts', silver(c.user.uid, SOCIAL_RULES.gift.maxSilver + 1))).statusCode).toBe(400);
     await t.db.transaction((tx) => applyDelta(tx, a.user.id, 400_000, 'admin_adjust', null, 'silver', `test:${randomUUID()}`));
-    await ok(a, 'POST', '/api/gifts', silver(c.user.uid, 100_000));
-    await ok(a, 'POST', '/api/gifts', silver(c.user.uid, 100_000));
+    await ok(a, 'POST', '/api/gifts', silver(c.user.uid, 3_000));
+    await ok(a, 'POST', '/api/gifts', silver(c.user.uid, 2_000));
     expect(await code(a, 'POST', '/api/gifts', silver(c.user.uid, 100))).toBe('gift_limit');
     const poor = await register(t);
     await befriend(poor, c);

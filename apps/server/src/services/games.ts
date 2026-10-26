@@ -3,7 +3,9 @@ import {
   applyBlackjackAction,
   blackjackView,
   canDouble,
+  canInsure,
   canSplit,
+  insuranceMax,
   extraStake,
   normalizeBlackjack,
   totalStake,
@@ -182,6 +184,7 @@ export async function blackjackAct(
   key: string,
   roundId: string,
   action: BlackjackAction,
+  amount = 0,
 ): Promise<PlayOutcome<BlackjackView>> {
   return db.transaction(async (tx) => {
     const [round] = await tx
@@ -200,14 +203,15 @@ export async function blackjackAct(
     if (round.status !== 'active' || !round.state) throw fail('round_finished');
 
     const state = normalizeBlackjack(round.state as BlackjackState);
-    if ((action === 'double' && !canDouble(state)) || (action === 'split' && !canSplit(state))) throw fail('invalid_bet');
-    // Doubling or splitting stakes the active hand's bet again, taken from the wallet first
-    // (insufficient_funds rolls the whole action back).
-    const extra = extraStake(state, action);
+    if ((action === 'double' && !canDouble(state)) || (action === 'split' && !canSplit(state)) || (action === 'insurance' && !canInsure(state))) throw fail('invalid_bet');
+    if (action === 'insurance' && (amount < 0 || amount > insuranceMax(state.bet))) throw fail('invalid_bet');
+    // Doubling or splitting stakes the active hand's bet again, insurance stakes the chosen amount;
+    // it is taken from the wallet first (insufficient_funds rolls the whole action back).
+    const extra = extraStake(state, action, amount);
     if (extra > 0) await applyDelta(tx, userId, -extra, 'bet', roundId);
     let next: BlackjackState;
     try {
-      next = applyBlackjackAction(state, action);
+      next = applyBlackjackAction(state, action, amount);
     } catch {
       throw fail('invalid_bet');
     }

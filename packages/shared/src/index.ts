@@ -13,6 +13,7 @@ export * from './games/slots';
 export * from './games/roulette';
 export * from './games/sicbo';
 export * from './games/blackjack';
+export * from './games/blackjackTable';
 export * from './games/tables';
 export * from './games/handEval';
 export * from './games/seated';

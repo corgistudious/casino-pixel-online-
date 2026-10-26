@@ -32,8 +32,8 @@ describe('daily check-in', () => {
   });
 
   it('pays the owner-approved silver streak and no gold', () => {
-    expect(CHECKIN_REWARDS.map((r) => r.silver)).toEqual([5_000, 5_000, 6_000, 6_000, 8_000, 10_000, 20_000]);
+    expect(CHECKIN_REWARDS.map((r) => r.silver)).toEqual(Array(7).fill(30_000));
     expect(CHECKIN_REWARDS.every((r) => r.gold === 0)).toBe(true);
-    expect(checkinReward(7).silver).toBe(20_000);
+    expect(checkinReward(7).silver).toBe(30_000);
   });
 });

@@ -25,7 +25,7 @@ type GameId = 'poker' | 'sicbo' | 'roulette' | 'lieng' | 'xito' | 'blackjack';
 const LIVE_ROUTE: Partial<Record<GameId, string>> = {
   sicbo: '/tables/taixiu-1',
   roulette: '/tables/roulette-1',
-  blackjack: '/play/blackjack',
+  blackjack: '/bjt',
   poker: '/rooms?game=poker',
   lieng: '/rooms?game=lieng',
   xito: '/rooms?game=xito',

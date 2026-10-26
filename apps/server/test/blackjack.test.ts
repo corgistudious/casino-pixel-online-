@@ -30,19 +30,21 @@ async function balances(userId: string) {
  * Starts a real round (the opening bet goes through the ledger as usual), then swaps in known
  * cards so the outcome is deterministic. `shoe` lists the next cards to be drawn, in order.
  */
-async function rigged(s: TestSocket, bet: number, player: Card[], dealer: Card[], shoe: Card[]): Promise<Env> {
+async function rigged(s: TestSocket, bet: number, player: Card[], dealer: Card[], shoe: Card[], phase: 'player' | 'insurance' = 'player'): Promise<Env> {
   let env: Env;
   do env = await s.ok<Env>({ type: 'blackjack.start', bet });
-  while (env.result.phase !== 'player');
+  while (env.result.phase === 'finished');
   const state: BlackjackState = {
     shoe: shoe.slice().reverse(),
     dealer,
     hands: [{ cards: player, bet, doubled: false, done: false, split: false, splitAces: false, outcome: null, payout: 0 }],
     active: 0,
     bet,
-    phase: 'player',
+    phase,
     outcome: null,
     payout: 0,
+    insurance: 0,
+    insurancePayout: 0,
   };
   await t.db.execute(sql`UPDATE game_rounds SET state = ${JSON.stringify(state)}::jsonb WHERE id = ${env.roundId}`);
   return env;
@@ -124,6 +126,7 @@ describe('blackjack on the server', () => {
         return;
       }
       let r = env;
+      if (r.result.phase === 'insurance') r = await s.ok<Env>({ type: 'blackjack.action', roundId: r.roundId, action: 'insurance', amount: 0 });
       while (r.result.phase === 'player') r = await act(s, r.roundId, 'stand');
     }
     throw new Error('no natural in 400 hands');
@@ -216,7 +219,7 @@ describe('blackjack on the server', () => {
     const s = await TestSocket.connect(t.port, token);
     let env: Env;
     do env = await s.ok<Env>({ type: 'blackjack.start', bet: 100 });
-    while (env.result.phase !== 'player');
+    while (env.result.phase === 'finished');
     const legacy = { shoe: ['KD'], player: ['10S', '8D'], dealer: ['9H', '6C'], bet: 100, doubled: false, phase: 'player', outcome: null, payout: 0 };
     await t.db.execute(sql`UPDATE game_rounds SET state = ${JSON.stringify(legacy)}::jsonb WHERE id = ${env.roundId}`);
     const before = await balances(user.id);
@@ -225,6 +228,70 @@ describe('blackjack on the server', () => {
     const r = await act(s, env.roundId, 'stand');
     expect(r.result.outcome).toBe('win');
     expect((await balances(user.id)).balance).toBe(before.balance + 200);
+    s.close();
+  });
+
+  it('insurance: staked once, pays 2:1 against a dealer blackjack, settled once', async () => {
+    const { token, user } = await register(t);
+    const s = await TestSocket.connect(t.port, token);
+    const env = await rigged(s, 100, ['10S', '7D'], ['AS', 'KC'], [], 'insurance');
+    const start = await balances(user.id);
+    const resumed = await s.ok<Env | null>({ type: 'blackjack.resume' });
+    expect(resumed!.result.insuranceMax).toBe(50);
+    expect(resumed!.result.dealer).toEqual(['AS', null]);
+    const insure = (amount: number, id?: string) => s.request({ type: 'blackjack.action', roundId: env.roundId, action: 'insurance', amount }, id);
+    // Above half the bet, or any other action before deciding, is refused and changes nothing.
+    expect(((await insure(51)) as { error?: { code: string } }).error?.code).toBe('invalid_bet');
+    const early = await s.request({ type: 'blackjack.action', roundId: env.roundId, action: 'hit' });
+    expect(early.ok ? null : early.error.code).toBe('invalid_bet');
+    expect((await balances(user.id)).balance).toBe(start.balance);
+    // The same request sent twice (network retry) is applied once.
+    const id = randomUUID();
+    const first = await insure(50, id);
+    const retry = await insure(50, id);
+    expect(first.ok && retry.ok).toBe(true);
+    const result = (first as { data: Env }).data.result;
+    expect(result.phase).toBe('finished');
+    expect(result.outcome).toBe('dealer_blackjack');
+    expect(result.insurancePayout).toBe(150);
+    const end = await balances(user.id);
+    expect(end.balance).toBe(start.balance - 50 + 150);
+    expect(end.payouts).toBe(start.payouts + 1);
+    const [round] = await t.db.execute<{ bet: string; payout: string }>(sql`SELECT bet, payout FROM game_rounds WHERE id = ${env.roundId}`);
+    expect(round).toEqual({ bet: '150', payout: '150' });
+    s.close();
+  });
+
+  it('insurance is lost when the dealer has no blackjack; declining costs nothing', async () => {
+    const { token, user } = await register(t);
+    const s = await TestSocket.connect(t.port, token);
+    const env = await rigged(s, 100, ['10S', '9D'], ['AS', '6C'], ['5H'], 'insurance');
+    const start = await balances(user.id);
+    const r = await s.ok<Env>({ type: 'blackjack.action', roundId: env.roundId, action: 'insurance', amount: 30 });
+    expect(r.result.phase).toBe('player');
+    expect(r.result.dealer[1]).toBeNull();
+    expect((await balances(user.id)).balance).toBe(start.balance - 30);
+    const done = await s.ok<Env>({ type: 'blackjack.action', roundId: env.roundId, action: 'stand' }); // 19 vs soft 17
+    expect(done.result.outcome).toBe('win');
+    expect((await balances(user.id)).balance).toBe(start.balance - 30 + 200);
+
+    const env2 = await rigged(s, 100, ['10S', '9D'], ['AS', '6C'], ['5H'], 'insurance');
+    const mid = await balances(user.id);
+    const declined = await s.ok<Env>({ type: 'blackjack.action', roundId: env2.roundId, action: 'insurance', amount: 0 });
+    expect(declined.result.insurance).toBe(0);
+    expect((await balances(user.id)).balance).toBe(mid.balance);
+    s.close();
+  });
+
+  it('insurance cannot be staked without the funds', async () => {
+    const { token, user } = await register(t);
+    const s = await TestSocket.connect(t.port, token);
+    const env = await rigged(s, 100, ['10S', '7D'], ['AS', 'KC'], [], 'insurance');
+    const { balance } = await balances(user.id);
+    await t.app.inject({ method: 'POST', url: '/api/bank/transfer', headers: { authorization: `Bearer ${token}` }, payload: { idempotencyKey: randomUUID(), currency: 'silver', direction: 'deposit', amount: balance }, remoteAddress: randomIp() });
+    const res = await s.request({ type: 'blackjack.action', roundId: env.roundId, action: 'insurance', amount: 50 });
+    expect(res.ok ? null : res.error.code).toBe('insufficient_funds');
+    expect((await s.ok<Env | null>({ type: 'blackjack.resume' }))!.result.phase).toBe('insurance');
     s.close();
   });
 });

@@ -162,6 +162,20 @@
       "when": 1792904555919,
       "tag": "0022_support_center",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1792904555920,
+      "tag": "0023_mission_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1792904555921,
+      "tag": "0024_blackjack_tables",
+      "breakpoints": true
     }
   ]
 }

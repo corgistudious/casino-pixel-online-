@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 /**
  * Missions. Progress is computed on the server from records of real play (settled game rounds and
  * ranked results); the client only shows it. Each mission can be claimed once per period:
@@ -62,6 +64,44 @@ export const MISSIONS: readonly MissionDef[] = [
 
 export function findMission(id: string): MissionDef | undefined {
   return MISSIONS.find((m) => m.id === id);
+}
+
+/**
+ * Bounds the Owner's mission configuration must respect. VIP EXP is only for rank missions and
+ * stays small so VIP remains a long-term goal.
+ */
+export const MISSION_LIMITS = { maxSilver: 1_000_000, maxGold: 1_000, maxVipExpPerMission: 50, maxVipWeeklyCap: 300 } as const;
+
+export interface MissionConfig {
+  rewards: Record<string, MissionReward>;
+  vipExpWeeklyCap: number;
+}
+
+export const missionRewardSchema = z.object({
+  silver: z.number().int().min(0).max(MISSION_LIMITS.maxSilver),
+  gold: z.number().int().min(0).max(MISSION_LIMITS.maxGold),
+  vipExp: z.number().int().min(0).max(MISSION_LIMITS.maxVipExpPerMission),
+});
+export const missionConfigSchema = z
+  .object({
+    rewards: z.record(z.string(), missionRewardSchema),
+    vipExpWeeklyCap: z.number().int().min(0).max(MISSION_LIMITS.maxVipWeeklyCap),
+  })
+  .superRefine((c, ctx) => {
+    for (const [id, r] of Object.entries(c.rewards)) {
+      const def = findMission(id);
+      if (!def) ctx.addIssue({ code: 'custom', path: ['rewards', id], message: 'unknown mission' });
+      else if (def.group !== 'rank' && r.vipExp > 0) ctx.addIssue({ code: 'custom', path: ['rewards', id, 'vipExp'], message: 'VIP EXP is for rank missions only' });
+    }
+  });
+
+/** Code defaults with the Owner's overrides applied. */
+export function applyMissionConfig(config: Partial<MissionConfig> | null): { missions: MissionDef[]; vipExpWeeklyCap: number } {
+  const rewards = config?.rewards ?? {};
+  return {
+    missions: MISSIONS.map((m) => (rewards[m.id] ? { ...m, reward: { ...rewards[m.id] } } : m)),
+    vipExpWeeklyCap: config?.vipExpWeeklyCap ?? MISSION_RULES.vipExpWeeklyCap,
+  };
 }
 
 export interface MissionView extends MissionDef {

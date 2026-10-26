@@ -5,7 +5,7 @@ export const BLACKJACK_DECKS = 6;
 /** A round can be split into at most this many hands (three splits). */
 export const BLACKJACK_MAX_HANDS = 4;
 
-export type BlackjackAction = 'hit' | 'stand' | 'double' | 'split';
+export type BlackjackAction = 'hit' | 'stand' | 'double' | 'split' | 'insurance';
 export type BlackjackOutcome = 'blackjack' | 'win' | 'push' | 'lose' | 'bust' | 'dealer_blackjack';
 
 /**
@@ -13,7 +13,10 @@ export type BlackjackOutcome = 'blackjack' | 'win' | 'push' | 'lose' | 'bust' | 
  * (a dealer natural ends the round at once), natural pays 3:2. Split any two cards of equal value
  * up to 4 hands; split aces take one card each and cannot be split again; double on any first two
  * cards, also after a split (not on split aces); 21 after a split is not a natural and pays 1:1.
- * No insurance and no surrender.
+ * Insurance: when the dealer shows an Ace the player first decides on insurance (0 = no insurance,
+ * up to half the original bet). The dealer then checks for blackjack: insurance pays 2:1 if the
+ * dealer has it (main bets lose unless the player also has a natural, which pushes), otherwise the
+ * insurance is lost and the hand goes on. No surrender.
  */
 export interface BlackjackHand {
   cards: Card[];
@@ -37,7 +40,11 @@ export interface BlackjackState {
   active: number;
   /** Opening stake. */
   bet: number;
-  phase: 'player' | 'finished';
+  phase: 'insurance' | 'player' | 'finished';
+  /** Insurance staked (0 = declined or never offered). */
+  insurance: number;
+  /** What the insurance returned (stake included): 3 × insurance when the dealer had blackjack. */
+  insurancePayout: number;
   /** Summary over all hands (the only hand when there was no split). */
   outcome: BlackjackOutcome | null;
   /** Total returned to the player, stakes included. */
@@ -80,11 +87,15 @@ export interface BlackjackView {
   /** Total staked over all hands, doubles included. */
   bet: number;
   doubled: boolean;
-  phase: 'player' | 'finished';
+  phase: 'insurance' | 'player' | 'finished';
   outcome: BlackjackOutcome | null;
   payout: number;
   canDouble: boolean;
   canSplit: boolean;
+  /** Insurance decision pending: the most that can be staked (half the original bet). */
+  insuranceMax: number | null;
+  insurance: number;
+  insurancePayout: number;
 }
 
 export function handValue(cards: readonly Card[]): { total: number; soft: boolean } {
@@ -109,12 +120,14 @@ export function isBlackjack(cards: readonly Card[]): boolean {
   return cards.length === 2 && handValue(cards).total === 21;
 }
 
-const cardValue = (c: Card) => {
+/** Blackjack value of one card (Ace 11, faces 10). */
+export const cardValue = (c: Card) => {
   const r = cardRank(c);
   return r === 'A' ? 11 : r === 'J' || r === 'Q' || r === 'K' ? 10 : Number(r);
 };
 
-const newHand = (cards: Card[], bet: number, split = false, splitAces = false): BlackjackHand => ({
+/** A fresh hand record. */
+export const newHand = (cards: Card[], bet: number, split = false, splitAces = false): BlackjackHand => ({
   cards,
   bet,
   doubled: false,
@@ -127,16 +140,22 @@ const newHand = (cards: Card[], bet: number, split = false, splitAces = false): 
 
 /** Upgrades a state saved by the single-hand version; current states pass through unchanged. */
 export function normalizeBlackjack(raw: BlackjackState | LegacyBlackjackState): BlackjackState {
-  if ('hands' in raw && Array.isArray(raw.hands)) return raw;
+  if ('hands' in raw && Array.isArray(raw.hands)) return { ...raw, insurance: raw.insurance ?? 0, insurancePayout: raw.insurancePayout ?? 0 };
   const legacy = raw as LegacyBlackjackState;
   const hand = { ...newHand(legacy.player.slice(), legacy.bet), doubled: legacy.doubled, done: legacy.phase === 'finished', outcome: legacy.outcome, payout: legacy.payout };
-  return { shoe: legacy.shoe, dealer: legacy.dealer, hands: [hand], active: 0, bet: legacy.bet, phase: legacy.phase, outcome: legacy.outcome, payout: legacy.payout };
+  return { shoe: legacy.shoe, dealer: legacy.dealer, hands: [hand], active: 0, bet: legacy.bet, phase: legacy.phase, outcome: legacy.outcome, payout: legacy.payout, insurance: 0, insurancePayout: 0 };
 }
 
-const stakeOf = (h: BlackjackHand) => h.bet * (h.doubled ? 2 : 1);
+/** What one hand has staked (doubled hands count twice). */
+export const stakeOf = (h: BlackjackHand) => h.bet * (h.doubled ? 2 : 1);
 /** Everything the player has staked in the round so far. */
 export function totalStake(state: BlackjackState): number {
-  return state.hands.reduce((s, h) => s + stakeOf(h), 0);
+  return state.hands.reduce((s, h) => s + stakeOf(h), 0) + (state.insurance ?? 0);
+}
+
+/** Most insurance a bet allows: half the original bet, rounded down. */
+export function insuranceMax(bet: number): number {
+  return Math.floor(bet / 2);
 }
 
 function draw(state: BlackjackState): Card {
@@ -163,10 +182,10 @@ function settle(state: BlackjackState): BlackjackState {
     else [h.outcome, h.payout] = ['lose', 0];
     h.done = true;
   }
-  state.payout = state.hands.reduce((s, h) => s + h.payout, 0);
+  state.payout = state.hands.reduce((s, h) => s + h.payout, 0) + (state.insurancePayout ?? 0);
   if (state.hands.length === 1) state.outcome = state.hands[0]!.outcome;
   else {
-    const stake = totalStake(state);
+    const stake = totalStake(state) - (state.insurance ?? 0);
     state.outcome = state.hands.every((h) => h.outcome === 'bust') ? 'bust' : state.payout > stake ? 'win' : state.payout === stake ? 'push' : 'lose';
   }
   state.phase = 'finished';
@@ -196,6 +215,8 @@ export function startBlackjack(rng: Rng, bet: number): BlackjackState {
     phase: 'player',
     outcome: null,
     payout: 0,
+    insurance: 0,
+    insurancePayout: 0,
   };
   const hand = state.hands[0]!;
   hand.cards.push(draw(state));
@@ -203,20 +224,42 @@ export function startBlackjack(rng: Rng, bet: number): BlackjackState {
   hand.cards.push(draw(state));
   state.dealer.push(draw(state));
 
+  // Dealer shows an Ace: the insurance decision comes before the dealer checks for blackjack.
+  if (cardRank(state.dealer[0]!) === 'A') return { ...state, phase: 'insurance' };
+  return peek(state);
+}
+
+/** The dealer checks for blackjack; naturals settle at once, otherwise the player acts. */
+function peek(state: BlackjackState): BlackjackState {
+  const hand = state.hands[0]!;
   const pBj = isBlackjack(hand.cards);
   const dBj = isBlackjack(state.dealer);
+  state.insurancePayout = dBj ? state.insurance * 3 : 0;
   const end = (outcome: BlackjackOutcome, payout: number): BlackjackState => {
     Object.assign(hand, { outcome, payout, done: true });
-    return { ...state, phase: 'finished', outcome, payout };
+    return { ...state, phase: 'finished', outcome, payout: payout + state.insurancePayout };
   };
-  if (pBj && dBj) return end('push', bet);
-  if (pBj) return end('blackjack', bet + Math.floor((bet * 3) / 2));
+  if (pBj && dBj) return end('push', state.bet);
+  if (pBj) return end('blackjack', state.bet + Math.floor((state.bet * 3) / 2));
   if (dBj) return end('dealer_blackjack', 0);
-  return state;
+  return { ...state, phase: 'player' };
+}
+
+/** Decides insurance (0 = no insurance). The caller debits `amount` first. */
+export function decideInsurance(prev: BlackjackState, amount: number): BlackjackState {
+  const state = clone(normalizeBlackjack(prev));
+  if (state.phase !== 'insurance') throw new Error('insurance is not offered now');
+  if (!Number.isSafeInteger(amount) || amount < 0 || amount > insuranceMax(state.bet)) throw new Error('invalid insurance amount');
+  state.insurance = amount;
+  return peek(state);
 }
 
 function activeHand(state: BlackjackState): BlackjackHand | undefined {
   return state.phase === 'player' ? state.hands[state.active] : undefined;
+}
+
+export function canInsure(raw: BlackjackState): boolean {
+  return normalizeBlackjack(raw).phase === 'insurance';
 }
 
 export function canDouble(raw: BlackjackState): boolean {
@@ -231,13 +274,17 @@ export function canSplit(raw: BlackjackState): boolean {
 }
 
 /** Extra stake the action takes from the wallet (debit it before applying the action). */
-export function extraStake(raw: BlackjackState, action: BlackjackAction): number {
-  const h = activeHand(normalizeBlackjack(raw));
+export function extraStake(raw: BlackjackState, action: BlackjackAction, amount = 0): number {
+  const state = normalizeBlackjack(raw);
+  if (action === 'insurance') return state.phase === 'insurance' ? amount : 0;
+  const h = activeHand(state);
   return h && (action === 'double' || action === 'split') ? h.bet : 0;
 }
 
-/** Applies a player action to the active hand. Double and split require the caller to debit `extraStake` first. */
-export function applyBlackjackAction(prev: BlackjackState, action: BlackjackAction): BlackjackState {
+/** Applies a player action to the active hand. Double, split and insurance require the caller to debit `extraStake` first. */
+export function applyBlackjackAction(prev: BlackjackState, action: BlackjackAction, amount = 0): BlackjackState {
+  if (action === 'insurance') return decideInsurance(prev, amount);
+  if (prev.phase === 'insurance') throw new Error('decide insurance first');
   if (prev.phase !== 'player') throw new Error('round already finished');
   const state = clone(normalizeBlackjack(prev));
   const hand = state.hands[state.active]!;
@@ -265,11 +312,12 @@ export function applyBlackjackAction(prev: BlackjackState, action: BlackjackActi
       return advance(state);
     }
   }
+  throw new Error(`unknown action ${action as string}`);
 }
 
 export function blackjackView(raw: BlackjackState): BlackjackView {
   const state = normalizeBlackjack(raw);
-  const hidden = state.phase === 'player';
+  const hidden = state.phase !== 'finished';
   const hands = state.hands.map((h) => ({ cards: h.cards.slice(), ...handValue(h.cards), bet: h.bet, doubled: h.doubled, done: h.done, outcome: h.outcome, payout: h.payout }));
   const active = Math.min(state.active, hands.length - 1);
   return {
@@ -286,5 +334,8 @@ export function blackjackView(raw: BlackjackState): BlackjackView {
     payout: state.payout,
     canDouble: canDouble(state),
     canSplit: canSplit(state),
+    insuranceMax: state.phase === 'insurance' ? insuranceMax(state.bet) : null,
+    insurance: state.insurance,
+    insurancePayout: state.insurancePayout,
   };
 }

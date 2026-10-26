@@ -20,10 +20,11 @@ import type { RealtimeHub } from './hub';
 import { notifyProgress } from '../services/progression';
 import { tableRoom, type RoundTableEngine } from '../services/roundTables';
 import { cardRoom, type CardTableEngine } from '../services/cardTables';
+import { bjtRoom, type BlackjackTableEngine } from '../services/blackjackTables';
 
 const AUTH_TIMEOUT_MS = 10_000;
 
-export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, tables: RoundTableEngine, cards: CardTableEngine, limits: { rate: number; burst: number }): void {
+export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, tables: RoundTableEngine, cards: CardTableEngine, bjt: BlackjackTableEngine, limits: { rate: number; burst: number }): void {
   const { rate: RATE, burst: BURST } = limits;
   app.get('/ws', { websocket: true }, (socket: WebSocket) => {
     let account: UserRow | null = null;
@@ -69,7 +70,7 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
           outcome = await blackjackStart(db, userId, msg.id, msg.bet);
           break;
         case 'blackjack.action':
-          outcome = await blackjackAct(db, userId, msg.id, msg.roundId, msg.action);
+          outcome = await blackjackAct(db, userId, msg.id, msg.roundId, msg.action, msg.amount ?? 0);
           break;
         case 'blackjack.resume':
           return blackjackResume(db, userId);
@@ -80,6 +81,25 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
         }
         case 'table.leave':
           hub.leave(tableRoom(msg.tableId), conn);
+          return { ok: true };
+        case 'bjt.join': {
+          const view = await bjt.view(msg.tableId, userId);
+          hub.join(bjtRoom(msg.tableId), conn);
+          return view;
+        }
+        case 'bjt.leave':
+          hub.leave(bjtRoom(msg.tableId), conn);
+          return { ok: true };
+        case 'bjt.sit':
+          await bjt.sit(userId, msg.tableId, msg.seat);
+          return bjt.view(msg.tableId, userId);
+        case 'bjt.stand':
+          return bjt.stand(userId, msg.tableId);
+        case 'bjt.bet':
+          await bjt.bet(userId, msg.tableId, msg.amount, msg.id);
+          return { ok: true };
+        case 'bjt.act':
+          await bjt.act(userId, msg.tableId, msg.roundId, msg.action, msg.amount ?? 0, msg.id);
           return { ok: true };
         case 'card.join': {
           const view = await cards.view(msg.tableId, userId);
