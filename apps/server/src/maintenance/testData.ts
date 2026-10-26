@@ -100,34 +100,52 @@ const TARGETS = sql`SELECT id FROM users WHERE is_test AND account_type = 'playe
 )})`;
 
 /**
- * Shared Blackjack rounds keep their players inside `bj_rounds.state.players[].userId` (JSON, no
- * foreign key), so the registry above cannot see them. A round is TEST data when any player in it
- * is a TEST account, and it also involves real money when any other player is not.
+ * Shared Blackjack rounds (`bj_rounds`) and card hands (`card_hands`) keep their players inside
+ * `state.players[].userId` (JSON, no foreign key), and ranked matches keep them in a uuid array,
+ * so the registry above cannot see them. A round/hand/match is TEST data when any player in it is a
+ * TEST account, and it also involves real money when any other player is not.
  */
-const bjPlayers = sql`jsonb_array_elements(r.state->'players') p`;
-const bjHasTest = sql`EXISTS (SELECT 1 FROM ${bjPlayers} WHERE (p->>'userId')::uuid IN (${TARGETS}))`;
-const bjHasReal = sql`EXISTS (SELECT 1 FROM ${bjPlayers} WHERE p->>'userId' IS NOT NULL AND (p->>'userId')::uuid NOT IN (${TARGETS}))`;
+export const EMBEDDED_PLAYER_TABLES = ['bj_rounds', 'card_hands'] as const;
+type EmbeddedTable = (typeof EMBEDDED_PLAYER_TABLES)[number];
+const players = sql`jsonb_array_elements(r.state->'players') p`;
+const hasTest = sql`EXISTS (SELECT 1 FROM ${players} WHERE (p->>'userId')::uuid IN (${TARGETS}))`;
+const hasReal = sql`EXISTS (SELECT 1 FROM ${players} WHERE p->>'userId' IS NOT NULL AND (p->>'userId')::uuid NOT IN (${TARGETS}))`;
+const matchHasTest = sql`m.players && ARRAY(${TARGETS})`;
+const matchHasReal = sql`EXISTS (SELECT 1 FROM unnest(m.players) x(id) WHERE x.id IS NOT NULL AND x.id NOT IN (${TARGETS}))`;
 
 export interface BjRoundCounts {
-  /** Running rounds with only TEST players: deleted (their stakes left TEST wallets, which are deleted too). */
+  /** Running rounds/hands/matches with only TEST players: deleted (their stakes left TEST wallets, which are deleted too). */
   activeTestOnly: number;
-  /** Running rounds with TEST and real players: block the reset until the round ends. */
+  /** Running ones with TEST and real players: block the reset until they end. */
   activeMixed: number;
-  /** Finished rounds with only TEST players: deleted. */
+  /** Finished ones with only TEST players: deleted. */
   finishedTestOnly: number;
-  /** Finished rounds with real players too: kept, TEST players' identities are removed. */
+  /** Finished ones with real players too: kept, TEST players' identities are removed. */
   finishedMixed: number;
 }
 
-async function bjRoundCounts(db: DbOrTx): Promise<BjRoundCounts> {
+async function embeddedCounts(db: DbOrTx, table: EmbeddedTable): Promise<BjRoundCounts> {
   const row = await one<Record<keyof BjRoundCounts, string>>(
     db,
     sql`SELECT
-          count(*) FILTER (WHERE r.status = 'active' AND NOT ${bjHasReal}) AS "activeTestOnly",
-          count(*) FILTER (WHERE r.status = 'active' AND ${bjHasReal}) AS "activeMixed",
-          count(*) FILTER (WHERE r.status <> 'active' AND NOT ${bjHasReal}) AS "finishedTestOnly",
-          count(*) FILTER (WHERE r.status <> 'active' AND ${bjHasReal}) AS "finishedMixed"
-        FROM bj_rounds r WHERE ${bjHasTest}`,
+          count(*) FILTER (WHERE r.status = 'active' AND NOT ${hasReal}) AS "activeTestOnly",
+          count(*) FILTER (WHERE r.status = 'active' AND ${hasReal}) AS "activeMixed",
+          count(*) FILTER (WHERE r.status <> 'active' AND NOT ${hasReal}) AS "finishedTestOnly",
+          count(*) FILTER (WHERE r.status <> 'active' AND ${hasReal}) AS "finishedMixed"
+        FROM ${sql.identifier(table)} r WHERE ${hasTest}`,
+  );
+  return { activeTestOnly: n(row.activeTestOnly), activeMixed: n(row.activeMixed), finishedTestOnly: n(row.finishedTestOnly), finishedMixed: n(row.finishedMixed) };
+}
+
+async function matchCounts(db: DbOrTx): Promise<BjRoundCounts> {
+  const row = await one<Record<keyof BjRoundCounts, string>>(
+    db,
+    sql`SELECT
+          count(*) FILTER (WHERE m.status = 'active' AND NOT ${matchHasReal}) AS "activeTestOnly",
+          count(*) FILTER (WHERE m.status = 'active' AND ${matchHasReal}) AS "activeMixed",
+          count(*) FILTER (WHERE m.status <> 'active' AND NOT ${matchHasReal}) AS "finishedTestOnly",
+          count(*) FILTER (WHERE m.status <> 'active' AND ${matchHasReal}) AS "finishedMixed"
+        FROM ranked_matches m WHERE ${matchHasTest} OR m.winner_id IN (${TARGETS}) OR m.forfeit_id IN (${TARGETS})`,
   );
   return { activeTestOnly: n(row.activeTestOnly), activeMixed: n(row.activeMixed), finishedTestOnly: n(row.finishedTestOnly), finishedMixed: n(row.finishedMixed) };
 }
@@ -148,6 +166,8 @@ export interface ResetPlan {
   tables: TableCount[];
   outboxMail: number;
   bjRounds: BjRoundCounts;
+  cardHands: BjRoundCounts;
+  rankedMatches: BjRoundCounts;
   supportPresent: boolean;
   /** Reasons the reset must not run. Empty means it may run. */
   blockers: string[];
@@ -234,8 +254,12 @@ export async function planReset(db: DbOrTx): Promise<ResetPlan> {
   if (n(sharedGuilds.c) > 0) blockers.push(`${n(sharedGuilds.c)} TEST-owned guild(s) contain real-player memberships or history; resolve ownership and data preservation before resetting TEST accounts.`);
   // A running shared Blackjack round with real players cannot lose a seat halfway: voiding it
   // would refund real stakes and settling it early would pay out a hand that is not finished.
-  const bjRounds = await bjRoundCounts(db);
+  const bjRounds = await embeddedCounts(db, 'bj_rounds');
   if (bjRounds.activeMixed > 0) blockers.push(`${bjRounds.activeMixed} running shared Blackjack round(s) seat TEST and real players together; wait for the round to finish (or pause the table in Admin so no new round starts) and run the dry-run again.`);
+  const cardHands = await embeddedCounts(db, 'card_hands');
+  if (cardHands.activeMixed > 0) blockers.push(`${cardHands.activeMixed} running card hand(s) (Poker / Liêng / Xì Tố) seat TEST and real players together; wait for the hand to finish (or pause the table in Admin so no new hand starts) and run the dry-run again.`);
+  const rankedMatches = await matchCounts(db);
+  if (rankedMatches.activeMixed > 0) blockers.push(`${rankedMatches.activeMixed} running ranked match(es) pair TEST and real players; wait for the match to finish and run the dry-run again.`);
   const uncovered = await uncoveredForeignKeys(db);
   if (uncovered.length) blockers.push(`Tables reference users but are not in the reset registry: ${uncovered.join(', ')}`);
   if (n(acc.support) !== 1) blockers.push('Keyo Support (UID 1000) is missing or not a system account.');
@@ -250,6 +274,8 @@ export async function planReset(db: DbOrTx): Promise<ResetPlan> {
     tables: await tableCounts(db),
     outboxMail: n(mail.c),
     bjRounds,
+    cardHands,
+    rankedMatches,
     supportPresent: n(acc.support) === 1,
     blockers,
     confirmPhrase: `RESET ${database} ${testAccounts}`,
@@ -270,25 +296,41 @@ async function keptSnapshot(db: DbOrTx) {
              OR w.gold <> coalesce((SELECT sum(delta) FROM ledger_entries l WHERE l.user_id = w.user_id AND l.currency = 'gold'), 0)
           )) AS mismatched`,
   );
-  // Real players' entries in shared Blackjack rounds, with each round's status: must not change.
-  const bj = await one<{ rounds: string; digest: string | null }>(
+  // Real players' entries in rounds/hands, with each one's status, and real players in ranked
+  // matches with the result: none of it may change.
+  const embedded: Record<string, { rounds: number; digest: string | null }> = {};
+  for (const table of EMBEDDED_PLAYER_TABLES) {
+    const r = await one<{ rounds: string; digest: string | null }>(
+      db,
+      sql`SELECT count(DISTINCT r.id) AS rounds,
+            md5(string_agg(r.id::text || r.status || coalesce(r.ended_at::text, '') || p::text, '|' ORDER BY r.id, p->>'seat')) AS digest
+          FROM ${sql.identifier(table)} r, ${players}
+          WHERE p->>'userId' IS NOT NULL AND (p->>'userId')::uuid NOT IN (${TARGETS})`,
+    );
+    embedded[table] = { rounds: n(r.rounds), digest: r.digest };
+  }
+  const m = await one<{ rounds: string; digest: string | null }>(
     db,
-    sql`SELECT count(DISTINCT r.id) AS rounds,
-          md5(string_agg(r.id::text || r.status || coalesce(r.ended_at::text, '') || p::text, '|' ORDER BY r.id, p->>'seat')) AS digest
-        FROM bj_rounds r, ${bjPlayers}
-        WHERE p->>'userId' IS NOT NULL AND (p->>'userId')::uuid NOT IN (${TARGETS})`,
+    sql`SELECT count(DISTINCT m.id) AS rounds,
+          md5(string_agg(m.id::text || m.status || x.id::text || CASE WHEN m.winner_id = x.id THEN 'W' WHEN m.forfeit_id = x.id THEN 'F' ELSE '' END, '|' ORDER BY m.id, x.id)) AS digest
+        FROM ranked_matches m, unnest(m.players) x(id)
+        WHERE x.id IS NOT NULL AND x.id NOT IN (${TARGETS})`,
   );
+  embedded.ranked_matches = { rounds: n(m.rounds), digest: m.digest };
   return {
     kept: n(acc.kept),
     mismatchedWallets: n(acc.mismatched),
     tables: Object.fromEntries(tables.map((t) => [t.table, t.kept])),
-    bjRealRounds: { rounds: n(bj.rounds), digest: bj.digest },
+    bjRealRounds: embedded.bj_rounds!,
+    embedded,
   };
 }
 
 export interface ResetResult {
   deleted: Record<string, number>;
   bjRounds: { deleted: number; redacted: number };
+  cardHands: { deleted: number; redacted: number };
+  rankedMatches: { deleted: number; redacted: number };
   reassigned: Record<string, number>;
   deletedAccounts: number;
   deletedMail: number;
@@ -307,21 +349,38 @@ export async function executeReset(db: Db, expectedPhrase: string, operator: str
     // Running shared Blackjack rounds are frozen (same lock the table engine takes per move), before
     // the users lock so the order matches the engine's: no bet, move or settlement can slip in.
     await tx.execute(sql`SELECT id FROM bj_rounds WHERE status = 'active' FOR UPDATE`);
+    await tx.execute(sql`SELECT id FROM card_hands WHERE status = 'active' FOR UPDATE`);
+    await tx.execute(sql`SELECT id FROM ranked_matches WHERE status = 'active' FOR UPDATE`);
     await tx.execute(sql`LOCK TABLE users IN SHARE ROW EXCLUSIVE MODE`);
     const plan = await planReset(tx);
     if (plan.blockers.length) throw new MaintenanceRefused(plan.blockers.join(' '));
     if (plan.confirmPhrase !== expectedPhrase) throw new MaintenanceRefused(`Confirmation phrase no longer matches (now "${plan.confirmPhrase}"); run the dry-run again.`);
 
     const before = await keptSnapshot(tx);
-    // Rounds with only TEST players go (running ones included: no real stake is in them). Finished
-    // rounds shared with real players stay for the real players' history; TEST players lose their id.
-    const bjDeleted = await tx.execute(sql`DELETE FROM bj_rounds r WHERE ${bjHasTest} AND NOT ${bjHasReal}`);
-    const bjRedacted = await tx.execute(sql`
-      UPDATE bj_rounds r SET state = jsonb_set(r.state - 'keys', '{players}', (
-        SELECT jsonb_agg(CASE WHEN (p->>'userId')::uuid IN (${TARGETS}) THEN p || '{"userId": null, "removed": true}'::jsonb ELSE p END ORDER BY ord)
-        FROM jsonb_array_elements(r.state->'players') WITH ORDINALITY AS x(p, ord)))
-      WHERE r.status <> 'active' AND ${bjHasTest}`);
-    const bjLeft = await one<{ c: string }>(tx, sql`SELECT count(*) AS c FROM bj_rounds r WHERE ${bjHasTest}`);
+    // Rounds and hands with only TEST players go (running ones included: no real stake is in them).
+    // Finished ones shared with real players stay for the real players' history; TEST players lose their id.
+    const cleaned: Record<EmbeddedTable, { deleted: number; redacted: number }> = { bj_rounds: { deleted: 0, redacted: 0 }, card_hands: { deleted: 0, redacted: 0 } };
+    let embeddedLeft = 0;
+    for (const table of EMBEDDED_PLAYER_TABLES) {
+      const t = sql.identifier(table);
+      const del = await tx.execute(sql`DELETE FROM ${t} r WHERE ${hasTest} AND NOT ${hasReal}`);
+      const red = await tx.execute(sql`
+        UPDATE ${t} r SET state = jsonb_set(r.state - 'keys', '{players}', (
+          SELECT jsonb_agg(CASE WHEN (p->>'userId')::uuid IN (${TARGETS}) THEN p || '{"userId": null, "removed": true}'::jsonb ELSE p END ORDER BY ord)
+          FROM jsonb_array_elements(r.state->'players') WITH ORDINALITY AS x(p, ord)))
+        WHERE r.status <> 'active' AND ${hasTest}`);
+      cleaned[table] = { deleted: del.count, redacted: red.count };
+      embeddedLeft += n((await one<{ c: string }>(tx, sql`SELECT count(*) AS c FROM ${t} r WHERE ${hasTest}`)).c);
+    }
+    // Ranked matches: the same rule; in kept ones TEST ids become NULL (winner/forfeit too).
+    const mDel = await tx.execute(sql`DELETE FROM ranked_matches m WHERE (${matchHasTest} OR m.winner_id IN (${TARGETS}) OR m.forfeit_id IN (${TARGETS})) AND NOT ${matchHasReal}`);
+    const mRed = await tx.execute(sql`
+      UPDATE ranked_matches m SET
+        players = ARRAY(SELECT CASE WHEN x.id IN (${TARGETS}) THEN NULL ELSE x.id END FROM unnest(m.players) WITH ORDINALITY x(id, ord) ORDER BY ord),
+        winner_id = CASE WHEN m.winner_id IN (${TARGETS}) THEN NULL ELSE m.winner_id END,
+        forfeit_id = CASE WHEN m.forfeit_id IN (${TARGETS}) THEN NULL ELSE m.forfeit_id END
+      WHERE m.status <> 'active' AND (${matchHasTest} OR m.winner_id IN (${TARGETS}) OR m.forfeit_id IN (${TARGETS}))`);
+    embeddedLeft += n((await one<{ c: string }>(tx, sql`SELECT count(*) AS c FROM ranked_matches m WHERE ${matchHasTest} OR m.winner_id IN (${TARGETS}) OR m.forfeit_id IN (${TARGETS})`)).c);
     const [support] = (await tx.execute(sql`SELECT id FROM users WHERE uid = ${KEYO_SUPPORT_UID}`)) as unknown as { id: string }[];
     const deleted: Record<string, number> = {};
     const reassigned: Record<string, number> = {};
@@ -349,9 +408,14 @@ export async function executeReset(db: Db, expectedPhrase: string, operator: str
       if (!(table in reassigned) && after.tables[table] !== count) problems.push(`kept rows in ${table} changed`);
     }
     if (n(remaining.c) !== 0) problems.push('TEST accounts remain');
-    if (n(bjLeft.c) !== 0) problems.push('shared Blackjack rounds still reference TEST accounts');
-    if (bjDeleted.count !== plan.bjRounds.activeTestOnly + plan.bjRounds.finishedTestOnly || bjRedacted.count !== plan.bjRounds.finishedMixed) problems.push('shared Blackjack rounds changed during the reset');
-    if (JSON.stringify(after.bjRealRounds) !== JSON.stringify(before.bjRealRounds)) problems.push("real players' shared Blackjack rounds changed");
+    if (embeddedLeft !== 0) problems.push('rounds, hands or ranked matches still reference TEST accounts');
+    const expected = { bj_rounds: plan.bjRounds, card_hands: plan.cardHands } as const;
+    for (const table of EMBEDDED_PLAYER_TABLES) {
+      const e = expected[table];
+      if (cleaned[table].deleted !== e.activeTestOnly + e.finishedTestOnly || cleaned[table].redacted !== e.finishedMixed) problems.push(`${table} changed during the reset`);
+    }
+    if (mDel.count !== plan.rankedMatches.activeTestOnly + plan.rankedMatches.finishedTestOnly || mRed.count !== plan.rankedMatches.finishedMixed) problems.push('ranked_matches changed during the reset');
+    if (JSON.stringify(after.embedded) !== JSON.stringify(before.embedded)) problems.push("real players' rounds, hands or ranked matches changed");
     if (n(supportLeft.c) !== 1) problems.push('Keyo Support is missing');
     if (problems.length) throw new Error(`Post-reset verification failed, rolled back: ${problems.join('; ')}`);
 
@@ -359,11 +423,13 @@ export async function executeReset(db: Db, expectedPhrase: string, operator: str
       action: 'system.reset_test_data',
       targetType: 'database',
       targetId: plan.database,
-      details: { operator, accounts: accounts.count, deleted, reassigned, mail: mail.count, bjRounds: { deleted: bjDeleted.count, redacted: bjRedacted.count } },
+      details: { operator, accounts: accounts.count, deleted, reassigned, mail: mail.count, bjRounds: cleaned.bj_rounds, cardHands: cleaned.card_hands, rankedMatches: { deleted: mDel.count, redacted: mRed.count } },
     });
     return {
       deleted,
-      bjRounds: { deleted: bjDeleted.count, redacted: bjRedacted.count },
+      bjRounds: cleaned.bj_rounds,
+      cardHands: cleaned.card_hands,
+      rankedMatches: { deleted: mDel.count, redacted: mRed.count },
       reassigned,
       deletedAccounts: accounts.count,
       deletedMail: mail.count,
