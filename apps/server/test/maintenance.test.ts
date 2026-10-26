@@ -94,6 +94,28 @@ describe('reset:test-data and launch:production', () => {
     expect(plan.confirmPhrase).toBe(`RESET ${plan.database} 4`);
   });
 
+  it('refuses to reset a TEST-owned guild containing real-player data', async () => {
+    const [tester] = await t.db.execute<{ id: string }>(sql`SELECT id FROM users WHERE username = 'tester001'`);
+    const [guild] = await t.db.execute<{ id: string }>(sql`
+      INSERT INTO guilds (name, owner_id) VALUES ('Mixed Reset Safety', ${tester!.id}::uuid) RETURNING id
+    `);
+    try {
+      await t.db.execute(sql`
+        INSERT INTO guild_members (user_id, guild_id, role)
+        VALUES (${official.id}::uuid, ${guild!.id}::uuid, 'member')
+      `);
+      const plan = await planReset(t.db);
+      expect(plan.blockers.join(' ')).toMatch(/TEST-owned guild.*real-player/);
+      await expect(executeReset(t.db, plan.confirmPhrase, 'vitest')).rejects.toBeInstanceOf(MaintenanceRefused);
+      expect(await count(sql`SELECT count(*) AS c FROM guild_members WHERE user_id = ${official.id}::uuid`)).toBe(1);
+      expect(await count(sql`SELECT count(*) AS c FROM users WHERE id = ${tester!.id}::uuid`)).toBe(1);
+    } finally {
+      await t.db.execute(sql`DELETE FROM guild_members WHERE guild_id = ${guild!.id}::uuid`);
+      await t.db.execute(sql`DELETE FROM guilds WHERE id = ${guild!.id}::uuid`);
+    }
+    expect((await planReset(t.db)).blockers).toEqual([]);
+  });
+
   it('refuses a wrong confirmation phrase and changes nothing', async () => {
     await expect(executeReset(t.db, 'RESET wrong 4', 'vitest')).rejects.toBeInstanceOf(MaintenanceRefused);
     expect(await count(sql`SELECT count(*) AS c FROM users WHERE is_test`)).toBe(4);
