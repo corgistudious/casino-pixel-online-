@@ -3,6 +3,7 @@ import { CURRENCIES, ECONOMY, GAME_KEYS, type ErrorCode, type GameKey, type Rewa
 import type { BlackjackView } from '../games/blackjack';
 import type { BjtTableView } from '../games/blackjackTable';
 import type { ChatChannel, ChatMessageView } from '../social';
+import type { RoomSummary } from '../rooms';
 import type { RouletteResult } from '../games/roulette';
 import type { SicBoResult } from '../games/sicbo';
 import type { SlotsResult } from '../games/slots';
@@ -357,6 +358,12 @@ export type ServerEvent =
   | { event: 'cardMatch'; data: { tableId: string; game: CardGame } }
   /** Shared Blackjack table state (public: the dealer's hole card stays hidden until settlement). */
   | { event: 'bjt'; data: BjtTableView }
+  /** A room's settings or host changed (sent to everyone watching its table). */
+  | { event: 'room'; data: RoomSummary & { closed?: boolean } }
+  /** A friend invited me to their room (access already granted, no password needed). */
+  | { event: 'roomInvite'; data: { room: RoomSummary; from: { uid: number; displayName: string } } }
+  /** The host removed me from a room. */
+  | { event: 'roomKicked'; data: { roomId: string; tableId: string } }
   /** The player's profile changed on the server (e.g. a timed item expired): refetch /api/me. */
   | { event: 'profile'; data: { reason: 'equipment' } }
   /** Shared-round table update (phase change, result, live totals). `myBets` is omitted in broadcasts. */

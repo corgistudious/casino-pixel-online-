@@ -6,7 +6,7 @@ import { toast } from '../ui/toast';
 import { useSession } from '../store/session';
 
 type Achievement = { id: string; rounds: number; silver: number; completed: boolean; claimed: boolean };
-const TITLES: Record<string, [string, string]> = {
+export const ACHIEVEMENT_TITLES: Record<string, [string, string]> = {
   first_game: ['Trận đấu đầu tiên', 'First game'],
   ten_games: ['Người chơi chăm chỉ', 'Active player'],
   hundred_games: ['Cao thủ trăm trận', 'Hundred-game veteran'],
@@ -37,7 +37,7 @@ export function AchievementsPage() {
   return <AppShell><div className="flex flex-col gap-4 p-4">
     <PageHeader icon="collection" title={vi ? 'Thành tích' : 'Achievements'} subtitle={vi ? `Đã hoàn thành ${rounds} trận` : `${rounds} completed games`} />
     <div className="grid gap-3 md:grid-cols-2">{items.map(a => <section key={a.id} className="glass flex flex-col gap-3 p-4">
-      <h2 className="font-bold text-amber-300">{TITLES[a.id]?.[vi ? 0 : 1] ?? a.id}</h2>
+      <h2 className="font-bold text-amber-300">{ACHIEVEMENT_TITLES[a.id]?.[vi ? 0 : 1] ?? a.id}</h2>
       <div className="text-sm text-white/60">{Math.min(rounds, a.rounds)} / {a.rounds} · +{a.silver.toLocaleString()} {vi ? 'Cxu Bạc' : 'Silver Cxu'}</div>
       <div className="h-2 rounded-full bg-white/10"><div className="h-2 rounded-full bg-amber-500" style={{ width: `${Math.min(100, rounds / a.rounds * 100)}%` }} /></div>
       <button disabled={!a.completed || a.claimed || busy !== null} className="rounded-xl bg-amber-500 p-2 font-bold text-black disabled:opacity-40" onClick={() => void claim(a.id)}>

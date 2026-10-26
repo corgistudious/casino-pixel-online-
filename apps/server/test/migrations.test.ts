@@ -198,3 +198,56 @@ describe('0020–0022 social, missions and support upgrade', () => {
     expect(await rows(sql`SELECT 1 FROM friendships f JOIN users u ON u.id = f.user_id WHERE u.uid = 100903`)).toEqual([]);
   });
 });
+
+describe('0025_rank_mythic upgrade', () => {
+  it('moves stacked Chiến Thần I RP into Thần Thoại, keeping every total RP and everyone else as they were', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(25) }); // 0000–0024: the schema before Thần Thoại
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES
+      (101000, 'top', 'top', 'x', 'Top'), (101001, 'full', 'full', 'x', 'Full'), (101002, 'climb', 'climb', 'x', 'Climb'), (101003, 'low', 'low', 'x', 'Low')`);
+    const [season] = await rows<{ id: number }>(sql`INSERT INTO rank_seasons (name, starts_at, ends_at, status, rules, rewards) VALUES ('S1', now(), now() + interval '60 days', 'active', '{"winRp":25,"lossRp":20,"softResetDivisions":5}'::jsonb, '{}'::jsonb) RETURNING id`);
+    for (const [uid, division, rp] of [
+      [101000, 39, 450],
+      [101001, 39, 200],
+      [101002, 39, 150],
+      [101003, 12, 80],
+    ] as const) {
+      await db.execute(sql`INSERT INTO player_ranks (season_id, user_id, division, rp, streak, peak_division) SELECT ${season!.id}, id, ${division}, ${rp}, 0, ${division} FROM users WHERE uid = ${uid}`);
+    }
+    const total = sql`SELECT u.uid, pr.division * 200 + pr.rp AS total FROM player_ranks pr JOIN users u ON u.id = pr.user_id ORDER BY u.uid`;
+    const before = await rows(total);
+    await runMigrations(db);
+    expect(await rows(total)).toEqual(before);
+    expect(await rows(sql`SELECT u.uid::int AS uid, pr.division, pr.rp, pr.peak_division FROM player_ranks pr JOIN users u ON u.id = pr.user_id ORDER BY u.uid`)).toEqual([
+      { uid: 101000, division: 40, rp: 250, peak_division: 40 },
+      { uid: 101001, division: 40, rp: 0, peak_division: 40 },
+      { uid: 101002, division: 39, rp: 150, peak_division: 39 },
+      { uid: 101003, division: 12, rp: 80, peak_division: 12 },
+    ]);
+    await expect(db.execute(sql`UPDATE player_ranks SET division = 41`)).rejects.toThrow();
+  });
+});
+
+describe('0026_social_profile and 0027_private_rooms upgrade', () => {
+  it('marks every existing table official and keeps seats, stacks and friendships as they were', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(26) }); // 0000–0025
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (101100, 'sitter', 'sitter', 'x', 'Sitter'), (101101, 'pal', 'pal', 'x', 'Pal')`);
+    await db.execute(sql`INSERT INTO card_seats (table_id, seat, user_id, stack) SELECT 'poker-1', 2, id, 4321 FROM users WHERE uid = 101100`);
+    await db.execute(sql`INSERT INTO bj_seats (table_id, seat, user_id) SELECT 'bj-1', 1, id FROM users WHERE uid = 101101`);
+    await db.execute(sql`INSERT INTO friendships (user_id, friend_id) SELECT a.id, b.id FROM users a, users b WHERE a.uid = 101100 AND b.uid = 101101`);
+    const snapshot = sql`SELECT (SELECT json_agg(json_build_object('t', table_id, 's', seat, 'k', stack) ORDER BY table_id) FROM card_seats) AS cards,
+      (SELECT json_agg(json_build_object('t', table_id, 's', seat) ORDER BY table_id) FROM bj_seats) AS bj, (SELECT count(*) FROM friendships) AS friends,
+      (SELECT count(*) FROM card_tables) AS card_tables, (SELECT count(*) FROM bj_tables) AS bj_tables`;
+    const before = await rows(snapshot);
+    await runMigrations(db);
+    expect(await rows(snapshot)).toEqual(before);
+    expect(await rows(sql`SELECT DISTINCT kind FROM card_tables UNION SELECT DISTINCT kind FROM bj_tables`)).toEqual([{ kind: 'official' }]);
+    for (const table of ['game_rooms', 'room_access', 'player_follows', 'profile_likes', 'player_blocks', 'player_reports', 'profile_settings']) {
+      expect(await rows(sql`SELECT count(*)::int AS n FROM ${sql.identifier(table)}`)).toEqual([{ n: 0 }]);
+    }
+    // A private room must carry a password hash, and a follow cannot point at oneself.
+    await expect(db.execute(sql`INSERT INTO game_rooms (id, engine, table_id, game, name, owner_id, visibility, stake) SELECT 'card:r-00000001', 'card', 'x', 'poker', 'Bad', id, 'private', 100 FROM users WHERE uid = 101100`)).rejects.toThrow();
+    await expect(db.execute(sql`INSERT INTO player_follows (follower_id, followee_id) SELECT id, id FROM users WHERE uid = 101100`)).rejects.toThrow();
+  });
+});

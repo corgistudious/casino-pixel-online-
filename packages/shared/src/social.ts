@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { Badge } from './contracts/api';
+import type { TopTitleId } from './progression';
 
 /**
  * Social rules shared by server and client. The server is the only enforcer; the client uses the
@@ -29,6 +30,19 @@ export const SOCIAL_RULES = {
     maxOfficers: 5,
     maxPendingInvites: 30,
   },
+  follow: { maxFollowing: 1_000 },
+  report: {
+    /** New reports per reporter per day (UTC); one open report per reporter and target. */
+    dailyPerReporter: 10,
+    descriptionMin: 10,
+    descriptionMax: 1_000,
+    /** Evidence images per report, each at most 1 MB, added by the reporter shortly after sending. */
+    maxAttachments: 3,
+    attachmentMaxBytes: 1_048_576,
+    attachmentWindowMinutes: 30,
+  },
+  /** Items a player may pin on their public profile. */
+  showcaseMax: 6,
 } as const;
 
 export const GUILD_EMBLEMS = ['crown', 'dragon', 'phoenix', 'lion', 'sword', 'shield', 'star', 'diamond'] as const;
@@ -61,6 +75,14 @@ export interface PlayerCard {
   bubble: string | null;
   badges: Badge[];
   level: number;
+  /** Current-season rank, where a list shows it (friends, rooms, members). */
+  rank?: RankBadge | null;
+}
+
+/** Current-season rank shown next to a player (Top title only for MAX Thần Thoại inside the Top 50). */
+export interface RankBadge {
+  division: number;
+  topTitle: TopTitleId | null;
 }
 
 export interface FriendView extends PlayerCard {
@@ -86,14 +108,129 @@ export interface PlayerSearchResult extends PlayerCard {
   online: boolean;
 }
 
-/** What anyone may see about another player (no balances, email or history details). */
+/** How the viewer relates to a player beyond friendship. */
+export interface SocialState {
+  following: boolean;
+  followedBy: boolean;
+  liked: boolean;
+  /** I blocked them. */
+  blocked: boolean;
+  /** They blocked me (actions towards them are refused). */
+  blockedBy: boolean;
+}
+
+export interface GameStatView {
+  game: string;
+  rounds: number;
+  wins: number;
+  losses: number;
+}
+
+/** Privacy switches a player controls. Wallet balances outside the Bank are always public. */
+export interface ProfilePrivacy {
+  showOnline: boolean;
+  showFriends: boolean;
+  showCollection: boolean;
+  showStats: boolean;
+}
+export const DEFAULT_PRIVACY: ProfilePrivacy = { showOnline: true, showFriends: true, showCollection: true, showStats: true };
+
+/**
+ * What anyone may see about another player. Built from an allowlist on the server: never email,
+ * login data, IPs, Bank balances, transaction history or support tickets. `null` = hidden by the
+ * player's privacy settings.
+ */
 export interface PlayerProfileView extends PlayerCard {
-  online: boolean;
+  online: boolean | null;
   relation: RelationStatus;
+  social: SocialState;
+  counts: { followers: number; following: number; likes: number; friends: number | null };
   createdAt: string;
-  rank: { division: number; rp: number } | null;
+  rank: { division: number; rp: number; topTitle: TopTitleId | null; topPosition: number | null; wins: number; losses: number } | null;
+  vip: { level: number };
   guild: Pick<GuildSummary, 'id' | 'name' | 'emblem' | 'color'> | null;
-  stats: { rounds: number; biggestWin: number };
+  /** Cxu Bạc and Cxu Vàng in the wallet, outside the Bank. Bank balances are never part of a profile. */
+  wallet: { silver: number; gold: number };
+  stats: { rounds: number; wins: number; losses: number; pushes: number; biggestWin: number; byGame: GameStatView[] } | null;
+  achievements: string[];
+  collection: { total: number; titles: string[]; items: string[]; showcase: string[] } | null;
+  /** Only on my own profile. */
+  privacy?: ProfilePrivacy & { showcase: string[] };
+}
+
+export interface FollowListEntry extends PlayerCard {
+  online: boolean | null;
+  since: string;
+}
+
+export const privacySchema = z
+  .object({
+    showOnline: z.boolean(),
+    showFriends: z.boolean(),
+    showCollection: z.boolean(),
+    showStats: z.boolean(),
+    /** Inventory instance ids to pin (owned, active). */
+    showcase: z.array(z.string().uuid()).max(SOCIAL_RULES.showcaseMax),
+  })
+  .partial();
+export type PrivacyInput = z.infer<typeof privacySchema>;
+
+// ---------------------------------------------------------------- reports
+
+export const REPORT_CATEGORIES = ['cheating', 'harassment', 'spam', 'inappropriate', 'exploit', 'impersonation', 'other'] as const;
+export type ReportCategory = (typeof REPORT_CATEGORIES)[number];
+export const REPORT_ATTACHMENT_MIME = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'] as const;
+export interface ReportAttachmentView {
+  id: string;
+  mime: (typeof REPORT_ATTACHMENT_MIME)[number];
+  width: number;
+  height: number;
+  size: number;
+}
+
+export const REPORT_STATUSES = ['pending', 'reviewing', 'resolved', 'rejected'] as const;
+export type ReportStatus = (typeof REPORT_STATUSES)[number];
+
+export const reportSchema = z.object({
+  uid: z.number().int().min(1),
+  category: z.enum(REPORT_CATEGORIES),
+  description: z.string().trim().min(SOCIAL_RULES.report.descriptionMin).max(SOCIAL_RULES.report.descriptionMax),
+  /** Where it happened, e.g. "chat:server" or "room:card:r-1a2b3c4d" (free text, short). */
+  context: z.string().trim().max(120).optional(),
+});
+export type ReportInput = z.infer<typeof reportSchema>;
+
+export const reportUpdateSchema = z.object({
+  status: z.enum(['reviewing', 'resolved', 'rejected']),
+  resolution: z.string().trim().max(1000).optional(),
+});
+
+/** A report as its author sees it: never anything about other reporters. */
+export interface MyReportView {
+  id: string;
+  target: PlayerCard;
+  category: ReportCategory;
+  status: ReportStatus;
+  createdAt: string;
+  attachments: number;
+}
+
+/** A report in the staff queue. */
+export interface StaffReportView {
+  id: string;
+  category: ReportCategory;
+  description: string;
+  context: string | null;
+  status: ReportStatus;
+  resolution: string | null;
+  createdAt: string;
+  updatedAt: string;
+  reporter: Pick<PlayerCard, 'uid' | 'displayName'>;
+  target: Pick<PlayerCard, 'uid' | 'displayName'> & { status: string };
+  handledBy: { uid: number; displayName: string } | null;
+  /** Open reports against the same target (context for staff; never acted on automatically). */
+  targetOpen: number;
+  attachments: ReportAttachmentView[];
 }
 
 export interface GiftView {

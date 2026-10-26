@@ -16,6 +16,8 @@ import { CardTableEngine } from './services/cardTables';
 import { BlackjackTableEngine } from './services/blackjackTables';
 import { registerCardRoutes } from './routes/cards';
 import { registerBlackjackTableRoutes } from './routes/blackjackTables';
+import { registerRoomRoutes } from './routes/rooms';
+import { RoomService } from './services/rooms';
 import { registerTableRoutes } from './routes/tables';
 import { registerProgressionRoutes } from './routes/progression';
 import { registerGiftcodeRoutes } from './routes/giftcodes';
@@ -97,6 +99,8 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   const bjt = new BlackjackTableEngine(db, client, hub, app.log);
   registerCardRoutes(app, db, cards);
   registerBlackjackTableRoutes(app, db, bjt);
+  const rooms = new RoomService(db, client, hub, cards, bjt, app.log);
+  registerRoomRoutes(app, db, rooms);
   registerProgressionRoutes(app, db, hub);
   registerGiftcodeRoutes(app, db, hub);
   registerBankRoutes(app, db, hub);
@@ -112,6 +116,7 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
     await tables.start();
     await cards.start();
     await bjt.start();
+    await rooms.start();
     // Ranked seasons start and end on their dates (guarded updates: safe on every instance).
     const tickRank = () => {
       void tickSeasons(db).then(
@@ -137,9 +142,10 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
     await tables.stop();
     await cards.stop();
     await bjt.stop();
+    await rooms.stop();
     await hub.close();
     await client.end({ timeout: 5 });
   });
 
-  return { app, db, hub, tables, cards, bjt };
+  return { app, db, hub, tables, cards, bjt, rooms };
 }

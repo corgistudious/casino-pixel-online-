@@ -155,7 +155,7 @@ describe('ranked seasons', () => {
     expect((await progress(p.token)).rank!.state).toEqual({ division: idx('diamond', 5), rp: 0, streak: 0 });
   });
 
-  it('ranks the Top 50 among full Chiến Thần I only, with one title each and a stable tie-break', async () => {
+  it('ranks the Top 50 among MAX Thần Thoại only, with one title each and a stable tie-break', async () => {
     const players = [];
     for (let i = 0; i < 12; i++) players.push(await register(t));
     for (const [i, p] of players.entries()) await setRank(p.user.id, seasonId, MAX_DIVISION, 300 - i * 5);
@@ -176,6 +176,55 @@ describe('ranked seasons', () => {
     expect(ladder.find((e) => e.uid === almost.user.uid)!.topTitle).toBeNull();
     const me = await progress(players[0]!.token);
     expect(me.rank).toMatchObject({ topPosition: 1, topTitle: 'vuong_gia' });
+  });
+
+  it('titles need MAX Thần Thoại: a Top position alone is not enough, and titles follow the live standings without touching RP', async () => {
+    type Entry = { uid: number; topTitle: string | null; rp: number; division: number; position: number };
+    const ladder = async () => (await t.app.inject({ url: '/api/rank/ladder' })).json().entries as Entry[];
+    const entryOf = async (uid: number) => (await ladder()).find((e) => e.uid === uid)!;
+    // Inside the Top 50 but Thần Thoại is not MAX yet → plain Thần Thoại, no Thần Vương.
+    const mythic = await register(t);
+    await setRank(mythic.user.id, seasonId, MAX_DIVISION, 150);
+    // An old Chiến Thần I row with a huge RP still ranks below every Thần Thoại.
+    const legacy = await register(t);
+    await setRank(legacy.user.id, seasonId, MAX_DIVISION - 1, 900);
+    const m = await entryOf(mythic.user.uid);
+    expect(m.position).toBeLessThanOrEqual(50);
+    expect(m).toMatchObject({ division: MAX_DIVISION, topTitle: null });
+    expect(await entryOf(legacy.user.uid)).toMatchObject({ topTitle: null });
+    expect((await progress(mythic.token)).rank).toMatchObject({ topPosition: null, topTitle: null });
+
+    // A MAX Thần Thoại player climbs and falls: Thần Vương → Thần Tướng → Vương Giả Chí Tôn → Thần Vương → none.
+    const climber = await register(t);
+    const setRp = (rp: number) => t.db.execute(sql`UPDATE player_ranks SET rp = ${rp} WHERE user_id = ${climber.user.id} AND season_id = ${seasonId}`);
+    await setRank(climber.user.id, seasonId, MAX_DIVISION, 240);
+    expect(await entryOf(climber.user.uid)).toMatchObject({ position: 13, topTitle: 'than_vuong' });
+    await setRp(262);
+    expect(await entryOf(climber.user.uid)).toMatchObject({ position: 9, topTitle: 'than_tuong' });
+    await setRp(1000);
+    expect(await entryOf(climber.user.uid)).toMatchObject({ position: 1, topTitle: 'vuong_gia' });
+    expect((await progress(climber.token)).rank).toMatchObject({ topPosition: 1, topTitle: 'vuong_gia' });
+    await setRp(240);
+    expect(await entryOf(climber.user.uid)).toMatchObject({ position: 13, topTitle: 'than_vuong' });
+    // 40 more MAX players above push the climber to position 53: back to plain Thần Thoại.
+    await t.db.execute(sql`
+      INSERT INTO users (uid, username, username_lower, password_hash, display_name, status)
+      SELECT 400000 + i, 'mx' || i, 'mx' || i, '!', 'Mx' || i, 'active' FROM generate_series(1, 40) i`);
+    await t.db.execute(sql`
+      INSERT INTO player_ranks (season_id, user_id, division, rp, streak, peak_division, wins)
+      SELECT ${seasonId}, id, ${MAX_DIVISION}, 500 + uid - 400000, 0, ${MAX_DIVISION}, 1 FROM users WHERE uid BETWEEN 400001 AND 400040`);
+    try {
+      const all = await ladder();
+      const c = all.find((e) => e.uid === climber.user.uid)!;
+      expect(c).toMatchObject({ position: 53, topTitle: null, rp: 240 });
+      // One title per player, exactly 50 holders.
+      expect(all.filter((e) => e.topTitle).length).toBe(50);
+      expect((await progress(climber.token)).rank).toMatchObject({ topPosition: null, topTitle: null, state: { division: MAX_DIVISION, rp: 240 } });
+    } finally {
+      await t.db.execute(sql`DELETE FROM player_ranks WHERE user_id IN (SELECT id FROM users WHERE uid BETWEEN 400001 AND 400040)`);
+      await t.db.execute(sql`DELETE FROM users WHERE uid BETWEEN 400001 AND 400040`);
+      await t.db.execute(sql`DELETE FROM player_ranks WHERE user_id IN (${climber.user.id}::uuid, ${mythic.user.id}::uuid, ${legacy.user.id}::uuid)`);
+    }
   });
 
   it('Admin and Moderator cannot touch RP; Owner can, with an audit entry', async () => {

@@ -11,7 +11,9 @@ import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { NavIcon } from '../ui/NavIcons';
 import { toast } from '../ui/toast';
-import { GiftDialog, ProfileDialog } from './dialogs';
+import { onRelationChange, PlayerTrigger } from '../players/PlayerActions';
+import { RankEmblem } from '../ui/RankEmblem';
+import { GiftDialog } from './dialogs';
 import { Empty, PlayerChip, Tabs, useFail, useSocialEvents } from './parts';
 
 type Tab = 'list' | 'requests' | 'search' | 'gifts';
@@ -24,10 +26,10 @@ export function FriendsPage() {
   const [tab, setTab] = useState<Tab>('list');
   const [data, setData] = useState<FriendsOverview | null>(null);
   const [giftTo, setGiftTo] = useState<PlayerCard | null>(null);
-  const [profile, setProfile] = useState<number | null>(null);
 
   const load = () => void api<FriendsOverview>('/api/friends').then(setData, fail);
   useEffect(load, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => onRelationChange(load), []); // eslint-disable-line react-hooks/exhaustive-deps
   useSocialEvents((kind) => ['request', 'accepted', 'removed', 'gift'].includes(kind) && load());
 
   const post = async (path: string, uid: number, success?: string) => {
@@ -87,7 +89,7 @@ export function FriendsPage() {
               <p className="text-xs text-white/50">{t('social.friends.count', { count: data.friends.length, online })}</p>
               <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {data.friends.map((f) => (
-                  <FriendCard key={f.uid} f={f} onGift={() => setGiftTo(f)} onProfile={() => setProfile(f.uid)} onRemove={() => window.confirm(t('social.friends.confirmRemove', { name: f.displayName })) && void post('/api/friends/remove', f.uid)} />
+                  <FriendCard key={f.uid} f={f} onGift={() => setGiftTo(f)} onRemove={() => window.confirm(t('social.friends.confirmRemove', { name: f.displayName })) && void post('/api/friends/remove', f.uid)} />
                 ))}
               </ul>
             </>
@@ -102,9 +104,9 @@ export function FriendsPage() {
               ) : (
                 data.incoming.map((r) => (
                   <div key={r.uid} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-black/25 p-3">
-                    <button type="button" className="min-w-0 text-left" onClick={() => setProfile(r.uid)}>
+                    <PlayerTrigger uid={r.uid} label={r.displayName} context="friends:incoming">
                       <PlayerChip card={r} />
-                    </button>
+                    </PlayerTrigger>
                     <div className="flex gap-2">
                       <Button size="sm" variant="gold" onClick={() => void post('/api/friends/accept', r.uid, t('social.friends.nowFriends'))}>{t('social.friends.accept')}</Button>
                       <Button size="sm" onClick={() => void post('/api/friends/decline', r.uid)}>{t('social.friends.decline')}</Button>
@@ -120,7 +122,9 @@ export function FriendsPage() {
               ) : (
                 data.outgoing.map((r) => (
                   <div key={r.uid} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-black/25 p-3">
-                    <PlayerChip card={r} />
+                    <PlayerTrigger uid={r.uid} label={r.displayName} context="friends:outgoing">
+                      <PlayerChip card={r} />
+                    </PlayerTrigger>
                     <Button size="sm" onClick={() => void post('/api/friends/cancel', r.uid)}>{t('social.friends.cancel')}</Button>
                   </div>
                 ))
@@ -129,11 +133,10 @@ export function FriendsPage() {
           </div>
         )}
 
-        {tab === 'search' && <SearchPanel onProfile={setProfile} onChanged={load} />}
+        {tab === 'search' && <SearchPanel onChanged={load} />}
         {tab === 'gifts' && <GiftHistory />}
       </div>
       {giftTo && <GiftDialog to={giftTo} onClose={() => setGiftTo(null)} />}
-      {profile !== null && <ProfileDialog uid={profile} onClose={() => setProfile(null)} onChanged={load} />}
     </AppShell>
   );
 }
@@ -147,15 +150,15 @@ function Stat({ value, label, accent = false }: { value: number; label: string; 
   );
 }
 
-function FriendCard({ f, onGift, onProfile, onRemove }: { f: FriendView; onGift: () => void; onProfile: () => void; onRemove: () => void }) {
+function FriendCard({ f, onGift, onRemove }: { f: FriendView; onGift: () => void; onRemove: () => void }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   return (
     <li className={`group flex flex-col gap-3 rounded-2xl border p-4 transition ${f.online ? 'border-emerald-300/25 bg-gradient-to-br from-emerald-500/10 to-black/30' : 'border-white/10 bg-black/25'} hover:border-fuchsia-300/40`}>
       <div className="flex items-start justify-between gap-2">
-        <button type="button" className="min-w-0 text-left" onClick={onProfile}>
-          <PlayerChip card={f} online={f.online} />
-        </button>
+        <PlayerTrigger uid={f.uid} label={f.displayName} context="friends">
+          <PlayerChip card={f} online={f.online} sub={f.rank ? <RankEmblem division={f.rank.division} top={f.rank.topTitle} size={16} /> : undefined} />
+        </PlayerTrigger>
         <button type="button" onClick={onRemove} className="rounded-lg px-1.5 text-white/30 opacity-0 transition hover:bg-ruby-500/20 hover:text-ruby-300 group-hover:opacity-100 focus:opacity-100" title={t('social.friends.remove')} aria-label={t('social.friends.remove')}>
           ✕
         </button>
@@ -164,13 +167,13 @@ function FriendCard({ f, onGift, onProfile, onRemove }: { f: FriendView; onGift:
       <div className="grid grid-cols-3 gap-2">
         <Button size="sm" variant="gold" onClick={() => navigate(`/chat?dm=${f.uid}`)}>{t('social.friends.message')}</Button>
         <Button size="sm" onClick={onGift} disabled={!f.giftable} title={f.giftable ? undefined : t('social.gift.tooSoon', { hours: 24 })}>{t('social.friends.gift')}</Button>
-        <Button size="sm" onClick={onProfile}>{t('social.friends.profile')}</Button>
+        <Button size="sm" onClick={() => navigate(`/player/${f.uid}`)}>{t('social.friends.profile')}</Button>
       </div>
     </li>
   );
 }
 
-function SearchPanel({ onProfile, onChanged }: { onProfile: (uid: number) => void; onChanged: () => void }) {
+function SearchPanel({ onChanged }: { onChanged: () => void }) {
   const { t } = useTranslation();
   const fail = useFail();
   const [q, setQ] = useState('');
@@ -201,9 +204,9 @@ function SearchPanel({ onProfile, onChanged }: { onProfile: (uid: number) => voi
       <ul className="grid gap-2 md:grid-cols-2">
         {rows?.map((r) => (
           <li key={r.uid} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-black/25 p-3">
-            <button type="button" className="min-w-0 text-left" onClick={() => onProfile(r.uid)}>
+            <PlayerTrigger uid={r.uid} label={r.displayName} context="search">
               <PlayerChip card={r} online={r.online} />
-            </button>
+            </PlayerTrigger>
             {r.relation === 'none' && <Button size="sm" variant="gold" onClick={() => void add(r.uid)}>{t('social.friends.add')}</Button>}
             {r.relation === 'incoming' && <Button size="sm" variant="gold" onClick={() => void add(r.uid)}>{t('social.friends.accept')}</Button>}
             {r.relation === 'friend' && <span className="text-xs font-label text-emerald-300">✓ {t('social.friends.isFriend')}</span>}

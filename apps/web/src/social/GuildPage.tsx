@@ -20,7 +20,7 @@ import { AppShell } from '../ui/AppShell';
 import { Button } from '../ui/Button';
 import { CurrencyIcon } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
-import { ProfileDialog } from './dialogs';
+import { PlayerTrigger } from '../players/PlayerActions';
 import { Empty, GUILD_PALETTE, GuildCrest, Modal, PlayerChip, Tabs, TierPill, useFail, useSocialEvents } from './parts';
 
 /** Guild hall: ranking / invites / founding when outside a guild; banner, members, management and log inside. */
@@ -330,7 +330,6 @@ function Banner({ label, value }: { label: string; value: string }) {
 function MemberList({ guild, reload }: { guild: MyGuild; reload: () => void }) {
   const { t } = useTranslation();
   const fail = useFail();
-  const [profile, setProfile] = useState<number | null>(null);
   const [transferTo, setTransferTo] = useState<GuildMemberView | null>(null);
   const post = async (path: string, body: unknown) => {
     try {
@@ -348,9 +347,9 @@ function MemberList({ guild, reload }: { guild: MyGuild; reload: () => void }) {
           const canKick = guild.myRole === 'owner' ? m.role !== 'owner' : guild.myRole === 'officer' && m.role === 'member';
           return (
             <li key={m.uid} className="flex flex-wrap items-center gap-3 rounded-xl bg-black/25 p-3">
-              <button type="button" className="min-w-0 flex-1 text-left" onClick={() => setProfile(m.uid)}>
+              <PlayerTrigger uid={m.uid} label={m.displayName} context="guild" className="flex-1">
                 <PlayerChip card={m} online={m.online} />
-              </button>
+              </PlayerTrigger>
               <span className={`rounded-md bg-gradient-to-r px-2 py-0.5 text-xs font-label ${roleTone[m.role]}`}>{t(`social.guild.roles.${m.role}`)}</span>
               {guild.myRole === 'owner' && m.role !== 'owner' && (
                 <>
@@ -369,7 +368,6 @@ function MemberList({ guild, reload }: { guild: MyGuild; reload: () => void }) {
           );
         })}
       </ul>
-      {profile !== null && <ProfileDialog uid={profile} onClose={() => setProfile(null)} />}
       {transferTo && <TransferDialog member={transferTo} onClose={() => setTransferTo(null)} onDone={reload} />}
     </section>
   );

@@ -22,7 +22,7 @@ export function BjtLobbyPage() {
   return (
     <AppShell>
       <div className="flex flex-col gap-4 p-3 lg:p-5">
-        <PageHeader icon="rooms" title={t('bjt.lobby')} subtitle={t('bjt.lobbySub')} />
+        <PageHeader icon="rooms" title={t('bjt.lobby')} subtitle={t('bjt.lobbySub')} right={<Link to="/custom-rooms" className="rounded-xl border border-gold-300/50 bg-gold-300/10 px-3 py-2 text-sm font-strong text-gold-100 hover:bg-gold-300/20">🔒 {t('room.title')}</Link>} />
         <Link to="/play/blackjack" className="group relative overflow-hidden rounded-3xl border border-emerald-300/30 bg-gradient-to-br from-[#0d4a33] via-[#0b2a22] to-[#0b0f1a] p-5 shadow-panel transition hover:border-emerald-200/60">
           <div className="font-display text-2xl font-heading text-white">🂡 {t('bjt.solo')}</div>
           <p className="text-sm text-white/60">{t('bjt.soloDesc')}</p>

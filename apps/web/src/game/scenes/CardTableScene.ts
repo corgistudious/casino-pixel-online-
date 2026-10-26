@@ -49,6 +49,8 @@ export class CardTableScene extends BaseScene {
   private now: () => number = Date.now;
   private timerAt: { pos: XY; deadline: number; total: number } | null = null;
   private strings: Record<string, string> = {};
+  /** Tap/click on an occupied seat (avatar or name plate): the page opens the player menu at that point. */
+  private onSeat?: (uid: number, at: { x: number; y: number }) => void;
 
   constructor() {
     super(CardTableScene.KEY);
@@ -73,6 +75,10 @@ export class CardTableScene extends BaseScene {
   /** Localised strings for in-canvas labels (fold, all-in, hand names…). */
   setLabels(labels: Record<string, string>) {
     this.strings = labels;
+  }
+
+  setSeatHandler(fn: (uid: number, at: { x: number; y: number }) => void) {
+    this.onSeat = fn;
   }
 
   setClock(now: () => number) {
@@ -137,6 +143,15 @@ export class CardTableScene extends BaseScene {
       const name = this.text(slot.at.x, nameY, s.displayName.slice(0, 12), { size: 8, weight: 700 });
       const stack = this.text(slot.at.x, nameY + 11, compactChips(p ? p.stack : s.stack), { size: 9, color: '#ffe08a', weight: 800 });
       this.layer.add([halo, av, initial, plate, name, stack]);
+      for (const hit of [av, plate]) {
+        hit.setInteractive({ useHandCursor: true }).on('pointerup', (ptr: Phaser.Input.Pointer) => {
+          const ev = ptr.event as MouseEvent | TouchEvent | undefined;
+          const touch = ev && 'changedTouches' in ev ? ev.changedTouches[0] : undefined;
+          const x = touch?.clientX ?? (ev as MouseEvent | undefined)?.clientX ?? 0;
+          const y = touch?.clientY ?? (ev as MouseEvent | undefined)?.clientY ?? 0;
+          this.onSeat?.(s.uid, { x, y });
+        });
+      }
       if (p?.folded || s.status !== 'active') {
         av.setAlpha(0.45);
         initial.setAlpha(0.5);

@@ -64,7 +64,7 @@ export function CardLobbyPage() {
   return (
     <AppShell>
       <div className="flex flex-col gap-4 p-3 lg:p-5">
-        <PageHeader icon="rooms" title={t('cards.lobby')} subtitle={t('cards.lobbySub')} />
+        <PageHeader icon="rooms" title={t('cards.lobby')} subtitle={t('cards.lobbySub')} right={<Link to="/custom-rooms" className="rounded-xl border border-gold-300/50 bg-gold-300/10 px-3 py-2 text-sm font-strong text-gold-100 hover:bg-gold-300/20">🔒 {t('room.title')}</Link>} />
         <div className="flex gap-1 overflow-x-auto rounded-xl border border-white/10 bg-black/25 p-1" role="tablist">
           {CARD_GAMES.map((g) => (
             <button

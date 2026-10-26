@@ -677,7 +677,7 @@ export const playerRanks = pgTable(
   (t) => [
     primaryKey({ columns: [t.seasonId, t.userId] }),
     index('player_ranks_ladder_idx').on(t.seasonId, t.division, t.rp),
-    check('player_ranks_division_range', sql`${t.division} BETWEEN 0 AND 39`),
+    check('player_ranks_division_range', sql`${t.division} BETWEEN 0 AND 40`),
     check('player_ranks_rp_nonnegative', sql`${t.rp} >= 0`),
     check('player_ranks_streak_range', sql`${t.streak} BETWEEN 0 AND 3`),
   ],
@@ -842,6 +842,8 @@ export const cardTables = pgTable('card_tables', {
   config: jsonb('config').notNull(),
   /** casual | ranked */
   mode: text('mode').notNull().default('casual'),
+  /** official (staff tables) | room (player-created, see game_rooms) */
+  kind: text('kind').notNull().default('official'),
   /** open | paused | closed */
   status: text('status').notNull().default('open'),
   /** Seat holding the dealer button for the next hand. */

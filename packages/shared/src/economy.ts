@@ -113,5 +113,18 @@ export const ERROR_CODES = [
   'not_owned',
   'insufficient_gold',
   'rescue_not_available',
+  'blocked',
+  'self_social',
+  'follow_limit',
+  'report_duplicate',
+  'report_limit',
+  'room_password',
+  'room_locked',
+  'room_kicked',
+  'room_full',
+  'room_busy',
+  'room_limit',
+  'room_closed',
+  'not_room_owner',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];

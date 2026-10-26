@@ -70,7 +70,7 @@ describe('friends', () => {
 
     await ok(a, 'POST', '/api/friends/remove', { uid: b.user.uid });
     expect((await ok<FriendsOverview>(b, 'GET', '/api/friends')).friends).toEqual([]);
-    expect(await code(a, 'POST', '/api/friends/request', { uid: a.user.uid })).toBe('bad_request');
+    expect(await code(a, 'POST', '/api/friends/request', { uid: a.user.uid })).toBe('self_social');
   });
 
   it('shows who is online', async () => {

@@ -5,6 +5,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GameLayout, Stat } from '../game/controls/GameLayout';
 import { PhaserView } from '../game/PhaserView';
 import { CardTableScene, type CardBackLook } from '../game/scenes/CardTableScene';
+import { RoomPasswordPrompt } from '../rooms/RoomForm';
+import { RoomPanel } from '../rooms/RoomPanel';
+import { usePlayerMenu } from '../players/PlayerActions';
 import { errorText } from '../lib/errors';
 import { formatChips } from '../lib/format';
 import { clockOffset } from '../lib/tables';
@@ -35,6 +38,8 @@ function CardTable({ tableId }: { tableId: string }) {
   const [buyIn, setBuyIn] = useState(0);
   const [pickSeat, setPickSeat] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const [joinKey, setJoinKey] = useState(0);
   const [, setTick] = useState(0);
   const samples = useRef<number[]>([]);
   const offset = useRef(0);
@@ -61,15 +66,18 @@ function CardTable({ tableId }: { tableId: string }) {
     socket.request('card.join', { tableId }).then(
       (v) => alive && apply(v),
       (err) => {
+        // A private room asks for its password; removed players and closed rooms go back to the room list.
+        if (err instanceof ApiError && err.code === 'room_locked') return setLocked(true);
         toast(errorText(t, err, i18n.language), 'error');
         if (err instanceof ApiError && err.code === 'table_not_found') navigate('/rooms', { replace: true });
+        if (err instanceof ApiError && (err.code === 'room_kicked' || err.code === 'room_closed')) navigate('/custom-rooms', { replace: true });
       },
     );
     return () => {
       alive = false;
       socket.request('card.leave', { tableId }).catch(() => {});
     };
-  }, [status, tableId, apply, navigate, t, i18n.language]);
+  }, [status, tableId, apply, navigate, t, i18n.language, joinKey]);
 
   useEffect(() => socket.listen((ev) => ev.event === 'card' && ev.data.table.id === tableId && apply(ev.data)), [tableId, apply]);
   useEffect(() => {
@@ -162,6 +170,7 @@ function CardTable({ tableId }: { tableId: string }) {
             onReady={(s) => {
               scene.current = s;
               s.setClock(now);
+              s.setSeatHandler((uid, at) => usePlayerMenu.getState().show({ uid, context: `table:card:${tableId}`, rect: { top: at.y, bottom: at.y, left: at.x, right: at.x } }));
               s.setLabels(labels);
               if (viewRef.current) s.render(viewRef.current, backs);
             }}
@@ -183,6 +192,17 @@ function CardTable({ tableId }: { tableId: string }) {
       }
       panel={
         <>
+          <RoomPanel engine="card" tableId={tableId} members={view?.seats ?? []} />
+          {locked && (
+            <RoomPasswordPrompt
+              roomId={`card:${tableId}`}
+              onClose={() => navigate('/custom-rooms')}
+              onJoined={() => {
+                setLocked(false);
+                setJoinKey((k) => k + 1);
+              }}
+            />
+          )}
           {cfg && (
             <div className="text-[11px] font-semibold text-white/55">
               {view.table.game === 'poker' ? t('cards.blinds', { sb: fmt(cfg.smallBlind), bb: fmt(cfg.bigBlind) }) : t('cards.ante', { ante: fmt(cfg.ante) })}
