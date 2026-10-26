@@ -28,12 +28,12 @@ export async function moveBankFunds(db: Db, userId: string, id: string, currency
     `);
     if (previous.length) {
       const p = previous[0]!;
-      if (p.currency !== currency || p.direction !== direction || Number(p.amount) !== amount) throw fail('bad_request');
+      if (p.currency !== currency || p.direction !== direction || Number(p.amount) !== amount) throw fail('idempotency_conflict');
       return { replayed: true, walletAfter: Number(p.wallet_after), bankAfter: Number(p.bank_after) };
     }
     // Reject reuse of another user's idempotency key.
     const used = await tx.execute(sql`SELECT 1 FROM bank_transfers WHERE id = ${id}::uuid`);
-    if (used.length) throw fail('bad_request');
+    if (used.length) throw fail('idempotency_conflict');
     await tx.execute(sql`INSERT INTO bank_accounts(user_id) VALUES (${userId}::uuid) ON CONFLICT DO NOTHING`);
     const column = sql.raw(currency === 'silver' ? 'silver' : 'gold');
     const signed = direction === 'deposit' ? amount : -amount;
@@ -64,10 +64,32 @@ export async function moveBankFunds(db: Db, userId: string, id: string, currency
   });
 }
 
-export async function bankHistory(db: Db, userId: string) {
-  const rows = await db.execute(sql`
+export interface BankTransferView {
+  id: string;
+  currency: BankCurrency;
+  direction: BankDirection;
+  amount: number;
+  walletAfter: number;
+  bankAfter: number;
+  createdAt: string;
+}
+
+/** Newest first, 50 per page; `before` is the createdAt of the last row already shown. */
+export async function bankHistory(db: Db, userId: string, before?: string): Promise<{ transfers: BankTransferView[] }> {
+  const rows = await db.execute<{ id: string; currency: BankCurrency; direction: BankDirection; amount: string; wallet_after: string; bank_after: string; created_at: string }>(sql`
     SELECT id, currency, direction, amount, wallet_after, bank_after, created_at
-    FROM bank_transfers WHERE user_id = ${userId}::uuid ORDER BY created_at DESC LIMIT 100
+    FROM bank_transfers WHERE user_id = ${userId}::uuid ${before ? sql`AND created_at < ${before}::timestamptz` : sql``}
+    ORDER BY created_at DESC LIMIT 50
   `);
-  return { transfers: rows };
+  return {
+    transfers: rows.map((r) => ({
+      id: r.id,
+      currency: r.currency,
+      direction: r.direction,
+      amount: Number(r.amount),
+      walletAfter: Number(r.wallet_after),
+      bankAfter: Number(r.bank_after),
+      createdAt: new Date(r.created_at).toISOString(),
+    })),
+  };
 }
