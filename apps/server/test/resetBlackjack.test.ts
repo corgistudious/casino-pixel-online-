@@ -196,15 +196,20 @@ describe('reset:test-data with shared Blackjack tables', () => {
     // Only the real player's table starts a round; the emptied TEST table stays idle.
     expect((await latest('bj-1')).state.phase).toBe('betting');
     expect(await count(sql`SELECT count(*) AS c FROM bj_rounds WHERE table_id = 'bj-2'`)).toBe(0);
-    const before = await balance(real.user.id);
-    await bet(real, 'bj-1', 100);
-    expect(await balance(real.user.id)).toBe(before - 100);
-    // Retrying the same request does not take the stake twice.
-    const id = randomUUID();
+    // Stack the new round's shoe (real 19, dealer 10 up / 7 hole) so no insurance phase interferes.
     const roundId = (await latest('bj-1')).id;
-    await real.ws.request({ type: 'bjt.act', tableId: 'bj-1', roundId, action: 'stand' }, id);
-    await real.ws.request({ type: 'bjt.act', tableId: 'bj-1', roundId, action: 'stand' }, id);
-    expect((await roundRow(roundId))!.status).toBe('done');
+    await t.db.execute(sql`UPDATE bj_rounds SET state = jsonb_set(state, '{shoe}', ${JSON.stringify(['7H', '9C', '10D', '10S'])}::jsonb) WHERE id = ${roundId}::uuid`);
+    const before = await balance(real.user.id);
+    // Retrying the same bet request does not take the stake twice.
+    const id = randomUUID();
+    expect((await real.ws.request({ type: 'bjt.bet', tableId: 'bj-1', amount: 100 }, id)).ok).toBe(true);
+    await real.ws.request({ type: 'bjt.bet', tableId: 'bj-1', amount: 100 }, id);
+    expect(await balance(real.user.id)).toBe(before - 100);
+    await act(real, 'bj-1', roundId, 'stand');
+    const finished = (await roundRow(roundId))!;
+    expect(finished.status).toBe('done');
+    expect(finished.state.players.map((p) => [p.seat, p.payout])).toEqual([[0, 200]]);
+    expect(await balance(real.user.id)).toBe(before + 100);
 
     const again = await planReset(t.db);
     expect(again.blockers.join(' ')).toMatch(/no TEST accounts/);
