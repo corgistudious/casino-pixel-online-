@@ -12,6 +12,7 @@ import { Button } from '../ui/Button';
 import { ChatBubble, TitleBadge } from '../ui/Cosmetics';
 import { NavIcon } from '../ui/NavIcons';
 import { PlayerName } from '../ui/OfficialAssets';
+import { PlayerTrigger, useBlockedUids } from '../players/PlayerActions';
 import { Empty, PlayerChip, useFail } from './parts';
 
 type Tab = 'server' | 'guild' | 'dm';
@@ -120,7 +121,7 @@ function Room({ channel }: { channel: 'server' | 'guild' }) {
     );
   return (
     <div className="flex h-full min-h-[420px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#101a33]/90 to-[#0b0f1f]/95">
-      <Thread messages={messages} more={more} onOlder={older} onRemove={canModerate ? remove : undefined} />
+      <Thread messages={messages} more={more} onOlder={older} onRemove={canModerate ? remove : undefined} context={`chat:${channel}`} />
       <Composer channel={channel} path={`/api/chat/${channel}`} />
     </div>
   );
@@ -247,9 +248,15 @@ function Private({ initial }: { initial: number | null }) {
               <button type="button" className="rounded-lg px-2 py-1 text-white/60 hover:bg-white/10 md:hidden" onClick={() => setPeer(null)} aria-label={t('nav.back')}>
                 ←
               </button>
-              {current ? <PlayerChip card={current.peer} online={current.online} size={36} /> : <span className="text-white/60">UID {peer}</span>}
+              {current ? (
+                <PlayerTrigger uid={current.peer.uid} label={current.peer.displayName} context="chat:dm">
+                  <PlayerChip card={current.peer} online={current.online} size={36} />
+                </PlayerTrigger>
+              ) : (
+                <span className="text-white/60">UID {peer}</span>
+              )}
             </header>
-            <Thread messages={messages} more={more} onOlder={older} />
+            <Thread messages={messages} more={more} onOlder={older} context="chat:dm" />
             <Composer channel="dm" path={`/api/chat/dm/${peer}`} locked={!!current && !current.friend} />
           </>
         )}
@@ -258,7 +265,9 @@ function Private({ initial }: { initial: number | null }) {
   );
 }
 
-function Thread({ messages, more, onOlder, onRemove }: { messages: ChatMessageView[] | null; more: boolean; onOlder: () => void; onRemove?: (id: number) => void }) {
+function Thread({ messages: all, more, onOlder, onRemove, context }: { messages: ChatMessageView[] | null; more: boolean; onOlder: () => void; onRemove?: (id: number) => void; context: string }) {
+  const blocked = useBlockedUids();
+  const messages = all && blocked.size ? all.filter((m) => !blocked.has(m.sender.uid)) : all;
   const { t, i18n } = useTranslation();
   const me = useSession((s) => s.user?.uid);
   const box = useRef<HTMLDivElement>(null);
@@ -295,11 +304,19 @@ function Thread({ messages, more, onOlder, onRemove }: { messages: ChatMessageVi
           const grouped = prev && prev.sender.uid === m.sender.uid && new Date(m.createdAt).getTime() - new Date(prev.createdAt).getTime() < 5 * 60_000;
           return (
             <li key={m.id} className={`group flex items-end gap-2 ${mine ? 'flex-row-reverse' : ''} ${grouped ? '' : 'mt-2'}`}>
-              <div className="w-9 shrink-0">{!grouped && !mine && <Avatar index={m.sender.avatar} frame={m.sender.frame} avatarItem={m.sender.avatarItem} size={36} />}</div>
+              <div className="w-9 shrink-0">
+                {!grouped && !mine && (
+                  <PlayerTrigger uid={m.sender.uid} label={m.sender.displayName} context={context}>
+                    <Avatar index={m.sender.avatar} frame={m.sender.frame} avatarItem={m.sender.avatarItem} size={36} />
+                  </PlayerTrigger>
+                )}
+              </div>
               <div className={`flex min-w-0 max-w-[80%] flex-col ${mine ? 'items-end' : 'items-start'}`}>
                 {!grouped && !mine && (
                   <div className="mb-0.5 flex items-center gap-1.5 px-1 text-[11px]">
-                    <PlayerName name={m.sender.displayName} badges={m.sender.badges} size={12} className="font-label text-cyan-100" />
+                    <PlayerTrigger uid={m.sender.uid} label={m.sender.displayName} context={context}>
+                      <PlayerName name={m.sender.displayName} badges={m.sender.badges} size={12} className="font-label text-cyan-100" />
+                    </PlayerTrigger>
                     {m.sender.title && <TitleBadge itemId={m.sender.title} size="sm" />}
                   </div>
                 )}

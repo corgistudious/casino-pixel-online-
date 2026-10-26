@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { formatChips } from '../lib/format';
 import { api } from '../net/api';
 import { useSession } from '../store/session';
+import { PlayerTrigger } from '../players/PlayerActions';
 import { AppShell, PageHeader } from '../ui/AppShell';
 import { RankEmblem, useRankName } from '../ui/RankEmblem';
 import { SeasonRewardsTable } from '../ui/SeasonRewardsTable';
@@ -236,7 +237,9 @@ export function RankPage() {
               {ladder?.map((e) => (
                 <Row key={e.uid} mine={e.uid === me?.uid} position={e.position}>
                   <RankEmblem division={e.division} top={e.topTitle} size={30} />
-                  <span className="min-w-0 flex-1 truncate">{e.displayName}</span>
+                  <PlayerTrigger uid={e.uid} label={e.displayName} context="rank:ladder" className="flex-1 truncate">
+                    {e.displayName}
+                  </PlayerTrigger>
                   <span className="text-xs text-white/60">{rankName(e.division, e.topTitle)}</span>
                   <span className="w-16 text-right text-xs tabular-nums text-white/70">{fmt(e.rp)} RP</span>
                 </Row>
@@ -247,7 +250,9 @@ export function RankPage() {
             <List loading={!levels} empty={levels?.length === 0 ? '—' : null}>
               {levels?.map((e) => (
                 <Row key={e.uid} mine={e.uid === me?.uid} position={e.position}>
-                  <span className="min-w-0 flex-1 truncate">{e.displayName}</span>
+                  <PlayerTrigger uid={e.uid} label={e.displayName} context="rank:level" className="flex-1 truncate">
+                    {e.displayName}
+                  </PlayerTrigger>
                   <span className="font-semibold text-gold-100">{t('level.short', { level: e.level })}</span>
                   <span className="w-24 text-right text-xs tabular-nums text-white/55">{fmt(e.exp)} EXP</span>
                 </Row>

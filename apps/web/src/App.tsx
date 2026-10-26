@@ -44,6 +44,11 @@ import { RankPage } from './pages/RankPage';
 import { GiftcodePage } from './pages/GiftcodePage';
 import { CardLobbyPage } from './pages/CardLobbyPage';
 import { CardTablePage } from './pages/CardTablePage';
+import { PlayerActionHost } from './players/PlayerActions';
+import { PlayerProfilePage } from './players/PlayerProfilePage';
+import { RoomInviteHost } from './rooms/RoomInviteHost';
+import { RoomsPage } from './rooms/RoomsPage';
+import { ReportsAdminPage } from './admin/ReportsAdminPage';
 import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
@@ -114,11 +119,15 @@ export function App() {
       <RotateOverlay />
       <Toasts />
       <LevelUpBanner />
+      <PlayerActionHost />
+      <RoomInviteHost />
       <Routes>
         <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
         <Route path="/tables/:tableId" element={<Authed><TableRoute /></Authed>} />
         <Route path="/profile" element={<Authed><ProfilePage /></Authed>} />
+        <Route path="/player/:uid" element={<Authed><PlayerProfilePage /></Authed>} />
+        <Route path="/custom-rooms" element={<Authed><RoomsPage /></Authed>} />
         <Route path="/market" element={<Authed><MarketPage /></Authed>} />
         <Route path="/shop" element={<Navigate to="/market" replace />} />
         <Route path="/vip" element={<Authed><VipPage /></Authed>} />
@@ -147,6 +156,7 @@ export function App() {
           <Route path="players/:uid" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
           <Route path="support" element={<RequirePerm perm="support.read"><SupportAdminPage /></RequirePerm>} />
+          <Route path="reports" element={<RequirePerm perm="reports.manage"><ReportsAdminPage /></RequirePerm>} />
           <Route path="progression" element={<RequirePerm perm="progression.read"><ProgressionAdminPage /></RequirePerm>} />
           <Route path="missions" element={<RequirePerm perm="progression.read"><MissionConfigPage /></RequirePerm>} />
           <Route path="season-rewards" element={<RequirePerm perm="progression.read"><SeasonRewardsPage /></RequirePerm>} />

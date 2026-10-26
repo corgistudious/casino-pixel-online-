@@ -5,6 +5,7 @@ import { formatChips } from '../lib/format';
 import { api } from '../net/api';
 import { useSession } from '../store/session';
 import { Avatar, Medal } from '../ui/Avatar';
+import { PlayerTrigger } from '../players/PlayerActions';
 import { AppShell, PageHeader } from '../ui/AppShell';
 import { Amount, PlayerName } from '../ui/OfficialAssets';
 
@@ -31,8 +32,10 @@ export function LeaderboardPage() {
                 style={{ animationDelay: `${Math.min(i, 20) * 25}ms` }}
               >
                 <Medal rank={e.rank} />
-                <Avatar index={e.avatar} avatarItem={e.avatarItem} size={34} frame={e.frame} animated={e.rank === 1} />
-                <PlayerName name={e.displayName} badges={e.badges} className="flex-1" />
+                <PlayerTrigger uid={e.uid} label={e.displayName} context="leaderboard" className="flex min-w-0 flex-1 items-center gap-3">
+                  <Avatar index={e.avatar} avatarItem={e.avatarItem} size={34} frame={e.frame} animated={e.rank === 1} />
+                  <PlayerName name={e.displayName} badges={e.badges} className="flex-1" />
+                </PlayerTrigger>
                 <Amount currency="silver" value={formatChips(e.balance, i18n.language)} size={20} className="font-semibold" />
               </li>
             ))}

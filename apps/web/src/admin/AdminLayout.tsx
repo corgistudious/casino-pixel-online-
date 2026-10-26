@@ -11,6 +11,7 @@ export const ADMIN_SECTIONS: { path: string; key: string; perm: Permission }[] =
   { path: 'players', key: 'players', perm: 'users.read' },
   { path: 'staff', key: 'staff', perm: 'staff.read' },
   { path: 'support', key: 'support', perm: 'support.read' },
+  { path: 'reports', key: 'reports', perm: 'reports.manage' },
   { path: 'progression', key: 'progression', perm: 'progression.read' },
   { path: 'season-rewards', key: 'seasonRewards', perm: 'progression.read' },
   { path: 'missions', key: 'missions', perm: 'progression.read' },

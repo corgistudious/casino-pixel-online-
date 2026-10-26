@@ -6,7 +6,11 @@ import { sfx } from '../audio/sfx';
 import { InsurancePrompt } from '../game/controls/InsurancePrompt';
 import { errorText } from '../lib/errors';
 import { formatChips } from '../lib/format';
+import { ApiError } from '../net/api';
 import { socket } from '../net/socket';
+import { PlayerTrigger } from '../players/PlayerActions';
+import { RoomPasswordPrompt } from '../rooms/RoomForm';
+import { RoomPanel } from '../rooms/RoomPanel';
 import { useSession } from '../store/session';
 import { AppShell } from '../ui/AppShell';
 import { Avatar } from '../ui/Avatar';
@@ -40,7 +44,14 @@ export function BjtTablePage() {
   const lastRound = useRef<string | null>(null);
 
   const fail = (err: unknown) => toast(errorText(t, err, i18n.language), 'error');
-  const join = () => void socket.request('bjt.join', { tableId }).then(setView, fail);
+  const [locked, setLocked] = useState(false);
+  const join = () =>
+    void socket.request('bjt.join', { tableId }).then(setView, (err) => {
+      // A private room asks for its password; removed players and closed rooms go back to the room list.
+      if (err instanceof ApiError && err.code === 'room_locked') return setLocked(true);
+      fail(err);
+      if (err instanceof ApiError && (err.code === 'room_kicked' || err.code === 'room_closed')) navigate('/custom-rooms', { replace: true });
+    });
   // Join (and re-join after every reconnect, which also refreshes the state); leave on exit.
   useEffect(() => {
     if (status === 'online') join();
@@ -94,6 +105,16 @@ export function BjtTablePage() {
     return (
       <AppShell>
         <p className="p-6 text-white/50">{t('app.loading')}</p>
+        {locked && (
+          <RoomPasswordPrompt
+            roomId={`bj:${tableId}`}
+            onClose={() => navigate('/custom-rooms')}
+            onJoined={() => {
+              setLocked(false);
+              join();
+            }}
+          />
+        )}
       </AppShell>
     );
   }
@@ -142,7 +163,9 @@ export function BjtTablePage() {
               <div key={seat} className="absolute flex w-[18%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1" style={{ left: `${pos.left}%`, top: `${pos.top}%` }}>
                 {p && <Hands p={p} active={turnSeat === seat} fmt={fmt} t={t} done={round?.phase === 'done'} />}
                 {s ? (
-                  <SeatPlate s={s} turn={turnSeat === seat} me={seat === mySeat} t={t} />
+                  <PlayerTrigger uid={s.uid} label={s.displayName} context={`table:bj:${tableId}`} className="rounded-full">
+                    <SeatPlate s={s} turn={turnSeat === seat} me={seat === mySeat} t={t} />
+                  </PlayerTrigger>
                 ) : mySeat === null ? (
                   <button type="button" aria-label={`${t('bjt.sit')} ${seat + 1}`} disabled={busy || tb.status !== 'open'} onClick={() => void send('bjt.sit', { seat })} className="rounded-full border border-dashed border-gold-300/60 bg-black/30 px-3 py-2 text-xs font-label text-gold-100 hover:bg-gold-300/15">
                     {t('bjt.sit')}
@@ -160,6 +183,7 @@ export function BjtTablePage() {
             <h1 className="font-display text-lg font-heading">{tb.name[i18n.language === 'en' ? 'en' : 'vi']}</h1>
             <span className="text-xs text-white/50">{t('bjt.limits', { min: fmt(tb.minBet), max: fmt(tb.maxBet) })}</span>
           </div>
+          <RoomPanel engine="bj" tableId={tableId} members={view.seats} />
           {mySeat === null ? (
             <p className="text-sm text-white/60">{t('bjt.sitToPlay')}</p>
           ) : round?.phase === 'betting' && !mine ? (
