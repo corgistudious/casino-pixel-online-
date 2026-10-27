@@ -243,6 +243,24 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
               <span>{t('tables.players', { n: view.bettors, w: view.watchers })}</span>
             </div>
           )}
+          {view && (
+            <div className="rounded-xl border border-gold-300/20 bg-black/30 px-3 py-2">
+              <div className="mb-2 text-xs font-semibold text-gold-100">
+                {i18n.language === 'vi' ? 'Người chơi đã đặt cược' : 'Players betting this round'} ({view.bettors})
+              </div>
+              {view.players.length ? (
+                <div className="flex max-h-28 flex-wrap gap-1.5 overflow-y-auto">
+                  {view.players.map((player) => (
+                    <span key={player.uid} title={`UID ${player.uid}`} className="rounded-full border border-white/15 bg-white/10 px-2 py-1 text-xs text-white/85">
+                      {player.displayName}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-white/45">{i18n.language === 'vi' ? 'Chưa có người đặt cược trong vòng này' : 'No bets placed this round'}</p>
+              )}
+            </div>
+          )}
           {view?.table.status === 'paused' && <p className="rounded-lg bg-amber-900/40 px-3 py-2 text-xs text-amber-100">{t('tables.paused')}</p>}
           {view && <Pool view={view} />}
           <ChipSelector values={CHIP_VALUES} value={chip} onChange={setChip} />
