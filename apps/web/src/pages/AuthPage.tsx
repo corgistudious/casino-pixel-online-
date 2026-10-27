@@ -62,6 +62,7 @@ export function AuthFrame({ title, children, onSubmit }: { title: string; childr
           </div>
         </div>
         <form onSubmit={onSubmit ?? ((e) => e.preventDefault())} className="glass mx-auto flex w-full max-w-md flex-col gap-3 p-5 sm:gap-4 sm:p-6">
+          <div className="flex justify-center lg:hidden"><KeyoLogo size={104} className="max-h-28" /></div>
           <div className="flex items-center justify-between gap-3">
             <h2 className="font-display text-2xl font-semibold">{title}</h2>
             <LanguageSwitch />
