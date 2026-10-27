@@ -355,7 +355,12 @@ export class RoundTableEngine {
         .limit(HISTORY),
       userId ? this.myBets(round.id, userId) : Promise.resolve([]),
     ]);
-    const [bettors] = await this.db.execute<{ n: string }>(sql`SELECT count(DISTINCT user_id) AS n FROM table_bets WHERE round_id = ${round.id}`);
+    const [bettors, players] = await Promise.all([
+      this.db.execute<{ n: string }>(sql`SELECT count(DISTINCT user_id) AS n FROM table_bets WHERE round_id = ${round.id}`),
+      this.db.selectDistinct({ uid: users.uid, displayName: users.displayName })
+        .from(tableBets).innerJoin(users, eq(users.id, tableBets.userId))
+        .where(eq(tableBets.roundId, round.id)).limit(60),
+    ]);
     const showOutcome = round.status === 'locked' || round.status === 'settled';
     return {
       table: summary(table),
@@ -375,7 +380,8 @@ export class RoundTableEngine {
       },
       serverNow: now.getTime(),
       totals: Object.fromEntries(totalsRows.map((r) => [betAreaKey({ kind: r.kind, value: r.value ?? undefined }), { amount: Number(r.amount), players: Number(r.players) }])),
-      bettors: Number(bettors?.n ?? 0),
+      bettors: Number(bettors[0]?.n ?? 0),
+      players,
       watchers: this.hub.roomSize(tableRoom(tableId)),
       history: history.map((h) => h.outcome as RoundOutcome),
       myBets: mine,
