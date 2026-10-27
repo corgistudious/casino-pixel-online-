@@ -23,13 +23,21 @@ const TABS: Tab[] = ['server', 'guild', 'dm'];
  * every reconnect refetches the open view so nothing is missed while offline.
  */
 export function ChatPage() {
+  return (
+    <AppShell>
+      <ChatContent />
+    </AppShell>
+  );
+}
+
+/** Reusable chat content for both the full chat page and an in-game overlay. */
+export function ChatContent() {
   const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const tab: Tab = TABS.includes(params.get('tab') as Tab) ? (params.get('tab') as Tab) : params.get('dm') ? 'dm' : 'server';
   const unread = useSocial((s) => s.unreadDm);
   const online = useSession((s) => s.status === 'online');
   return (
-    <AppShell>
       <div className="flex h-full min-h-0 flex-col gap-3 p-3 lg:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="flex items-center gap-2 font-display text-2xl font-heading text-white">
@@ -58,7 +66,6 @@ export function ChatPage() {
           {tab === 'dm' && <Private initial={Number(params.get('dm')) || null} />}
         </div>
       </div>
-    </AppShell>
   );
 }
 
@@ -120,7 +127,7 @@ function Room({ channel }: { channel: 'server' | 'guild' }) {
       </Empty>
     );
   return (
-    <div className="flex h-full min-h-[420px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#101a33]/90 to-[#0b0f1f]/95">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#101a33]/90 to-[#0b0f1f]/95">
       <Thread messages={messages} more={more} onOlder={older} onRemove={canModerate ? remove : undefined} context={`chat:${channel}`} />
       <Composer channel={channel} path={`/api/chat/${channel}`} />
     </div>
@@ -204,7 +211,7 @@ function Private({ initial }: { initial: number | null }) {
   const time = (iso: string | null) => (iso ? new Date(iso).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' }) : '');
 
   return (
-    <div className="grid h-full min-h-[420px] grid-cols-1 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0f1f]/95 md:grid-cols-[280px_1fr]">
+    <div className="grid h-full min-h-0 grid-cols-1 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0f1f]/95 md:grid-cols-[280px_1fr]">
       <aside className={`flex min-h-0 flex-col border-white/10 md:border-r ${peer ? 'hidden md:flex' : 'flex'}`}>
         <div className="p-2">
           <input className="field" value={filter} onChange={(e) => setFilter(e.target.value)} placeholder={t('social.chat.searchFriends')} aria-label={t('social.chat.searchFriends')} />
