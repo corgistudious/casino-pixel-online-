@@ -49,6 +49,10 @@ const DOCK: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/vip', icon: 'vip', label: 'nav.vip' },
   { to: '/rank', icon: 'rank', label: 'nav.rank' },
   { to: '/leaderboard', icon: 'leaderboard', label: 'nav.leaderboard' },
+  { to: '/friends', icon: 'friends', label: 'nav.friends' },
+  { to: '/guild', icon: 'guild', label: 'nav.guild' },
+  { to: '/missions', icon: 'missions', label: 'nav.missions' },
+  { to: '/support', icon: 'support', label: 'nav.support' },
   { to: '/profile', icon: 'profile', label: 'nav.profile' },
 ];
 
@@ -392,42 +396,53 @@ function GameCard({ s, game, index, cardW }: { s: Sizes; game: (typeof GAMES)[nu
 
 function Dock({ s }: { s: Sizes }) {
   const { t } = useTranslation();
+  // Keep the chat shortcut outside the central lobby dock, aligned at its left edge.
+  // Compact layouts use smaller icons so the expanded navigation remains usable in landscape.
+  const iconSize = Math.round(s.dockIcon * 0.72);
+  const itemWidth = s.dockIcon * 2.05;
   return (
-    <nav className="relative z-10 flex shrink-0 items-end justify-center" style={{ height: s.dock, paddingBottom: s.pad * 0.5 }}>
-      <div
-        className="flex items-stretch rounded-[28px] border border-[#f2c14e]/45 bg-gradient-to-b from-[#1e1546]/95 to-[#0a0720]/95 shadow-[0_-6px_30px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.08)]"
-        style={{ paddingInline: s.gap * 0.6, gap: s.gap * 0.2 }}
+    <div className="relative z-10 grid shrink-0 grid-cols-[1fr_minmax(0,auto)_1fr] items-end" style={{ height: s.dock, paddingBottom: s.pad * 0.5, paddingInline: s.pad }}>
+      <Link
+        to="/chat"
+        title={t('nav.chat')}
+        aria-label={t('nav.chat')}
+        className="group flex w-fit flex-col items-center justify-center self-center rounded-2xl border border-[#f2c14e]/45 bg-gradient-to-b from-[#241a4d]/95 to-[#0a0720]/95 px-3 py-2 text-[#ffe08a] shadow-lg transition hover:brightness-125"
       >
-        {DOCK.map((item) => {
-          const active = item.to === '/';
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={`group relative flex flex-col items-center justify-center transition ${active ? '-translate-y-[18%]' : 'hover:-translate-y-1'}`}
-              style={{ minWidth: s.dockIcon * 2.6, paddingInline: s.dockIcon * 0.35, paddingBlock: s.dockIcon * 0.25 }}
-            >
-              <span
-                className={`relative flex items-center justify-center rounded-full transition ${
-                  active
-                    ? 'bg-gradient-to-b from-[#fff1b8] via-[#f2c14e] to-[#8a5a12] shadow-[0_8px_20px_rgba(242,193,78,0.35)] ring-2 ring-[#fff1b8]/60 [&_path]:!stroke-[#1a1036]'
-                    : 'group-hover:bg-white/5'
-                }`}
-                style={{ width: s.dockIcon * 1.6, height: s.dockIcon * 1.6 }}
+        <NavIcon name="chat" size={iconSize} active />
+        <span className="mt-1 whitespace-nowrap font-semibold" style={{ fontSize: s.label * 0.75 }}>{t('nav.chat')}</span>
+      </Link>
+      <nav aria-label={t('nav.hub')} className="min-w-0 max-w-full overflow-x-auto rounded-[28px] border border-[#f2c14e]/45 bg-gradient-to-b from-[#1e1546]/95 to-[#0a0720]/95 shadow-[0_-6px_30px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.08)]">
+        <div className="flex w-max items-stretch" style={{ paddingInline: s.gap * 0.35, gap: s.gap * 0.1 }}>
+          {DOCK.map((item) => {
+            const active = item.to === '/';
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                title={t(item.label)}
+                className={`group relative flex shrink-0 flex-col items-center justify-center transition ${active ? '-translate-y-[8%]' : 'hover:-translate-y-1'}`}
+                style={{ minWidth: itemWidth, paddingInline: s.dockIcon * 0.15, paddingBlock: s.dockIcon * 0.18 }}
               >
-                <NavIcon name={item.icon} size={s.dockIcon} active={active} />
-              </span>
-              <span
-                className={`relative mt-1 whitespace-nowrap font-semibold ${active ? 'text-[#ffe08a]' : 'text-white/70 group-hover:text-white'}`}
-                style={{ fontSize: s.label * 0.85 }}
-              >
-                {t(item.label)}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
+                <span
+                  className={`relative flex items-center justify-center rounded-full transition ${
+                    active
+                      ? 'bg-gradient-to-b from-[#fff1b8] via-[#f2c14e] to-[#8a5a12] shadow-[0_8px_20px_rgba(242,193,78,0.35)] ring-2 ring-[#fff1b8]/60 [&_path]:!stroke-[#1a1036]'
+                      : 'group-hover:bg-white/5'
+                  }`}
+                  style={{ width: iconSize * 1.5, height: iconSize * 1.5 }}
+                >
+                  <NavIcon name={item.icon} size={iconSize} active={active} />
+                </span>
+                <span className={`relative mt-1 whitespace-nowrap font-semibold ${active ? 'text-[#ffe08a]' : 'text-white/70 group-hover:text-white'}`} style={{ fontSize: s.label * 0.72 }}>
+                  {t(item.label)}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+      <span aria-hidden="true" />
+    </div>
   );
 }
 
