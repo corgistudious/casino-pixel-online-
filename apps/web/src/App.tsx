@@ -82,7 +82,7 @@ function TableRoute() {
 function InGameChat() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
-  const inGame = /^\\/(play|tables|bjt|cards)\\//.test(pathname) || pathname === '/bjt';
+  const inGame = ['/play/', '/tables/', '/bjt/', '/cards/'].some((prefix) => pathname.startsWith(prefix)) || pathname === '/bjt';
   useEffect(() => setOpen(false), [pathname]);
   if (!inGame) return null;
   return (
