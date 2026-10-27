@@ -35,6 +35,7 @@ export class RealtimeHub {
   private readonly byUser = new Map<string, Set<Connection>>();
   /** Room (e.g. a game table) → sockets watching it on this instance. */
   private readonly rooms = new Map<string, Set<Connection>>();
+  private readonly roomKeys = new Set<string>();
   private bigWins: BigWinEvent[] = [];
   private pub?: Redis;
   private sub?: Redis;
@@ -85,8 +86,9 @@ export class RealtimeHub {
 
   remove(conn: Connection): void {
     for (const [room, members] of this.rooms) {
-      members.delete(conn);
+      if (!members.delete(conn)) continue;
       if (members.size === 0) this.rooms.delete(room);
+      void this.syncRoom(room);
     }
     const set = this.byUser.get(conn.userId);
     if (!set) return;
@@ -133,17 +135,53 @@ export class RealtimeHub {
     let members = this.rooms.get(room);
     if (!members) this.rooms.set(room, (members = new Set()));
     members.add(conn);
+    void this.syncRoom(room);
   }
 
   leave(room: string, conn: Connection): void {
     const members = this.rooms.get(room);
     members?.delete(conn);
     if (members?.size === 0) this.rooms.delete(room);
+    void this.syncRoom(room);
   }
 
   /** Sockets watching a room on this instance. */
   roomSize(room: string): number {
     return this.rooms.get(room)?.size ?? 0;
+  }
+
+  /** Distinct authenticated accounts currently watching a room across instances. */
+  async roomUserIds(room: string): Promise<string[]> {
+    const ids = new Set([...this.rooms.get(room) ?? []].map((conn) => conn.userId));
+    if (this.pub) {
+      try {
+        const keys = await this.pub.keys(`${this.keys.channel}:room:${room}:*`);
+        if (keys.length) {
+          const values = await this.pub.mget(keys);
+          for (const value of values) if (value) for (const id of JSON.parse(value) as string[]) ids.add(id);
+        }
+      } catch (err) {
+        this.log.warn({ err, room }, 'room presence lookup failed');
+      }
+    }
+    return [...ids];
+  }
+
+  private async syncRoom(room: string): Promise<void> {
+    if (!this.pub) return;
+    const key = `${this.keys.channel}:room:${room}:${this.instanceId}`;
+    const ids = [...new Set([...this.rooms.get(room) ?? []].map((conn) => conn.userId))];
+    try {
+      if (ids.length) {
+        this.roomKeys.add(key);
+        await this.pub.set(key, JSON.stringify(ids), 'EX', USER_ONLINE_TTL_S);
+      } else {
+        this.roomKeys.delete(key);
+        await this.pub.del(key);
+      }
+    } catch (err) {
+      this.log.warn({ err, room }, 'room presence sync failed');
+    }
   }
 
   /** Sends to everyone watching a room, on every instance. */
@@ -189,6 +227,7 @@ export class RealtimeHub {
   async close(): Promise<void> {
     clearInterval(this.timer);
     await this.pub?.del(this.keys.presence + this.instanceId).catch(() => {});
+    if (this.pub && this.roomKeys.size) await this.pub.del(...this.roomKeys).catch(() => {});
     this.pub?.disconnect();
     this.sub?.disconnect();
   }
@@ -227,6 +266,7 @@ export class RealtimeHub {
     if (!this.pub) return;
     try {
       await this.pub.set(this.keys.presence + this.instanceId, String(this.localOnline), 'EX', 30);
+      for (const room of this.rooms.keys()) await this.syncRoom(room);
       if (this.byUser.size) {
         const batch = this.pub.multi();
         for (const id of this.byUser.keys()) batch.set(this.keys.userOnline + id, '1', 'EX', USER_ONLINE_TTL_S);

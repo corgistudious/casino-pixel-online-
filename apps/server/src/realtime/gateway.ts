@@ -25,6 +25,8 @@ import { assertRoomAccess } from '../services/roomAccess';
 
 const AUTH_TIMEOUT_MS = 10_000;
 
+/** Refresh the shared-table snapshot whenever room membership changes. */
+
 export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, tables: RoundTableEngine, cards: CardTableEngine, bjt: BlackjackTableEngine, limits: { rate: number; burst: number }): void {
   const { rate: RATE, burst: BURST } = limits;
   app.get('/ws', { websocket: true }, (socket: WebSocket) => {
@@ -32,6 +34,15 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
     let tokens = BURST;
     let last = Date.now();
     let queue = Promise.resolve();
+    const joinedRoundTables = new Set<string>();
+    const publishRoundPresence = async (tableId: string) => {
+      try {
+        const { myBets: _myBets, ...view } = await tables.view(tableId);
+        hub.publishRoom(tableRoom(tableId), { type: 'event', event: 'table', data: view });
+      } catch (err) {
+        app.log.warn({ err, tableId }, 'round-table presence refresh failed');
+      }
+    };
 
     const send = (msg: ServerMessage) => {
       if (socket.readyState === socket.OPEN) socket.send(JSON.stringify(msg));
@@ -78,10 +89,14 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
         case 'table.join': {
           const view = await tables.view(msg.tableId, userId);
           hub.join(tableRoom(msg.tableId), conn);
+          joinedRoundTables.add(msg.tableId);
+          void publishRoundPresence(msg.tableId);
           return view;
         }
         case 'table.leave':
           hub.leave(tableRoom(msg.tableId), conn);
+          joinedRoundTables.delete(msg.tableId);
+          void publishRoundPresence(msg.tableId);
           return { ok: true };
         case 'bjt.join': {
           await assertRoomAccess(db, 'bj', msg.tableId, userId);
@@ -196,6 +211,8 @@ export function registerGateway(app: FastifyInstance, db: Db, hub: RealtimeHub, 
     socket.on('close', () => {
       clearTimeout(authTimer);
       if (account) hub.remove(conn);
+      for (const tableId of joinedRoundTables) void publishRoundPresence(tableId);
+      joinedRoundTables.clear();
     });
     socket.on('error', (err) => app.log.warn({ err }, 'ws error'));
   });

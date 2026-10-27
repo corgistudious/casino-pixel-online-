@@ -141,6 +141,8 @@ export interface TableRoundView {
   /** Public identities of players who placed a bet in this round; no bet amounts or balances. */
   players: { uid: number; displayName: string }[];
   watchers: number;
+  /** Unique authenticated accounts watching this table, including spectators. */
+  members: { uid: number; displayName: string }[];
   history: RoundOutcome[];
   myBets: MyTableBet[];
 }

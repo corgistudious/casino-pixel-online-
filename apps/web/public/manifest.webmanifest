@@ -1,10 +1,10 @@
 {
   "name": "Keyo Game",
-  "short_name": "Keyo",
+  "short_name": "Keyo Game",
   "start_url": "./",
   "display": "fullscreen",
   "orientation": "landscape",
   "background_color": "#05040b",
   "theme_color": "#05040b",
-  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+  "icons": [{ "src": "/assets/official/keyo-game-logo.png", "sizes": "any", "type": "image/png", "purpose": "any" }]
 }
