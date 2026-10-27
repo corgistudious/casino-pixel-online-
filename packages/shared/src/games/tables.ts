@@ -138,6 +138,8 @@ export interface TableRoundView {
   serverNow: number;
   totals: Record<string, { amount: number; players: number }>;
   bettors: number;
+  /** Public identities of players who placed a bet in this round; no bet amounts or balances. */
+  players: { uid: number; displayName: string }[];
   watchers: number;
   history: RoundOutcome[];
   myBets: MyTableBet[];

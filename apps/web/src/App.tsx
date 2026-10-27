@@ -1,6 +1,6 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HashRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { BlackjackGame } from './game/controls/BlackjackGame';
 import { RouletteGame } from './game/controls/RouletteGame';
 import { SicBoGame } from './game/controls/SicBoGame';
@@ -37,7 +37,8 @@ import { AchievementsPage } from './pages/AchievementsPage';
 import { RoomsAdminPage } from './admin/RoomsAdminPage';
 import { TradingPage } from './pages/TradingPage';
 import { MissionsPage } from './pages/MissionsPage';
-import { ChatPage } from './social/ChatPage';
+import { ChatPage, ChatContent } from './social/ChatPage';
+import { NavIcon } from './ui/NavIcons';
 import { FriendsPage } from './social/FriendsPage';
 import { GuildPage } from './social/GuildPage';
 import { RankPage } from './pages/RankPage';
@@ -75,6 +76,38 @@ function TableRoute() {
   const { tableId } = useParams();
   // Remount per table so scenes and subscriptions never mix two tables.
   return tableId ? <SharedTableGame key={tableId} tableId={tableId} /> : <Navigate to="/" replace />;
+}
+
+/** Floating in-room chat: opening it does not unmount the active game/table. */
+function InGameChat() {
+  const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+  const inGame = ['/play/', '/tables/', '/bjt/', '/cards/'].some((prefix) => pathname.startsWith(prefix)) || pathname === '/bjt';
+  useEffect(() => setOpen(false), [pathname]);
+  if (!inGame) return null;
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-label="Chat"
+        title="Chat"
+        className="fixed bottom-3 left-3 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-[#f2c14e]/70 bg-[#180f38]/95 shadow-lg hover:brightness-125"
+      >
+        <NavIcon name="chat" size={23} active />
+      </button>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-2 sm:p-4" role="dialog" aria-modal="true" aria-label="Chat">
+          <div className="flex h-[min(92dvh,680px)] w-[min(94vw,850px)] min-h-0 flex-col overflow-hidden rounded-2xl border border-[#f2c14e]/50 bg-[#0b0920] shadow-2xl">
+            <div className="flex shrink-0 justify-end border-b border-white/10 px-3 py-1">
+              <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="rounded-lg px-3 py-1 text-lg text-white hover:bg-white/10">×</button>
+            </div>
+            <div className="min-h-0 flex-1"><ChatContent /></div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 function Authed({ children, admin = false }: { children: ReactNode; admin?: boolean }) {
@@ -121,6 +154,7 @@ export function App() {
       <LevelUpBanner />
       <PlayerActionHost />
       <RoomInviteHost />
+      <InGameChat />
       <Routes>
         <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
