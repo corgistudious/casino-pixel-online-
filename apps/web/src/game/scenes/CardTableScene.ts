@@ -126,20 +126,31 @@ export class CardTableScene extends BaseScene {
     const src = assetSrc(url);
     if (!src) return null;
     const key = `photo:${url}`;
-    if (!this.textures.exists(key)) {
-      if (!this.loadingPhotos.has(key)) {
-        this.loadingPhotos.add(key);
-        this.load.setCORS('anonymous');
-        this.load.image(key, src);
-        this.load.once(`filecomplete-image-${key}`, () => this.view && this.render(this.view, this.backs));
-        this.load.start();
+    const round = `${key}:round`;
+    if (!this.textures.exists(round)) {
+      if (this.textures.exists(key)) {
+        // Cut the photo to a circle once (masks do not work on children of a container).
+        const img = this.textures.get(key).getSourceImage() as HTMLImageElement;
+        const canvas = this.textures.createCanvas(round, 96, 96);
+        if (!canvas) return null;
+        const ctx = canvas.getContext();
+        ctx.beginPath();
+        ctx.arc(48, 48, 48, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(img, 0, 0, 96, 96);
+        canvas.refresh();
+      } else {
+        if (!this.loadingPhotos.has(key)) {
+          this.loadingPhotos.add(key);
+          this.load.setCORS('anonymous');
+          this.load.image(key, src);
+          this.load.once(`filecomplete-image-${key}`, () => this.view && this.render(this.view, this.backs));
+          this.load.start();
+        }
+        return null;
       }
-      return null;
     }
-    const img = this.add.image(x, y, key).setDisplaySize(30, 30);
-    const mask = this.make.graphics({}, false).fillStyle(0xffffff).fillCircle(x, y, 15);
-    img.setMask(mask.createGeometryMask());
-    return img;
+    return this.add.image(x, y, round).setDisplaySize(30, 30);
   }
 
   render(view: CardTableView, backs: Record<number, CardBackLook | undefined>) {
@@ -199,6 +210,7 @@ export class CardTableScene extends BaseScene {
       if (p?.folded || s.status !== 'active') {
         av.setAlpha(0.45);
         initial.setAlpha(0.5);
+        photo?.setAlpha(0.5);
         const tag = p?.folded ? this.strings.fold : s.status === 'leaving' ? this.strings.leaving : this.strings.sittingOut;
         if (tag) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > CENTER.y ? 27 : 46), tag, { size: 8, color: '#ff9fae', weight: 700, shadow: true }));
       } else if (p?.allIn && !hand?.result) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > CENTER.y ? 27 : 46), this.strings.allIn ?? 'ALL-IN', { size: 9, color: '#ffe08a', weight: 800, shadow: true }));

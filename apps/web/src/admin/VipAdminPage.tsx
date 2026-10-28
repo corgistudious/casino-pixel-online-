@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { adminApi, newIdempotencyKey } from '../net/adminApi';
 import { Button } from '../ui/Button';
+import { CurrencyIcon } from '../ui/OfficialAssets';
 import { VipEmblem } from '../ui/VipEmblem';
 import { Panel, Pill, Table } from './parts';
 import { useAdminKit } from './useAdmin';
@@ -79,8 +80,8 @@ export function VipAdminPage() {
                 <span style={{ color: l.color }}>{l.name.vi}</span> <span className="text-white/45">/ {l.name.en}</span>
               </span>,
               <span key="e" className="tabular-nums">{fmt(l.exp)}</span>,
-              <span key="d" className="tabular-nums">
-                {fmt(l.daily.silver)} 🪙 · {fmt(l.daily.gold)} ✦
+              <span key="d" className="inline-flex items-center gap-1 tabular-nums">
+                <CurrencyIcon currency="silver" size={14} /> {fmt(l.daily.silver)} · <CurrencyIcon currency="gold" size={14} /> {fmt(l.daily.gold)}
               </span>,
               l.active ? <Pill key="s" tone="emerald">{t('admin.vip.active')}</Pill> : <Pill key="s">{t('admin.vip.inactive')}</Pill>,
               canEdit ? (

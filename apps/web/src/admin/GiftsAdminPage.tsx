@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { adminApi, newIdempotencyKey } from '../net/adminApi';
 import { GiftIcon } from '../players/GiftShopDialog';
 import { Button } from '../ui/Button';
+import { CurrencyIcon } from '../ui/OfficialAssets';
 import { Panel, Pill, Table } from './parts';
 import { useAdminKit } from './useAdmin';
 
@@ -89,8 +90,8 @@ export function GiftsAdminPage() {
                 </span>
               </span>,
               t(`giftShop.categories.${g.category}`),
-              <span key="p" className="tabular-nums">
-                {fmt(g.price)} {g.currency === 'gold' ? '✦' : '🪙'}
+              <span key="p" className="inline-flex items-center gap-1 tabular-nums">
+                <CurrencyIcon currency={g.currency} size={14} /> {fmt(g.price)}
               </span>,
               <span key="c" className="tabular-nums text-pink-200">+{fmt(g.charm)}</span>,
               <span key="w" className="text-[11px]">
@@ -313,8 +314,8 @@ function Transactions() {
             <span key="g" className="flex items-center gap-1 text-xs">
               <GiftIcon gift={r.gift} size={18} /> {r.gift.name.vi} ×{r.quantity}
             </span>,
-            <span key="p" className="text-xs tabular-nums">
-              {fmt(r.total)} {r.currency === 'gold' ? '✦' : '🪙'}
+            <span key="p" className="inline-flex items-center gap-1 text-xs tabular-nums">
+              <CurrencyIcon currency={r.currency} size={12} /> {fmt(r.total)}
             </span>,
             <span key="c" className="text-xs tabular-nums text-pink-200">+{fmt(r.charm)}</span>,
             r.status === 'reversed' ? (
