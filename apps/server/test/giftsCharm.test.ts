@@ -130,6 +130,17 @@ describe('sending a gift', () => {
     expect((await wallet(a)).silver).toBe(before.silver - 500);
     expect(await charm(b)).toBe(5);
     expect(code(await send(a, b, 'rose', 500, { id, quantity: 2 }))).toBe('idempotency_conflict');
+    // Same key with a different confirmed price or message must not silently replay.
+    expect(code(await send(a, b, 'rose', 501, { id }))).toBe('idempotency_conflict');
+    expect(code(await send(a, b, 'rose', 500, { id, message: 'Changed note' }))).toBe('idempotency_conflict');
+    expect(code(await send(a, b, 'rose', 500, { id, anonymous: true }))).toBe('idempotency_conflict');
+    // A matching retry remains valid even if the live catalogue price changes later.
+    await putGift('rose', { price: 600 });
+    const retry = await send(a, b, 'rose', 500, { id });
+    expect(retry.statusCode).toBe(200);
+    expect(retry.json().replayed).toBe(true);
+    expect((await wallet(a)).silver).toBe(before.silver - 500);
+    expect(await charm(b)).toBe(5);
     expect(Number((await rows<{ c: string }>(sql`SELECT count(*) AS c FROM charm_ledger WHERE gift_tx_id = ${id}::uuid`))[0]!.c)).toBe(1);
   });
 
