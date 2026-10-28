@@ -129,11 +129,21 @@ export async function sendCharmGift(db: Db, me: { id: string; uid: number }, inp
   return db.transaction(async (tx) => {
     // Serialises everything this sender does (limits, balance) without blocking other senders.
     await tx.execute(sql`SELECT id FROM users WHERE id = ${me.id}::uuid FOR UPDATE`);
-    const prior = await tx.execute<{ sender_id: string; receiver_uid: number; gift_id: string; quantity: number; anonymous: boolean }>(sql`
-      SELECT t.sender_id, r.uid AS receiver_uid, t.gift_id, t.quantity, t.anonymous FROM gift_transactions t JOIN users r ON r.id = t.receiver_id WHERE t.id = ${input.id}::uuid`);
+    const prior = await tx.execute<{ sender_id: string; receiver_uid: number; gift_id: string; quantity: number; anonymous: boolean; unit_price: string; message: string }>(sql`
+      SELECT t.sender_id, r.uid AS receiver_uid, t.gift_id, t.quantity, t.anonymous, t.unit_price, t.message
+      FROM gift_transactions t JOIN users r ON r.id = t.receiver_id WHERE t.id = ${input.id}::uuid`);
     if (prior.length) {
       const p = prior[0]!;
-      const same = p.sender_id === me.id && Number(p.receiver_uid) === input.uid && p.gift_id === input.giftId && Number(p.quantity) === input.quantity && p.anonymous === input.anonymous;
+      // Compare every normalized request field against the original purchase snapshot.
+      // Never compare with the live catalogue price: staff may have changed it since purchase.
+      const same =
+        p.sender_id === me.id &&
+        Number(p.receiver_uid) === input.uid &&
+        p.gift_id === input.giftId &&
+        Number(p.quantity) === input.quantity &&
+        p.anonymous === input.anonymous &&
+        Number(p.unit_price) === input.expectedPrice &&
+        p.message === input.message;
       if (!same) throw fail('idempotency_conflict');
       return {
         tx: (await historyRows(tx, me.id, sql`t.id = ${input.id}::uuid`))[0]!,
