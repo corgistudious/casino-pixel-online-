@@ -8,8 +8,8 @@ import { api } from '../net/api';
 import { ACHIEVEMENT_TITLES } from '../pages/AchievementsPage';
 import { GuildCrest, Modal, PlayerChip } from '../social/parts';
 import { assetSrc, itemName, useCatalog } from '../store/catalog';
-import { AppShell } from '../ui/AppShell';
-import { Avatar } from '../ui/Avatar';
+import { AppShell, CharmIcon } from '../ui/AppShell';
+import { useSession } from '../store/session';
 import { Button } from '../ui/Button';
 import { TitleBadge } from '../ui/Cosmetics';
 import { Amount, PlayerName } from '../ui/OfficialAssets';
@@ -18,6 +18,9 @@ import { toast } from '../ui/toast';
 import { VipEmblem } from '../ui/VipEmblem';
 import { onRelationChange, PlayerTrigger, usePlayerActionItems } from './PlayerActions';
 import { ReportDialog } from './ReportDialog';
+import { AvatarCropDialog } from './AvatarCropDialog';
+import { GiftHistory, GiftShowcase } from './GiftShowcase';
+import { PlayerAvatar, PlayerRankBadge, useLiveCounts } from './identity';
 
 /** Full public profile of a player (or my own, with privacy settings). */
 export function PlayerProfilePage() {
@@ -32,6 +35,7 @@ export function PlayerProfilePage() {
   const [missing, setMissing] = useState(false);
   const [report, setReport] = useState(false);
   const [list, setList] = useState<'followers' | 'following' | null>(null);
+  const [cropping, setCropping] = useState(false);
   const fmt = (n: number) => formatChips(n, i18n.language);
 
   const load = useCallback(() => {
@@ -54,6 +58,7 @@ export function PlayerProfilePage() {
   }, [location.hash, p]);
 
   const items = usePlayerActionItems(p, load, { onReport: () => setReport(true) });
+  const counts = useLiveCounts(uid, { followers: p?.counts.followers ?? 0, likes: p?.counts.likes ?? 0, charm: p?.counts.charm ?? 0 });
 
   const item = (id: string) => catalog[id];
   const statCard = (label: string, value: string, tone = 'text-white') => (
@@ -79,18 +84,23 @@ export function PlayerProfilePage() {
             <section className="glass relative overflow-hidden p-4 lg:p-6">
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-fuchsia-600/20 via-violet-700/10 to-transparent" />
               <div className="relative flex flex-wrap items-center gap-4">
-                <div className="relative">
-                  <Avatar index={p.avatar} frame={p.frame} avatarItem={p.avatarItem} size={104} animated />
-                  {p.online !== null && (
-                    <span className={`absolute bottom-1 right-1 h-4 w-4 rounded-full ring-2 ring-ink-900 ${p.online ? 'bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]' : 'bg-white/25'}`} />
+                <div className="flex flex-col items-center gap-1.5">
+                  <PlayerAvatar player={p} size={104} status={p.presence} animated />
+                  {p.relation === 'self' && (
+                    <button type="button" onClick={() => setCropping(true)} className="rounded-full border border-gold-300/40 bg-black/40 px-3 py-1 text-[11px] text-gold-100 hover:bg-black/60">
+                      📷 {t('avatarUpload.change')}
+                    </button>
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <PlayerName name={p.displayName} badges={p.badges} size={22} className="max-w-full font-display text-2xl font-bold text-white" />
+                  <div className="flex min-w-0 items-center gap-2">
+                    <PlayerName name={p.displayName} badges={p.badges} size={22} className="min-w-0 font-display text-2xl font-bold text-white" />
+                    <PlayerRankBadge rank={p.rank} size={26} />
+                  </div>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-white/60">
                     <span className="tabular-nums">UID {p.uid}</span>
                     <span className="rounded bg-gold-300/15 px-1.5 font-label text-gold-100">{t('social.level', { level: p.level })}</span>
-                    <span>{p.online === null ? t('people.profile.hiddenOnline') : p.online ? t('people.profile.online') : t('people.profile.offline')}</span>
+                    <span>{p.presence === null ? t('people.profile.hiddenOnline') : t(`identity.presence.${p.presence}`)}</span>
                     <span>· {t('people.profile.joined', { date: new Date(p.createdAt).toLocaleDateString(i18n.language) })}</span>
                   </div>
                   {p.title && (
@@ -116,16 +126,22 @@ export function PlayerProfilePage() {
                 </div>
               </div>
               {/* Counts */}
-              <div className="relative mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              <div className="relative mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
                 <button type="button" onClick={() => setList('followers')} className="rounded-xl bg-black/25 p-3 text-left transition hover:bg-white/10">
                   <div className="text-[11px] text-white/45">{t('people.profile.followers')}</div>
-                  <div className="mt-1 font-strong tabular-nums">{fmt(p.counts.followers)}</div>
+                  <div className="mt-1 font-strong tabular-nums">{fmt(counts.followers)}</div>
                 </button>
                 <button type="button" onClick={() => setList('following')} className="rounded-xl bg-black/25 p-3 text-left transition hover:bg-white/10">
                   <div className="text-[11px] text-white/45">{t('people.profile.following')}</div>
                   <div className="mt-1 font-strong tabular-nums">{fmt(p.counts.following)}</div>
                 </button>
-                {statCard(t('people.profile.likes'), fmt(p.counts.likes), 'text-ruby-200')}
+                {statCard(t('people.profile.likes'), fmt(counts.likes), 'text-ruby-200')}
+                <div className="rounded-xl border border-pink-300/20 bg-black/25 p-3" title={t('player.charmDesc')}>
+                  <div className="flex items-center gap-1 text-[11px] text-white/45">
+                    <CharmIcon size={14} /> {t('player.charm')}
+                  </div>
+                  <div className="mt-1 font-strong tabular-nums text-pink-100">{fmt(counts.charm)}</div>
+                </div>
                 {statCard(t('people.profile.friends'), p.counts.friends === null ? t('people.profile.hidden') : fmt(p.counts.friends))}
               </div>
               {/* Actions */}
@@ -291,12 +307,26 @@ export function PlayerProfilePage() {
               </section>
             </div>
 
+            <GiftShowcase owner={p} />
+            {p.relation === 'self' && <GiftHistory />}
+
             {p.privacy && <PrivacyPanel privacy={p.privacy} onSaved={load} />}
           </>
         )}
       </div>
       {p && report && <ReportDialog target={{ uid: p.uid, displayName: p.displayName }} context={`profile:${p.uid}`} onClose={() => setReport(false)} />}
       {p && list && <FollowListDialog uid={p.uid} which={list} onClose={() => setList(null)} />}
+      {p && cropping && (
+        <AvatarCropDialog
+          hasPhoto={!!p.customAvatar}
+          onClose={() => setCropping(false)}
+          onSaved={(url) => {
+            const me = useSession.getState().user;
+            if (me) useSession.getState().setUser({ ...me, customAvatar: url });
+            load();
+          }}
+        />
+      )}
     </AppShell>
   );
 }
@@ -375,7 +405,7 @@ function PrivacyPanel({ privacy, onSaved }: { privacy: ProfilePrivacy & { showca
       <h2 className="font-display text-lg text-gold-100">{t('people.privacyPanel.title')}</h2>
       <p className="mt-1 text-xs leading-relaxed text-white/55">{t('people.privacyPanel.intro')}</p>
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
-        {(['showOnline', 'showFriends', 'showCollection', 'showStats'] as const).map((k) => (
+        {(['showOnline', 'showFriends', 'showCollection', 'showStats', 'showGifts'] as const).map((k) => (
           <label key={k} className="flex cursor-pointer items-center justify-between gap-3 rounded-xl bg-black/25 px-3 py-2 text-sm">
             {t(`people.privacyPanel.${k}`)}
             <input type="checkbox" checked={draft[k]} onChange={() => toggle(k)} className="h-5 w-5 accent-amber-400" />

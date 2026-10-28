@@ -14,6 +14,8 @@ import { Button } from '../ui/Button';
 import { GameArt } from '../ui/Icons';
 import { BadgeIcon, CurrencyIcon, PlayerName } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
+import { AvatarCropDialog } from '../players/AvatarCropDialog';
+import { PlayerAvatar } from '../players/identity';
 
 const TABS = ['overview', 'history', 'fairness'] as const;
 type Tab = (typeof TABS)[number];
@@ -34,6 +36,7 @@ export function ProfilePage() {
   const [displayName, setDisplayName] = useState(user.displayName);
   const [avatar, setAvatar] = useState(user.avatar);
   const [clientSeed, setClientSeed] = useState('');
+  const [cropping, setCropping] = useState(false);
   const fmt = (n: number) => formatChips(n, i18n.language);
   const fail = (err: unknown) => toast(t(`errors.${err instanceof ApiError ? err.code : 'internal'}`), 'error');
 
@@ -95,7 +98,12 @@ export function ProfilePage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_30%,rgba(242,193,78,0.22),transparent_45%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(115deg,transparent_0_38px,rgba(255,241,184,0.04)_38px_40px)]" />
           <div className="relative flex flex-wrap items-center gap-4 p-4 lg:gap-6 lg:p-6">
-            <Avatar index={avatar} frame={user.frame} avatarItem={user.avatarItem} size={104} />
+            <div className="flex flex-col items-center gap-1.5">
+              <PlayerAvatar player={{ ...user, avatar }} size={104} />
+              <button type="button" onClick={() => setCropping(true)} className="rounded-full border border-gold-300/40 bg-black/40 px-3 py-1 text-[11px] text-gold-100 hover:bg-black/60">
+                📷 {t('avatarUpload.change')}
+              </button>
+            </div>
             <div className="min-w-0 flex-1">
               <h1 className="font-display text-2xl font-bold lg:text-3xl">
                 <PlayerName name={user.displayName} badges={user.badges} size={26} />
@@ -109,6 +117,9 @@ export function ProfilePage() {
                 <span className="tabular-nums">{t('player.id', { id: user.uid })}</span>
                 <span>@{user.username}</span>
                 <span>{t('profile.memberSince', { date: new Date(user.createdAt).toLocaleDateString(i18n.language) })}</span>
+                <Link to={`/player/${user.uid}`} className="text-gold-200 underline-offset-2 hover:underline">
+                  {t('identity.publicProfile')}
+                </Link>
               </div>
               <div className="mt-3">
                 <VipMeter />
@@ -131,9 +142,9 @@ export function ProfilePage() {
                 <CharmIcon size={30} />
                 <div>
                   <div className="flex items-center gap-1 text-[10px] text-white/50">
-                    {t('player.charm')} <DemoTag />
+                    {t('player.charm')} {IS_DEMO && <DemoTag />}
                   </div>
-                  <div className="font-bold tabular-nums text-pink-100">{fmt(DEMO_EXTRAS.charm)}</div>
+                  <div className="font-bold tabular-nums text-pink-100">{fmt(IS_DEMO ? DEMO_EXTRAS.charm : user.charm)}</div>
                 </div>
               </div>
             </div>
@@ -314,6 +325,7 @@ export function ProfilePage() {
           </section>
         )}
       </div>
+      {cropping && <AvatarCropDialog hasPhoto={!!user.customAvatar} onClose={() => setCropping(false)} onSaved={(url) => setUser({ ...user, customAvatar: url })} />}
     </AppShell>
   );
 }

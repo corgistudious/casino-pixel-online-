@@ -11,6 +11,7 @@ import { NavIcon } from '../ui/NavIcons';
 import { CurrencyIcon } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
 import { VipEmblem } from '../ui/VipEmblem';
+import { useVip } from '../store/vip';
 
 const GROUPS: { id: MissionGroup; tone: string; ring: string; icon: string }[] = [
   { id: 'daily', tone: 'from-sky-500/25 via-sky-500/5', ring: 'border-sky-300/30', icon: '☀️' },
@@ -23,6 +24,7 @@ export function MissionsPage() {
   const { t } = useTranslation();
   const fail = useFail();
   const [data, setData] = useState<MissionsOverview | null>(null);
+  const vipLevel = useVip((v) => v.status?.level);
   const [now, setNow] = useState(Date.now());
   const load = () => void api<MissionsOverview>('/api/missions').then(setData, fail);
   useEffect(load, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -52,7 +54,7 @@ export function MissionsPage() {
               <div className="flex items-center gap-4">
                 <Ring value={total ? done / total : 0} label={t('missions.done', { done, total })} />
                 <div className="flex items-center gap-2 rounded-2xl border border-gold-300/30 bg-black/30 px-3 py-2">
-                  <VipEmblem level={vipProgress(data.vip.exp).level} size={34} />
+                  <VipEmblem level={vipLevel ?? vipProgress(data.vip.exp).level} size={34} />
                   <div className="text-xs">
                     <div className="font-label text-gold-100">{t('missions.vipCap', { granted: data.vip.weekGranted, cap: data.vip.weekCap })}</div>
                     <div className="mt-1 h-1.5 w-40 overflow-hidden rounded-full bg-black/50">

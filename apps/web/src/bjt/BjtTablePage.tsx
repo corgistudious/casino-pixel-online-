@@ -1,4 +1,5 @@
 import { cardValue, type BjtPlayerView, type BjtSeatView, type BjtTableView, type Card } from '@casino/shared';
+import { PlayerAvatar, PlayerRankBadge } from '../players/identity';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -257,10 +258,13 @@ function SeatPlate({ s, turn, me, t }: { s: BjtSeatView; turn: boolean; me: bool
   return (
     <div className={`flex items-center gap-2 rounded-full border px-2 py-1 backdrop-blur ${turn ? 'border-cyan-300 bg-cyan-500/20 shadow-[0_0_16px_rgba(90,216,255,0.7)]' : me ? 'border-gold-300/70 bg-black/50' : 'border-white/15 bg-black/45'}`}>
       <div className={s.online ? '' : 'opacity-50 grayscale'}>
-        <Avatar index={s.avatar} frame={s.frame} avatarItem={s.avatarItem} size={30} />
+        <PlayerAvatar player={s} size={30} />
       </div>
       <div className="min-w-0 leading-tight">
-        <div className="max-w-24 truncate text-xs font-strong text-white">{s.displayName}</div>
+        <div className="flex max-w-28 items-center gap-1">
+          <span className="truncate text-xs font-strong text-white">{s.displayName}</span>
+          <PlayerRankBadge rank={s.rank} size={13} />
+        </div>
         <div className="text-[9px] text-white/50">{s.leaving ? t('bjt.leaving') : !s.online ? t('bjt.offline') : `UID ${s.uid}`}</div>
       </div>
     </div>

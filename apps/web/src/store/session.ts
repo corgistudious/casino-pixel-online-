@@ -61,6 +61,19 @@ export const useSession = create<SessionStore>((set, get) => {
         if (ev.data.levelsGained.length) set({ levelUp: ev.data.level.level });
         break;
       }
+      case 'identity': {
+        // My own look changed (photo, frame, VIP, name), possibly from another device or staff.
+        const user = get().user;
+        if (user && ev.data.uid === user.uid) {
+          set({ user: { ...user, customAvatar: ev.data.customAvatar, vipLevel: ev.data.vipLevel, frame: ev.data.frame, avatar: ev.data.avatar, avatarItem: ev.data.avatarItem, displayName: ev.data.displayName, badges: ev.data.badges } });
+        }
+        break;
+      }
+      case 'counts': {
+        const user = get().user;
+        if (user && ev.data.uid === user.uid) set({ user: { ...user, charm: ev.data.charm } });
+        break;
+      }
       case 'profile':
         // A timed item expired (or similar): show the server's current profile.
         void api<{ user: PublicUser }>('/api/me').then(({ user }) => get().user && set({ user }), () => {});

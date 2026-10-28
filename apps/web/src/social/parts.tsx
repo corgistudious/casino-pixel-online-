@@ -1,9 +1,9 @@
-import type { GuildColor, GuildEmblem, PlayerCard } from '@casino/shared';
+import type { GuildColor, GuildEmblem, PlayerCard, PresenceStatus } from '@casino/shared';
 import { useEffect, useId, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { errorText } from '../lib/errors';
 import { socket } from '../net/socket';
-import { Avatar } from '../ui/Avatar';
+import { PlayerAvatar, PlayerRankBadge, useLiveIdentity } from '../players/identity';
 import { PlayerName } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
 
@@ -25,25 +25,21 @@ export function useSocialEvents(onChange: (kind: string) => void, deps: unknown[
   );
 }
 
-/** Avatar (with online dot), name with badges and level. */
-export function PlayerChip({ card, size = 44, online, sub, nameClass = '' }: { card: PlayerCard; size?: number; online?: boolean; sub?: ReactNode; nameClass?: string }) {
+/** Avatar (VIP badge, online / in-game dot), name with rank and badges, level and UID. */
+export function PlayerChip({ card, size = 44, online, sub, nameClass = '' }: { card: PlayerCard; size?: number; online?: boolean | PresenceStatus; sub?: ReactNode; nameClass?: string }) {
   const { t } = useTranslation();
+  const p = useLiveIdentity(card);
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <div className="relative shrink-0">
-        <Avatar index={card.avatar} frame={card.frame} avatarItem={card.avatarItem} size={size} />
-        {online !== undefined && (
-          <span
-            className={`absolute bottom-0 right-0 h-3 w-3 rounded-full ring-2 ring-ink-900 ${online ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]' : 'bg-white/25'}`}
-            title={online ? t('social.online') : t('social.offline')}
-          />
-        )}
-      </div>
+      <PlayerAvatar player={p} size={size} status={online} />
       <div className="min-w-0">
-        <PlayerName name={card.displayName} badges={card.badges} size={14} className={`max-w-full font-strong text-white ${nameClass}`} />
+        <div className="flex min-w-0 items-center gap-1">
+          <PlayerName name={p.displayName} badges={p.badges} size={14} className={`min-w-0 font-strong text-white ${nameClass}`} />
+          <PlayerRankBadge rank={p.rank} size={16} />
+        </div>
         <div className="flex items-center gap-1.5 text-[11px] text-white/50">
-          <span className="rounded bg-gold-300/15 px-1 font-label text-gold-100">{t('social.level', { level: card.level })}</span>
-          <span className="tabular-nums">UID {card.uid}</span>
+          <span className="rounded bg-gold-300/15 px-1 font-label text-gold-100">{t('social.level', { level: p.level })}</span>
+          <span className="tabular-nums">UID {p.uid}</span>
           {sub}
         </div>
       </div>

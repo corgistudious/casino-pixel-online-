@@ -50,7 +50,7 @@ export function FriendsPage() {
           <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-fuchsia-500/25 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 left-24 h-56 w-56 rounded-full bg-cyan-400/15 blur-3xl" />
           <div className="relative flex flex-wrap items-center gap-4">
-            <Avatar index={me.avatar} frame={me.frame} avatarItem={me.avatarItem} size={64} />
+            <Avatar customAvatar={me.customAvatar} index={me.avatar} frame={me.frame} avatarItem={me.avatarItem} size={64} />
             <div className="min-w-0 flex-1">
               <h1 className="flex items-center gap-2 font-display text-2xl font-heading text-white lg:text-3xl">
                 <NavIcon name="friends" size={26} active /> {t('social.friends.title')}
@@ -157,7 +157,7 @@ function FriendCard({ f, onGift, onRemove }: { f: FriendView; onGift: () => void
     <li className={`group flex flex-col gap-3 rounded-2xl border p-4 transition ${f.online ? 'border-emerald-300/25 bg-gradient-to-br from-emerald-500/10 to-black/30' : 'border-white/10 bg-black/25'} hover:border-fuchsia-300/40`}>
       <div className="flex items-start justify-between gap-2">
         <PlayerTrigger uid={f.uid} label={f.displayName} context="friends">
-          <PlayerChip card={f} online={f.online} sub={f.rank ? <RankEmblem division={f.rank.division} top={f.rank.topTitle} size={16} /> : undefined} />
+          <PlayerChip card={f} online={f.presence ?? f.online} />
         </PlayerTrigger>
         <button type="button" onClick={onRemove} className="rounded-lg px-1.5 text-white/30 opacity-0 transition hover:bg-ruby-500/20 hover:text-ruby-300 group-hover:opacity-100 focus:opacity-100" title={t('social.friends.remove')} aria-label={t('social.friends.remove')}>
           ✕

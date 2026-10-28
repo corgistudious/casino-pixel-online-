@@ -1,4 +1,5 @@
 import type { FriendsOverview, RoomEngine, RoomView } from '@casino/shared';
+import { PlayerAvatar, PlayerRankBadge, type IdentityLike } from '../players/identity';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -14,13 +15,8 @@ import { Button } from '../ui/Button';
 import { toast } from '../ui/toast';
 import { RoomForm } from './RoomForm';
 
-export interface TableMember {
+export interface TableMember extends IdentityLike {
   seat: number;
-  uid: number;
-  displayName: string;
-  avatar: number;
-  frame: string;
-  avatarItem: string | null;
 }
 
 /**
@@ -108,8 +104,9 @@ export function RoomPanel({ engine, tableId, members }: { engine: RoomEngine; ta
         {members.map((m) => (
           <li key={m.seat} className="flex items-center gap-2">
             <PlayerTrigger uid={m.uid} label={m.displayName} context={room ? `room:${room.id}` : `table:${engine}:${tableId}`} className="flex min-w-0 flex-1 items-center gap-2 p-1 hover:bg-white/5">
-              <Avatar index={m.avatar} frame={m.frame} avatarItem={m.avatarItem} size={26} />
+              <PlayerAvatar player={m} size={26} />
               <span className="truncate text-xs text-white/85">{m.displayName}</span>
+              <PlayerRankBadge rank={m.rank} size={14} />
               {room && room.owner.uid === m.uid && <span className="text-[10px] text-gold-200">★</span>}
             </PlayerTrigger>
             {room?.isOwner && m.uid !== me && (

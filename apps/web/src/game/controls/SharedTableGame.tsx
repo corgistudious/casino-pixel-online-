@@ -23,6 +23,7 @@ import { PhaserView } from '../PhaserView';
 import { RouletteTableScene } from '../scenes/RouletteTableScene';
 import { TaiXiuScene } from '../scenes/TaiXiuScene';
 import { GameLayout, Stat } from './GameLayout';
+import { PlayerIdentityCompact } from '../../players/identity';
 
 type View = Omit<TableRoundView, 'myBets'>;
 type Scene = TaiXiuScene | RouletteTableScene;
@@ -251,8 +252,8 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
               {view.players.length ? (
                 <div className="flex max-h-28 flex-wrap gap-1.5 overflow-y-auto">
                   {view.players.map((player) => (
-                    <span key={player.uid} title={`UID ${player.uid}`} className="rounded-full border border-white/15 bg-white/10 px-2 py-1 text-xs text-white/85">
-                      {player.displayName}
+                    <span key={player.uid} className="rounded-full border border-white/15 bg-white/10 py-0.5 pl-0.5 pr-2">
+                      <PlayerIdentityCompact player={player} size={22} context={`table:${view.table.id}`} />
                     </span>
                   ))}
                 </div>
@@ -269,8 +270,8 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
               {view.members.length ? (
                 <div className="flex max-h-28 flex-wrap gap-1.5 overflow-y-auto">
                   {view.members.map((member) => (
-                    <span key={member.uid} title={`UID ${member.uid}`} className="rounded-full border border-white/15 bg-white/10 px-2 py-1 text-xs text-white/85">
-                      {member.displayName}
+                    <span key={member.uid} className="rounded-full border border-white/15 bg-white/10 py-0.5 pl-0.5 pr-2">
+                      <PlayerIdentityCompact player={member} size={22} context={`table:${view.table.id}`} />
                     </span>
                   ))}
                 </div>

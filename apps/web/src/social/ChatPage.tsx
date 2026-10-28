@@ -7,7 +7,7 @@ import { socket } from '../net/socket';
 import { useSession } from '../store/session';
 import { useSocial } from '../store/social';
 import { AppShell } from '../ui/AppShell';
-import { Avatar } from '../ui/Avatar';
+import { PlayerAvatar, PlayerRankBadge, useLiveIdentity, type IdentityLike } from '../players/identity';
 import { Button } from '../ui/Button';
 import { ChatBubble, TitleBadge } from '../ui/Cosmetics';
 import { NavIcon } from '../ui/NavIcons';
@@ -225,10 +225,7 @@ function Private({ initial }: { initial: number | null }) {
                 onClick={() => open(c.peer.uid)}
                 className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition ${peer === c.peer.uid ? 'bg-cyan-400/15' : 'hover:bg-white/5'}`}
               >
-                <div className="relative shrink-0">
-                  <Avatar index={c.peer.avatar} frame={c.peer.frame} avatarItem={c.peer.avatarItem} size={40} />
-                  <span className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full ring-2 ring-[#0b0f1f] ${c.online ? 'bg-emerald-400' : 'bg-white/25'}`} />
-                </div>
+                <PlayerAvatar player={c.peer} size={40} status={c.online} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <PlayerName name={c.peer.displayName} badges={c.peer.badges} size={12} className={`text-sm ${c.unread ? 'font-heading text-white' : 'font-label text-white/85'}`} />
@@ -314,7 +311,7 @@ function Thread({ messages: all, more, onOlder, onRemove, context }: { messages:
               <div className="w-9 shrink-0">
                 {!grouped && !mine && (
                   <PlayerTrigger uid={m.sender.uid} label={m.sender.displayName} context={context}>
-                    <Avatar index={m.sender.avatar} frame={m.sender.frame} avatarItem={m.sender.avatarItem} size={36} />
+                    <PlayerAvatar player={m.sender} size={36} />
                   </PlayerTrigger>
                 )}
               </div>
@@ -322,8 +319,9 @@ function Thread({ messages: all, more, onOlder, onRemove, context }: { messages:
                 {!grouped && !mine && (
                   <div className="mb-0.5 flex items-center gap-1.5 px-1 text-[11px]">
                     <PlayerTrigger uid={m.sender.uid} label={m.sender.displayName} context={context}>
-                      <PlayerName name={m.sender.displayName} badges={m.sender.badges} size={12} className="font-label text-cyan-100" />
+                      <LiveName player={m.sender} />
                     </PlayerTrigger>
+                    <PlayerRankBadge rank={m.sender.rank} size={14} />
                     {m.sender.title && <TitleBadge itemId={m.sender.title} size="sm" />}
                   </div>
                 )}
@@ -399,4 +397,10 @@ function Composer({ channel, path, locked = false }: { channel: ChatChannel; pat
       </div>
     </div>
   );
+}
+
+/** Sender name with any newer live identity (rename, badges) merged in. */
+function LiveName({ player }: { player: IdentityLike }) {
+  const p = useLiveIdentity(player);
+  return <PlayerName name={p.displayName} badges={p.badges ?? []} size={12} className="font-label text-cyan-100" />;
 }

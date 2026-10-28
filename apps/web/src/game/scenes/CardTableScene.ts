@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
-import type { Card, CardTableView } from '@casino/shared';
+import { vipTierOf, type Card, type CardTableView } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
 import { compactChips } from '../../lib/format';
 import { cardKey, chipDenomFor, ensureCardBackTexture, ensureCardTexture, ensureChipTextures, hdImage, hdScale } from '../art';
+import { assetSrc } from '../../store/catalog';
 import { BaseScene } from './BaseScene';
 
 type XY = { x: number; y: number };
@@ -38,6 +39,8 @@ export interface CardBackLook {
  * Shared table for Poker Texas Hold'em, Liêng and Xì Tố. Draws whatever the server view says:
  * the viewer only ever receives their own hidden cards; others are shown with their card back.
  */
+const VIP_COLORS = { silver: 0xc9cfdc, gold: 0xf2c14e, platinum: 0x9fe7f5, diamond: 0x5ab8ff, royal: 0xc27bff } as const;
+
 export class CardTableScene extends BaseScene {
   static readonly KEY = 'card-table';
   private layer!: Phaser.GameObjects.Container;
@@ -51,6 +54,9 @@ export class CardTableScene extends BaseScene {
   private strings: Record<string, string> = {};
   /** Tap/click on an occupied seat (avatar or name plate): the page opens the player menu at that point. */
   private onSeat?: (uid: number, at: { x: number; y: number }) => void;
+  private backs: Record<number, CardBackLook | undefined> = {};
+  /** Uploaded profile photos being fetched (texture key → URL); the seats redraw once one arrives. */
+  private loadingPhotos = new Set<string>();
 
   constructor() {
     super(CardTableScene.KEY);
@@ -112,8 +118,33 @@ export class CardTableScene extends BaseScene {
     return img;
   }
 
+  /**
+   * A seated player's uploaded photo as a round image, or null while it loads (the coloured
+   * initial shows meanwhile). A photo that fails to load keeps the initial.
+   */
+  private photo(url: string | null | undefined, x: number, y: number): Phaser.GameObjects.Image | null {
+    const src = assetSrc(url);
+    if (!src) return null;
+    const key = `photo:${url}`;
+    if (!this.textures.exists(key)) {
+      if (!this.loadingPhotos.has(key)) {
+        this.loadingPhotos.add(key);
+        this.load.setCORS('anonymous');
+        this.load.image(key, src);
+        this.load.once(`filecomplete-image-${key}`, () => this.view && this.render(this.view, this.backs));
+        this.load.start();
+      }
+      return null;
+    }
+    const img = this.add.image(x, y, key).setDisplaySize(30, 30);
+    const mask = this.make.graphics({}, false).fillStyle(0xffffff).fillCircle(x, y, 15);
+    img.setMask(mask.createGeometryMask());
+    return img;
+  }
+
   render(view: CardTableView, backs: Record<number, CardBackLook | undefined>) {
     this.view = view;
+    this.backs = backs;
     this.layer.removeAll(true);
     const hand = view.hand;
     if (hand && hand.seq !== this.handSeq) {
@@ -138,11 +169,24 @@ export class CardTableScene extends BaseScene {
       const halo = this.add.circle(slot.at.x, slot.at.y, 20, won ? 0xffe08a : isTurn ? 0x5ad8ff : 0x000000, won || isTurn ? 0.35 : 0);
       const av = this.add.circle(slot.at.x, slot.at.y, 16, color).setStrokeStyle(2, s.uid === -1 ? 0xffffff : 0xf2d38a);
       const initial = this.text(slot.at.x, slot.at.y, (s.displayName[0] ?? '?').toUpperCase(), { size: 14, display: true, shadow: true });
+      const photo = this.photo(s.customAvatar, slot.at.x, slot.at.y);
+      if (photo) initial.setVisible(false);
       const nameY = slot.at.y + (slot.at.y > CENTER.y ? -38 : 27); // clear of the turn-timer ring
       const plate = this.add.rectangle(slot.at.x, nameY + 6, 84, 24, 0x05040b, 0.78).setStrokeStyle(1, 0xf2d38a, 0.4);
       const name = this.text(slot.at.x, nameY, s.displayName.slice(0, 12), { size: 8, weight: 700 });
       const stack = this.text(slot.at.x, nameY + 11, compactChips(p ? p.stack : s.stack), { size: 9, color: '#ffe08a', weight: 800 });
       this.layer.add([halo, av, initial, plate, name, stack]);
+      if (photo) this.layer.add(photo);
+      // VIP tag on the avatar's lower-right rim (away from the face, the cards and the chips).
+      if (s.vipLevel > 1) {
+        const tier = vipTierOf(s.vipLevel);
+        const vx = slot.at.x + 13;
+        const vy = slot.at.y + 12;
+        this.layer.add([
+          this.add.circle(vx, vy, 7, VIP_COLORS[tier]).setStrokeStyle(1, 0x05040b),
+          this.text(vx, vy, String(s.vipLevel), { size: s.vipLevel >= 10 ? 6 : 7, color: '#1b1636', weight: 800 }),
+        ]);
+      }
       for (const hit of [av, plate]) {
         hit.setInteractive({ useHandCursor: true }).on('pointerup', (ptr: Phaser.Input.Pointer) => {
           const ev = ptr.event as MouseEvent | TouchEvent | undefined;
