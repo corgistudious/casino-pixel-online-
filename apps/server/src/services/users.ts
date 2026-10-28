@@ -1,4 +1,8 @@
 import { renameInfo } from './rename';
+import { assetUrl } from './assets';
+import { activeAvatar } from './avatars';
+import { charmOf } from './gifts';
+import { vipLevelsOf } from './vip';
 import {
   checkinDate,
   checkinDayEnd,
@@ -63,6 +67,9 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
     title: gear.title,
     chatBubble: gear.chatBubble,
     cardBack: gear.cardBack,
+    customAvatar: await activeAvatar(db, user.id),
+    vipLevel: (await vipLevelsOf(db, [user.id])).get(user.id) ?? 1,
+    charm: await charmOf(db, user.id),
     unreadMail: await unreadCount(db, user.id),
     level: (await levelOf(db, user.id)).level,
     createdAt: user.createdAt.toISOString(),
@@ -149,7 +156,19 @@ export async function leaderboard(db: Db, limit = 50): Promise<LeaderboardEntry[
     )
     .orderBy(desc(wallets.balance), users.createdAt)
     .limit(limit);
-  return rows.map(({ isVerified, isPartner, ...r }, i) => ({ rank: i + 1, ...r, badges: badgesOf({ isVerified, isPartner }) }));
+  // Same wealth ranking as before; only the photo and VIP badge are added for display.
+  const ids = await db.execute<{ uid: number; custom_avatar: string | null; vip_level: number }>(sql`
+    SELECT u.uid, av.asset_id AS custom_avatar, keyo_vip_level(vp.exp, vp.override_level, vp.override_until) AS vip_level
+    FROM users u LEFT JOIN vip_progress vp ON vp.user_id = u.id LEFT JOIN avatar_uploads av ON av.user_id = u.id AND av.status = 'active'
+    WHERE u.uid = ANY(string_to_array(${rows.map((r) => r.uid).join(',') || '0'}, ',')::int[])`);
+  const look = new Map(ids.map((r) => [Number(r.uid), r]));
+  return rows.map(({ isVerified, isPartner, ...r }, i) => ({
+    rank: i + 1,
+    ...r,
+    badges: badgesOf({ isVerified, isPartner }),
+    customAvatar: look.get(r.uid)?.custom_avatar ? assetUrl(look.get(r.uid)!.custom_avatar!) : null,
+    vipLevel: Number(look.get(r.uid)?.vip_level ?? 1),
+  }));
 }
 
 export function isUniqueViolation(err: unknown): boolean {

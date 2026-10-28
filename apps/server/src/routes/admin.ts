@@ -7,6 +7,7 @@ import type { Db } from '../db/client';
 import { auditLogs, bans, emailOutbox, rolePermissions, roles, users } from '../db/schema';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
+import { publishIdentity } from '../services/identity';
 import {
   banUser,
   createCustomUidAccount,
@@ -275,6 +276,7 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
       await audit(tx, { actorId: req.account!.id, action: 'badge.update', targetType: 'user', targetId: uid, details: input, ip: req.ip });
       return r;
     });
+    void publishIdentity(db, hub, row.id);
     return { badges: badgesOf(row) };
   });
 

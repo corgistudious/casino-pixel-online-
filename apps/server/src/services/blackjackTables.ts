@@ -32,6 +32,7 @@ import { gameRounds } from '../db/schema';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { fairRng, sha256 } from './fair';
+import { identities } from './identity';
 import { awardGameplayExp, notifyProgress, type ExpResult } from './progression';
 import { assertRoomAccess } from './roomAccess';
 import { applyDelta, getWallet } from './wallet';
@@ -158,6 +159,7 @@ export class BlackjackTableEngine {
       SELECT s.seat, s.user_id, s.leaving, u.uid, u.display_name, u.avatar, u.avatar_item, u.frame
       FROM bj_seats s JOIN users u ON u.id = s.user_id WHERE s.table_id = ${tableId} ORDER BY s.seat`);
     const online = await this.hub.onlineAmong(seats.map((s) => s.user_id));
+    const ids = await identities(this.db, seats.map((s) => s.user_id));
     const [r] = await this.db.execute<RoundRow>(sql`SELECT * FROM bj_rounds WHERE table_id = ${tableId} ORDER BY seq DESC LIMIT 1`);
     const round =
       r && (r.status === 'active' || r.status === 'done')
@@ -166,7 +168,23 @@ export class BlackjackTableEngine {
     return {
       table: summary(t, seats.length),
       seats: seats.map(
-        (s): BjtSeatView => ({ seat: s.seat, uid: Number(s.uid), displayName: s.display_name, avatar: s.avatar, avatarItem: s.avatar_item, frame: s.frame, online: online.has(s.user_id), leaving: s.leaving }),
+        (s): BjtSeatView => {
+          const id = ids.get(s.user_id);
+          return {
+            seat: s.seat,
+            uid: Number(s.uid),
+            displayName: s.display_name,
+            avatar: s.avatar,
+            avatarItem: s.avatar_item,
+            frame: s.frame,
+            badges: id?.badges ?? [],
+            customAvatar: id?.customAvatar ?? null,
+            vipLevel: id?.vipLevel ?? 1,
+            rank: id?.rank ?? null,
+            online: online.has(s.user_id),
+            leaving: s.leaving,
+          };
+        },
       ),
       round,
       mySeat: seats.find((s) => s.user_id === viewerId)?.seat ?? null,

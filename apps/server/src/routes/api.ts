@@ -10,6 +10,7 @@ import type { Config } from '../config';
 import type { Db } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
+import { publishIdentity } from '../services/identity';
 import { getActiveSeed, rotateSeed } from '../services/fair';
 import { buyItem, equip } from '../services/catalog';
 import { playerStats, roundHistory } from '../services/stats';
@@ -44,6 +45,7 @@ export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub
   app.post('/api/me/rename', { preHandler: authed }, async req => {
     const input=z.object({ displayName:z.string().trim().min(1).max(24), useCard:z.boolean().default(false) }).parse(req.body);
     await renamePlayer(db,requireAccount(req).id,input.displayName,input.useCard);
+    void publishIdentity(db, hub, requireAccount(req).id);
     const [fresh]=await db.select().from(users).where(eq(users.id,requireAccount(req).id));
     return { user: await toPublicUser(db,fresh!) };
   });

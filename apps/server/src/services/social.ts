@@ -8,12 +8,14 @@ import {
   type GiftView,
   type PlayerCard,
   type PlayerSearchResult,
+  type PresenceStatus,
   type RelationStatus,
 } from '@casino/shared';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
+import { assetUrl } from './assets';
 import { rankBadges } from './rank';
 import { badgesOf } from './users';
 import { applyDelta } from './wallet';
@@ -21,8 +23,12 @@ import { applyDelta } from './wallet';
 // ---------------------------------------------------------------- player cards
 
 /** Columns describing how a player looks in lists and chat (`u` = users, `pp` = player_progress). */
-export const CARD_COLUMNS = sql`u.id AS user_id, u.uid, u.display_name, u.avatar, u.avatar_item, u.frame, u.equipped_title, u.equipped_bubble, u.is_verified, u.is_partner, coalesce(pp.level, 1) AS level`;
-export const CARD_JOIN = sql`LEFT JOIN player_progress pp ON pp.user_id = u.id`;
+export const CARD_COLUMNS = sql`u.id AS user_id, u.uid, u.display_name, u.avatar, u.avatar_item, u.frame, u.equipped_title, u.equipped_bubble, u.is_verified, u.is_partner, coalesce(pp.level, 1) AS level,
+  cav.asset_id AS custom_avatar, keyo_vip_level(cvp.exp, cvp.override_level, cvp.override_until) AS vip_level,
+  (SELECT pr.division FROM player_ranks pr JOIN rank_seasons rs ON rs.id = pr.season_id WHERE pr.user_id = u.id AND rs.status = 'active' LIMIT 1) AS rank_division`;
+export const CARD_JOIN = sql`LEFT JOIN player_progress pp ON pp.user_id = u.id
+  LEFT JOIN vip_progress cvp ON cvp.user_id = u.id
+  LEFT JOIN avatar_uploads cav ON cav.user_id = u.id AND cav.status = 'active'`;
 /** Players other people may see and interact with: never Keyo Support, system or deleted accounts. */
 export const VISIBLE_PLAYER = sql`u.account_type = 'player' AND u.status <> 'deleted' AND u.uid <> ${KEYO_SUPPORT_UID}`;
 
@@ -38,6 +44,9 @@ export type CardRow = {
   is_verified: boolean;
   is_partner: boolean;
   level: number;
+  custom_avatar: string | null;
+  vip_level: number;
+  rank_division: number | null;
 };
 
 export function toCard(r: CardRow): PlayerCard {
@@ -51,6 +60,9 @@ export function toCard(r: CardRow): PlayerCard {
     bubble: r.equipped_bubble,
     badges: badgesOf({ isVerified: r.is_verified, isPartner: r.is_partner }),
     level: Number(r.level),
+    customAvatar: r.custom_avatar ? assetUrl(r.custom_avatar) : null,
+    vipLevel: Number(r.vip_level ?? 1),
+    rank: r.rank_division === null || r.rank_division === undefined ? null : { division: Number(r.rank_division), topTitle: null },
   };
 }
 
@@ -82,6 +94,19 @@ export async function isFriend(db: DbOrTx, a: string, b: string): Promise<boolea
   return !!(await areFriends(db, a, b));
 }
 
+/** Online / in a game (seated at a card or Blackjack table) / offline. */
+export async function presenceOf(db: DbOrTx, hub: RealtimeHub, userIds: readonly string[]): Promise<Map<string, PresenceStatus>> {
+  const out = new Map<string, PresenceStatus>();
+  if (!userIds.length) return out;
+  const online = await hub.onlineAmong(userIds);
+  const seated = await db.execute<{ user_id: string }>(sql`
+    SELECT user_id FROM card_seats WHERE user_id::text = ANY(string_to_array(${userIds.join(',')}, ','))
+    UNION SELECT user_id FROM bj_seats WHERE user_id::text = ANY(string_to_array(${userIds.join(',')}, ','))`);
+  const playing = new Set(seated.map((r) => r.user_id));
+  for (const id of userIds) out.set(id, online.has(id) ? (playing.has(id) ? 'in_game' : 'online') : 'offline');
+  return out;
+}
+
 const notify = (hub: RealtimeHub, userId: string, data: Record<string, unknown>) =>
   hub.sendToUser(userId, { type: 'event', event: 'social', data } as never);
 
@@ -102,7 +127,7 @@ export async function friendsOverview(db: Db, hub: RealtimeHub, meId: string): P
       SELECT ${CARD_COLUMNS}, r.created_at FROM friend_requests r JOIN users u ON u.id = r.receiver_id ${CARD_JOIN}
       WHERE r.sender_id = ${meId}::uuid AND ${VISIBLE_PLAYER} ORDER BY r.created_at DESC`),
   ]);
-  const [online, ranks] = await Promise.all([hub.onlineAmong(friends.map((f) => f.user_id)), rankBadges(db, friends.map((f) => f.user_id))]);
+  const [presence, ranks] = await Promise.all([presenceOf(db, hub, friends.map((f) => f.user_id)), rankBadges(db, friends.map((f) => f.user_id))]);
   const request = (r: CardRow & { created_at: string }): FriendRequestView => ({ ...toCard(r), createdAt: iso(r.created_at) });
   const badge = (id: string) => {
     const r = ranks.get(id);
@@ -110,7 +135,10 @@ export async function friendsOverview(db: Db, hub: RealtimeHub, meId: string): P
   };
   return {
     friends: friends
-      .map((f) => ({ ...toCard(f), rank: badge(f.user_id), online: online.has(f.user_id), since: iso(f.since), giftable: f.giftable }))
+      .map((f) => {
+        const status = presence.get(f.user_id) ?? 'offline';
+        return { ...toCard(f), rank: badge(f.user_id), online: status !== 'offline', presence: status, since: iso(f.since), giftable: f.giftable };
+      })
       .sort((a, b) => Number(b.online) - Number(a.online) || a.displayName.localeCompare(b.displayName)),
     incoming: incoming.map(request),
     outgoing: outgoing.map(request),

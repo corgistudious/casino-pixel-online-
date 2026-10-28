@@ -29,6 +29,7 @@ export function statusFor(code: ErrorCode): number {
     case 'room_kicked':
     case 'not_room_owner':
     case 'reauth_required':
+    case 'account_too_new':
       return 403;
     case 'round_not_found':
     case 'not_found':
@@ -51,10 +52,14 @@ export function statusFor(code: ErrorCode): number {
     case 'room_limit':
     case 'room_busy':
     case 'room_full':
+    case 'gift_price_changed':
+    case 'vip_level_in_use':
+    case 'already_reversed':
       return 409;
     case 'too_soon':
     case 'too_many_attempts':
     case 'report_limit':
+    case 'avatar_rate_limited':
       return 429;
     case 'rate_limited':
       return 429;

@@ -145,6 +145,17 @@ export class TestSocket {
     return res.data as T;
   }
 
+  /** Resolves with the first pushed event matching `pred` (already received or arriving within `ms`). */
+  async waitFor(pred: (m: ServerMessage & Record<string, any>) => boolean, ms = 3_000): Promise<ServerMessage & Record<string, any>> {
+    const end = Date.now() + ms;
+    for (;;) {
+      const hit = this.events.find((m) => pred(m as ServerMessage & Record<string, any>));
+      if (hit) return hit as ServerMessage & Record<string, any>;
+      if (Date.now() > end) throw new Error('event not received');
+      await new Promise((r) => setTimeout(r, 25));
+    }
+  }
+
   close() {
     this.ws.close();
   }

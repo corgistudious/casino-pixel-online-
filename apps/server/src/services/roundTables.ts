@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import {
+  type PublicIdentity,
   betAreaKey,
   DEFAULT_TIMINGS,
   ECONOMY,
@@ -26,6 +27,7 @@ import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { fairRng, sha256 } from './fair';
 import { isBigWin } from './games';
+import { identities } from './identity';
 import { badgesOf } from './users';
 import { applyDelta, getWallet } from './wallet';
 import { awardGameplayExp, notifyProgress, type ExpResult } from './progression';
@@ -356,15 +358,15 @@ export class RoundTableEngine {
       userId ? this.myBets(round.id, userId) : Promise.resolve([]),
     ]);
     const roomUserIds = await this.hub.roomUserIds(tableRoom(tableId));
-    const [bettors, players, members] = await Promise.all([
+    const [bettors, bettorRows] = await Promise.all([
       this.db.execute<{ n: string }>(sql`SELECT count(DISTINCT user_id) AS n FROM table_bets WHERE round_id = ${round.id}`),
-      this.db.selectDistinct({ uid: users.uid, displayName: users.displayName })
-        .from(tableBets).innerJoin(users, eq(users.id, tableBets.userId))
-        .where(eq(tableBets.roundId, round.id)).limit(60),
-      roomUserIds.length
-        ? this.db.select({ uid: users.uid, displayName: users.displayName }).from(users).where(inArray(users.id, roomUserIds)).limit(100)
-        : Promise.resolve([]),
+      this.db.selectDistinct({ userId: tableBets.userId }).from(tableBets).where(eq(tableBets.roundId, round.id)).limit(60),
     ]);
+    // Public identities only (photo/avatar, frame, VIP, rank, badges): never bet amounts or balances.
+    const watching = roomUserIds.slice(0, 100);
+    const ids = await identities(this.db, [...bettorRows.map((b) => b.userId), ...watching]);
+    const players = bettorRows.map((b) => ids.get(b.userId)).filter((x): x is PublicIdentity => !!x);
+    const members = watching.map((id) => ids.get(id)).filter((x): x is PublicIdentity => !!x);
     const showOutcome = round.status === 'locked' || round.status === 'settled';
     return {
       table: summary(table),

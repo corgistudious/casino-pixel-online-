@@ -1,7 +1,6 @@
 import {
   DEFAULT_PRIVACY,
   SOCIAL_RULES,
-  vipProgress,
   type FollowListEntry,
   type PlayerProfileView,
   type PrivacyInput,
@@ -13,8 +12,9 @@ import { sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
+import { giftShowcase } from './gifts';
 import { rankBadges } from './rank';
-import { blockedBetween, CARD_COLUMNS, CARD_JOIN, toCard, VISIBLE_PLAYER, visiblePlayer, type CardRow } from './social';
+import { blockedBetween, CARD_COLUMNS, CARD_JOIN, presenceOf, toCard, VISIBLE_PLAYER, visiblePlayer, type CardRow } from './social';
 
 export { blockedBetween };
 
@@ -119,12 +119,12 @@ export async function blockedList(db: Db, meId: string) {
 
 // ---------------------------------------------------------------- privacy
 
-type SettingsRow = { show_online: boolean; show_friends: boolean; show_collection: boolean; show_stats: boolean; showcase: string[] };
+type SettingsRow = { show_online: boolean; show_friends: boolean; show_collection: boolean; show_stats: boolean; show_gifts: boolean; showcase: string[] };
 
 async function settingsOf(db: DbOrTx, userId: string): Promise<ProfilePrivacy & { showcase: string[] }> {
-  const [r] = await db.execute<SettingsRow>(sql`SELECT show_online, show_friends, show_collection, show_stats, showcase FROM profile_settings WHERE user_id = ${userId}::uuid`);
+  const [r] = await db.execute<SettingsRow>(sql`SELECT show_online, show_friends, show_collection, show_stats, show_gifts, showcase FROM profile_settings WHERE user_id = ${userId}::uuid`);
   if (!r) return { ...DEFAULT_PRIVACY, showcase: [] };
-  return { showOnline: r.show_online, showFriends: r.show_friends, showCollection: r.show_collection, showStats: r.show_stats, showcase: r.showcase ?? [] };
+  return { showOnline: r.show_online, showFriends: r.show_friends, showCollection: r.show_collection, showStats: r.show_stats, showGifts: r.show_gifts, showcase: r.showcase ?? [] };
 }
 
 export async function updatePrivacy(db: Db, userId: string, input: PrivacyInput): Promise<ProfilePrivacy & { showcase: string[] }> {
@@ -144,10 +144,10 @@ export async function updatePrivacy(db: Db, userId: string, input: PrivacyInput)
       next.showcase = ids;
     }
     await tx.execute(sql`
-      INSERT INTO profile_settings (user_id, show_online, show_friends, show_collection, show_stats, showcase, updated_at)
-      VALUES (${userId}::uuid, ${next.showOnline}, ${next.showFriends}, ${next.showCollection}, ${next.showStats}, string_to_array(${next.showcase.join(',')}, ',')::uuid[], now())
+      INSERT INTO profile_settings (user_id, show_online, show_friends, show_collection, show_stats, show_gifts, showcase, updated_at)
+      VALUES (${userId}::uuid, ${next.showOnline}, ${next.showFriends}, ${next.showCollection}, ${next.showStats}, ${next.showGifts}, string_to_array(${next.showcase.join(',')}, ',')::uuid[], now())
       ON CONFLICT (user_id) DO UPDATE SET show_online = EXCLUDED.show_online, show_friends = EXCLUDED.show_friends,
-        show_collection = EXCLUDED.show_collection, show_stats = EXCLUDED.show_stats, showcase = EXCLUDED.showcase, updated_at = now()`);
+        show_collection = EXCLUDED.show_collection, show_stats = EXCLUDED.show_stats, show_gifts = EXCLUDED.show_gifts, showcase = EXCLUDED.showcase, updated_at = now()`);
     return next;
   });
 }
@@ -177,7 +177,8 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
     color: string | null;
     silver: string | null;
     gold: string | null;
-    vip_exp: string | null;
+    vip_level: number;
+    charm: string | null;
     followers: number;
     following: number;
     likes: number;
@@ -192,7 +193,8 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
       g.id AS guild_id, g.name AS guild_name, g.emblem, g.color,
       -- Wallet only (outside the Bank). bank_accounts is never read for a profile.
       w.balance AS silver, w.gold,
-      vp.exp AS vip_exp,
+      keyo_vip_level(vp.exp, vp.override_level, vp.override_until) AS vip_level,
+      (SELECT total FROM charm_points c WHERE c.user_id = u.id) AS charm,
       (SELECT count(*)::int FROM player_follows f JOIN users x ON x.id = f.follower_id WHERE f.followee_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted') AS followers,
       (SELECT count(*)::int FROM player_follows f JOIN users x ON x.id = f.followee_id WHERE f.follower_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted') AS following,
       (SELECT count(*)::int FROM profile_likes l JOIN users x ON x.id = l.liker_id WHERE l.profile_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted') AS likes,
@@ -206,11 +208,12 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
   const privacy = await settingsOf(db, p.user_id);
   const show = (flag: keyof ProfilePrivacy) => self || privacy[flag];
 
-  const [online, social, ranks, achievements] = await Promise.all([
-    show('showOnline') ? hub.onlineAmong([p.user_id]).then((s) => s.has(p.user_id)) : Promise.resolve(null),
+  const [presence, social, ranks, achievements, gifts] = await Promise.all([
+    show('showOnline') ? presenceOf(db, hub, [p.user_id]).then((s) => s.get(p.user_id) ?? 'offline') : Promise.resolve(null),
     self ? Promise.resolve({ following: false, followedBy: false, liked: false, blocked: false, blockedBy: false }) : socialState(db, meId, p.user_id),
     rankBadges(db, [p.user_id]),
     db.execute<{ achievement_id: string }>(sql`SELECT achievement_id FROM achievement_claims WHERE user_id = ${p.user_id}::uuid ORDER BY claimed_at`),
+    show('showGifts') ? giftShowcase(db, p.user_id) : Promise.resolve(null),
   ]);
 
   let stats: PlayerProfileView['stats'] = null;
@@ -249,18 +252,20 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
   const rank = ranks.get(p.user_id);
   return {
     ...toCard(p),
-    online,
+    online: presence === null ? null : presence !== 'offline',
+    presence,
     relation: extra!.relation,
     social,
-    counts: { followers: extra!.followers, following: extra!.following, likes: extra!.likes, friends: show('showFriends') ? extra!.friends : null },
+    counts: { followers: extra!.followers, following: extra!.following, likes: extra!.likes, friends: show('showFriends') ? extra!.friends : null, charm: Number(extra!.charm ?? 0) },
     createdAt: iso(extra!.created_at),
     rank: rank ? { division: rank.division, rp: rank.rp, topTitle: rank.topTitle, topPosition: rank.position, wins: rank.wins, losses: rank.losses } : null,
-    vip: { level: vipProgress(Number(extra!.vip_exp ?? 0)).level },
+    vip: { level: Number(extra!.vip_level) },
     guild: extra!.guild_id ? { id: extra!.guild_id, name: extra!.guild_name!, emblem: extra!.emblem as never, color: extra!.color as never } : null,
     wallet: { silver: Number(extra!.silver ?? 0), gold: Number(extra!.gold ?? 0) },
     stats,
     achievements: achievements.map((a) => a.achievement_id),
     collection,
+    gifts,
     ...(self ? { privacy } : {}),
   };
 }

@@ -25,6 +25,7 @@ import { registerBankRoutes } from './routes/bank';
 import { registerSupportRoutes } from './routes/support';
 import { registerMarketRoutes } from './routes/market';
 import { registerVipRoutes } from './routes/vip';
+import { registerGiftRoutes } from './routes/gifts';
 import { registerChatRoutes } from './routes/chat';
 import { registerAchievementRoutes } from './routes/achievements';
 import { sweepExpiredEquipment } from './services/catalog';
@@ -106,7 +107,8 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerBankRoutes(app, db, hub);
   registerSupportRoutes(app, db, hub);
   registerMarketRoutes(app, db);
-  registerVipRoutes(app, db);
+  registerVipRoutes(app, db, hub);
+  registerGiftRoutes(app, db, hub);
   registerChatRoutes(app, db, hub);
   registerSocialRoutes(app, db, hub);
   registerMissionRoutes(app, db, hub);
