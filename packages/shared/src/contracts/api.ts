@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { CURRENCIES, ECONOMY, GAME_KEYS, type ErrorCode, type GameKey, type Reward } from '../economy';
 import type { BlackjackView } from '../games/blackjack';
 import type { BjtTableView } from '../games/blackjackTable';
+import type { IdentityFields, PublicIdentity } from '../identity';
 import type { ChatChannel, ChatMessageView } from '../social';
 import type { RoomSummary } from '../rooms';
 import type { RouletteResult } from '../games/roulette';
@@ -211,6 +212,11 @@ export interface PublicUser {
   ownedFrames: string[];
   /** Equipped special avatar (catalog item id); null = the default avatar `avatar`. */
   avatarItem: string | null;
+  /** Uploaded profile photo (shown instead of the avatar while set) and effective VIP level. */
+  customAvatar: string | null;
+  vipLevel: number;
+  /** Charm Points (Điểm Hấp Dẫn), from received gifts only. */
+  charm: number;
   /** Unread mail count (for the mailbox badge). */
   unreadMail: number;
   /** Account level (1–999). */
@@ -281,7 +287,7 @@ export interface PlayerStats {
   byGame: Record<GameKey, { rounds: number; wagered: number; won: number }>;
 }
 
-export interface LeaderboardEntry {
+export interface LeaderboardEntry extends IdentityFields {
   rank: number;
   uid: number;
   username: string;
@@ -366,6 +372,10 @@ export type ServerEvent =
   | { event: 'roomKicked'; data: { roomId: string; tableId: string } }
   /** The player's profile changed on the server (e.g. a timed item expired): refetch /api/me. */
   | { event: 'profile'; data: { reason: 'equipment' } }
+  /** A player's public look changed (photo, frame, name, VIP, badges): redraw them everywhere. */
+  | { event: 'identity'; data: PublicIdentity }
+  /** Public profile counters changed (follow, like, gift). */
+  | { event: 'counts'; data: { uid: number; followers: number; likes: number; charm: number } }
   /** Shared-round table update (phase change, result, live totals). `myBets` is omitted in broadcasts. */
   | { event: 'table'; data: Omit<TableRoundView, 'myBets'> & { myBets?: MyTableBet[] } };
 

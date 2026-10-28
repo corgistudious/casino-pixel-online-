@@ -33,6 +33,7 @@ import {
 } from '../services/social';
 import { block, blockedList, follow, followList, like, playerProfile, unblock, unfollow, unlike, updatePrivacy } from '../services/profile';
 import { addAttachment, createReport, loadAttachment, myReports, staffReports, updateReport } from '../services/reports';
+import { publishCounts } from '../services/gifts';
 import { getWallet } from '../services/wallet';
 import { makeGuards } from './guards';
 
@@ -83,10 +84,29 @@ export function registerSocialRoutes(app: FastifyInstance, db: Db, hub: Realtime
   app.get('/api/players/:uid/following', limited(60), async (req) => ({
     players: await followList(db, hub, uidSchema.parse(req.params).uid, 'following', listQuery.parse(req.query).before),
   }));
-  app.post('/api/players/follow', limited(30), async (req) => follow(db, hub, me(req), uidBody.parse(req.body).uid));
-  app.post('/api/players/unfollow', limited(30), async (req) => unfollow(db, me(req), uidBody.parse(req.body).uid));
-  app.post('/api/players/like', limited(30), async (req) => like(db, hub, me(req), uidBody.parse(req.body).uid));
-  app.post('/api/players/unlike', limited(30), async (req) => unlike(db, me(req), uidBody.parse(req.body).uid));
+  // Counters are pushed after the change commits (best effort; follows and likes never add Charm).
+  const counted = async <T>(uid: number, run: Promise<T>): Promise<T> => {
+    const result = await run;
+    const [target] = await db.execute<{ id: string }>(sqlUserByUid(uid));
+    if (target) void publishCounts(db, hub, target.id);
+    return result;
+  };
+  app.post('/api/players/follow', limited(30), async (req) => {
+    const { uid } = uidBody.parse(req.body);
+    return counted(uid, follow(db, hub, me(req), uid));
+  });
+  app.post('/api/players/unfollow', limited(30), async (req) => {
+    const { uid } = uidBody.parse(req.body);
+    return counted(uid, unfollow(db, me(req), uid));
+  });
+  app.post('/api/players/like', limited(30), async (req) => {
+    const { uid } = uidBody.parse(req.body);
+    return counted(uid, like(db, hub, me(req), uid));
+  });
+  app.post('/api/players/unlike', limited(30), async (req) => {
+    const { uid } = uidBody.parse(req.body);
+    return counted(uid, unlike(db, me(req), uid));
+  });
   app.post('/api/players/block', limited(20), async (req) => block(db, hub, me(req), uidBody.parse(req.body).uid));
   app.post('/api/players/unblock', limited(20), async (req) => unblock(db, me(req), uidBody.parse(req.body).uid));
   app.get('/api/me/blocks', { preHandler: authed }, async (req) => ({ players: await blockedList(db, requireAccount(req).id) }));

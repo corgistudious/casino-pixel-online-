@@ -1,3 +1,4 @@
+import type { PublicIdentity } from '../identity';
 import { z } from 'zod';
 import { type Rng, randInt } from './rng';
 import { ROULETTE_WHEEL, rouletteColor, rouletteReturn, type RouletteBetKind, type RouletteColor } from './roulette';
@@ -139,10 +140,10 @@ export interface TableRoundView {
   totals: Record<string, { amount: number; players: number }>;
   bettors: number;
   /** Public identities of players who placed a bet in this round; no bet amounts or balances. */
-  players: { uid: number; displayName: string }[];
+  players: PublicIdentity[];
   watchers: number;
   /** Unique authenticated accounts watching this table, including spectators. */
-  members: { uid: number; displayName: string }[];
+  members: PublicIdentity[];
   history: RoundOutcome[];
   myBets: MyTableBet[];
 }

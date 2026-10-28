@@ -7,7 +7,7 @@ import type { Db, DbOrTx } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { guildCreateSchema, guildUpdateSchema } from '@casino/shared';
-import { CARD_COLUMNS, CARD_JOIN, toCard, visiblePlayer, type CardRow } from './social';
+import { CARD_COLUMNS, CARD_JOIN, presenceOf, toCard, visiblePlayer, type CardRow } from './social';
 import { applyDelta } from './wallet';
 
 /**
@@ -196,7 +196,7 @@ export async function myGuild(db: Db, hub: RealtimeHub, userId: string): Promise
     SELECT ${CARD_COLUMNS}, m.role, m.joined_at FROM guild_members m JOIN users u ON u.id = m.user_id ${CARD_JOIN}
     WHERE m.guild_id = ${m.guild_id}::uuid
     ORDER BY CASE m.role WHEN 'owner' THEN 0 WHEN 'officer' THEN 1 ELSE 2 END, m.joined_at`);
-  const online = await hub.onlineAmong(members.map((x) => x.user_id));
+  const presence = await presenceOf(db, hub, members.map((x) => x.user_id));
   const logRows = await db.execute<{ id: number; action: string; created_at: string; a_uid: number | null; a_name: string | null; t_uid: number | null; t_name: string | null }>(sql`
     SELECT l.id, l.action, l.created_at, a.uid AS a_uid, a.display_name AS a_name, t.uid AS t_uid, t.display_name AS t_name
     FROM guild_log l LEFT JOIN users a ON a.id = l.actor_id LEFT JOIN users t ON t.id = l.target_id
@@ -207,7 +207,10 @@ export async function myGuild(db: Db, hub: RealtimeHub, userId: string): Promise
   return {
     ...toSummary(row),
     myRole: me.role,
-    memberList: members.map((x) => ({ ...toCard(x), role: x.role, joinedAt: new Date(x.joined_at).toISOString(), online: online.has(x.user_id) })),
+    memberList: members.map((x) => {
+      const status = presence.get(x.user_id) ?? 'offline';
+      return { ...toCard(x), role: x.role, joinedAt: new Date(x.joined_at).toISOString(), online: status !== 'offline', presence: status };
+    }),
     log: logRows.map(
       (l): GuildLogEntry => ({
         id: Number(l.id),

@@ -26,6 +26,7 @@ import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { effectiveEquipment } from './catalog';
 import { fairRng, sha256 } from './fair';
+import { identities } from './identity';
 import { awardGameplayExp, notifyProgress, type ExpResult } from './progression';
 import { activeSeason, recordRankedMatch } from './rank';
 import { assertRoomAccess } from './roomAccess';
@@ -139,10 +140,28 @@ export class CardTableEngine {
 
   private async seatViews(tableId: string): Promise<(CardSeatView & { userId: string })[]> {
     const rows = await this.db.select({ s: cardSeats, u: users }).from(cardSeats).innerJoin(users, eq(users.id, cardSeats.userId)).where(eq(cardSeats.tableId, tableId)).orderBy(asc(cardSeats.seat));
+    const ids = await identities(this.db, rows.map(({ u }) => u.id));
     return Promise.all(
       rows.map(async ({ s, u }) => {
         const gear = await effectiveEquipment(this.db, u);
-        return { userId: u.id, seat: s.seat, uid: u.uid, displayName: u.displayName, avatar: u.avatar, avatarItem: gear.avatarItem, frame: gear.frame, cardBack: gear.cardBack, title: gear.title, stack: s.stack, status: s.status as CardSeatView['status'] };
+        const id = ids.get(u.id);
+        return {
+          userId: u.id,
+          seat: s.seat,
+          uid: u.uid,
+          displayName: u.displayName,
+          avatar: u.avatar,
+          avatarItem: gear.avatarItem,
+          frame: gear.frame,
+          badges: id?.badges ?? [],
+          customAvatar: id?.customAvatar ?? null,
+          vipLevel: id?.vipLevel ?? 1,
+          rank: id?.rank ?? null,
+          cardBack: gear.cardBack,
+          title: gear.title,
+          stack: s.stack,
+          status: s.status as CardSeatView['status'],
+        };
       }),
     );
   }

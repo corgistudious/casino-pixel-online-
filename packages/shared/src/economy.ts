@@ -126,5 +126,13 @@ export const ERROR_CODES = [
   'room_limit',
   'room_closed',
   'not_room_owner',
+  'gift_unavailable',
+  'gift_price_changed',
+  'gift_daily_limit',
+  'account_too_new',
+  'avatar_rate_limited',
+  'vip_level_in_use',
+  'vip_levels_invalid',
+  'already_reversed',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];

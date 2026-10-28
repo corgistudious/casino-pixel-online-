@@ -5,6 +5,7 @@ import { requireAccount, requireActive } from '../auth/session';
 import type { Db } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
+import { publishIdentity } from '../services/identity';
 import { loadAsset } from '../services/assets';
 import { effectiveEquipment, equip, inventoryOf, publicCatalog } from '../services/catalog';
 import { claimAll, claimMail, deleteMail, listMail, markRead, unreadCount } from '../services/mailbox';
@@ -29,7 +30,7 @@ export function registerCosmeticsRoutes(app: FastifyInstance, db: Db, hub: Realt
    * the one detected from the bytes at upload; nosniff and a deny-all CSP stop any script use.
    */
   app.get('/api/assets/:id', async (req, reply) => {
-    const { id } = z.object({ id: z.string().regex(/^[a-f0-9]{64}\.(png|webp|gif)$/) }).parse(req.params);
+    const { id } = z.object({ id: z.string().regex(/^[a-f0-9]{64}\.(png|webp|gif|jpg)$/) }).parse(req.params);
     const asset = await loadAsset(db, id);
     if (!asset) throw fail('not_found');
     return reply
@@ -51,6 +52,7 @@ export function registerCosmeticsRoutes(app: FastifyInstance, db: Db, hub: Realt
   app.post('/api/me/equip', { preHandler: authed }, async (req) => {
     const { slot, itemId } = equipSchema.parse(req.body);
     const user = await equip(db, requireAccount(req).id, slot, itemId);
+    void publishIdentity(db, hub, user.id);
     return { user: await toPublicUser(db, user) };
   });
 

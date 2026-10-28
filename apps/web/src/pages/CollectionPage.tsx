@@ -80,7 +80,7 @@ export function CollectionPage() {
 
   const preview = (o: Owned | undefined, size: number) => {
     if (!o) return null;
-    if (kind === 'frame') return <Avatar index={user.avatar} avatarItem={user.avatarItem} frame={o.itemId} size={size} />;
+    if (kind === 'frame') return <Avatar customAvatar={user.customAvatar} index={user.avatar} avatarItem={user.avatarItem} frame={o.itemId} size={size} />;
     if (kind === 'avatar') return <Avatar index={user.avatar} avatarItem={o.itemId} frame={user.frame} size={size} />;
     if (kind === 'title') return <TitleBadge itemId={o.itemId} size={size > 100 ? 'md' : 'sm'} />;
     if (kind === 'chat_bubble') return <ChatBubble itemId={o.itemId}>{t('collection.bubbleSample')}</ChatBubble>;

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { requireAccount, requireActive } from '../auth/session';
 import type { Db } from '../db/client';
 import type { RealtimeHub } from '../realtime/hub';
+import { publishIdentity } from '../services/identity';
 import { missionConfigSchema, MISSION_LIMITS, MISSIONS } from '@casino/shared';
 import { fail } from '../errors';
 import { userRoleIds } from '../services/rbac';
@@ -17,6 +18,7 @@ export function registerMissionRoutes(app: FastifyInstance, db: Db, hub: Realtim
     const user = requireActive(requireAccount(req));
     const { id } = z.object({ id: z.string().min(1).max(40) }).parse(req.body);
     const result = await claimMission(db, user.id, id);
+    if (result.reward.vipExp) void publishIdentity(db, hub, user.id);
     const wallet = await getWallet(db, user.id);
     hub.sendToUser(user.id, { type: 'event', event: 'wallet', data: wallet });
     return { ...result, wallet };

@@ -62,13 +62,13 @@ function FramesGrid() {
               <div className="absolute bottom-1 h-4 w-28 rounded-[50%] bg-gold-300/25 blur-md xl:w-40" />
               <div className="absolute h-20 w-20 rounded-full bg-gradient-to-b from-white/10 to-transparent lg:h-32 lg:w-32" />
               <div className="lg:hidden">
-                <Avatar index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={76} />
+                <Avatar customAvatar={user.customAvatar} index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={76} />
               </div>
               <div className="hidden lg:block xl:hidden">
-                <Avatar index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={104} />
+                <Avatar customAvatar={user.customAvatar} index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={104} />
               </div>
               <div className="hidden xl:block">
-                <Avatar index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={132} />
+                <Avatar customAvatar={user.customAvatar} index={user.avatar} avatarItem={user.avatarItem} frame={frame.id} size={132} />
               </div>
             </div>
             <div className="text-center">

@@ -63,8 +63,9 @@ export function CharmIcon({ size = 18 }: { size?: number }) {
 export function VipMeter({ compact = false }: { compact?: boolean }) {
   const { t, i18n } = useTranslation();
   const exp = useVip((v) => v.exp);
+  const status = useVip((v) => v.status);
   useEffect(startVipSync, []);
-  const vip = vipProgress(exp ?? 0);
+  const vip = status ?? vipProgress(exp ?? 0);
   return (
     <NavLink to="/vip" className="group flex items-center gap-2" title={t('nav.vip')}>
       <VipEmblem level={vip.level} size={compact ? 34 : 40} />
@@ -100,7 +101,7 @@ function PlayerBar() {
     <header className="relative z-10 flex h-14 shrink-0 items-center gap-3 border-b border-gold-300/15 bg-gradient-to-b from-ink-800/95 to-ink-900/90 px-3 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)] backdrop-blur-xl lg:h-16 lg:gap-5 lg:px-5">
       <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold-300/60 to-transparent" />
       <NavLink to="/profile" className="flex min-w-0 items-center gap-2.5">
-        <Avatar index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={40} />
+        <Avatar customAvatar={user.customAvatar} index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={40} />
         <div className="hidden min-w-0 sm:block">
           <PlayerName name={user.displayName} badges={user.badges} size={16} className="max-w-[11rem] text-sm font-semibold" />
           <div className="text-[11px] leading-tight text-white/45 tabular-nums">
@@ -118,9 +119,9 @@ function PlayerBar() {
       <div className="ml-auto flex items-center gap-2 lg:gap-3">
         <div className="hidden items-center gap-1.5 rounded-full border border-pink-300/20 bg-black/30 px-2.5 py-1 lg:flex" title={t('player.charmDesc')}>
           <CharmIcon size={18} />
-          <span className="text-sm font-semibold tabular-nums text-pink-100">{fmt(DEMO_EXTRAS.charm)}</span>
+          <span className="text-sm font-semibold tabular-nums text-pink-100">{fmt(IS_DEMO ? DEMO_EXTRAS.charm : user.charm)}</span>
           <span className="text-[10px] text-white/45">{t('player.charm')}</span>
-          <DemoTag />
+          {IS_DEMO && <DemoTag />}
         </div>
         <ChatButton />
         {(['silver', 'gold'] as const).map((c) => (

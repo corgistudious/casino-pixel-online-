@@ -1,6 +1,6 @@
 import type { Badge, Currency } from '@casino/shared';
 import { useEffect, useState, type FormEvent } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { adminApi, newIdempotencyKey } from '../net/adminApi';
 import { Button } from '../ui/Button';
 import { BadgeIcon } from '../ui/OfficialAssets';
@@ -196,6 +196,7 @@ function PlayerDetail({ uid }: { uid: number }) {
             )}
           </dl>
           <Actions detail={detail} call={call} />
+          <IdentityTools uid={u.uid} call={call} />
           <Recovery detail={detail} call={call} />
         </div>
       )}
@@ -517,5 +518,47 @@ function Ledger({ uid }: { uid: number }) {
         </Button>
       )}
     </>
+  );
+}
+
+/** VIP / Charm shortcuts and removing an inappropriate profile photo (avatars.moderate). */
+function IdentityTools({ uid, call }: { uid: number; call: (method: string, path: string, body?: unknown) => Promise<boolean> }) {
+  const { t, can } = useAdminKit();
+  const [reason, setReason] = useState('');
+  if (!can('vip.read') && !can('charm.read') && !can('avatars.moderate')) return null;
+  return (
+    <div className="flex flex-col gap-2 rounded-xl border border-white/10 bg-black/20 p-3">
+      <h3 className="text-sm text-white/75">{t('admin.identity.title')}</h3>
+      <div className="flex flex-wrap gap-2">
+        {can('vip.read') && (
+          <Link to={`/admin/vip/${uid}`} className="rounded-lg border border-fuchsia-300/40 px-3 py-1 text-xs text-fuchsia-100 hover:bg-white/5">
+            {t('admin.identity.vip')}
+          </Link>
+        )}
+        {can('charm.read') && (
+          <Link to={`/admin/charm/${uid}`} className="rounded-lg border border-pink-300/40 px-3 py-1 text-xs text-pink-100 hover:bg-white/5">
+            {t('admin.identity.charm')}
+          </Link>
+        )}
+        {can('gifts.read') && (
+          <Link to={`/admin/gifts`} className="rounded-lg border border-white/20 px-3 py-1 text-xs text-white/75 hover:bg-white/5">
+            {t('admin.identity.gifts')}
+          </Link>
+        )}
+      </div>
+      {can('avatars.moderate') && (
+        <div className="flex flex-wrap gap-2">
+          <input className="field max-w-sm" maxLength={500} placeholder={t('admin.identity.reason')} value={reason} onChange={(e) => setReason(e.target.value)} />
+          <Button
+            size="sm"
+            variant="ruby"
+            disabled={reason.trim().length < 3}
+            onClick={() => void call('POST', `/api/admin/users/${uid}/avatar/reject`, { reason: reason.trim() }).then((ok) => ok && setReason(''))}
+          >
+            {t('admin.identity.removePhoto')}
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }

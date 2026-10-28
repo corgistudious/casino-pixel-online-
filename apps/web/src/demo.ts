@@ -43,6 +43,9 @@ let user: PublicUser = {
   permissions: [],
   roles: [],
   avatarItem: null,
+  customAvatar: null,
+  vipLevel: 5,
+  charm: DEMO_EXTRAS.charm,
   unreadMail: 0,
   level: 1,
   title: null,
@@ -61,12 +64,12 @@ let user: PublicUser = {
 };
 
 const leaderboard: LeaderboardEntry[] = [
-  { rank: 1, uid: 100017, username: 'lucky_tiger', displayName: 'Lucky Tiger', avatar: 4, avatarItem: null, frame: 'royal', badges: ['verified'], balance: 2_480_000 },
-  { rank: 2, uid: 100052, username: 'emerald_queen', displayName: 'Emerald Queen', avatar: 2, avatarItem: null, frame: 'emerald', badges: ['partner'], balance: 1_965_500 },
-  { rank: 3, uid: 100103, username: 'ace_hunter', displayName: 'Ace Hunter', avatar: 9, avatarItem: null, frame: 'ruby', badges: [], balance: 1_402_250 },
-  { rank: 4, uid: 100428, username: 'corgi_vip', displayName: 'Corgi Royale', avatar: 3, avatarItem: null, frame: 'sapphire', badges: ['verified', 'partner'], balance: 128_450 },
-  { rank: 5, uid: 100611, username: 'silver_fox', displayName: 'Silver Fox', avatar: 6, avatarItem: null, frame: 'silver', badges: [], balance: 98_300 },
-  { rank: 6, uid: 100890, username: 'midnight', displayName: 'Midnight Ace', avatar: 12, avatarItem: null, frame: 'classic', badges: [], balance: 76_900 },
+  { rank: 1, uid: 100017, username: 'lucky_tiger', displayName: 'Lucky Tiger', avatar: 4, avatarItem: null, frame: 'royal', badges: ['verified'], customAvatar: null, vipLevel: 12, balance: 2_480_000 },
+  { rank: 2, uid: 100052, username: 'emerald_queen', displayName: 'Emerald Queen', avatar: 2, avatarItem: null, frame: 'emerald', badges: ['partner'], customAvatar: null, vipLevel: 9, balance: 1_965_500 },
+  { rank: 3, uid: 100103, username: 'ace_hunter', displayName: 'Ace Hunter', avatar: 9, avatarItem: null, frame: 'ruby', badges: [], customAvatar: null, vipLevel: 6, balance: 1_402_250 },
+  { rank: 4, uid: 100428, username: 'corgi_vip', displayName: 'Corgi Royale', avatar: 3, avatarItem: null, frame: 'sapphire', badges: ['verified', 'partner'], customAvatar: null, vipLevel: 5, balance: 128_450 },
+  { rank: 5, uid: 100611, username: 'silver_fox', displayName: 'Silver Fox', avatar: 6, avatarItem: null, frame: 'silver', badges: [], customAvatar: null, vipLevel: 3, balance: 98_300 },
+  { rank: 6, uid: 100890, username: 'midnight', displayName: 'Midnight Ace', avatar: 12, avatarItem: null, frame: 'classic', badges: [], customAvatar: null, vipLevel: 1, balance: 76_900 },
 ];
 
 const bigWins: BigWinEvent[] = [

@@ -8,6 +8,7 @@ import { useCatalog } from '../store/catalog';
 import { Button } from '../ui/Button';
 import { CurrencyIcon } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
+import { useGiftShop } from '../players/GiftShopDialog';
 import { Modal, PlayerChip, useFail } from './parts';
 
 const PRESETS = [500, 1_000, 2_000, 5_000];
@@ -58,6 +59,17 @@ export function GiftDialog({ to, onClose, onSent }: { to: PlayerCard; onClose: (
     <Modal title={step === 'pick' ? t('social.gift.title', { name: to.displayName }) : t('social.gift.confirmTitle')} onClose={onClose}>
       {step === 'pick' ? (
         <>
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              useGiftShop.getState().open(to);
+            }}
+            className="flex items-center justify-between rounded-xl border border-pink-300/40 bg-gradient-to-r from-pink-500/20 to-fuchsia-500/10 px-3 py-2.5 text-left text-sm text-white hover:brightness-110"
+          >
+            <span>💝 {t('giftShop.fromFriends')}</span>
+            <span aria-hidden>→</span>
+          </button>
           <div className="grid grid-cols-2 gap-2">
             {(['silver', 'item'] as const).map((k) => (
               <button

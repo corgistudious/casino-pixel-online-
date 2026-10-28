@@ -204,6 +204,27 @@
       "when": 1792904555925,
       "tag": "0028_report_attachments",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1792904555926,
+      "tag": "0029_vip_config",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1792904555927,
+      "tag": "0030_avatar_uploads",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1792904555928,
+      "tag": "0031_gift_shop_charm",
+      "breakpoints": true
     }
   ]
 }

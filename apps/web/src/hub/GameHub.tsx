@@ -89,7 +89,7 @@ function Hud({ s }: { s: Sizes }) {
       <div className="pointer-events-none absolute inset-x-0 bottom-3 h-[2px] bg-gradient-to-r from-transparent via-[#f2c14e]/70 to-transparent" />
 
       <Link to="/profile" className="relative flex items-center" style={{ gap: s.gap * 0.7 }}>
-        <Avatar index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={s.avatar} />
+        <Avatar customAvatar={user.customAvatar} index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={s.avatar} />
         <div className="min-w-0">
           <div style={{ fontSize: s.name }}>
             <PlayerName name={user.displayName} badges={user.badges} size={s.name * 0.95} className="max-w-[11em] font-bold" />

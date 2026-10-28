@@ -15,6 +15,23 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  // Charm and gifts (0031): staff columns move to Keyo Support; a real receiver keeps charm it got
+  // from a TEST sender (its ledger row stays, only the link to the deleted gift row is cleared).
+  { table: 'charm_ledger', column: 'actor_id', action: 'reassign_to_support' },
+  { table: 'charm_ledger', column: 'user_id', action: 'delete' },
+  { table: 'charm_points', column: 'user_id', action: 'delete' },
+  { table: 'gift_transactions', column: 'reversed_by', action: 'reassign_to_support' },
+  { table: 'gift_transactions', column: 'sender_id', action: 'delete' },
+  { table: 'gift_transactions', column: 'receiver_id', action: 'delete' },
+  { table: 'gift_catalog', column: 'updated_by', action: 'reassign_to_support' },
+  // Profile photos (0030).
+  { table: 'avatar_uploads', column: 'moderated_by', action: 'reassign_to_support' },
+  { table: 'avatar_uploads', column: 'user_id', action: 'delete' },
+  // VIP configuration and manual changes (0029). A real player's VIP is never deleted because a TEST staff account set it.
+  { table: 'vip_events', column: 'actor_id', action: 'reassign_to_support' },
+  { table: 'vip_events', column: 'user_id', action: 'delete' },
+  { table: 'vip_levels', column: 'updated_by', action: 'reassign_to_support' },
+  { table: 'vip_progress', column: 'override_by', action: 'reassign_to_support' },
   { table: 'room_join_attempts', column: 'user_id', action: 'delete' },
   { table: 'room_access', column: 'user_id', action: 'delete' },
   { table: 'room_access', column: 'invited_by', action: 'delete' },
@@ -209,7 +226,8 @@ async function tableCounts(db: DbOrTx): Promise<TableCount[]> {
     // A row with multiple user references belongs to TEST data if ANY referenced
     // user is a TEST account. Count kept rows by the whole row, not by one column.
     const columns = [...new Set(TEST_DATA_TABLES.filter((entry) => entry.table === t.table).map((entry) => entry.column))];
-    const targets = sql.join(columns.map((column) => sql`${sql.identifier(column)} IN (${TARGETS})`), sql` OR `);
+    // coalesce: a NULL column (e.g. a staff column nobody set) is not TEST data, and NOT (NULL IN …) would hide the row from both counts.
+    const targets = sql.join(columns.map((column) => sql`coalesce(${sql.identifier(column)} IN (${TARGETS}), false)`), sql` OR `);
     const row = await one<{ test: string; kept: string }>(
       db,
       sql`SELECT

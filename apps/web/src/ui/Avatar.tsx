@@ -1,5 +1,5 @@
 import { DEFAULT_FRAME, findFrame, type CatalogItem } from '@casino/shared';
-import { useId } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { assetSrc, useCatalog } from '../store/catalog';
 import { usesVuongGiaArt, VuongGiaAvatarArt, VuongGiaFrame } from './Cosmetics';
 
@@ -32,7 +32,8 @@ export function avatarCount() {
 
 /**
  * Round avatar with its frame. `frame` is a catalog frame id or 'none'; `avatarItem` is an owned
- * special avatar (catalog image) shown instead of the default emblem `index`.
+ * special avatar (catalog image) shown instead of the default emblem `index`; `customAvatar` is the
+ * player's uploaded photo, shown inside the same frame while set.
  */
 export function Avatar({
   index,
@@ -40,26 +41,36 @@ export function Avatar({
   frame = DEFAULT_FRAME,
   animated = false,
   avatarItem = null,
+  customAvatar = null,
 }: {
   index: number;
   size?: number;
   frame?: string;
   animated?: boolean;
   avatarItem?: string | null;
+  customAvatar?: string | null;
 }) {
   const items = useCatalog((c) => c.items);
   const special = avatarItem ? items[avatarItem] : undefined;
+  const photo = assetSrc(customAvatar);
   return (
     <FramedAvatar
       index={index}
       size={size}
       frame={frame}
       frameItem={items[frame]}
-      avatarSrc={assetSrc(special?.assetUrl)}
-      avatarArt={!special?.assetUrl && usesVuongGiaArt(special) ? 'vuong_gia' : undefined}
+      avatarSrc={photo ?? assetSrc(special?.assetUrl)}
+      avatarArt={!photo && !special?.assetUrl && usesVuongGiaArt(special) ? 'vuong_gia' : undefined}
       animated={animated}
     />
   );
+}
+
+/** An image that falls back to the default emblem if it cannot load (deleted, offline, blocked). */
+function SafeImage({ src, fallback }: { src: string; fallback: ReactNode }) {
+  const [broken, setBroken] = useState<string | null>(null);
+  if (broken === src) return <>{fallback}</>;
+  return <img src={src} alt="" draggable={false} loading="lazy" decoding="async" onError={() => setBroken(src)} className="h-full w-full rounded-full object-cover" />;
 }
 
 /**
@@ -88,11 +99,7 @@ export function FramedAvatar({
   const id = useId();
   const palette = PALETTES[index % PALETTES.length]!;
   const glyph = GLYPHS[(index + Math.floor(index / PALETTES.length) * 3) % GLYPHS.length]!;
-  const inner = avatarArt === 'vuong_gia' ? (
-    <VuongGiaAvatarArt />
-  ) : avatarSrc ? (
-    <img src={avatarSrc} alt="" draggable={false} className="h-full w-full rounded-full object-cover" />
-  ) : (
+  const emblem = (
     <svg viewBox="0 0 48 48" width="100%" height="100%" className="rounded-full">
       <defs>
         <radialGradient id={`${id}bg`} cx="35%" cy="30%" r="80%">
@@ -111,6 +118,7 @@ export function FramedAvatar({
       <ellipse cx="24" cy="12" rx="17" ry="9" fill={`url(#${id}gl)`} />
     </svg>
   );
+  const inner = avatarArt === 'vuong_gia' ? <VuongGiaAvatarArt /> : avatarSrc ? <SafeImage src={avatarSrc} fallback={emblem} /> : emblem;
   if (frame === 'none') return <div className="shrink-0" style={{ width: size, height: size }}>{inner}</div>;
   if (!frameItem?.assetUrl && frameItem?.style?.art === 'vuong_gia') {
     return (

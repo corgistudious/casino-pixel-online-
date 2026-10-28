@@ -11,6 +11,9 @@ import { AuditPage } from './admin/AuditPage';
 import { DashboardPage } from './admin/DashboardPage';
 import { DeletionsPage, SystemPage, UidsPage } from './admin/MiscPages';
 import { PlayersPage } from './admin/PlayersPage';
+import { VipAdminPage } from './admin/VipAdminPage';
+import { GiftsAdminPage } from './admin/GiftsAdminPage';
+import { CharmAdminPage } from './admin/CharmAdminPage';
 import { StaffPage } from './admin/StaffPage';
 import { ItemsPage } from './admin/ItemsPage';
 import { MailAdminPage } from './admin/MailAdminPage';
@@ -46,6 +49,8 @@ import { GiftcodePage } from './pages/GiftcodePage';
 import { CardLobbyPage } from './pages/CardLobbyPage';
 import { CardTablePage } from './pages/CardTablePage';
 import { PlayerActionHost } from './players/PlayerActions';
+import { IdentitySync } from './players/identity';
+import { GiftShopHost } from './players/GiftShopDialog';
 import { PlayerProfilePage } from './players/PlayerProfilePage';
 import { RoomInviteHost } from './rooms/RoomInviteHost';
 import { RoomsPage } from './rooms/RoomsPage';
@@ -153,6 +158,8 @@ export function App() {
       <Toasts />
       <LevelUpBanner />
       <PlayerActionHost />
+      <IdentitySync />
+      <GiftShopHost />
       <RoomInviteHost />
       <InGameChat />
       <Routes>
@@ -188,6 +195,11 @@ export function App() {
           <Route path="dashboard" element={<RequirePerm perm="dashboard.read"><DashboardPage /></RequirePerm>} />
           <Route path="players" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
           <Route path="players/:uid" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
+          <Route path="vip" element={<RequirePerm perm="vip.read"><VipAdminPage /></RequirePerm>} />
+          <Route path="vip/:uid" element={<RequirePerm perm="vip.read"><VipAdminPage /></RequirePerm>} />
+          <Route path="gifts" element={<RequirePerm perm="gifts.read"><GiftsAdminPage /></RequirePerm>} />
+          <Route path="charm" element={<RequirePerm perm="charm.read"><CharmAdminPage /></RequirePerm>} />
+          <Route path="charm/:uid" element={<RequirePerm perm="charm.read"><CharmAdminPage /></RequirePerm>} />
           <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
           <Route path="support" element={<RequirePerm perm="support.read"><SupportAdminPage /></RequirePerm>} />
           <Route path="reports" element={<RequirePerm perm="reports.manage"><ReportsAdminPage /></RequirePerm>} />

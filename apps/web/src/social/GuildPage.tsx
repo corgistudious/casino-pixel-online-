@@ -348,7 +348,7 @@ function MemberList({ guild, reload }: { guild: MyGuild; reload: () => void }) {
           return (
             <li key={m.uid} className="flex flex-wrap items-center gap-3 rounded-xl bg-black/25 p-3">
               <PlayerTrigger uid={m.uid} label={m.displayName} context="guild" className="flex-1">
-                <PlayerChip card={m} online={m.online} />
+                <PlayerChip card={m} online={m.presence ?? m.online} />
               </PlayerTrigger>
               <span className={`rounded-md bg-gradient-to-r px-2 py-0.5 text-xs font-label ${roleTone[m.role]}`}>{t(`social.guild.roles.${m.role}`)}</span>
               {guild.myRole === 'owner' && m.role !== 'owner' && (
