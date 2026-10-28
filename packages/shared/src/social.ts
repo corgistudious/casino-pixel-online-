@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import type { Badge } from './contracts/api';
+import type { GiftShowcaseView } from './gifts';
+import type { IdentityFields, PresenceStatus } from './identity';
 import type { TopTitleId } from './progression';
 
 /**
@@ -64,8 +66,8 @@ export function guildTier(points: number): 'D' | 'C' | 'B' | 'A' | 'S' | 'SS' | 
   return 'D';
 }
 
-/** How another player looks in social lists and chat (avatar, frame, badges, cosmetics). */
-export interface PlayerCard {
+/** How another player looks in social lists and chat (avatar, frame, VIP, rank, badges, cosmetics). */
+export interface PlayerCard extends IdentityFields {
   uid: number;
   displayName: string;
   avatar: number;
@@ -87,6 +89,7 @@ export interface RankBadge {
 
 export interface FriendView extends PlayerCard {
   online: boolean;
+  presence: PresenceStatus;
   since: string;
   /** May receive gifts from me now (friends long enough). */
   giftable: boolean;
@@ -132,8 +135,9 @@ export interface ProfilePrivacy {
   showFriends: boolean;
   showCollection: boolean;
   showStats: boolean;
+  showGifts: boolean;
 }
-export const DEFAULT_PRIVACY: ProfilePrivacy = { showOnline: true, showFriends: true, showCollection: true, showStats: true };
+export const DEFAULT_PRIVACY: ProfilePrivacy = { showOnline: true, showFriends: true, showCollection: true, showStats: true, showGifts: true };
 
 /**
  * What anyone may see about another player. Built from an allowlist on the server: never email,
@@ -142,9 +146,11 @@ export const DEFAULT_PRIVACY: ProfilePrivacy = { showOnline: true, showFriends: 
  */
 export interface PlayerProfileView extends PlayerCard {
   online: boolean | null;
+  /** Online / in a game / offline; null when hidden by privacy. */
+  presence: PresenceStatus | null;
   relation: RelationStatus;
   social: SocialState;
-  counts: { followers: number; following: number; likes: number; friends: number | null };
+  counts: { followers: number; following: number; likes: number; friends: number | null; charm: number };
   createdAt: string;
   rank: { division: number; rp: number; topTitle: TopTitleId | null; topPosition: number | null; wins: number; losses: number } | null;
   vip: { level: number };
@@ -154,6 +160,8 @@ export interface PlayerProfileView extends PlayerCard {
   stats: { rounds: number; wins: number; losses: number; pushes: number; biggestWin: number; byGame: GameStatView[] } | null;
   achievements: string[];
   collection: { total: number; titles: string[]; items: string[]; showcase: string[] } | null;
+  /** Received gifts; null when hidden by privacy. */
+  gifts: GiftShowcaseView | null;
   /** Only on my own profile. */
   privacy?: ProfilePrivacy & { showcase: string[] };
 }
@@ -169,6 +177,7 @@ export const privacySchema = z
     showFriends: z.boolean(),
     showCollection: z.boolean(),
     showStats: z.boolean(),
+    showGifts: z.boolean(),
     /** Inventory instance ids to pin (owned, active). */
     showcase: z.array(z.string().uuid()).max(SOCIAL_RULES.showcaseMax),
   })
@@ -275,6 +284,7 @@ export interface GuildMemberView extends PlayerCard {
   role: GuildRole;
   joinedAt: string;
   online: boolean;
+  presence: PresenceStatus;
 }
 
 export interface GuildLogEntry {

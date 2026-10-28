@@ -21,3 +21,5 @@ export * from './i18n';
 export * from './social';
 export * from './missions';
 export * from './rooms';
+export * from './gifts';
+export * from './identity';

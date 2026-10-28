@@ -1,3 +1,4 @@
+import type { PublicIdentity } from '../identity';
 import type { Card } from './cards';
 import { bestPokerHand, compareScores, evaluateFive, evaluateLieng, visibleStrength, type HandValue } from './handEval';
 
@@ -466,7 +467,7 @@ export function viewHand(h: Hand, meta: { id: string; seq: number; seedHash: str
 
 // ---------------------------------------------------------------- table views & API
 
-export interface CardSeatView {
+export interface CardSeatView extends Omit<PublicIdentity, 'uid' | 'displayName' | 'avatar' | 'avatarItem' | 'frame'> {
   seat: number;
   uid: number;
   displayName: string;

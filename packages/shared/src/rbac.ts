@@ -44,6 +44,22 @@ export const PERMISSIONS = [
   'progression.manage',
   /** Create, disable and export giftcodes. Owner and Super Admin only (they hand out rewards). */
   'giftcode.manage',
+  /** View VIP levels, players' VIP history. */
+  'vip.read',
+  /** Grant/revoke VIP levels and add/remove VIP EXP for a player (reason required, audited). */
+  'vip.manage',
+  /** Create and edit the VIP level table (thresholds, rewards, names). */
+  'vip.levels',
+  /** View the gift catalogue and gift transactions. */
+  'gifts.read',
+  /** Create/edit gifts, prices and sale windows; reverse gift transactions. */
+  'gifts.manage',
+  /** View players' Charm Points and their history. */
+  'charm.read',
+  /** Adjust a player's Charm Points by hand (reason required, audited). */
+  'charm.manage',
+  /** Remove an inappropriate uploaded profile photo. */
+  'avatars.moderate',
   'system.errors',
   /** Global configuration and emergency switches. Owner only. */
   'system.settings',
@@ -90,13 +106,14 @@ export const DEFAULT_ROLES: Record<RoleId, { name: string; description: string; 
       'chat.moderate',
       'rooms.manage',
       'progression.read',
+      'avatars.moderate',
     ],
   },
   moderator: {
     name: 'Moderator',
     description: 'Chat and community content moderation',
     rank: 40,
-    permissions: ['admin.access', 'dashboard.read', 'users.read', 'chat.moderate', 'reports.manage'],
+    permissions: ['admin.access', 'dashboard.read', 'users.read', 'chat.moderate', 'reports.manage', 'avatars.moderate'],
   },
   support: {
     name: 'Support',

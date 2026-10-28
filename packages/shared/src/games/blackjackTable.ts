@@ -1,3 +1,4 @@
+import type { PublicIdentity } from '../identity';
 import { BLACKJACK_MAX_HANDS, cardValue, handValue, insuranceMax, isBlackjack, newHand, stakeOf, type BlackjackHand, type BlackjackOutcome } from './blackjack';
 import { cardRank, type Card } from './cards';
 
@@ -305,7 +306,7 @@ export function bjtView(s: BjtState, meta: { id: string; seq: number; deadline: 
   };
 }
 
-export interface BjtSeatView {
+export interface BjtSeatView extends Omit<PublicIdentity, 'uid' | 'displayName' | 'avatar' | 'avatarItem' | 'frame'> {
   seat: number;
   uid: number;
   displayName: string;
