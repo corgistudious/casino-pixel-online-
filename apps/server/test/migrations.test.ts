@@ -251,3 +251,43 @@ describe('0026_social_profile and 0027_private_rooms upgrade', () => {
     await expect(db.execute(sql`INSERT INTO player_follows (follower_id, followee_id) SELECT id, id FROM users WHERE uid = 101100`)).rejects.toThrow();
   });
 });
+
+describe('0029–0031 VIP configuration, profile photos, gift shop and charm upgrade', () => {
+  it('keeps every VIP EXP, level, wallet, frame and avatar; adds empty gift/charm tables; rollback files undo cleanly', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(29) }); // 0000–0028: the schema live servers run before this release
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES
+      (1002, 'keyo_gm', 'keyo_gm', 'x', 'Keyo GM'), (101200, 'vip_a', 'vip_a', 'x', 'A'), (101201, 'vip_b', 'vip_b', 'x', 'B'), (101202, 'vip_c', 'vip_c', 'x', 'C')`);
+    await db.execute(sql`UPDATE users SET frame = 'royal', avatar = 7, avatar_item = NULL WHERE uid = 101200`);
+    await db.execute(sql`INSERT INTO wallets (user_id, balance, gold) SELECT id, uid * 3, uid % 97 FROM users`);
+    await db.execute(sql`INSERT INTO vip_progress (user_id, exp, last_claim_date) SELECT id, CASE uid WHEN 101200 THEN 0 WHEN 101201 THEN 12000 WHEN 101202 THEN 999999 ELSE 4999 END, '2026-10-01' FROM users`);
+    const snapshot = sql`SELECT
+      (SELECT json_agg(json_build_object('u', u.uid, 'exp', vp.exp, 'claim', vp.last_claim_date) ORDER BY u.uid) FROM vip_progress vp JOIN users u ON u.id = vp.user_id) AS vip,
+      (SELECT json_agg(json_build_object('u', uid, 'f', frame, 'a', avatar, 'i', avatar_item) ORDER BY uid) FROM users) AS look,
+      (SELECT json_agg(json_build_object('b', balance, 'g', gold) ORDER BY user_id) FROM wallets) AS wallets`;
+    const before = await rows(snapshot);
+    await runMigrations(db);
+    expect(await rows(snapshot)).toEqual(before);
+    // Same levels as the code table gave: 0 → 1, 4,999 → 4, 12,000 → 7, 999,999 → 15.
+    expect(await rows(sql`SELECT u.uid::int AS uid, keyo_vip_level(vp.exp, vp.override_level, vp.override_until) AS level FROM vip_progress vp JOIN users u ON u.id = vp.user_id ORDER BY u.uid`)).toEqual([
+      { uid: 1002, level: 4 },
+      { uid: 101200, level: 1 },
+      { uid: 101201, level: 7 },
+      { uid: 101202, level: 15 },
+    ]);
+    expect(await rows(sql`SELECT count(*)::int AS n, max(level) AS top FROM vip_levels`)).toEqual([{ n: 15, top: 15 }]);
+    for (const table of ['vip_events', 'avatar_uploads', 'gift_catalog', 'gift_transactions', 'charm_points', 'charm_ledger']) {
+      expect(await rows(sql`SELECT count(*)::int AS n FROM ${sql.identifier(table)}`)).toEqual([{ n: 0 }]);
+    }
+    // Re-running is a no-op (nothing re-seeded, nothing changed).
+    await runMigrations(db);
+    expect(await rows(sql`SELECT count(*)::int AS n FROM vip_levels`)).toEqual([{ n: 15 }]);
+    expect(await rows(snapshot)).toEqual(before);
+    // Rollback files restore the 0028 shape and keep the same data.
+    for (const f of ['0031_gift_shop_charm', '0030_avatar_uploads', '0029_vip_config']) {
+      await db.execute(sql.raw(readFileSync(resolve(__dirname, `../drizzle/rollback/${f}.down.sql`), 'utf8')));
+    }
+    expect(await rows(snapshot)).toEqual(before);
+    expect(await rows(sql`SELECT to_regclass('vip_levels') AS a, to_regclass('gift_transactions') AS b, to_regclass('avatar_uploads') AS c`)).toEqual([{ a: null, b: null, c: null }]);
+  });
+});
