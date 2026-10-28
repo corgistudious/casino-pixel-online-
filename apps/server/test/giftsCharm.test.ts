@@ -139,6 +139,7 @@ describe('sending a gift', () => {
     const retry = await send(a, b, 'rose', 500, { id });
     expect(retry.statusCode).toBe(200);
     expect(retry.json().replayed).toBe(true);
+    await putGift('rose'); // Restore shared catalogue fixture for subsequent tests.
     expect((await wallet(a)).silver).toBe(before.silver - 500);
     expect(await charm(b)).toBe(5);
     expect(Number((await rows<{ c: string }>(sql`SELECT count(*) AS c FROM charm_ledger WHERE gift_tx_id = ${id}::uuid`))[0]!.c)).toBe(1);
