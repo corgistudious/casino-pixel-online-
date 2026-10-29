@@ -41,7 +41,7 @@ describe('support center', () => {
     const detail = (await call(player, 'GET', `/api/support/tickets/${id}`)).json() as { messages: SupportMessageView[] };
     expect(detail.messages.map((m) => [m.fromStaff, m.author])).toEqual([
       [false, expect.any(String)],
-      [true, 'Keyo Support'],
+      [true, 'Keyo Captain'],
     ]);
     expect(JSON.stringify(detail)).not.toContain(agent.user.id);
     expect((await call(player, 'GET', '/api/support/unread')).json().count).toBe(0);

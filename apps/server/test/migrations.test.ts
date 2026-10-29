@@ -291,3 +291,55 @@ describe('0029–0031 VIP configuration, profile photos, gift shop and charm upg
     expect(await rows(sql`SELECT to_regclass('vip_levels') AS a, to_regclass('gift_transactions') AS b, to_regclass('avatar_uploads') AS c`)).toEqual([{ a: null, b: null, c: null }]);
   });
 });
+
+describe('0032 Keyo Captain dual Owner upgrade', () => {
+  it('makes UID 1000 the second Owner without touching accounts, balances or other roles; rollback restores the single Owner', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(32) }); // 0000–0031
+    await bootstrapRoles(db);
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name, account_type) VALUES
+      (1000, 'keyo_support', 'keyo_support', '!disabled', 'Keyo Support', 'system_support'),
+      (1002, 'keyo_gm', 'keyo_gm', 'x', 'Keyo GM', 'player'),
+      (1005, 'voxtan', 'voxtan', 'y', 'Voxtan', 'player'),
+      (101300, 'p1', 'p1', 'z', 'P1', 'player')`);
+    await db.execute(sql`INSERT INTO wallets (user_id, balance, gold) SELECT id, uid * 7, uid % 89 FROM users`);
+    await db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid = 1002`);
+    await db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'super_admin' FROM users WHERE uid = 1005`);
+    await db.execute(sql`INSERT INTO support_tickets (user_id, category, subject) SELECT id, 'account', 'Cũ' FROM users WHERE uid = 101300`);
+    // Before 0032 a second Owner is impossible.
+    await expect(db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid = 1000`)).rejects.toThrow();
+
+    const snapshot = sql`SELECT
+      (SELECT json_agg(json_build_object('u', uid, 't', account_type, 'p', password_hash, 's', status, 'id', id) ORDER BY uid) FROM users) AS users,
+      (SELECT json_agg(json_build_object('b', balance, 'g', gold) ORDER BY user_id) FROM wallets) AS wallets,
+      (SELECT json_agg(json_build_object('u', u.uid, 'r', r.role_id) ORDER BY u.uid, r.role_id) FROM user_roles r JOIN users u ON u.id = r.user_id WHERE NOT (u.uid = 1000 AND r.role_id = 'owner')) AS roles,
+      (SELECT count(*) FROM support_tickets) AS tickets`;
+    const owners = sql`SELECT u.uid::int AS uid FROM user_roles r JOIN users u ON u.id = r.user_id WHERE r.role_id = 'owner' ORDER BY u.uid`;
+    const before = await rows(snapshot);
+
+    await runMigrations(db);
+    await bootstrapOwner(db);
+    await bootstrapOwner(db);
+    expect(await rows(snapshot)).toEqual(before);
+    expect(await rows(owners)).toEqual([{ uid: 1000 }, { uid: 1002 }]);
+    expect(await rows(sql`SELECT display_name FROM users WHERE uid = 1000`)).toEqual([{ display_name: 'Keyo Captain' }]);
+    // Still nobody else, and an Owner role can never be removed.
+    await expect(db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid = 1005`)).rejects.toThrow();
+    await expect(db.execute(sql`DELETE FROM user_roles WHERE role_id = 'owner'`)).rejects.toThrow();
+    expect(await rows(sql`SELECT count(*)::int AS n FROM account_setup_tokens`)).toEqual([{ n: 0 }]);
+    expect(await rows(sql`SELECT count(*)::int AS n FROM support_tickets WHERE client_key IS NULL`)).toEqual([{ n: 1 }]);
+
+    await runMigrations(db); // re-run: no-op
+    expect(await rows(snapshot)).toEqual(before);
+
+    // The file wraps itself in BEGIN/COMMIT for psql; the driver runs the same body in its own transaction.
+    const down = readFileSync(resolve(__dirname, '../drizzle/rollback/0032_keyo_captain_dual_owner.down.sql'), 'utf8').replace(/^(BEGIN|COMMIT);$/gm, '');
+    await db.transaction((tx) => tx.execute(sql.raw(down)));
+    expect(await rows(snapshot)).toEqual(before);
+    expect(await rows(owners)).toEqual([{ uid: 1002 }]);
+    expect(await rows(sql`SELECT display_name FROM users WHERE uid = 1000`)).toEqual([{ display_name: 'Keyo Support' }]);
+    expect(await rows(sql`SELECT to_regclass('account_setup_tokens') AS t`)).toEqual([{ t: null }]);
+    await expect(db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid = 1000`)).rejects.toThrow();
+    await expect(db.execute(sql`DELETE FROM user_roles WHERE role_id = 'owner'`)).rejects.toThrow();
+  });
+});

@@ -52,7 +52,7 @@ describe('Keyo Support UID 1000', () => {
     await bootstrapSystemAccounts(t.db); // second run must be a no-op
     const rows = await t.db.select().from(users).where(sql`${users.uid} = ${KEYO_SUPPORT_UID}`);
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toMatchObject({ displayName: 'Keyo Support', accountType: 'system_support', isVerified: true, status: 'active' });
+    expect(rows[0]).toMatchObject({ displayName: 'Keyo Captain', accountType: 'system_support', isVerified: true, status: 'active' });
   });
 
   it('cannot be logged into, banned or granted as a custom UID', async () => {
