@@ -26,6 +26,7 @@ import { effectiveEquipment, ownedFrames } from './catalog';
 import { levelOf } from './progression';
 import { unreadCount } from './mailbox';
 import { applyDelta, getWallet } from './wallet';
+import { playableSql } from '../auth/accountRules';
 
 export type UserRow = typeof users.$inferSelect;
 
@@ -149,7 +150,7 @@ export async function leaderboard(db: Db, limit = 50): Promise<LeaderboardEntry[
     .innerJoin(users, eq(users.id, wallets.userId))
     .where(
       and(
-        eq(users.accountType, 'player'),
+        playableSql('users'),
         eq(users.status, 'active'),
         sql`NOT EXISTS (SELECT 1 FROM bans b WHERE b.user_id = ${users.id} AND b.revoked_at IS NULL AND b.starts_at <= now() AND (b.ends_at IS NULL OR b.ends_at > now()))`,
       ),

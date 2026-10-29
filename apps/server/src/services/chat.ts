@@ -126,7 +126,8 @@ export async function conversations(db: Db, hub: RealtimeHub, userId: string): P
 
 /** History with one player; marks their messages to me as read. */
 export async function dmHistory(db: Db, hub: RealtimeHub, userId: string, uid: number, before?: number): Promise<ChatMessageView[]> {
-  if (uid === KEYO_SUPPORT_UID) throw fail('protected_account');
+  // Players reach Keyo Captain through the Support menu and tickets, never by private message.
+  if (uid === KEYO_SUPPORT_UID) throw fail('support_only');
   const other = await visiblePlayer(db, uid);
   const rows = await db.execute<Row>(sql`
     SELECT m.id, m.body, m.created_at, ${CARD_COLUMNS}
@@ -140,7 +141,9 @@ export async function dmHistory(db: Db, hub: RealtimeHub, userId: string, uid: n
 }
 
 export async function sendDm(db: Db, hub: RealtimeHub, me: { id: string; uid: number }, uid: number, body: string): Promise<ChatMessageView> {
-  if (uid === KEYO_SUPPORT_UID) throw fail('protected_account');
+  // No private messages to Keyo Captain, and none from it either (the receiver could not answer):
+  // every contact with the official account goes through the Support Center.
+  if (uid === KEYO_SUPPORT_UID || me.uid === KEYO_SUPPORT_UID) throw fail('support_only');
   const { msg, otherId } = await db.transaction(async (tx) => {
     await assertCanSpeak(tx, me.id);
     const other = await visiblePlayer(tx, uid);

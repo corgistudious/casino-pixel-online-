@@ -1,5 +1,6 @@
 import {
   DEFAULT_PRIVACY,
+  KEYO_SUPPORT_UID,
   SOCIAL_RULES,
   type FollowListEntry,
   type PlayerProfileView,
@@ -88,6 +89,8 @@ async function countOf(db: DbOrTx, table: 'player_follows' | 'profile_likes', us
 
 /** Blocks a player: ends friendship, pending requests and follows both ways. Likes stay as they were. */
 export async function block(db: Db, hub: RealtimeHub, me: { id: string; uid: number }, uid: number): Promise<{ blocked: true }> {
+  // Keyo Captain is everyone's permanent official friend: it cannot block or be blocked.
+  if (uid === KEYO_SUPPORT_UID || me.uid === KEYO_SUPPORT_UID) throw fail('official_account');
   const otherId = await db.transaction(async (tx) => {
     const other = await counterpart(tx, me, uid, { allowBlocked: true });
     await tx.execute(sql`INSERT INTO player_blocks (blocker_id, blocked_id) VALUES (${me.id}::uuid, ${other.user_id}::uuid) ON CONFLICT DO NOTHING`);
@@ -186,6 +189,7 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
   }>(sql`
     SELECT u.created_at,
       CASE WHEN u.id = ${meId}::uuid THEN 'self'
+           WHEN u.uid = ${KEYO_SUPPORT_UID} THEN 'friend'
            WHEN EXISTS (SELECT 1 FROM friendships f WHERE f.user_id = ${meId}::uuid AND f.friend_id = u.id) THEN 'friend'
            WHEN EXISTS (SELECT 1 FROM friend_requests r WHERE r.sender_id = ${meId}::uuid AND r.receiver_id = u.id) THEN 'outgoing'
            WHEN EXISTS (SELECT 1 FROM friend_requests r WHERE r.sender_id = u.id AND r.receiver_id = ${meId}::uuid) THEN 'incoming'
@@ -195,9 +199,9 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
       w.balance AS silver, w.gold,
       keyo_vip_level(vp.exp, vp.override_level, vp.override_until) AS vip_level,
       (SELECT total FROM charm_points c WHERE c.user_id = u.id) AS charm,
-      (SELECT count(*)::int FROM player_follows f JOIN users x ON x.id = f.follower_id WHERE f.followee_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted') AS followers,
-      (SELECT count(*)::int FROM player_follows f JOIN users x ON x.id = f.followee_id WHERE f.follower_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted') AS following,
-      (SELECT count(*)::int FROM profile_likes l JOIN users x ON x.id = l.liker_id WHERE l.profile_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted') AS likes,
+      (SELECT count(*)::int FROM player_follows f JOIN users x ON x.id = f.follower_id WHERE f.followee_id = u.id AND (x.account_type = 'player' OR x.uid = 1000) AND x.status <> 'deleted') AS followers,
+      (SELECT count(*)::int FROM player_follows f JOIN users x ON x.id = f.followee_id WHERE f.follower_id = u.id AND (x.account_type = 'player' OR x.uid = 1000) AND x.status <> 'deleted') AS following,
+      (SELECT count(*)::int FROM profile_likes l JOIN users x ON x.id = l.liker_id WHERE l.profile_id = u.id AND (x.account_type = 'player' OR x.uid = 1000) AND x.status <> 'deleted') AS likes,
       (SELECT count(*)::int FROM friendships f JOIN users x ON x.id = f.friend_id WHERE f.user_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted' AND x.uid <> 1000) AS friends
     FROM users u
     LEFT JOIN wallets w ON w.user_id = u.id
@@ -252,8 +256,9 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
   const rank = ranks.get(p.user_id);
   return {
     ...toCard(p),
-    online: presence === null ? null : presence !== 'offline',
-    presence,
+    online: presence === null ? null : presence !== 'offline' || uid === KEYO_SUPPORT_UID,
+    // Keyo Captain shows its official support status (online) unless it is actually seated at a table.
+    presence: uid === KEYO_SUPPORT_UID && presence !== 'in_game' ? 'online' : presence,
     relation: extra!.relation,
     social,
     counts: { followers: extra!.followers, following: extra!.following, likes: extra!.likes, friends: show('showFriends') ? extra!.friends : null, charm: Number(extra!.charm ?? 0) },

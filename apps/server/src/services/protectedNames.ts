@@ -9,6 +9,7 @@ const RESERVED_EXACT = new Set([
   'keyo',
   'keyogame',
   'keyosupport',
+  'keyocaptain',
   'keyoadmin',
   'keyoowner',
   'keyomoderator',
@@ -37,7 +38,7 @@ export function isProtectedDisplayName(name: string): boolean {
   if (RESERVED_EXACT.has(normalized)) return true;
 
   // Prevent obvious impersonation of official Keyo identities.
-  if (/^keyo(support|admin|owner|moderator|staff|official)\d*$/.test(normalized)) {
+  if (/^keyo(support|captain|admin|owner|moderator|staff|official)\d*$/.test(normalized)) {
     return true;
   }
 

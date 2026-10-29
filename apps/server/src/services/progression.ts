@@ -4,6 +4,7 @@ import type { DbOrTx, Tx } from '../db/client';
 import { expEvents, levelRewards, playerProgress, users } from '../db/schema';
 import type { RealtimeHub } from '../realtime/hub';
 import { deliverReward } from './rewards';
+import { playableSql } from '../auth/accountRules';
 
 export interface ExpGrant {
   source: 'gameplay' | 'admin' | 'event' | 'achievement' | 'quest';
@@ -102,7 +103,7 @@ export async function levelLadder(db: DbOrTx, limit = 100) {
     .innerJoin(users, eq(users.id, playerProgress.userId))
     .where(
       and(
-        eq(users.accountType, 'player'),
+        playableSql('users'),
         eq(users.status, 'active'),
         sql`NOT EXISTS (SELECT 1 FROM bans b WHERE b.user_id = ${users.id} AND b.revoked_at IS NULL AND b.starts_at <= now() AND (b.ends_at IS NULL OR b.ends_at > now()))`,
       ),
