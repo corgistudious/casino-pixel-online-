@@ -30,6 +30,8 @@ export function statusFor(code: ErrorCode): number {
     case 'not_room_owner':
     case 'reauth_required':
     case 'account_too_new':
+    case 'support_only':
+    case 'official_account':
       return 403;
     case 'round_not_found':
     case 'not_found':
