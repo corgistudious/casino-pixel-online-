@@ -44,32 +44,42 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
   );
 }
 
-/** Centered card with the brand column on wide screens; shared by sign-in and the e-mailed link pages. */
+/**
+ * Centered card with the brand column on wide screens; shared by sign-in and the e-mailed link pages.
+ * The scroll container and the centering are separate elements: the card is centred while it fits
+ * and scrolls from its top when it does not (a phone held sideways, or the on-screen keyboard
+ * open), so the logo, the title and the buttons can always be reached. `auth-compact` tightens
+ * the spacing only on short screens; desktop and portrait keep the full layout.
+ */
 export function AuthFrame({ title, children, onSubmit }: { title: string; children: ReactNode; onSubmit?: (e: FormEvent) => void }) {
   const { t } = useTranslation();
   return (
-    <div className="flex h-full items-center justify-center overflow-y-auto p-4">
-      <div className="grid w-full max-w-4xl animate-rise items-center gap-6 lg:grid-cols-2">
-        <div className="hidden flex-col gap-4 lg:flex">
-          <KeyoLogo size={84} />
-          <p className="text-white/70">{t('app.tagline')}</p>
-          <div className="grid grid-cols-2 gap-3">
-            {(['roulette', 'blackjack', 'slots', 'sicbo'] as const).map((g) => (
-              <div key={g} className="glass aspect-[5/3] overflow-hidden p-0">
-                <GameArt game={g} />
-              </div>
-            ))}
+    <div className="auth-compact h-full overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
+      <div className="auth-shell flex min-h-full items-center justify-center p-4">
+        <div className="grid w-full max-w-4xl animate-rise items-center gap-6 lg:grid-cols-2">
+          <div className="hidden flex-col gap-4 lg:flex">
+            <KeyoLogo size={84} />
+            <p className="text-white/70">{t('app.tagline')}</p>
+            <div className="grid grid-cols-2 gap-3">
+              {(['roulette', 'blackjack', 'slots', 'sicbo'] as const).map((g) => (
+                <div key={g} className="glass aspect-[5/3] overflow-hidden p-0">
+                  <GameArt game={g} />
+                </div>
+              ))}
+            </div>
           </div>
+          <form onSubmit={onSubmit ?? ((e) => e.preventDefault())} className="auth-card glass mx-auto flex w-full max-w-md flex-col gap-3 p-5 sm:gap-4 sm:p-6">
+            <div className="flex justify-center lg:hidden">
+              <KeyoLogo size={104} className="auth-logo max-h-28" />
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="auth-title font-display text-2xl font-semibold">{title}</h2>
+              <LanguageSwitch />
+            </div>
+            {children}
+            <p className="text-[11px] leading-snug text-white/40">{t('app.disclaimer')}</p>
+          </form>
         </div>
-        <form onSubmit={onSubmit ?? ((e) => e.preventDefault())} className="glass mx-auto flex w-full max-w-md flex-col gap-3 p-5 sm:gap-4 sm:p-6">
-          <div className="flex justify-center lg:hidden"><KeyoLogo size={104} className="max-h-28" /></div>
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="font-display text-2xl font-semibold">{title}</h2>
-            <LanguageSwitch />
-          </div>
-          {children}
-          <p className="text-[11px] leading-snug text-white/40">{t('app.disclaimer')}</p>
-        </form>
       </div>
     </div>
   );
