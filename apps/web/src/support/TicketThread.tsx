@@ -52,7 +52,7 @@ export function TicketThread({ id, onChanged }: { id: string; onChanged?: () => 
   const { ticket, messages, staff } = data;
   const closed = ticket.status === 'closed';
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full min-h-0 flex-1 flex-col">
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 px-4 py-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
