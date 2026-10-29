@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { adminApi } from '../net/adminApi';
 import { Button } from '../ui/Button';
+import { toast } from '../ui/toast';
 import { Panel, Pill, Table } from './parts';
 import { useAdminKit } from './useAdmin';
 
@@ -136,8 +137,69 @@ interface MailRow {
   sentAt: string | null;
 }
 
-export function SystemPage() {
+/**
+ * Keyo Captain (UID 1000) sign-in status for Owners. The first password is set through a one-time
+ * link (Owner + password re-confirmation, 30 minutes). The link is shown once here, never stored.
+ */
+function CaptainPanel() {
   const { t, date, fail } = useAdminKit();
+  const [status, setStatus] = useState<{ passwordSet: boolean; owner: boolean } | null>(null);
+  const [link, setLink] = useState<{ url: string; expiresAt: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  const load = () => void adminApi<{ passwordSet: boolean; owner: boolean }>('/api/admin/captain').then(setStatus, fail);
+  useEffect(load, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const create = async () => {
+    setBusy(true);
+    try {
+      const r = await adminApi<{ token: string; expiresAt: string }>('/api/admin/captain/setup-link', { method: 'POST' });
+      const base = `${window.location.origin}${window.location.pathname}`;
+      setLink({ url: `${base}#/captain-setup?token=${encodeURIComponent(r.token)}`, expiresAt: r.expiresAt });
+    } catch (err) {
+      fail(err);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const copy = async () => {
+    if (!link) return;
+    try {
+      await navigator.clipboard.writeText(link.url);
+      toast(t('captain.email.copied'), 'success');
+    } catch {
+      toast(t('captain.email.copyFailed'), 'error');
+    }
+  };
+  return (
+    <Panel title={t('captain.admin.title')}>
+      <div className="flex flex-col gap-3 text-sm">
+        <p className="text-white/65">{t('captain.admin.body')}</p>
+        {status && (
+          <div className="flex flex-wrap gap-2">
+            <Pill tone={status.passwordSet ? 'emerald' : 'muted'}>{status.passwordSet ? t('captain.admin.passwordSet') : t('captain.admin.passwordMissing')}</Pill>
+            {status.owner && <Pill tone="emerald">{t('captain.owner')}</Pill>}
+          </div>
+        )}
+        {status && !status.passwordSet && !link && (
+          <Button variant="gold" size="sm" disabled={busy} onClick={() => void create()}>
+            {t('captain.admin.createLink')}
+          </Button>
+        )}
+        {link && (
+          <div className="flex flex-col gap-2 rounded-xl border border-gold-300/30 bg-black/30 p-3">
+            <p className="text-xs text-amber-100">{t('captain.admin.linkReady', { time: date(link.expiresAt) })}</p>
+            <code className="select-all break-all rounded bg-black/50 p-2 text-[11px] text-white/80">{link.url}</code>
+            <Button size="sm" onClick={() => void copy()}>
+              {t('captain.admin.copyLink')}
+            </Button>
+          </div>
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+export function SystemPage() {
+  const { t, date, fail, can } = useAdminKit();
   const [mail, setMail] = useState<MailRow[]>([]);
   useEffect(() => {
     void adminApi<{ mail: MailRow[] }>('/api/admin/outbox?limit=100').then((r) => setMail(r.mail), fail);
@@ -147,6 +209,7 @@ export function SystemPage() {
   return (
     <>
       <h1 className="font-display text-2xl">{t('admin.nav.system')}</h1>
+      {can('system.settings') && <CaptainPanel />}
       <Panel title={t('admin.outbox')}>
         <Table
           head={[t('admin.fields.time'), t('admin.fields.email'), t('admin.fields.details'), t('admin.fields.status')]}
