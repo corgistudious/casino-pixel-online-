@@ -15,6 +15,9 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  // Keyo Captain set-up links (0032): the account is protected; an issuing TEST staff becomes Keyo Captain.
+  { table: 'account_setup_tokens', column: 'created_by', action: 'reassign_to_support' },
+  { table: 'account_setup_tokens', column: 'user_id', action: 'delete' },
   // Charm and gifts (0031): staff columns move to Keyo Support; a real receiver keeps charm it got
   // from a TEST sender (its ledger row stays, only the link to the deleted gift row is cleared).
   { table: 'charm_ledger', column: 'actor_id', action: 'reassign_to_support' },

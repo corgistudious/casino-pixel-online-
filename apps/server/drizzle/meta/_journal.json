@@ -225,6 +225,13 @@
       "when": 1792904555928,
       "tag": "0031_gift_shop_charm",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1792904555929,
+      "tag": "0032_keyo_captain_dual_owner",
+      "breakpoints": true
     }
   ]
 }

@@ -25,7 +25,7 @@ export const users = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     /**
      * Public UID. Regular accounts draw from player_uid_seq (100000, 100001, …);
-     * 1–99999 are assigned manually by admins; 1000 is Keyo Support. Never changes or is reused.
+     * 1–99999 are assigned manually by admins; 1000 is Keyo Captain (Owner + official support). Never changes or is reused.
      */
     uid: bigint('uid', { mode: 'number' })
       .notNull()
@@ -224,8 +224,8 @@ export const userRoles = pgTable(
   },
   (t) => [
     primaryKey({ columns: [t.userId, t.roleId] }),
-    // There is exactly one Owner (UID 1002); triggers also forbid moving or removing the role.
-    uniqueIndex('user_roles_single_owner_idx').on(t.roleId).where(sql`${t.roleId} = 'owner'`),
+    // Only UID 1000 (Keyo Captain) and UID 1002 (Keyo GM) can hold the Owner role, and nobody can
+    // move or remove it: enforced by the user_roles_owner_guard trigger (migrations 0004, 0032).
   ],
 );
 
