@@ -1,4 +1,4 @@
-import { DEFAULT_ROLES, KEYO_OWNER_UID, PROTECTED_UIDS, roleRank, topRank, type Permission, type RoleId } from '@casino/shared';
+import { DEFAULT_ROLES, isOwnerUid, KEYO_OWNER_UID, OWNER_UIDS, PROTECTED_UIDS, roleRank, topRank, type Permission, type RoleId } from '@casino/shared';
 import { and, eq, inArray, notInArray, sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { rolePermissions, roles, userRoles, users } from '../db/schema';
@@ -28,26 +28,29 @@ export async function bootstrapRoles(db: Db): Promise<void> {
 }
 
 /**
- * Gives the Owner role to the account holding UID 1002, if it exists. The database only lets
- * UID 1002 hold the role, and never lets it be removed.
+ * Gives the Owner role to UID 1000 (Keyo Captain) and UID 1002 (Keyo GM) when those accounts exist.
+ * Idempotent; the database lets only these two UIDs hold the role and never lets it be removed.
+ * No other account is ever made Owner here.
  */
 export async function bootstrapOwner(db: Db): Promise<void> {
-  const [owner] = await db
-    .select({ id: users.id, status: users.status, accountType: users.accountType })
-    .from(users)
-    .where(eq(users.uid, KEYO_OWNER_UID));
-  if (!owner || owner.accountType !== 'player' || owner.status === 'deleted') return;
-  const existing = await db
-    .select({ roleId: userRoles.roleId })
-    .from(userRoles)
-    .where(and(eq(userRoles.userId, owner.id), eq(userRoles.roleId, 'owner')))
-    .limit(1);
-
-  if (existing.length > 0) return;
-
-  // Do not bypass database Owner protection if the role is missing.
-  const inserted = await db.insert(userRoles).values({ userId: owner.id, roleId: 'owner' }).onConflictDoNothing().returning();
-  if (inserted.length) await audit(db, { action: 'system.owner_role_assigned', targetType: 'user', targetId: KEYO_OWNER_UID });
+  for (const uid of OWNER_UIDS) {
+    const [owner] = await db
+      .select({ id: users.id, status: users.status, accountType: users.accountType, uid: users.uid })
+      .from(users)
+      .where(eq(users.uid, uid));
+    if (!owner || owner.status === 'deleted') continue;
+    // UID 1000 is the official system account; UID 1002 must be a regular player account.
+    if (uid === KEYO_OWNER_UID ? owner.accountType !== 'player' : owner.accountType !== 'system_support' && owner.accountType !== 'player') continue;
+    const existing = await db
+      .select({ roleId: userRoles.roleId })
+      .from(userRoles)
+      .where(and(eq(userRoles.userId, owner.id), eq(userRoles.roleId, 'owner')))
+      .limit(1);
+    if (existing.length > 0) continue;
+    // Do not bypass database Owner protection if the role is missing.
+    const inserted = await db.insert(userRoles).values({ userId: owner.id, roleId: 'owner' }).onConflictDoNothing().returning();
+    if (inserted.length) await audit(db, { action: 'system.owner_role_assigned', targetType: 'user', targetId: uid });
+  }
 }
 
 export async function userPermissions(db: DbOrTx, userId: string): Promise<string[]> {
@@ -88,7 +91,7 @@ export async function rankOf(db: DbOrTx, userId: string): Promise<number> {
 }
 
 export function isProtected(user: Pick<UserRow, 'uid'>): boolean {
-  return PROTECTED_UIDS.includes(user.uid);
+  return PROTECTED_UIDS.includes(Number(user.uid));
 }
 
 /**
@@ -123,7 +126,7 @@ export async function grantStaffRole(db: Db, actorId: string, uid: number, roleI
     const actorRank = await rankOf(tx, actorId);
     if (target.id === actorId || roleRank(roleId) >= actorRank) throw fail('forbidden');
     // Changing the roles of someone at or above your rank is not allowed (Owner is above everyone).
-    if (target.uid === KEYO_OWNER_UID || (await rankOf(tx, target.id)) >= actorRank) throw fail('forbidden');
+    if (isOwnerUid(target.uid) || (await rankOf(tx, target.id)) >= actorRank) throw fail('forbidden');
     await tx.insert(userRoles).values({ userId: target.id, roleId, grantedBy: actorId }).onConflictDoNothing();
     await audit(tx, { actorId, action: 'role.grant', targetType: 'user', targetId: uid, details: { roleId }, ip });
     return userRoleIds(tx, target.id);
@@ -133,7 +136,7 @@ export async function grantStaffRole(db: Db, actorId: string, uid: number, roleI
 export async function revokeStaffRole(db: Db, actorId: string, uid: number, roleId: string, ip?: string): Promise<string[]> {
   return db.transaction(async (tx) => {
     const target = await loadTarget(tx, uid);
-    if (roleId === 'owner' || target.uid === KEYO_OWNER_UID) throw fail('protected_account');
+    if (roleId === 'owner' || isOwnerUid(target.uid)) throw fail('protected_account');
     const actorRank = await rankOf(tx, actorId);
     if (target.id === actorId || roleRank(roleId) >= actorRank || (await rankOf(tx, target.id)) >= actorRank) throw fail('forbidden');
     if (roleId === 'super_admin') {
