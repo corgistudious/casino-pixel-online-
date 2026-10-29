@@ -43,7 +43,7 @@ describe('Owner (UID 1002)', () => {
     expect(code(await call('DELETE', `/api/admin/users/${KEYO_OWNER_UID}/roles/owner`, superAdmin.headers))).toBe('protected_account');
     expect(code(await call('DELETE', `/api/admin/users/${KEYO_OWNER_UID}/roles/owner`, owner.headers))).toBe('protected_account');
     expect(code(await call('POST', '/api/me/deletion', { authorization: `Bearer ${owner.token}` }, { password: TEST_PASSWORD, confirm: true }))).toBe('protected_account');
-    expect(code(await call('POST', '/api/admin/accounts', owner.headers, { uid: KEYO_OWNER_UID, username: 'fake_gm', displayName: 'GM', email: 'fake@example.test' }))).toBe('uid_reserved');
+    expect(code(await call('POST', '/api/admin/accounts', owner.headers, { uid: KEYO_OWNER_UID, displayName: 'GM', password: 'Strong-pass-1', confirmPassword: 'Strong-pass-1' }))).toBe('uid_reserved');
   });
 
   it('the Owner role can be neither granted to anyone else nor moved', async () => {
@@ -178,7 +178,7 @@ describe('re-authentication for sensitive actions', () => {
     const plain = { authorization: `Bearer ${owner.token}` };
     expect(code(await call('POST', `/api/admin/users/${p.user.uid}/grant`, plain, grantBody(10)))).toBe('reauth_required');
     expect(code(await call('POST', `/api/admin/users/${p.user.uid}/roles`, plain, { roleId: 'support' }))).toBe('reauth_required');
-    expect(code(await call('POST', '/api/admin/accounts', plain, { uid: 321, username: 'u_321', displayName: 'X', email: 'u321@example.test' }))).toBe('reauth_required');
+    expect(code(await call('POST', '/api/admin/accounts', plain, { uid: 321, displayName: 'X', password: 'Strong-pass-1', confirmPassword: 'Strong-pass-1' }))).toBe('reauth_required');
   });
 
   it('a step-up token belongs to one account and is not a session token', async () => {
