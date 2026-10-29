@@ -77,7 +77,7 @@ export type RoleId = (typeof ROLE_IDS)[number];
 export const DEFAULT_ROLES: Record<RoleId, { name: string; description: string; rank: number; permissions: readonly Permission[] }> = {
   owner: {
     name: 'Owner',
-    description: 'Keyo GM (UID 1002). Full access, cannot be removed through the API',
+    description: 'Keyo Captain (UID 1000) and Keyo GM (UID 1002). Full access, cannot be removed through the API',
     rank: 100,
     permissions: PERMISSIONS,
   },
@@ -142,10 +142,20 @@ export function topRank(roleIds: readonly string[]): number {
   return roleIds.reduce((max, r) => Math.max(max, roleRank(r)), 0);
 }
 
-/** Keyo Support system account. */
+/** Keyo Captain (formerly "Keyo Support"): Owner and the official support account. */
 export const KEYO_SUPPORT_UID = 1000;
+export const KEYO_CAPTAIN_UID = KEYO_SUPPORT_UID;
 /** Keyo GM / Owner account. */
 export const KEYO_OWNER_UID = 1002;
+/**
+ * The only accounts that may hold the Owner role (also enforced by a database trigger). Owners are
+ * equals: neither can ban, restrict, delete, demote or change the credentials of the other.
+ */
+export const OWNER_UIDS: readonly number[] = [KEYO_CAPTAIN_UID, KEYO_OWNER_UID];
+// Raw SQL returns bigint columns as strings, so compare numerically.
+export const isOwnerUid = (uid: number | string) => OWNER_UIDS.includes(Number(uid));
+/** Public contact address of Keyo Captain (never used as a login e-mail). */
+export const SUPPORT_EMAIL = 'keyogamevietnam@gmail.com';
 /** Accounts that can never be banned, deleted, demoted or have their UID changed. */
 export const PROTECTED_UIDS: readonly number[] = [KEYO_SUPPORT_UID, KEYO_OWNER_UID];
 export const SPECIAL_UID_MAX = 99_999;

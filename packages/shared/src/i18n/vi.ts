@@ -1530,6 +1530,8 @@ export const vi: Translation = {
     invalid_asset: 'Tệp phải là ảnh vuông PNG, WebP hoặc GIF (64–1024 px, tối đa 1 MB).',
     not_tradable: 'Vật phẩm này không thể giao dịch.',
     protected_account: 'Tài khoản này được bảo vệ.',
+    support_only: 'Keyo Captain không nhận tin nhắn riêng. Hãy dùng menu Hỗ trợ hoặc Trung tâm hỗ trợ.',
+    official_account: 'Đây là tài khoản chính thức của Keyo Game nên không thể thực hiện thao tác này.',
     friend_limit: 'Đã đạt giới hạn bạn bè hoặc lời mời đang chờ.',
     not_friends: 'Hai bạn chưa là bạn bè.',
     blocked: 'Không thể thực hiện: một trong hai người đã chặn người kia.',

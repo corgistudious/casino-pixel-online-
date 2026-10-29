@@ -134,5 +134,7 @@ export const ERROR_CODES = [
   'vip_level_in_use',
   'vip_levels_invalid',
   'already_reversed',
+  'support_only',
+  'official_account',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];

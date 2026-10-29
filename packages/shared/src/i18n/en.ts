@@ -1528,6 +1528,8 @@ export const en = {
     invalid_asset: 'The file must be a square PNG, WebP or GIF image (64–1024 px, up to 1 MB).',
     not_tradable: 'This item cannot be traded.',
     protected_account: 'This account is protected.',
+    support_only: 'Keyo Captain does not take direct messages. Please use the Support menu or the Support Center.',
+    official_account: 'This is the official Keyo Game account, so this action is not available.',
     friend_limit: 'Friend or pending request limit reached.',
     not_friends: 'You are not friends.',
     blocked: 'Not possible: one of you has blocked the other.',
