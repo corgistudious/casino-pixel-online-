@@ -8,8 +8,11 @@ import { BOWL_X, BOWL_Y, SicBoScene } from './SicBoScene';
 type Round = TableRoundView['round'];
 type Stage = 'shake' | 'bet' | 'reveal' | 'result' | 'void';
 
-const BOWL_HOME_Y = BOWL_Y - 8;
-const LIFT_Y = 122;
+/** Seen from above, the cover sits centred on the dice plate. */
+const BOWL_HOME_Y = BOWL_Y;
+/** Lifted away up and slightly left, clear of the betting spots, the dice and the result line. */
+const LIFT_X = -16;
+const LIFT_Y = 132;
 
 /**
  * Shared Tài Xỉu table. Everything on screen is derived from the round timestamps and the
@@ -53,8 +56,9 @@ export class TaiXiuScene extends SicBoScene {
     if (now < betsOpen) {
       this.enter('shake', r, () => this.cover());
       if (this.reduceMotion) return;
-      this.bowl.setPosition(BOWL_X + Math.sin(now / 38) * 5, BOWL_HOME_Y + Math.abs(Math.sin(now / 61)) * -6);
-      this.bowl.setAngle(Math.sin(now / 47) * 7);
+      // Seen from above, a shake slides the cover around on the plate and turns it a little.
+      this.bowl.setPosition(BOWL_X + Math.sin(now / 38) * 5, BOWL_HOME_Y + Math.cos(now / 53) * 4);
+      this.bowl.setAngle(Math.sin(now / 47) * 9);
       if (now - this.lastRattle > 170) {
         this.lastRattle = now;
         sfx.dice();
@@ -89,7 +93,7 @@ export class TaiXiuScene extends SicBoScene {
   }
 
   private cover() {
-    this.bowl.setPosition(BOWL_X, BOWL_HOME_Y).setAngle(0).setAlpha(1);
+    this.bowl.setPosition(BOWL_X, BOWL_HOME_Y).setAngle(0).setAlpha(1).setScale(hdScale('taixiu-bowl'));
     this.dice.forEach((d) => d.setVisible(false));
     this.resultText.setText('');
     this.highlightSpots([]);
@@ -100,9 +104,11 @@ export class TaiXiuScene extends SicBoScene {
   }
 
   private placeBowl(lift: number, wobble: number) {
-    this.bowl.setPosition(BOWL_X + lift * 18, BOWL_HOME_Y - lift * LIFT_Y);
-    this.bowl.setAngle(-lift * 14 + wobble);
-    this.bowl.setAlpha(1 - lift * 0.15);
+    // Lifted towards the viewer: it grows slightly while it slides off the plate.
+    this.bowl.setPosition(BOWL_X + lift * LIFT_X, BOWL_HOME_Y - lift * LIFT_Y);
+    this.bowl.setAngle(-lift * 18 + wobble);
+    this.bowl.setScale(hdScale('taixiu-bowl', 1 + lift * 0.05));
+    this.bowl.setAlpha(1 - lift * 0.12);
   }
 
   private announce(o: TaiXiuOutcome) {
