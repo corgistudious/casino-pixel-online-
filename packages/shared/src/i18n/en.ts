@@ -389,6 +389,7 @@ export const en = {
       placeholder: 'Type a message…',
       send: 'Send',
       older: 'Load older messages',
+      unknownSender: 'Player no longer available',
       empty: 'No messages yet. Say hello!',
       noGuild: 'You are not in a guild.',
       findGuild: 'Find a guild',
