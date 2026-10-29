@@ -51,6 +51,7 @@ import { CardTablePage } from './pages/CardTablePage';
 import { PlayerActionHost } from './players/PlayerActions';
 import { IdentitySync } from './players/identity';
 import { GiftShopHost } from './players/GiftShopDialog';
+import { SupportMenuHost } from './support/SupportMenu';
 import { PlayerProfilePage } from './players/PlayerProfilePage';
 import { RoomInviteHost } from './rooms/RoomInviteHost';
 import { RoomsPage } from './rooms/RoomsPage';
@@ -160,6 +161,7 @@ export function App() {
       <PlayerActionHost />
       <IdentitySync />
       <GiftShopHost />
+      <SupportMenuHost />
       <RoomInviteHost />
       <InGameChat />
       <Routes>
@@ -218,6 +220,7 @@ export function App() {
         <Route path="/verify-email" element={<EmailLinkPage kind="verify" />} />
         <Route path="/reset-password" element={<EmailLinkPage kind="reset" />} />
         <Route path="/activate" element={<EmailLinkPage kind="activate" />} />
+        <Route path="/captain-setup" element={<EmailLinkPage kind="captain" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>
