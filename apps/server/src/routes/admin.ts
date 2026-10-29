@@ -1,4 +1,4 @@
-import { adminBadgesSchema, adminGrantSchema, DEFAULT_ROLES, isOwnerUid, PERMISSIONS, passwordSchema, roleRank, SPECIAL_UID_MAX, usernameSchema, emailSchema } from '@casino/shared';
+import { adminBadgesSchema, adminGrantSchema, customUidAccountSchema, DEFAULT_ROLES, isOwnerUid, PERMISSIONS, passwordSchema, roleRank, SPECIAL_UID_MAX } from '@casino/shared';
 import { desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import type { FastifyInstance } from 'fastify';
@@ -216,18 +216,11 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     return { special: rows, nextPlayerUid: Number(next) };
   });
 
-  app.post('/api/admin/accounts', { preHandler: canReauth('uid.assign') }, async (req) => {
-    const input = z
-      .object({
-        uid: z.number().int().min(1).max(SPECIAL_UID_MAX),
-        username: usernameSchema,
-        displayName: z.string().trim().min(1).max(24),
-        email: emailSchema,
-        isTest: z.boolean().optional(),
-      })
-      .parse(req.body);
-    const user = await createCustomUidAccount(db, req.account!.id, input, { appUrl: config.APP_URL, ip: req.ip });
-    return { uid: user.uid, status: user.status };
+  /** Special UID account: UID, display name, password + confirmation. Active at once; no email. */
+  app.post('/api/admin/accounts', { preHandler: canReauth('uid.assign') }, async (req, reply) => {
+    const input = customUidAccountSchema.parse(req.body);
+    reply.header('cache-control', 'no-store');
+    return createCustomUidAccount(db, req.account!.id, input, { appUrl: config.APP_URL, ip: req.ip });
   });
 
   // ---------------------------------------------------------------- staff & roles
