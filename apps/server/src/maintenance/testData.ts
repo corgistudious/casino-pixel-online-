@@ -15,6 +15,12 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  // Leaderboards (0033): statistics and awards of TEST accounts go with them; snapshots hold no keys.
+  { table: 'player_game_stats', column: 'user_id', action: 'delete' },
+  { table: 'player_game_daily', column: 'user_id', action: 'delete' },
+  { table: 'leaderboard_awards', column: 'user_id', action: 'delete' },
+  { table: 'tournament_results', column: 'user_id', action: 'delete' },
+  { table: 'tournaments', column: 'created_by', action: 'reassign_to_support' },
   // Keyo Captain set-up links (0032): the account is protected; an issuing TEST staff becomes Keyo Captain.
   { table: 'account_setup_tokens', column: 'created_by', action: 'reassign_to_support' },
   { table: 'account_setup_tokens', column: 'user_id', action: 'delete' },
@@ -368,6 +374,8 @@ export async function executeReset(db: Db, expectedPhrase: string, operator: str
   return db.transaction(async (tx) => {
     // Serialises maintenance runs and freezes the mode for the duration of the reset.
     await tx.execute(sql`SELECT mode FROM environment_state WHERE id = 1 FOR UPDATE`);
+    // Lets append-only tables (leaderboard awards) drop TEST accounts' rows, for this transaction only.
+    await tx.execute(sql`SET LOCAL keyo.purge_test_data = 'on'`);
     // Running shared Blackjack rounds are frozen (same lock the table engine takes per move), before
     // the users lock so the order matches the engine's: no bet, move or settlement can slip in.
     await tx.execute(sql`SELECT id FROM bj_rounds WHERE status = 'active' FOR UPDATE`);
