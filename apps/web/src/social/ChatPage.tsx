@@ -1,5 +1,5 @@
-import { SOCIAL_RULES, type ChatChannel, type ChatMessageView, type ConversationView } from '@casino/shared';
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { KEYO_SUPPORT_UID, SOCIAL_RULES, type ChatChannel, type ChatMessageView, type ConversationView } from '@casino/shared';
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 import { api, ApiError } from '../net/api';
@@ -7,7 +7,7 @@ import { socket } from '../net/socket';
 import { useSession } from '../store/session';
 import { useSocial } from '../store/social';
 import { AppShell } from '../ui/AppShell';
-import { PlayerAvatar, PlayerRankBadge, useLiveIdentity, type IdentityLike } from '../players/identity';
+import { PlayerAvatar, PlayerRankBadge, useLiveIdentity } from '../players/identity';
 import { Button } from '../ui/Button';
 import { ChatBubble, TitleBadge } from '../ui/Cosmetics';
 import { NavIcon } from '../ui/NavIcons';
@@ -307,24 +307,10 @@ function Thread({ messages: all, more, onOlder, onRemove, context }: { messages:
           const mine = m.sender.uid === me;
           const grouped = prev && prev.sender.uid === m.sender.uid && new Date(m.createdAt).getTime() - new Date(prev.createdAt).getTime() < 5 * 60_000;
           return (
-            <li key={m.id} className={`group flex items-end gap-2 ${mine ? 'flex-row-reverse' : ''} ${grouped ? '' : 'mt-2'}`}>
-              <div className="w-9 shrink-0">
-                {!grouped && !mine && (
-                  <PlayerTrigger uid={m.sender.uid} label={m.sender.displayName} context={context}>
-                    <PlayerAvatar player={m.sender} size={36} />
-                  </PlayerTrigger>
-                )}
-              </div>
+            <li key={m.id} className={`group flex items-start gap-2 ${mine ? 'flex-row-reverse' : ''} ${grouped ? '' : 'mt-2'}`}>
+              <div className="w-9 shrink-0">{!grouped && <SenderAvatar sender={m.sender} context={context} />}</div>
               <div className={`flex min-w-0 max-w-[80%] flex-col ${mine ? 'items-end' : 'items-start'}`}>
-                {!grouped && !mine && (
-                  <div className="mb-0.5 flex items-center gap-1.5 px-1 text-[11px]">
-                    <PlayerTrigger uid={m.sender.uid} label={m.sender.displayName} context={context}>
-                      <LiveName player={m.sender} />
-                    </PlayerTrigger>
-                    <PlayerRankBadge rank={m.sender.rank} size={14} />
-                    {m.sender.title && <TitleBadge itemId={m.sender.title} size="sm" />}
-                  </div>
-                )}
+                {!grouped && <SenderHeader sender={m.sender} context={context} mine={mine} />}
                 <ChatBubble itemId={m.sender.bubble} mine={mine}>
                   <span className="whitespace-pre-wrap break-words">{m.body}</span>
                 </ChatBubble>
@@ -399,8 +385,44 @@ function Composer({ channel, path, locked = false }: { channel: ChatChannel; pat
   );
 }
 
-/** Sender name with any newer live identity (rename, badges) merged in. */
-function LiveName({ player }: { player: IdentityLike }) {
-  const p = useLiveIdentity(player);
-  return <PlayerName name={p.displayName} badges={p.badges ?? []} size={12} className="font-label text-cyan-100" />;
+type Sender = ChatMessageView['sender'];
+
+/**
+ * Who wrote a message, for every message (mine included): avatar inside the equipped frame with the
+ * VIP badge, then name, Verified/Partner badges, rank, level, UID and equipped title. All of it
+ * comes from the public card the server sends with the message (no extra request per line).
+ * Tapping opens the same quick profile as everywhere else; system accounts are shown, not opened.
+ */
+function SenderTrigger({ sender, context, children }: { sender: Sender; context?: string; children: ReactNode }) {
+  if (sender.uid === KEYO_SUPPORT_UID) return <span className="inline-flex min-w-0">{children}</span>;
+  return (
+    <PlayerTrigger uid={sender.uid} label={sender.displayName} context={context}>
+      {children}
+    </PlayerTrigger>
+  );
+}
+
+function SenderAvatar({ sender, context }: { sender: Sender; context?: string }) {
+  return (
+    <SenderTrigger sender={sender} context={context}>
+      <PlayerAvatar player={sender} size={36} />
+    </SenderTrigger>
+  );
+}
+
+function SenderHeader({ sender, context, mine }: { sender: Sender; context?: string; mine: boolean }) {
+  const { t } = useTranslation();
+  const p = useLiveIdentity(sender);
+  return (
+    <div className={`mb-0.5 flex max-w-full flex-wrap items-center gap-x-1.5 gap-y-0.5 px-1 text-[11px] ${mine ? 'flex-row-reverse' : ''}`}>
+      <SenderTrigger sender={sender} context={context}>
+        <PlayerName name={p.displayName || t('social.chat.unknownSender')} badges={p.badges ?? []} size={12} className={`max-w-[11rem] font-label ${mine ? 'text-gold-100' : 'text-cyan-100'}`} />
+      </SenderTrigger>
+      <PlayerRankBadge rank={p.rank} size={14} />
+      {(p.vipLevel ?? 1) > 1 && <span className="rounded bg-fuchsia-400/15 px-1 font-label text-[10px] text-fuchsia-100">VIP {p.vipLevel}</span>}
+      <span className="rounded bg-gold-300/15 px-1 font-label text-[10px] text-gold-100">{t('social.level', { level: sender.level })}</span>
+      <span className="tabular-nums text-[10px] text-white/40">UID {sender.uid}</span>
+      {sender.title && <TitleBadge itemId={sender.title} size="sm" />}
+    </div>
+  );
 }

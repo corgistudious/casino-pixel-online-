@@ -391,6 +391,7 @@ export const vi: Translation = {
       placeholder: 'Nhập tin nhắn…',
       send: 'Gửi',
       older: 'Tải tin cũ hơn',
+      unknownSender: 'Người chơi không còn khả dụng',
       empty: 'Chưa có tin nhắn. Hãy là người mở lời!',
       noGuild: 'Bạn chưa ở trong bang hội nào.',
       findGuild: 'Tìm bang hội',
