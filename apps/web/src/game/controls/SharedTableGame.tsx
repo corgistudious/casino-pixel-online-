@@ -24,6 +24,7 @@ import { RouletteTableScene } from '../scenes/RouletteTableScene';
 import { TaiXiuScene } from '../scenes/TaiXiuScene';
 import { GameLayout, Stat } from './GameLayout';
 import { PlayerIdentityCompact } from '../../players/identity';
+import { celebrateWin } from '../../cosmetics/VictoryEffect';
 
 type View = Omit<TableRoundView, 'myBets'>;
 type Scene = TaiXiuScene | RouletteTableScene;
@@ -164,6 +165,7 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
       const big = win >= placedTotal * 10;
       big ? sfx.bigWin() : sfx.win();
       scene.current?.celebrate(win, 428, 180, big);
+      if (win > placedTotal) celebrateWin(`table:${view.round.id}`, { big });
     } else sfx.lose();
   }, [view, info?.phase, roundMine, placedTotal, t]);
 

@@ -50,7 +50,7 @@ let user: PublicUser = {
   level: 1,
   title: null,
   chatBubble: null,
-  cardBack: null,
+  cardBack: null, tableSkin: null, victoryEffect: null,
   locale: 'vi',
   avatar: 3,
   role: 'player',

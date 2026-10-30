@@ -53,6 +53,7 @@ import { PlayerActionHost } from './players/PlayerActions';
 import { IdentitySync } from './players/identity';
 import { GiftShopHost } from './players/GiftShopDialog';
 import { SupportMenuHost } from './support/SupportMenu';
+import { VictoryEffectHost } from './cosmetics/VictoryEffect';
 import { PlayerProfilePage } from './players/PlayerProfilePage';
 import { RoomInviteHost } from './rooms/RoomInviteHost';
 import { RoomsPage } from './rooms/RoomsPage';
@@ -163,6 +164,7 @@ export function App() {
       <IdentitySync />
       <GiftShopHost />
       <SupportMenuHost />
+      <VictoryEffectHost />
       <RoomInviteHost />
       <InGameChat />
       <Routes>

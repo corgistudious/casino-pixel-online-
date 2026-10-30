@@ -18,6 +18,9 @@ import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { toast } from '../ui/toast';
 import { CardDefs, CardSvg } from './CardSvg';
+import { TableSkinCanvas } from '../cosmetics/TableSkinCanvas';
+import { skinColors } from '../cosmetics/tableArt';
+import { celebrateWin } from '../cosmetics/VictoryEffect';
 
 /** Seat positions on the felt (percent of width/height), left to right along the rail. */
 const SEAT_POS = [
@@ -35,6 +38,8 @@ export function BjtTablePage() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [view, setView] = useState<BjtTableView | null>(null);
+  const tableSkin = useSession((s) => s.user?.tableSkin ?? null);
+  const railCss = `#${skinColors(tableSkin).railDark.toString(16).padStart(6, '0')}`;
   const [busy, setBusy] = useState(false);
   const [bet, setBet] = useState(0);
   const [now, setNow] = useState(Date.now());
@@ -81,7 +86,10 @@ export function BjtTablePage() {
     if (round?.phase === 'done' && lastRound.current !== round.id && mine) {
       lastRound.current = round.id;
       const staked = mine.hands.reduce((a, h) => a + h.bet * (h.doubled ? 2 : 1), 0) + (mine.insurance ?? 0);
-      if (mine.payout > staked) sfx.win();
+      if (mine.payout > staked) {
+        sfx.win();
+        celebrateWin(`bjt:${round.id}`);
+      }
       else if (mine.payout === 0) sfx.lose();
     }
   }, [round?.phase, round?.id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -137,7 +145,11 @@ export function BjtTablePage() {
     <AppShell>
       <CardDefs />
       <div className="flex flex-col gap-3 p-3 lg:flex-row lg:p-5">
-        <section className="relative aspect-[16/10] w-full min-w-0 overflow-hidden rounded-[2.5rem] border-[10px] border-[#3a1d0b] bg-[radial-gradient(ellipse_at_50%_35%,#1f8a55_0%,#11573a_55%,#0a3424_100%)] shadow-[inset_0_0_80px_rgba(0,0,0,0.6),0_20px_40px_-20px_rgba(0,0,0,0.9)] lg:flex-1">
+        <section className="relative isolate aspect-[16/10] w-full min-w-0 overflow-hidden rounded-[2.5rem] border-[10px] shadow-[inset_0_0_80px_rgba(0,0,0,0.6),0_20px_40px_-20px_rgba(0,0,0,0.9)] lg:flex-1" style={{ borderColor: railCss }}>
+          {/* The viewer's own table skin (personal): other players keep seeing theirs. */}
+          <div className="absolute inset-0 -z-10">
+            <TableSkinCanvas skinId={tableSkin} layout="arc" />
+          </div>
           <div className="pointer-events-none absolute inset-6 rounded-[50%/40%] border border-gold-300/30" />
           <div className="pointer-events-none absolute left-1/2 top-[44%] -translate-x-1/2 text-center text-[10px] uppercase tracking-[0.3em] text-gold-100/50">Blackjack pays 3 to 2 · Insurance pays 2 to 1</div>
           {/* Dealer */}

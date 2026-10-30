@@ -16,7 +16,7 @@ const KINDS: ItemKind[] = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back
 
 /** The player's equipped item per slot (PublicUser field). */
 const equippedIn = (u: PublicUser, kind: ItemKind): string | null =>
-  ({ frame: u.frame, avatar: u.avatarItem, title: u.title, chat_bubble: u.chatBubble, card_back: u.cardBack, collectible: null })[kind];
+  ({ frame: u.frame, avatar: u.avatarItem, title: u.title, chat_bubble: u.chatBubble, card_back: u.cardBack, table_skin: u.tableSkin, victory_effect: u.victoryEffect, collectible: null })[kind] ?? null;
 
 /** Text/border tone per rarity (text tokens on the dark surface, never color alone: the name is shown too). */
 export const RARITY_TONE: Record<Rarity, string> = {

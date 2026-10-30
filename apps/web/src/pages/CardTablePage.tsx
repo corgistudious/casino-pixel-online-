@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GameLayout, Stat } from '../game/controls/GameLayout';
 import { PhaserView } from '../game/PhaserView';
 import { CardTableScene, type CardBackLook } from '../game/scenes/CardTableScene';
+import { libraryCardBack } from '../cosmetics/cardBackArt';
 import { RoomPasswordPrompt } from '../rooms/RoomForm';
 import { RoomPanel } from '../rooms/RoomPanel';
 import { usePlayerMenu } from '../players/PlayerActions';
@@ -89,8 +90,11 @@ function CardTable({ tableId }: { tableId: string }) {
   const backs = useMemo(() => {
     const out: Record<number, CardBackLook | undefined> = {};
     for (const s of view?.seats ?? []) {
+      // The SEAT OWNER's back (public cosmetic): every viewer sees each player's own choice.
       const item = s.cardBack ? catalog[s.cardBack] : undefined;
-      if (item?.style) out[s.seat] = { key: `cardback-${item.id}`, colors: item.style.colors, royal: item.style.art === 'vuong_gia' };
+      const art = libraryCardBack(item?.style?.art ?? s.cardBack);
+      if (art) out[s.seat] = { key: `cardback-lib-${s.cardBack}`, colors: [], royal: false, art };
+      else if (item?.style) out[s.seat] = { key: `cardback-${item.id}`, colors: item.style.colors, royal: item.style.art === 'vuong_gia' };
     }
     return out;
   }, [view?.seats, catalog]);

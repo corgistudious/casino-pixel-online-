@@ -1,4 +1,7 @@
 import Phaser from 'phaser';
+import type { CardBackArt } from '@casino/shared';
+import { paintCardBack } from '../cosmetics/cardBackArt';
+import { paintTable, type OvalGeometry, type TableLayout } from '../cosmetics/tableArt';
 import { ROULETTE_WHEEL, rouletteColor, type Card, type SlotSymbol } from '@casino/shared';
 import { FONT_DISPLAY, FONT_UI, RES, WORLD_H, WORLD_W } from './hd';
 
@@ -960,4 +963,18 @@ export function ensureCardBackTexture(scene: Phaser.Scene, key: string, colors: 
       diamondSuit(ctx, W / 2, H / 2, 16);
     }
   });
+}
+
+// ---------------------------------------------------------------- cosmetics (table skins, card backs)
+
+/** Background texture for the viewer's table skin and the scene's layout (one per skin + layout). */
+export function ensureSkinBackground(scene: Phaser.Scene, skinId: string, layout: TableLayout, oval?: OvalGeometry): string {
+  const key = `skin-bg:${skinId}:${layout}:${oval ? `${oval.cx},${oval.cy},${oval.rx},${oval.ry}` : ''}`;
+  hdTexture(scene, key, WORLD_W, WORLD_H, (ctx) => paintTable(ctx, WORLD_W, WORLD_H, skinId, layout, oval));
+  return key;
+}
+
+/** Texture of a Frame-Library card back (seasonal backs). */
+export function ensureLibraryCardBack(scene: Phaser.Scene, key: string, art: CardBackArt) {
+  hdTexture(scene, key, CARD_W, CARD_H, (ctx) => paintCardBack(ctx, CARD_W, CARD_H, art));
 }

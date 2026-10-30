@@ -26,6 +26,11 @@ export abstract class TableScene extends BaseScene {
     super.create();
   }
 
+  /** Tài Xỉu, Sic Bo and Roulette: framed felt behind the bowl/wheel and the betting board. */
+  protected override tableLayout() {
+    return 'board' as const;
+  }
+
   protected addSpot(
     key: string,
     x: number,

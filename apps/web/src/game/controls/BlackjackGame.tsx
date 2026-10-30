@@ -13,6 +13,7 @@ import { BlackjackScene } from '../scenes/BlackjackScene';
 import { GameLayout, Stat } from './GameLayout';
 import { usePlay } from './usePlay';
 import { InsurancePrompt } from './InsurancePrompt';
+import { celebrateWin } from '../../cosmetics/VictoryEffect';
 
 export function BlackjackGame() {
   const { t, i18n } = useTranslation();
@@ -51,6 +52,7 @@ export function BlackjackGame() {
       setRound(env);
       setLastBet(amount);
       setBet(0);
+      if (env.result.phase === 'finished' && env.result.payout > env.result.bet) celebrateWin(`bj:${env.roundId}`, { big: env.result.outcome === 'blackjack' });
     }
   };
 
@@ -61,7 +63,10 @@ export function BlackjackGame() {
       () => socket.request('blackjack.action', { roundId: round.roundId, action, ...(amount !== undefined ? { amount } : {}) }),
       (e) => s.show(e.result, tr),
     );
-    if (env) setRound(env);
+    if (env) {
+      setRound(env);
+      if (env.result.phase === 'finished' && env.result.payout > env.result.bet) celebrateWin(`bj:${env.roundId}`, { big: env.result.outcome === 'blackjack' });
+    }
   };
 
   return (
