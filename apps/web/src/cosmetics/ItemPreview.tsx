@@ -16,7 +16,7 @@ export function ItemThumb({ itemId, kind, item, size = 72 }: { itemId: string; k
   const user = useSession((s) => s.user)!;
   if (kind === 'frame') return <span className="p-2"><Avatar index={user.avatar} customAvatar={user.customAvatar} avatarItem={user.avatarItem} frame={itemId} size={Math.round(size * 0.7)} /></span>;
   if (kind === 'title') return <TitleBadge itemId={itemId} size={size > 100 ? 'md' : 'sm'} />;
-  if (kind === 'chat_bubble') return <div className="scale-90"><ChatBubble itemId={itemId}>{t('collection.bubbleSample')}</ChatBubble></div>;
+  if (kind === 'chat_bubble') return <div className={`whitespace-nowrap ${size < 64 ? 'scale-75' : 'scale-90'}`}><ChatBubble itemId={itemId}>{t(size < 100 ? 'preview.bubbleShort' : 'collection.bubbleSample')}</ChatBubble></div>;
   if (kind === 'card_back') return <CardBack itemId={itemId} width={Math.round(size * 0.62)} />;
   if (kind === 'table_skin') {
     return (

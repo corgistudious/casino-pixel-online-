@@ -43,6 +43,7 @@ export function TitleBadge({ itemId, size = 'md', item: given }: { itemId: strin
         className={`relative inline-flex items-center gap-1 overflow-hidden rounded-full border bg-black/55 font-bold tracking-wide shadow-[0_0_10px_-2px_var(--glow)] ${size === 'sm' ? 'px-2 py-px text-[11px]' : 'px-3 py-0.5 text-xs'}`}
         style={{ borderColor: a.border, ['--glow' as string]: a.border }}
         title={name}
+        data-title={itemId}
       >
         {a.icon && <GlyphIcon glyph={a.icon} size={size === 'sm' ? 11 : 13} color={a.colors[1] ?? a.colors[0]!} />}
         <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${a.colors.join(', ')})` }}>
@@ -78,6 +79,7 @@ export function ChatBubble({ itemId, children, mine = false, item: given }: { it
     const a = lib.art;
     return (
       <div
+        data-bubble={itemId ?? undefined}
         className={`relative max-w-xs px-4 py-2.5 text-sm font-medium text-white ${radius} border`}
         style={{ background: `linear-gradient(135deg, ${a.bg[0]}, ${a.bg[1]})`, borderColor: a.border, boxShadow: `0 0 14px -4px ${a.glow}, inset 0 1px 0 rgba(255,255,255,0.18)` }}
       >

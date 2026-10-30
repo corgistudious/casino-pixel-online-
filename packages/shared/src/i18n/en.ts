@@ -400,6 +400,7 @@ export const en = {
     layoutBlackjack: 'Blackjack',
     layoutBoard: 'Tài Xỉu / Roulette',
     chatOther: 'Hi! Joining the table?',
+    bubbleShort: 'Nice!',
     chatMine: 'On my way! Good luck 🍀',
   },
   supportCenter: {

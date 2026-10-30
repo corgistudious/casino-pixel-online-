@@ -1,14 +1,16 @@
 import Phaser from 'phaser';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSettings } from '../store/settings';
 import { RES, WORLD_H, WORLD_W } from './hd';
-import type { BaseScene } from './scenes/BaseScene';
+import { viewerTableSkin, type BaseScene } from './scenes/BaseScene';
 
 /** Mounts a Phaser game running a single scene and hands the scene to React once it is ready. */
 export function PhaserView<S extends BaseScene>({ create, onReady }: { create: () => S; onReady: (scene: S) => void }) {
   const host = useRef<HTMLDivElement>(null);
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
+  // The viewer's own table skin, fixed for the scene's lifetime (exposed for QA, never sent anywhere).
+  const [skin] = useState(viewerTableSkin);
 
   useEffect(() => {
     if (!host.current) return;
@@ -38,5 +40,5 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <div ref={host} className="h-full w-full overflow-hidden rounded-2xl" />;
+  return <div ref={host} data-table-skin={skin} className="h-full w-full overflow-hidden rounded-2xl" />;
 }

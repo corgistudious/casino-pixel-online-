@@ -402,6 +402,7 @@ export const vi: Translation = {
     layoutBlackjack: 'Blackjack',
     layoutBoard: 'Tài Xỉu / Roulette',
     chatOther: 'Chào bạn, vào bàn không?',
+    bubbleShort: 'Hay quá!',
     chatMine: 'Vào luôn! Chúc may mắn 🍀',
   },
   supportCenter: {

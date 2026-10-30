@@ -179,6 +179,8 @@ function CardTable({ tableId }: { tableId: string }) {
               if (viewRef.current) s.render(viewRef.current, backs);
             }}
           />
+          {/* Which back each seat shows (seat owner's cosmetic), for QA; no card data. */}
+          <span hidden data-card-backs={JSON.stringify(Object.fromEntries(Object.entries(backs).map(([seat, b]) => [seat, b?.key ?? null])))} />
           {legal && left !== null && (
             <div className={`pointer-events-none absolute right-3 top-2 rounded-full border px-4 py-1.5 text-sm font-bold backdrop-blur ${left <= 5 ? 'animate-pulse border-red-400/80 bg-red-950/80 text-red-100' : 'border-gold-300/50 bg-ink-950/80 text-gold-100'}`} role="status">
               {t('cards.yourTurn')} · {left}s
