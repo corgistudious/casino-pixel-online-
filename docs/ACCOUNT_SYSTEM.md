@@ -29,7 +29,7 @@ Tên đăng nhập dành riêng (không đăng ký được): `keyo`, `keyo_supp
 | 1–99999 | UID đặc biệt, chỉ admin có quyền `uid.assign` tạo (`POST /api/admin/accounts`) |
 | 1000 | Giữ riêng cho **Keyo Support** (tài khoản hệ thống, tạo tự động khi khởi động, idempotent) |
 
-Tài khoản UID đặc biệt được tạo ở trạng thái `pending_activation` với mật khẩu không dùng được; chủ tài khoản nhận email `#/activate?token=…` (hoặc mã) để tự đặt mật khẩu. Admin **không bao giờ** biết mật khẩu.
+Tài khoản UID đặc biệt (Admin → UID đặc biệt) chỉ có 4 trường: **UID, Tên hiển thị, Mật khẩu, Nhập lại mật khẩu**. Tài khoản được tạo **active** ngay trong một transaction (user + ví + seed + audit `uid.custom_create`), đăng nhập ngay bằng UID + mật khẩu, username kỹ thuật tự sinh `uid_<UID>`, không email, không TEST, không role quản trị, không quà tân thủ (chính sách cũ cho UID đặc biệt). Từ chối UID trùng/ngoài 1–99.999/được bảo vệ (1000, 1002); chỉ mục duy nhất `uid` xử lý hai yêu cầu đồng thời; `idempotencyKey` cho phép thử lại an toàn. Mật khẩu chỉ được hash, không log/audit/trả về. Người chơi tự liên kết email ở Cài đặt → Tài khoản → Bảo mật (mã 6 số, giới hạn gửi/thử); email chỉ dùng đăng nhập sau khi xác minh. Tài khoản chưa có email chỉ khôi phục qua Trung tâm hỗ trợ sau khi xác minh quyền sở hữu, Owner/Super Admin đặt lại mật khẩu (xác nhận lại + audit). Tài khoản `pending_activation` cũ (nếu có) vẫn kích hoạt được qua `#/activate`.
 
 Tài khoản cũ (trước migration `0002`) được cấp UID ≥ 100000 theo thứ tự, giữ trạng thái `active`, không bị buộc thêm email; có thể liên kết email một lần trong Cài đặt. Họ đã nhận gói chào mừng cũ nên không nhận quà tân thủ mới lần nữa.
 
@@ -77,7 +77,7 @@ Mọi email đi qua bảng `email_outbox` (ghi cùng transaction với nghiệp 
 | POST | `/api/auth/link-email` | tài khoản cũ chưa có email đã xác minh |
 | POST | `/api/auth/forgot-password` | |
 | POST | `/api/auth/reset-password` | `{ token }` hoặc `{ email, code }` + mật khẩu mới |
-| POST | `/api/auth/activate` | tài khoản UID đặc biệt |
+| POST | `/api/auth/activate` | tài khoản UID đặc biệt cũ (`pending_activation`) |
 | POST | `/api/auth/logout-all` | |
 | GET/POST/DELETE | `/api/me/deletion` | xem / gửi / huỷ yêu cầu xoá |
 | GET | `/api/admin/users`, `/api/admin/users/:uid` | `users.read` |

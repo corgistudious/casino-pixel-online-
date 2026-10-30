@@ -26,6 +26,7 @@ export function AccountSection() {
   const [delPassword, setDelPassword] = useState('');
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [relink, setRelink] = useState(false);
   const [pw, setPw] = useState({ current: '', next: '', confirm: '' });
   const signIn = useSession((s) => s.signIn);
   const fail = (err: unknown) => toast(errorText(t, err, i18n.language), 'error');
@@ -50,6 +51,7 @@ export function AccountSection() {
     const res = await api<{ user: PublicUser }>('/api/auth/link-email', { method: 'POST', body: { email, password } });
     setUser(res.user);
     setPassword('');
+    setRelink(false);
     toast(t('auth.resent'), 'success');
   });
 
@@ -121,8 +123,10 @@ export function AccountSection() {
         <span>{t(`account.statuses.${user.status}`)}</span>
       </div>
 
-      {!user.email && (
-        <form onSubmit={linkEmail} className="flex flex-col gap-2 border-t border-white/10 pt-4">
+      <h4 className="border-t border-white/10 pt-4 font-display text-base text-gold-100">{t('account.security')}</h4>
+
+      {(!user.email || relink) && (
+        <form onSubmit={linkEmail} className="flex flex-col gap-2">
           <p className="font-display">{t('account.linkEmail')}</p>
           <p className="text-xs text-white/50">{t('account.linkEmailBody')}</p>
           <input className="field" type="email" placeholder={t('auth.email')} value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
@@ -133,8 +137,8 @@ export function AccountSection() {
         </form>
       )}
 
-      {user.email && !user.emailVerified && (
-        <form onSubmit={verify} className="flex flex-col gap-2 border-t border-white/10 pt-4">
+      {user.email && !user.emailVerified && !relink && (
+        <form onSubmit={verify} className="flex flex-col gap-2">
           <p className="text-xs text-white/60">{t('auth.verifyBody', { email: user.email })}</p>
           <input
             className="field tracking-[0.4em] tabular-nums"
@@ -154,13 +158,16 @@ export function AccountSection() {
             <Button type="button" disabled={busy} onClick={() => void resend()}>
               {t('auth.resend')}
             </Button>
+            <Button type="button" disabled={busy} onClick={() => setRelink(true)}>
+              {t('account.useOtherEmail')}
+            </Button>
           </div>
         </form>
       )}
 
       {user.emailVerified && <p className="text-xs text-white/45">{t('account.changeEmailHint')}</p>}
 
-      <form onSubmit={changePassword} className="flex flex-col gap-2 border-t border-white/10 pt-4">
+      <form onSubmit={changePassword} className="flex flex-col gap-2 border-t border-white/5 pt-4">
         <p className="font-display">{t('account.changePassword')}</p>
         <input className="field" type="password" placeholder={t('account.currentPassword')} value={pw.current} onChange={(e) => setPw({ ...pw, current: e.target.value })} required autoComplete="current-password" maxLength={128} />
         <input className="field" type="password" placeholder={t('auth.newPassword')} value={pw.next} onChange={(e) => setPw({ ...pw, next: e.target.value })} required minLength={8} maxLength={128} autoComplete="new-password" />

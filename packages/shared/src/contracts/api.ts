@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CURRENCIES, ECONOMY, GAME_KEYS, type ErrorCode, type GameKey, type Reward } from '../economy';
+import { SPECIAL_UID_MAX } from '../rbac';
 import type { BlackjackView } from '../games/blackjack';
 import type { BjtTableView } from '../games/blackjackTable';
 import type { IdentityFields, PublicIdentity } from '../identity';
@@ -254,6 +255,22 @@ export const adminBadgesSchema = z.object({
 
 /** A fresh UUID per intended admin action; retries with the same key are applied only once. */
 export const idempotencyKeySchema = z.string().uuid();
+
+/**
+ * Admin → Special UIDs: exactly four fields. The account is active at once, has no email (the
+ * player links one later in Settings) and is a normal player — never test, never staff.
+ */
+export const customUidAccountSchema = z
+  .object({
+    uid: z.number().int().min(1).max(SPECIAL_UID_MAX),
+    displayName: z.string().trim().min(1).max(24),
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    /** Retry key: the same key returns the account already created instead of an error. */
+    idempotencyKey: idempotencyKeySchema.optional(),
+  })
+  .refine((v) => v.password === v.confirmPassword, { message: 'password_mismatch', path: ['confirmPassword'] });
+export type CustomUidAccountInput = z.infer<typeof customUidAccountSchema>;
 
 export const adminGrantSchema = z.object({
   amount: z

@@ -9,6 +9,7 @@ import { Button } from '../ui/Button';
 import { TopBar } from '../ui/Chrome';
 import { BadgeIcon } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
+import { SpecialUidForm } from '../admin/MiscPages';
 
 interface Overview {
   users: number;
@@ -330,22 +331,11 @@ function Players({ can, fail, date, fmt, onChange }: { can: (p: Permission) => b
 function SpecialUids({ fail }: { fail: Fail }) {
   const { t } = useTranslation();
   const [list, setList] = useState<{ special: PlayerRow[]; nextPlayerUid: number } | null>(null);
-  const [form, setForm] = useState({ uid: '', username: '', displayName: '', email: '', isTest: false });
   const load = () => void api<{ special: PlayerRow[]; nextPlayerUid: number }>('/api/admin/uids/special').then(setList, fail);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(load, []);
 
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      await api('/api/admin/accounts', { method: 'POST', body: { ...form, uid: Number(form.uid) } });
-      toast(t('admin.done'), 'success');
-      setForm({ uid: '', username: '', displayName: '', email: '', isTest: false });
-      load();
-    } catch (err) {
-      fail(err);
-    }
-  };
+
 
   return (
     <Section title={t('admin.special')}>
@@ -358,22 +348,7 @@ function SpecialUids({ fail }: { fail: Fail }) {
           </li>
         ))}
       </ul>
-      <form onSubmit={submit} className="grid gap-2 sm:grid-cols-2">
-        <p className="text-xs text-white/50 sm:col-span-2">
-          {t('admin.createSpecial')} — {t('admin.createSpecialHint')}
-        </p>
-        <input className="field" placeholder="UID" inputMode="numeric" required value={form.uid} onChange={(e) => setForm({ ...form, uid: e.target.value })} />
-        <input className="field" placeholder={t('auth.username')} required value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} />
-        <input className="field" placeholder={t('auth.displayName')} required value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} />
-        <input className="field" type="email" placeholder={t('auth.email')} required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-        <label className="flex items-center gap-2 text-xs text-white/70 sm:col-span-2">
-          <input type="checkbox" className="accent-gold-300" checked={form.isTest} onChange={(e) => setForm({ ...form, isTest: e.target.checked })} />
-          {t('admin.markTest')}
-        </label>
-        <Button type="submit" variant="gold" className="sm:col-span-2">
-          {t('admin.createSpecial')}
-        </Button>
-      </form>
+      <SpecialUidForm onCreated={load} />
     </Section>
   );
 }

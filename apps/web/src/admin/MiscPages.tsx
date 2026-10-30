@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { adminApi } from '../net/adminApi';
 import { Button } from '../ui/Button';
@@ -15,43 +15,103 @@ interface SpecialRow {
   isTest: boolean;
 }
 
-export function UidsPage() {
-  const { t, fail, done } = useAdminKit();
-  const [list, setList] = useState<{ special: SpecialRow[]; nextPlayerUid: number } | null>(null);
-  const empty = { uid: '', username: '', displayName: '', email: '', isTest: false };
+const newKey = () =>
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => ((c === 'x' ? Math.random() * 16 : (Math.random() * 4) | 8) | 0).toString(16));
+
+/**
+ * Special UID account: exactly four fields. The password lives only in this component's state,
+ * is sent once over the API (never in a URL or storage) and is cleared after success.
+ */
+export function SpecialUidForm({ onCreated }: { onCreated: () => void }) {
+  const { t, fail } = useAdminKit();
+  const empty = { uid: '', displayName: '', password: '', confirmPassword: '' };
   const [form, setForm] = useState(empty);
+  const [show, setShow] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [created, setCreated] = useState<{ uid: number; displayName: string } | null>(null);
+  // One key per filled-in form: a retry after a dropped response returns the same account.
+  const key = useRef(newKey());
+  const mismatch = !!form.confirmPassword && form.password !== form.confirmPassword;
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (busy || mismatch) return;
+    setBusy(true);
+    try {
+      const r = await adminApi<{ uid: number; displayName: string }>('/api/admin/accounts', {
+        method: 'POST',
+        body: { uid: Number(form.uid), displayName: form.displayName.trim(), password: form.password, confirmPassword: form.confirmPassword, idempotencyKey: key.current },
+      });
+      setCreated({ uid: r.uid, displayName: r.displayName });
+      setForm(empty);
+      setShow(false);
+      key.current = newKey();
+      onCreated();
+    } catch (err) {
+      fail(err);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const set = (k: keyof typeof empty) => (e: ChangeEvent<HTMLInputElement>) => {
+    setCreated(null);
+    setForm({ ...form, [k]: k === 'uid' ? e.target.value.replace(/\D/g, '').slice(0, 5) : e.target.value });
+  };
+  const label = 'flex flex-col gap-1 text-xs text-white/60';
+  return (
+    <form onSubmit={submit} className="grid gap-3 sm:grid-cols-2" autoComplete="off">
+      <p className="text-xs text-white/50 sm:col-span-2">{t('admin.createSpecialHint')}</p>
+      <label className={label}>
+        {t('admin.specialFields.uid')}
+        <input className="field tabular-nums" inputMode="numeric" required value={form.uid} onChange={set('uid')} placeholder="1–99999" />
+      </label>
+      <label className={label}>
+        {t('admin.specialFields.displayName')}
+        <input className="field" required maxLength={24} value={form.displayName} onChange={set('displayName')} />
+      </label>
+      <label className={label}>
+        {t('admin.specialFields.password')}
+        <input className="field" type={show ? 'text' : 'password'} required minLength={8} maxLength={128} autoComplete="new-password" value={form.password} onChange={set('password')} />
+      </label>
+      <label className={label}>
+        {t('admin.specialFields.confirmPassword')}
+        <input className="field" type={show ? 'text' : 'password'} required minLength={8} maxLength={128} autoComplete="new-password" value={form.confirmPassword} onChange={set('confirmPassword')} aria-invalid={mismatch} />
+        {mismatch && <span className="text-ruby-300">{t('errors.password_mismatch')}</span>}
+      </label>
+      <p className="text-[11px] text-white/45 sm:col-span-2">{t('auth.passwordHint')}</p>
+      <div className="flex flex-wrap items-center gap-2 sm:col-span-2">
+        <Button type="button" size="sm" onClick={() => setShow((v) => !v)} aria-pressed={show}>
+          {show ? t('admin.hidePassword') : t('admin.showPassword')}
+        </Button>
+        <Button type="submit" variant="gold" className="flex-1" disabled={busy || mismatch || !form.uid || !form.displayName.trim() || form.password.length < 8 || !form.confirmPassword}>
+          {t('admin.createSpecial')}
+        </Button>
+      </div>
+      {created && (
+        <div role="status" className="flex flex-col gap-1 rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-3 text-sm text-emerald-100 sm:col-span-2">
+          <p>{t('admin.specialCreated')}</p>
+          <p className="font-strong text-white">
+            UID <span className="tabular-nums text-gold-100">{created.uid}</span> · {created.displayName}
+          </p>
+        </div>
+      )}
+      <p className="text-[11px] text-white/40 sm:col-span-2">{t('admin.specialRecovery')}</p>
+    </form>
+  );
+}
+
+export function UidsPage() {
+  const { t, fail } = useAdminKit();
+  const [list, setList] = useState<{ special: SpecialRow[]; nextPlayerUid: number } | null>(null);
   const load = () => void adminApi<{ special: SpecialRow[]; nextPlayerUid: number }>('/api/admin/uids/special').then(setList, fail);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(load, []);
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      await adminApi('/api/admin/accounts', { method: 'POST', body: { ...form, uid: Number(form.uid) } });
-      done();
-      setForm(empty);
-      load();
-    } catch (err) {
-      fail(err);
-    }
-  };
   return (
     <>
       <h1 className="font-display text-2xl">{t('admin.special')}</h1>
       <Panel title={t('admin.createSpecial')}>
-        <form onSubmit={submit} className="grid gap-2 sm:grid-cols-2">
-          <p className="text-xs text-white/50 sm:col-span-2">{t('admin.createSpecialHint')}</p>
-          <input className="field" placeholder="UID" inputMode="numeric" required value={form.uid} onChange={(e) => setForm({ ...form, uid: e.target.value.replace(/\D/g, '') })} />
-          <input className="field" placeholder={t('auth.username')} required value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} />
-          <input className="field" placeholder={t('auth.displayName')} required value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} />
-          <input className="field" type="email" placeholder={t('auth.email')} required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-          <label className="flex items-center gap-2 text-xs text-white/70 sm:col-span-2">
-            <input type="checkbox" className="accent-gold-300" checked={form.isTest} onChange={(e) => setForm({ ...form, isTest: e.target.checked })} />
-            {t('admin.markTest')}
-          </label>
-          <Button type="submit" variant="gold" className="sm:col-span-2">
-            {t('admin.createSpecial')}
-          </Button>
-        </form>
+        <SpecialUidForm onCreated={load} />
       </Panel>
       <Panel title={list ? t('admin.nextUid', { uid: list.nextPlayerUid }) : undefined}>
         <Table

@@ -3,10 +3,11 @@ import { randomUUID } from 'node:crypto';
 import { ECONOMY, KEYO_OWNER_UID, KEYO_SUPPORT_UID, PROTECTED_UIDS, SPECIAL_UID_MAX, type RegisterInput } from '@casino/shared';
 import { and, desc, eq, gt, isNull, lte, or, sql } from 'drizzle-orm';
 import { dummyPasswordHash, hashPassword, needsRehash, UNUSABLE_PASSWORD, verifyPassword } from '../auth/password';
-import type { Db, DbOrTx } from '../db/client';
+import type { Db, DbOrTx, Tx } from '../db/client';
 import { accountDeletionRequests, bans, users, wallets } from '../db/schema';
 import { AppError, fail } from '../errors';
 import { enqueueMail } from '../mail/mailer';
+import { runOnce } from './adminOps';
 import { audit } from './audit';
 import { consumeCode, consumeLinkToken, issueToken, type TokenPurpose } from './emailTokens';
 import { createActiveSeed } from './fair';
@@ -330,45 +331,58 @@ export async function setPasswordWithToken(
 
 // ---------------------------------------------------------------- custom UID accounts (admin)
 
+/**
+ * Admin → Special UIDs. Four inputs only (UID, display name, password + confirmation): the account
+ * is created ACTIVE in one transaction, can sign in at once with its UID, has no email (the player
+ * links and verifies one later in Settings), is never a test account and gets no staff role.
+ * Special accounts get no starter reward (unchanged policy). The password is hashed before the
+ * transaction and never logged, audited or returned. A retry with the same idempotency key returns
+ * the account already created; the UID's unique index settles two concurrent requests.
+ */
 export async function createCustomUidAccount(
   db: Db,
   actorId: string,
-  input: { uid: number; username: string; displayName: string; email: string; isTest?: boolean },
+  input: { uid: number; displayName: string; password: string; idempotencyKey?: string },
   ctx: AccountContext,
-): Promise<UserRow> {
+): Promise<{ uid: number; displayName: string; status: string; replayed: boolean }> {
   if (!Number.isInteger(input.uid) || input.uid < 1 || input.uid > SPECIAL_UID_MAX) throw fail('bad_request');
-  // Keyo Support (1000) and the Owner (1002) are never assigned through the API.
+  // Keyo Captain (1000) and Keyo_GM (1002) are never assigned through the API.
   if (PROTECTED_UIDS.includes(input.uid)) throw fail('uid_reserved');
+  const displayName = input.displayName.trim();
+  if (isProtectedDisplayName(displayName)) throw fail('username_taken');
+  const passwordHash = await hashPassword(input.password);
+  const create = async (tx: Tx) => {
+    // Technical username, never typed by the admin: uid_<UID>, with a suffix if a legacy account took it.
+    const base = `uid_${input.uid}`;
+    const [clash] = await tx.select({ id: users.id }).from(users).where(eq(users.usernameLower, base));
+    const username = clash ? `${base}_${randomUUID().replace(/-/g, '').slice(0, 6)}` : base;
+    const now = new Date();
+    const [user] = await tx
+      .insert(users)
+      .values({
+        uid: input.uid,
+        username,
+        usernameLower: username,
+        displayName,
+        passwordHash,
+        status: 'active',
+        // Policy for special accounts: no starter reward (also not later, when an email is verified).
+        starterGrantedAt: now,
+        isTest: false,
+      })
+      .returning();
+    await createWalletAndSeed(tx, user!.id);
+    await audit(tx, { actorId, action: 'uid.custom_create', targetType: 'user', targetId: input.uid, details: { displayName }, ip: ctx.ip });
+    return { uid: Number(user!.uid), displayName: user!.displayName, status: user!.status };
+  };
   try {
-    return await db.transaction(async (tx) => {
-      const [user] = await tx
-        .insert(users)
-        .values({
-          uid: input.uid,
-          username: input.username,
-          usernameLower: input.username.toLowerCase(),
-          displayName: input.displayName,
-          email: input.email,
-          emailLower: input.email.toLowerCase(),
-          passwordHash: UNUSABLE_PASSWORD,
-          status: 'pending_activation',
-          // Pre-activated by an admin: the starter reward is not part of special accounts.
-          starterGrantedAt: new Date(),
-          // Special UIDs are deliberate assignments, so they are official unless the admin marks them as test.
-          isTest: input.isTest ?? false,
-        })
-        .returning();
-      await createWalletAndSeed(tx, user!.id);
-      const { token, code } = await issueToken(tx, user!.id, 'activate', user!.emailLower!);
-      await enqueueMail(tx, user!.email!, 'activate_account', user!.locale, { name: user!.displayName, uid: String(user!.uid), code }, link(ctx, 'activate', token));
-      await audit(tx, { actorId, action: 'uid.custom_create', targetType: 'user', targetId: input.uid, details: { username: input.username, isTest: input.isTest ?? false }, ip: ctx.ip });
-      return user!;
-    });
-  } catch (err) {
-    if (isUniqueViolation(err)) {
-      const c = constraintOf(err) ?? '';
-      throw fail(c.includes('uid') ? 'uid_taken' : c.includes('email') ? 'email_taken' : 'username_taken');
+    if (input.idempotencyKey) {
+      const { result, replayed } = await runOnce(db, input.idempotencyKey, actorId, 'uid.custom_create', { uid: input.uid, displayName }, create);
+      return { ...result, replayed };
     }
+    return { ...(await db.transaction(create)), replayed: false };
+  } catch (err) {
+    if (isUniqueViolation(err)) throw fail(constraintOf(err)?.includes('uid') ? 'uid_taken' : 'username_taken');
     throw err;
   }
 }

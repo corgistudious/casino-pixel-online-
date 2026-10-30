@@ -60,7 +60,7 @@ describe('Keyo Support UID 1000', () => {
     expect(login.statusCode).toBe(401);
     const ban = await post(`/api/admin/users/${KEYO_SUPPORT_UID}/bans`, { duration: 'permanent', reason: 'nope' }, admin);
     expect(ban.json().error.code).toBe('protected_account');
-    const custom = await post('/api/admin/accounts', { uid: KEYO_SUPPORT_UID, username: 'fake_support', displayName: 'Fake', email: 'fake@example.test' }, admin);
+    const custom = await post('/api/admin/accounts', { uid: KEYO_SUPPORT_UID, displayName: 'Fake', password: 'Strong-pass-1', confirmPassword: 'Strong-pass-1' }, admin);
     expect(custom.json().error.code).toBe('uid_reserved');
   });
 
@@ -254,28 +254,106 @@ describe('password reset', () => {
 });
 
 describe('custom UID accounts', () => {
-  it('lets admins create an account with a special UID that the owner activates', async () => {
+  const PW = 'Special-pass-42';
+  const body = (uid: number, extra: Record<string, unknown> = {}) => ({ uid, displayName: 'VIP Khách', password: PW, confirmPassword: PW, ...extra });
+
+  it('creates an active player from UID, display name and password; it signs in by UID at once, no email, no test flag, no role', async () => {
     const uid = 4242;
-    const email = `vip${randomUUID().slice(0, 6)}@example.test`;
-    const res = await post('/api/admin/accounts', { uid, username: `vip_${randomUUID().slice(0, 6)}`, displayName: 'VIP', email }, admin);
-    expect(res.json()).toEqual({ uid, status: 'pending_activation' });
-    expect(await auditCount('uid.custom_create', uid)).toBe(1);
-    // No default password: the account cannot log in until activated.
-    const mail = await lastMail(t, email);
-    expect(mail!.template).toBe('activate_account');
-    expect(mail!.body_text).not.toMatch(/password:/i);
-    const act = await post('/api/auth/activate', { token: tokenIn(mail!.body_text), password: 'myOwnPass1', confirmPassword: 'myOwnPass1' });
-    expect(act.json().user).toMatchObject({ uid, status: 'active', permissions: [] });
-    const dup = await post('/api/admin/accounts', { uid, username: `other_${randomUUID().slice(0, 6)}`, displayName: 'X', email: `o${randomUUID().slice(0, 6)}@example.test` }, admin);
-    expect(dup.json().error.code).toBe('uid_taken');
+    const res = await post('/api/admin/accounts', body(uid), admin);
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['cache-control']).toBe('no-store');
+    expect(res.json()).toEqual({ uid, displayName: 'VIP Khách', status: 'active', replayed: false });
+    expect(res.body).not.toContain(PW);
+    const [row] = await t.db.select().from(users).where(sql`${users.uid} = ${uid}`);
+    expect(row).toMatchObject({ username: `uid_${uid}`, email: null, emailVerifiedAt: null, isTest: false, status: 'active', accountType: 'player' });
+    expect(row!.passwordHash).not.toContain(PW);
+    const roles = await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM user_roles WHERE user_id = ${row!.id}`);
+    expect(roles[0]!.n).toBe(0);
+    // Wallet + fairness seed exist; no starter reward (special-account policy) and nothing else credited.
+    const [w] = await t.db.execute<{ balance: string; gold: string; seeds: number }>(sql`
+      SELECT w.balance, w.gold, (SELECT count(*)::int FROM fair_seeds s WHERE s.user_id = w.user_id) AS seeds FROM wallets w WHERE w.user_id = ${row!.id}`);
+    expect(w).toMatchObject({ balance: '0', gold: '0' });
+    expect(w!.seeds).toBeGreaterThan(0);
+    // Audit: who, which UID, when — never the password.
+    const audits = await t.db.execute<{ details: unknown; actor_id: string | null }>(sql`SELECT details, actor_id FROM audit_logs WHERE action = 'uid.custom_create' AND target_id = ${String(uid)}`);
+    expect(audits).toHaveLength(1);
+    expect(audits[0]!.actor_id).not.toBeNull();
+    expect(JSON.stringify(audits)).not.toContain(PW);
+    // No mail is sent on creation.
+    const mails = await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM email_outbox o JOIN users u ON u.email_lower = lower(o.to_address) WHERE u.uid = ${uid}`);
+    expect(mails[0]!.n).toBe(0);
+
+    const login = await post('/api/auth/login', { login: String(uid), password: PW });
+    expect(login.statusCode).toBe(200);
+    expect(login.json().user).toMatchObject({ uid, status: 'active', email: null, emailVerified: false, permissions: [] });
+    // Plays straight away (no verification gate): the daily check-in works like for any player.
+    expect((await post('/api/me/checkin', {}, auth(login.json().token))).statusCode).not.toBe(403);
   });
 
-  it('only accepts 1–99999 and requires the uid.assign permission', async () => {
-    const out = await post('/api/admin/accounts', { uid: 100_000, username: `x_${randomUUID().slice(0, 6)}`, displayName: 'X', email: `x${randomUUID().slice(0, 6)}@example.test` }, admin);
-    expect(out.statusCode).toBe(400);
+  it('links and verifies an email after sign-in; the email only works for sign-in once verified', async () => {
+    const uid = 4343;
+    await post('/api/admin/accounts', body(uid), admin);
+    const token = (await post('/api/auth/login', { login: String(uid), password: PW })).json().token as string;
+    const email = `c${randomUUID().slice(0, 6)}@example.test`;
+    expect((await post('/api/auth/link-email', { email, password: 'wrong-pass-1' }, auth(token))).json().error.code).toBe('invalid_credentials');
+    const linked = await post('/api/auth/link-email', { email, password: PW }, auth(token));
+    expect(linked.json().user).toMatchObject({ email, emailVerified: false });
+    // Unverified email cannot be used to sign in.
+    expect((await post('/api/auth/login', { login: email, password: PW })).statusCode).toBe(401);
+    // Wrong codes count towards the attempt limit.
+    expect((await post('/api/auth/verify-email', { code: '000000' }, auth(token))).json().error.code).toMatch(/invalid_token|too_many_attempts/);
+    const code = codeIn((await lastMail(t, email))!.body_text);
+    const verified = await post('/api/auth/verify-email', { code }, auth(token));
+    expect(verified.json().user).toMatchObject({ emailVerified: true });
+    expect((await post('/api/auth/login', { login: email, password: PW })).statusCode).toBe(200);
+    expect((await post('/api/auth/login', { login: String(uid), password: PW })).statusCode).toBe(200);
+    // Still no starter reward for special accounts.
+    expect(Number((await t.db.execute<{ b: string }>(sql`SELECT balance AS b FROM wallets w JOIN users u ON u.id = w.user_id WHERE u.uid = ${uid}`))[0]!.b)).toBe(0);
+    // An email used by another account cannot be linked.
+    await post('/api/admin/accounts', body(4344), admin);
+    const other = (await post('/api/auth/login', { login: '4344', password: PW })).json().token as string;
+    expect((await post('/api/auth/link-email', { email, password: PW }, auth(other))).json().error.code).toBe('email_taken');
+  });
+
+  it('refuses taken, reserved and out-of-range UIDs, mismatched or weak passwords, missing permission', async () => {
+    await post('/api/admin/accounts', body(4545), admin);
+    expect((await post('/api/admin/accounts', body(4545, { displayName: 'Other' }), admin)).json().error.code).toBe('uid_taken');
+    for (const uid of [1000, 1002]) expect((await post('/api/admin/accounts', body(uid), admin)).json().error.code).toBe('uid_reserved');
+    for (const uid of [0, 100_000, 1.5]) expect((await post('/api/admin/accounts', body(uid), admin)).statusCode).toBe(400);
+    expect((await post('/api/admin/accounts', body(4546, { confirmPassword: 'Different-pass-1' }), admin)).statusCode).toBe(400);
+    for (const weak of ['short1', 'onlyletters', '12345678']) expect((await post('/api/admin/accounts', body(4547, { password: weak, confirmPassword: weak }), admin)).statusCode).toBe(400);
+    expect((await post('/api/admin/accounts', body(4548, { displayName: 'Keyo Captain' }), admin)).json().error.code).toBe('username_taken');
+    // Old fields are not part of the contract any more and change nothing.
+    const legacy = await post('/api/admin/accounts', body(4549, { username: 'chosen', email: 'x@example.test', isTest: true }), admin);
+    expect(legacy.statusCode).toBe(200);
+    const [row] = await t.db.select().from(users).where(sql`${users.uid} = 4549`);
+    expect(row).toMatchObject({ username: 'uid_4549', email: null, isTest: false });
     const player = await register(t);
-    const denied = await post('/api/admin/accounts', { uid: 777, username: 'nope_777', displayName: 'X', email: 'nope777@example.test' }, auth(player.token));
-    expect(denied.json().error.code).toBe('forbidden');
+    expect((await post('/api/admin/accounts', body(777), auth(player.token))).json().error.code).toBe('forbidden');
+    const [n] = await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM users WHERE uid IN (4546, 4547, 4548, 777)`);
+    expect(n!.n).toBe(0);
+  });
+
+  it('two simultaneous requests for one UID create one account; a retry with the same key returns it', async () => {
+    const results = await Promise.all([post('/api/admin/accounts', body(4646), admin), post('/api/admin/accounts', body(4646), admin)]);
+    expect(results.map((r) => r.statusCode).sort()).toEqual([200, 409]);
+    const key = randomUUID();
+    const first = await post('/api/admin/accounts', body(4747, { idempotencyKey: key }), admin);
+    const again = await post('/api/admin/accounts', body(4747, { idempotencyKey: key }), admin);
+    expect(first.json()).toMatchObject({ uid: 4747, replayed: false });
+    expect(again.json()).toMatchObject({ uid: 4747, replayed: true });
+    const [n] = await t.db.execute<{ n: number; w: number }>(sql`SELECT count(*)::int AS n, (SELECT count(*)::int FROM wallets w JOIN users u ON u.id = w.user_id WHERE u.uid IN (4646, 4747)) AS w FROM users WHERE uid IN (4646, 4747)`);
+    expect(n).toEqual({ n: 2, w: 2 });
+    expect((await post('/api/admin/accounts', body(4747, { idempotencyKey: key, displayName: 'Changed' }), admin)).json().error.code).toBe('idempotency_conflict');
+  });
+
+  it('normal sign-up is unchanged', async () => {
+    // Regular sign-up still sends its verification email and stays unverified until the code is entered.
+    const pending = await registerPending(t);
+    expect(pending.user.email).toBeTruthy();
+    expect((await lastMail(t, pending.user.email))!.template).toBe('verify_email');
+    const [row] = await t.db.select().from(users).where(sql`${users.uid} = ${pending.user.uid}`);
+    expect(row!.emailVerifiedAt).toBeNull();
   });
 });
 
