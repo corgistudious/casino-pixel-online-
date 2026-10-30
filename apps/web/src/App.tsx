@@ -16,6 +16,7 @@ import { GiftsAdminPage } from './admin/GiftsAdminPage';
 import { CharmAdminPage } from './admin/CharmAdminPage';
 import { StaffPage } from './admin/StaffPage';
 import { ItemsPage } from './admin/ItemsPage';
+import { CollectionsAdminPage } from './admin/CollectionsAdminPage';
 import { MailAdminPage } from './admin/MailAdminPage';
 import { ProgressionAdminPage } from './admin/ProgressionAdminPage';
 import { SeasonRewardsPage } from './admin/SeasonRewardsPage';
@@ -215,6 +216,7 @@ export function App() {
           <Route path="giftcodes" element={<RequirePerm perm="giftcode.manage"><GiftcodesPage /></RequirePerm>} />
           <Route path="rooms" element={<RequirePerm perm="rooms.manage"><RoomsAdminPage /></RequirePerm>} />
           <Route path="items" element={<RequirePerm perm="items.read"><ItemsPage /></RequirePerm>} />
+          <Route path="collections" element={<RequirePerm perm="items.read"><CollectionsAdminPage /></RequirePerm>} />
           <Route path="mail" element={<RequirePerm perm="mail.send"><MailAdminPage /></RequirePerm>} />
           <Route path="audit" element={<RequirePerm perm="audit.read"><AuditPage /></RequirePerm>} />
           <Route path="uids" element={<RequirePerm perm="uid.assign"><UidsPage /></RequirePerm>} />

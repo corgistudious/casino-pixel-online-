@@ -21,6 +21,7 @@ export const ADMIN_SECTIONS: { path: string; key: string; perm: Permission }[] =
   { path: 'gifts', key: 'gifts', perm: 'gifts.read' },
   { path: 'charm', key: 'charm', perm: 'charm.read' },
   { path: 'items', key: 'items', perm: 'items.read' },
+  { path: 'collections', key: 'collections', perm: 'items.read' },
   { path: 'mail', key: 'mail', perm: 'mail.send' },
   { path: 'audit', key: 'audit', perm: 'audit.read' },
   { path: 'uids', key: 'uids', perm: 'uid.assign' },
