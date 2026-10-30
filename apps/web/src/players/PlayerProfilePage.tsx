@@ -1,4 +1,4 @@
-import { KEYO_CAPTAIN_UID, SOCIAL_RULES, type FollowListEntry, type InventoryEntry, type PlayerProfileView, type ProfilePrivacy } from '@casino/shared';
+import { boardById, frameDef, KEYO_CAPTAIN_UID, SOCIAL_RULES, type FollowListEntry, type InventoryEntry, type PlayerProfileView, type ProfilePrivacy } from '@casino/shared';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -20,6 +20,7 @@ import { onRelationChange, PlayerTrigger, usePlayerActionItems } from './PlayerA
 import { ReportDialog } from './ReportDialog';
 import { CaptainBadges } from '../support/SupportMenu';
 import { AvatarCropDialog } from './AvatarCropDialog';
+import { Avatar, Medal } from '../ui/Avatar';
 import { GiftHistory, GiftShowcase } from './GiftShowcase';
 import { PlayerAvatar, PlayerRankBadge, useLiveCounts } from './identity';
 
@@ -243,6 +244,9 @@ export function PlayerProfilePage() {
               )}
             </section>
 
+            {/* Leaderboard achievements */}
+            <RankingAchievements p={p} />
+
             <div className="grid gap-4 lg:grid-cols-2">
               {/* Achievements & badges */}
               <section className="glass p-4">
@@ -437,6 +441,80 @@ function PrivacyPanel({ privacy, onSaved }: { privacy: ProfilePrivacy & { showca
           {t('room.form.save')}
         </Button>
       </div>
+    </section>
+  );
+}
+
+/** Top 1/2/3 finishes, per-game wins and streaks, and rare frames owned (public data only). */
+function RankingAchievements({ p }: { p: PlayerProfileView }) {
+  const { t, i18n } = useTranslation();
+  const catalog = useCatalog((c) => c.items);
+  const lang = i18n.language === 'en' ? 'en' : 'vi';
+  const fmt = (n: number) => formatChips(n, i18n.language);
+  const periodLabel = (key: string) => t(`lb.period.${key[0]}`, { v: key.slice(1), defaultValue: key });
+  const boardLabel = (id: string) => {
+    const b = boardById(id);
+    if (!b) return id;
+    return `${b.game ? t(`lb.gameNames.${b.game}`) + ' · ' : ''}${t(`lb.metrics.${b.metric}`)}`;
+  };
+  const rare = (p.collection?.items ?? []).filter((id) => {
+    const f = frameDef(id);
+    return f && (f.rarity === 'legendary' || f.rarity === 'mythic');
+  });
+  const games = (p.gameStats ?? []).filter((g) => g.played > 0);
+  return (
+    <section className="glass flex flex-col gap-4 p-4">
+      <h2 className="font-display text-lg text-gold-100">{t('lb.profileTitle')}</h2>
+      {p.awards.length === 0 ? (
+        <p className="text-sm text-white/50">{t('lb.noAwards')}</p>
+      ) : (
+        <ul className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {p.awards.map((a) => (
+            <li key={`${a.board}:${a.periodKey}`} className="flex items-center gap-3 rounded-xl border border-gold-300/25 bg-black/25 p-2">
+              <span className="p-2">
+                <Avatar index={p.avatar} customAvatar={p.customAvatar} avatarItem={p.avatarItem} frame={a.reigningItem ?? 'classic'} size={40} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="flex items-center gap-1.5 font-strong text-white">
+                  <Medal rank={a.place} size={20} /> {t('lb.top', { place: a.place })}
+                </span>
+                <span className="block truncate text-xs text-white/70">{boardLabel(a.board)}</span>
+                <span className="block text-[10px] text-white/45">
+                  {periodLabel(a.periodKey)} · {fmt(a.value)}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {games.length > 0 && (
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          {games.map((g) => (
+            <div key={g.game} className="rounded-xl bg-black/25 p-2.5 text-center">
+              <div className="text-[11px] font-label text-gold-100">{t(`lb.gameNames.${g.game}`)}</div>
+              <div className="mt-1 text-[11px] text-white/60">
+                {t('lb.winsLabel')} <span className="font-strong tabular-nums text-emerald-300">{fmt(g.wins)}</span> / {fmt(g.played)}
+              </div>
+              <div className="text-[11px] text-white/60">
+                {t('lb.bestStreak')} <span className="font-strong tabular-nums text-gold-100">{g.bestStreak}</span>
+              </div>
+              <div className="text-[10px] text-white/45">
+                {t('lb.currentStreak')} {g.currentStreak}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {rare.length > 0 && (
+        <div className="flex flex-wrap gap-3">
+          {rare.map((id) => (
+            <span key={id} className="flex flex-col items-center gap-1 p-2" title={itemName(catalog[id], lang, frameDef(id)!.name[lang])}>
+              <Avatar index={p.avatar} customAvatar={p.customAvatar} avatarItem={p.avatarItem} frame={id} size={40} />
+              <span className="max-w-[6rem] truncate text-[10px] text-white/60">{itemName(catalog[id], lang, frameDef(id)!.name[lang])}</span>
+            </span>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
