@@ -1,4 +1,4 @@
-import { equipSchema } from '@casino/shared';
+import { equipSchema, equipSetSchema } from '@casino/shared';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { requireAccount, requireActive } from '../auth/session';
@@ -7,6 +7,7 @@ import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { publishIdentity } from '../services/identity';
 import { loadAsset } from '../services/assets';
+import { equipCollectionSet, publicCollections } from '../services/collections';
 import { allowedRoleFrames, effectiveEquipment, equip, inventoryOf, publicCatalog } from '../services/catalog';
 import { claimAll, claimMail, deleteMail, listMail, markRead, unreadCount } from '../services/mailbox';
 import { toPublicUser } from '../services/users';
@@ -54,6 +55,17 @@ export function registerCosmeticsRoutes(app: FastifyInstance, db: Db, hub: Realt
     const user = await equip(db, requireAccount(req).id, slot, itemId);
     void publishIdentity(db, hub, user.id);
     return { user: await toPublicUser(db, user) };
+  });
+
+  /** Seasonal collections players can see (approved: scheduled, on sale or ended). */
+  app.get('/api/collections', { preHandler: authed }, async () => ({ collections: await publicCollections(db) }));
+
+  /** Equips every owned item of a collection, one per slot; never buys anything. */
+  app.post('/api/me/equip-set', { preHandler: authed }, async (req) => {
+    const { collectionId, replaceRoleFrame } = equipSetSchema.parse(req.body);
+    const r = await equipCollectionSet(db, requireAccount(req).id, collectionId, replaceRoleFrame);
+    void publishIdentity(db, hub, r.user.id);
+    return { user: await toPublicUser(db, r.user), equipped: r.equipped, missing: r.missing, keptRoleFrame: r.keptRoleFrame };
   });
 
   // ---------------------------------------------------------------- mailbox

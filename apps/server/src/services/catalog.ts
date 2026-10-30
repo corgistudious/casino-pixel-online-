@@ -1,5 +1,6 @@
 import {
   DEFAULT_FRAME,
+  DEFAULT_TABLE_SKIN,
   UNIQUE_ITEM_KINDS,
   type EquipSlot,
   type CatalogItem,
@@ -35,6 +36,7 @@ export function toCatalogItem(row: CatalogRow, animatedAsset = false): CatalogIt
     render: (row.render as FrameRender | null) ?? null,
     style,
     priceSilver: row.priceSilver,
+    priceGold: row.priceGold,
   };
 }
 
@@ -135,15 +137,44 @@ export async function grantItem(
   return expired ? 'expired' : 'granted';
 }
 
-/** Buys a released shop item with Cxu Bạc: debit and ownership in one transaction. */
-export async function buyItem(db: Db, userId: string, itemId: string): Promise<void> {
+/**
+ * Where an item can be bought right now and for how much, decided on the server only:
+ *  - items listed in a seasonal collection are sold only while one of those collections is
+ *    approved by the Owner and inside its window, at the collection's price and currency;
+ *  - other released items at their shop price (Cxu Bạc or Cxu Vàng).
+ * Returns null when the item is not on sale.
+ */
+export async function saleOffer(db: DbOrTx, itemId: string, now = new Date()): Promise<{ price: number; currency: 'silver' | 'gold'; collectionId: string | null } | null> {
   const item = await getCatalogRow(db, itemId);
-  if (!item || item.status !== 'released' || item.priceSilver === null) throw fail('item_not_found');
-  // The default frame belongs to everyone already; other price-0 items are free to take once.
-  if (item.id === DEFAULT_FRAME) throw fail('already_owned');
+  if (!item || item.status !== 'released' || item.source === 'role') return null;
+  const offers = await db.execute<{ collection_id: string; price: string; currency: 'silver' | 'gold'; live: boolean }>(sql`
+    SELECT o.collection_id, o.price, o.currency,
+      (c.approved_at IS NOT NULL AND c.ended_at IS NULL AND c.starts_at <= ${now.toISOString()}::timestamptz AND c.ends_at > ${now.toISOString()}::timestamptz) AS live
+    FROM collection_items o JOIN cosmetic_collections c ON c.id = o.collection_id
+    WHERE o.item_id = ${itemId} ORDER BY live DESC, o.price ASC`);
+  if (offers.length) {
+    const live = offers.find((o) => o.live);
+    return live ? { price: Number(live.price), currency: live.currency, collectionId: live.collection_id } : null;
+  }
+  if (item.priceSilver !== null) return { price: item.priceSilver, currency: 'silver', collectionId: null };
+  if (item.priceGold !== null) return { price: item.priceGold, currency: 'gold', collectionId: null };
+  return null;
+}
+
+/**
+ * Buys an item: price and currency come from saleOffer (never from the client), the debit and the
+ * ownership happen in one transaction, and the unique inventory index makes a second purchase
+ * (double tap, retry, two tabs) fail with already_owned without charging. `expected` guards against
+ * a price that changed while the page was open.
+ */
+export async function buyItem(db: Db, userId: string, itemId: string, expected: { price?: number; currency?: 'silver' | 'gold' } = {}): Promise<void> {
+  if (itemId === DEFAULT_FRAME || itemId === DEFAULT_TABLE_SKIN) throw fail('already_owned');
   await db.transaction(async (tx) => {
-    if ((await grantItem(tx, userId, itemId, 'shop', null)) !== 'granted') throw fail('already_owned');
-    if (item.priceSilver! > 0) await applyDelta(tx, userId, -item.priceSilver!, 'shop', null, 'silver', `item:${itemId}`);
+    const offer = await saleOffer(tx, itemId);
+    if (!offer) throw fail('item_not_found');
+    if ((expected.price !== undefined && expected.price !== offer.price) || (expected.currency && expected.currency !== offer.currency)) throw fail('gift_price_changed');
+    if ((await grantItem(tx, userId, itemId, offer.collectionId ? 'season' : 'shop', offer.collectionId)) !== 'granted') throw fail('already_owned');
+    if (offer.price > 0) await applyDelta(tx, userId, -offer.price, 'shop', null, offer.currency, `item:${itemId}`);
   });
 }
 
@@ -179,6 +210,8 @@ export const SLOT_COLUMNS = {
   title: { column: 'equipped_title', key: 'equippedTitle', empty: null },
   chat_bubble: { column: 'equipped_bubble', key: 'equippedBubble', empty: null },
   card_back: { column: 'equipped_card_back', key: 'equippedCardBack', empty: null },
+  table_skin: { column: 'equipped_table_skin', key: 'equippedTableSkin', empty: null },
+  victory_effect: { column: 'equipped_victory_effect', key: 'equippedVictoryEffect', empty: null },
 } as const satisfies Record<EquipSlot, { column: string; key: keyof typeof users.$inferSelect; empty: string | null }>;
 
 /**
@@ -189,7 +222,9 @@ export async function equip(db: Db, userId: string, slot: EquipSlot, itemId: str
   if (itemId !== null) {
     const item = await getCatalogRow(db, itemId);
     if (!item || item.status === 'draft' || item.kind !== slot) throw fail('item_not_found');
-    if (item.source === 'role') {
+    if (slot === 'table_skin' && itemId === DEFAULT_TABLE_SKIN) {
+      // The classic table belongs to everyone.
+    } else if (item.source === 'role') {
       // Checked against the player's real roles (server-side RBAC), never against anything sent.
       if (!(await roleFrameAllowed(db, userId, itemId))) throw fail('not_owned');
     } else if (!(slot === 'frame' && itemId === DEFAULT_FRAME)) {
@@ -227,7 +262,15 @@ export async function sweepExpiredEquipment(db: DbOrTx): Promise<string[]> {
  * last sweep is already reported as removed.
  */
 export async function effectiveEquipment(db: DbOrTx, user: typeof users.$inferSelect) {
-  const equipped = { frame: user.frame, avatarItem: user.avatarItem, title: user.equippedTitle, chatBubble: user.equippedBubble, cardBack: user.equippedCardBack };
+  const equipped = {
+    frame: user.frame,
+    avatarItem: user.avatarItem,
+    title: user.equippedTitle,
+    chatBubble: user.equippedBubble,
+    cardBack: user.equippedCardBack,
+    tableSkin: user.equippedTableSkin,
+    victoryEffect: user.equippedVictoryEffect,
+  };
   const ids = Object.values(equipped).filter((v): v is string => !!v && v !== 'none' && v !== DEFAULT_FRAME);
   if (!ids.length) return equipped;
   const expired = await db
@@ -242,6 +285,8 @@ export async function effectiveEquipment(db: DbOrTx, user: typeof users.$inferSe
     title: equipped.title && gone.has(equipped.title) ? null : equipped.title,
     chatBubble: equipped.chatBubble && gone.has(equipped.chatBubble) ? null : equipped.chatBubble,
     cardBack: equipped.cardBack && gone.has(equipped.cardBack) ? null : equipped.cardBack,
+    tableSkin: equipped.tableSkin && gone.has(equipped.tableSkin) ? null : equipped.tableSkin,
+    victoryEffect: equipped.victoryEffect && gone.has(equipped.victoryEffect) ? null : equipped.victoryEffect,
   };
 }
 

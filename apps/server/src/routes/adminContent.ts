@@ -6,6 +6,7 @@ import {
   idempotencyKeySchema,
   ITEM_KINDS,
   STAFF_ITEM_SOURCES,
+  RESERVED_TITLE_PATTERN,
   ITEM_STATUSES,
   itemIdSchema,
   MAIL_KINDS,
@@ -29,6 +30,7 @@ import { adminCatalog, getCatalogRow, grantItem, ownersOf, revokeInstance } from
 import { listBatches, sendMail, unreadCount } from '../services/mailbox';
 import { userPermissions } from '../services/rbac';
 import { makeGuards } from './guards';
+import { adminCollections, approveCollection, endCollection, rerunCollection, saveCollection } from '../services/collections';
 
 const assetIdSchema = z.string().regex(/^[a-f0-9]{64}\.(png|webp|gif)$/);
 
@@ -46,10 +48,15 @@ const itemFields = {
   /** Drawn look (colours, animation) for frames, titles, chat bubbles and card backs without an image. */
   style: itemStyleSchema.nullable().optional(),
   priceSilver: z.number().int().min(0).max(100_000_000).nullable().optional(),
+  priceGold: z.number().int().min(0).max(1_000_000).nullable().optional(),
   sort: z.number().int().min(-1000).max(100_000).optional(),
 };
 /** Images are required for avatars and collectibles; the other kinds may be drawn from a style instead. */
-const DRAWABLE_KINDS = ['frame', 'title', 'chat_bubble', 'card_back'];
+const DRAWABLE_KINDS = ['frame', 'title', 'chat_bubble', 'card_back', 'table_skin', 'victory_effect'];
+/** Cosmetic titles may never impersonate staff roles, verification or official accounts. */
+function assertTitleName(kind: string | undefined, ...names: (string | null | undefined)[]) {
+  if (kind === 'title' && names.some((n) => n && RESERVED_TITLE_PATTERN.test(n))) throw fail('bad_request', 'reserved title name');
+}
 const createItemSchema = z
   .object({ id: itemIdSchema, kind: z.enum(ITEM_KINDS), ...itemFields })
   .refine((v) => !!v.assetId || (!!v.style && DRAWABLE_KINDS.includes(v.kind)), { message: 'an image (or, for frames, titles, bubbles and card backs, a style) is required', path: ['assetId'] });
@@ -69,6 +76,42 @@ const sendMailSchema = z.object({
 export function registerAdminContentRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub): void {
   const { can, canReauth } = makeGuards(app, db);
 
+  // ---------------------------------------------------------------- seasonal collections
+  const collectionId = z.object({ id: z.string().regex(/^[a-z0-9_]{2,40}$/) });
+  const collectionBody = z.object({
+    theme: z.string().regex(/^[a-z0-9_]{2,30}$/),
+    year: z.number().int().min(2020).max(2100),
+    nameVi: z.string().trim().min(1).max(60),
+    nameEn: z.string().trim().min(1).max(60),
+    descVi: z.string().trim().max(300).nullable().optional(),
+    descEn: z.string().trim().max(300).nullable().optional(),
+    startsAt: z.string().datetime(),
+    endsAt: z.string().datetime(),
+    timezone: z.string().min(3).max(40).default('Asia/Ho_Chi_Minh'),
+    items: z.array(z.object({ itemId: itemIdSchema, price: z.number().int().min(0).max(100_000_000), currency: z.enum(['silver', 'gold']), sort: z.number().int().min(0).max(1000).optional() })).max(60),
+  });
+  app.get('/api/admin/collections', { preHandler: can('items.read') }, async () => ({ collections: await adminCollections(db) }));
+  app.put('/api/admin/collections/:id', { preHandler: canReauth('items.manage') }, async (req) => {
+    const { id } = collectionId.parse(req.params);
+    return { collection: await saveCollection(db, req.account!.id, id, collectionBody.parse(req.body), req.ip) };
+  });
+  /** Owner only (checked in the service), password re-confirmed. */
+  app.post('/api/admin/collections/:id/approve', { preHandler: canReauth('items.manage') }, async (req) => {
+    const { id } = collectionId.parse(req.params);
+    await approveCollection(db, req.account!.id, id, req.ip);
+    return { ok: true };
+  });
+  app.post('/api/admin/collections/:id/end', { preHandler: canReauth('items.manage') }, async (req) => {
+    const { id } = collectionId.parse(req.params);
+    await endCollection(db, req.account!.id, id, req.ip);
+    return { ok: true };
+  });
+  app.post('/api/admin/collections/:id/rerun', { preHandler: canReauth('items.manage') }, async (req) => {
+    const { id } = collectionId.parse(req.params);
+    const body = z.object({ id: z.string().regex(/^[a-z0-9_]{2,40}$/), year: z.number().int().min(2020).max(2100), startsAt: z.string().datetime(), endsAt: z.string().datetime() }).parse(req.body);
+    return { id: await rerunCollection(db, req.account!.id, id, body, req.ip) };
+  });
+
   // Raw image uploads (the bytes are inspected; the declared type is only used to route the body here).
   app.addContentTypeParser([...ASSET_MIME], { parseAs: 'buffer', bodyLimit: ASSET_MAX_BYTES + 1024 }, (_req, body, done) => done(null, body));
 
@@ -83,6 +126,8 @@ export function registerAdminContentRoutes(app: FastifyInstance, db: Db, hub: Re
 
   app.post('/api/admin/items', { preHandler: can('items.manage') }, async (req) => {
     const input = createItemSchema.parse(req.body);
+    assertTitleName(input.kind, input.nameVi, input.nameEn);
+    if (input.priceSilver != null && input.priceGold != null) throw fail('bad_request', 'one price only');
     if (input.assetId && !(await loadAsset(db, input.assetId))) throw fail('invalid_asset', 'unknown asset');
     if (await getCatalogRow(db, input.id)) throw fail('bad_request', 'id already exists');
     const [row] = await db
@@ -102,6 +147,7 @@ export function registerAdminContentRoutes(app: FastifyInstance, db: Db, hub: Re
         style: input.style ?? null,
         render: input.kind === 'frame' ? (input.render ?? frameRenderSchema.parse({})) : null,
         priceSilver: input.priceSilver ?? null,
+        priceGold: input.priceGold ?? null,
         sort: input.sort ?? 0,
         createdBy: req.account!.id,
       })
@@ -116,10 +162,14 @@ export function registerAdminContentRoutes(app: FastifyInstance, db: Db, hub: Re
     const input = updateItemSchema.parse(req.body);
     const current = await getCatalogRow(db, id);
     if (!current) throw fail('item_not_found');
+    assertTitleName(current.kind, input.nameVi, input.nameEn);
+    const nextSilver = input.priceSilver !== undefined ? input.priceSilver : current.priceSilver;
+    const nextGold = input.priceGold !== undefined ? input.priceGold : current.priceGold;
+    if (nextSilver != null && nextGold != null) throw fail('bad_request', 'one price only');
     if (input.assetId && !(await loadAsset(db, input.assetId))) throw fail('invalid_asset', 'unknown asset');
     // Role frames (Owner / Super Admin / Admin / Moderator) are privileges, not goods: never priced,
     // tradable or turned into another kind of item.
-    if (current.source === 'role' && (input.priceSilver != null || input.tradable === true || input.source !== undefined)) {
+    if (current.source === 'role' && (input.priceSilver != null || input.priceGold != null || input.tradable === true || input.source !== undefined)) {
       throw fail('forbidden', 'role frames cannot be sold, traded or re-sourced');
     }
     if (input.status === 'draft' && current.status !== 'draft') {
