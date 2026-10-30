@@ -232,6 +232,20 @@
       "when": 1792904555929,
       "tag": "0032_keyo_captain_dual_owner",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1792990955929,
+      "tag": "0033_leaderboards",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1792991955929,
+      "tag": "0034_frame_library",
+      "breakpoints": true
     }
   ]
 }

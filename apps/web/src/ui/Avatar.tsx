@@ -2,6 +2,7 @@ import { DEFAULT_FRAME, findFrame, type CatalogItem } from '@casino/shared';
 import { useId, useState, type ReactNode } from 'react';
 import { assetSrc, useCatalog } from '../store/catalog';
 import { usesVuongGiaArt, VuongGiaAvatarArt, VuongGiaFrame } from './Cosmetics';
+import { isLibraryFrame, LibraryFrame } from './FrameArt';
 
 /** 16 vector emblems: gradient pairs and glyph paths (24×24 viewBox). */
 const PALETTES: [string, string][] = [
@@ -120,6 +121,17 @@ export function FramedAvatar({
   );
   const inner = avatarArt === 'vuong_gia' ? <VuongGiaAvatarArt /> : avatarSrc ? <SafeImage src={avatarSrc} fallback={emblem} /> : emblem;
   if (frame === 'none') return <div className="shrink-0" style={{ width: size, height: size }}>{inner}</div>;
+  // Frame Library artwork (podium, Hall of Fame, seasonal, tournament, role): drawn by id, so it
+  // renders even before the catalog has loaded.
+  const libraryArt = !frameItem?.assetUrl ? (frameItem?.style?.art ?? frame) : null;
+  if (libraryArt && isLibraryFrame(libraryArt)) {
+    return (
+      <div className="relative shrink-0" style={{ width: size, height: size }}>
+        <div className="absolute inset-0 overflow-hidden rounded-full">{inner}</div>
+        <LibraryFrame artId={libraryArt} size={size} animated={animated} />
+      </div>
+    );
+  }
   if (!frameItem?.assetUrl && frameItem?.style?.art === 'vuong_gia') {
     return (
       <div className="relative shrink-0" style={{ width: size, height: size }}>

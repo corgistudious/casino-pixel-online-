@@ -5,7 +5,7 @@ import {
   itemStyleSchema,
   idempotencyKeySchema,
   ITEM_KINDS,
-  ITEM_SOURCES,
+  STAFF_ITEM_SOURCES,
   ITEM_STATUSES,
   itemIdSchema,
   MAIL_KINDS,
@@ -38,7 +38,7 @@ const itemFields = {
   descVi: z.string().trim().max(300).nullable().optional(),
   descEn: z.string().trim().max(300).nullable().optional(),
   rarity: z.enum(RARITIES),
-  source: z.enum(ITEM_SOURCES),
+  source: z.enum(STAFF_ITEM_SOURCES),
   tradable: z.boolean(),
   status: z.enum(ITEM_STATUSES),
   assetId: assetIdSchema.optional(),
@@ -117,6 +117,11 @@ export function registerAdminContentRoutes(app: FastifyInstance, db: Db, hub: Re
     const current = await getCatalogRow(db, id);
     if (!current) throw fail('item_not_found');
     if (input.assetId && !(await loadAsset(db, input.assetId))) throw fail('invalid_asset', 'unknown asset');
+    // Role frames (Owner / Super Admin / Admin / Moderator) are privileges, not goods: never priced,
+    // tradable or turned into another kind of item.
+    if (current.source === 'role' && (input.priceSilver != null || input.tradable === true || input.source !== undefined)) {
+      throw fail('forbidden', 'role frames cannot be sold, traded or re-sourced');
+    }
     if (input.status === 'draft' && current.status !== 'draft') {
       const [{ n }] = (await db.execute(sql`SELECT count(*) AS n FROM inventory_items WHERE item_id = ${id}`)) as unknown as [{ n: string }];
       if (Number(n) > 0) throw fail('bad_request', 'owned items cannot return to draft; use hidden');

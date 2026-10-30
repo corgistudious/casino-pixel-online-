@@ -17,8 +17,10 @@ export type Rarity = (typeof RARITIES)[number];
 export const ITEM_STATUSES = ['draft', 'released', 'hidden'] as const;
 export type ItemStatus = (typeof ITEM_STATUSES)[number];
 
-export const ITEM_SOURCES = ['shop', 'event', 'mail', 'vip', 'achievement', 'tournament', 'admin', 'legacy', 'season', 'giftcode'] as const;
+export const ITEM_SOURCES = ['shop', 'event', 'mail', 'vip', 'achievement', 'tournament', 'admin', 'legacy', 'season', 'giftcode', 'leaderboard', 'role'] as const;
 export type ItemSource = (typeof ITEM_SOURCES)[number];
+/** Sources staff may pick for catalog items: 'role' frames are reserved (granted by real roles, never owned), 'leaderboard' by ranking rewards. */
+export const STAFF_ITEM_SOURCES = ['shop', 'event', 'mail', 'vip', 'achievement', 'tournament', 'admin', 'legacy', 'season', 'giftcode', 'leaderboard'] as const satisfies readonly ItemSource[];
 
 /** Where an uploaded frame image sits relative to the avatar circle (1 = same size as the avatar). */
 export const frameRenderSchema = z.object({

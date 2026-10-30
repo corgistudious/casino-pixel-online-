@@ -23,3 +23,5 @@ export * from './missions';
 export * from './rooms';
 export * from './gifts';
 export * from './identity';
+export * from './leaderboards';
+export * from './frameLibrary';

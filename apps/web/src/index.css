@@ -131,3 +131,21 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-\[dealIn_\.35s_ease-out\] { animation: none !important; }
 }
+
+/* Frame Library artwork: a slow sheen across the metal and soft twinkles (never rotation). */
+@keyframes kf-sheen {
+  0% { transform: translateX(0); }
+  60%, 100% { transform: translateX(230px); }
+}
+@keyframes kf-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.4); }
+  50% { opacity: 1; transform: scale(1); }
+}
+.kf-sheen { animation: kf-sheen 4.5s ease-in-out infinite; }
+.kf-twinkle { animation: kf-twinkle 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .kf-sheen, .kf-twinkle { animation: none; }
+  .kf-sheen { display: none; }
+}
+.reduce-motion .kf-sheen { display: none; }
+.reduce-motion .kf-twinkle { animation: none; }

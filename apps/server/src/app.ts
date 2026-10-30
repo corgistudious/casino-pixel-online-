@@ -42,6 +42,8 @@ import { registerApiRoutes } from './routes/api';
 import { registerAuthRoutes } from './routes/auth';
 import { registerSocialRoutes } from './routes/social';
 import { registerMissionRoutes } from './routes/missions';
+import { registerLeaderboardRoutes } from './routes/leaderboards';
+import { finalizeClosedPeriods } from './services/rankingRewards';
 
 export async function buildApp(config: Config, opts: { logger?: FastifyServerOptions['logger']; migrate?: boolean } = {}) {
   const app = Fastify({
@@ -112,6 +114,7 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
   registerChatRoutes(app, db, hub);
   registerSocialRoutes(app, db, hub);
   registerMissionRoutes(app, db, hub);
+  registerLeaderboardRoutes(app, db);
   registerAchievementRoutes(app, db);
   let seasonTimer: NodeJS.Timeout | undefined;
   if (config.TABLE_SCHEDULER === 'on') {
@@ -124,6 +127,11 @@ export async function buildApp(config: Config, opts: { logger?: FastifyServerOpt
       void tickSeasons(db).then(
         (r) => (r.ended.length || r.started.length) && app.log.info(r, 'rank seasons changed'),
         (err) => app.log.error({ err }, 'season tick failed'),
+      );
+      // Closed months: snapshot rewarded leaderboards and give their Top 3 frames (once, locked).
+      void finalizeClosedPeriods(db).then(
+        (r) => r.length && app.log.info({ boards: r }, 'leaderboard periods finalized'),
+        (err) => app.log.error({ err }, 'leaderboard finalize failed'),
       );
       // Timed cosmetics (e.g. the 60-day Vương Giả set) are unequipped everywhere once expired.
       void sweepExpiredEquipment(db).then(

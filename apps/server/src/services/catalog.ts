@@ -114,6 +114,8 @@ export async function grantItem(
 ): Promise<GrantOutcome> {
   const item = await getCatalogRow(tx, itemId);
   if (!item || item.status === 'draft') throw fail('item_not_found');
+  // Role frames are worn by holding the role, never owned (the database refuses it as well).
+  if (item.source === 'role') throw fail('forbidden');
   const expired = !!expiresAt && expiresAt.getTime() <= Date.now();
   if (UNIQUE_ITEM_KINDS.includes(item.kind as ItemKind)) {
     const inserted = await tx.insert(inventoryItems).values({ userId, itemId, kind: item.kind, source, sourceRef, expiresAt }).onConflictDoNothing().returning({ id: inventoryItems.id });
@@ -157,6 +159,19 @@ async function ownsActive(db: DbOrTx, userId: string, itemId: string): Promise<'
   return !row.expiresAt || row.expiresAt.getTime() > Date.now() ? 'yes' : 'expired';
 }
 
+/** Whether the player currently holds the role (and, for Owner variants, the UID) a role frame needs. */
+export async function roleFrameAllowed(db: DbOrTx, userId: string, itemId: string): Promise<boolean> {
+  const [r] = await db.execute<{ ok: boolean }>(sql`SELECT keyo_role_frame_allowed(${userId}::uuid, ${itemId}) AS ok`);
+  return !!r?.ok;
+}
+
+/** Role frames the player may wear right now (shown in the Frame Library next to owned frames). */
+export async function allowedRoleFrames(db: DbOrTx, userId: string): Promise<string[]> {
+  const rows = await db.execute<{ id: string }>(sql`
+    SELECT c.id FROM catalog_items c WHERE c.source = 'role' AND c.kind = 'frame' AND c.status <> 'draft' AND keyo_role_frame_allowed(${userId}::uuid, c.id) ORDER BY c.sort`);
+  return rows.map((r) => r.id);
+}
+
 /** users column holding each slot, and the value meaning "nothing equipped". */
 export const SLOT_COLUMNS = {
   frame: { column: 'frame', key: 'frame', empty: 'none' },
@@ -174,7 +189,10 @@ export async function equip(db: Db, userId: string, slot: EquipSlot, itemId: str
   if (itemId !== null) {
     const item = await getCatalogRow(db, itemId);
     if (!item || item.status === 'draft' || item.kind !== slot) throw fail('item_not_found');
-    if (!(slot === 'frame' && itemId === DEFAULT_FRAME)) {
+    if (item.source === 'role') {
+      // Checked against the player's real roles (server-side RBAC), never against anything sent.
+      if (!(await roleFrameAllowed(db, userId, itemId))) throw fail('not_owned');
+    } else if (!(slot === 'frame' && itemId === DEFAULT_FRAME)) {
       const owned = await ownsActive(db, userId, itemId);
       if (owned === 'no') throw fail('not_owned');
       if (owned === 'expired') throw fail('item_expired');

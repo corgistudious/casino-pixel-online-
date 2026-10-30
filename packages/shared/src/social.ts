@@ -3,6 +3,7 @@ import type { Badge } from './contracts/api';
 import type { GiftShowcaseView } from './gifts';
 import type { IdentityFields, PresenceStatus } from './identity';
 import type { TopTitleId } from './progression';
+import type { LbAwardView, PlayerGameStatView } from './leaderboards';
 
 /**
  * Social rules shared by server and client. The server is the only enforcer; the client uses the
@@ -161,6 +162,10 @@ export interface PlayerProfileView extends PlayerCard {
   wallet: { silver: number; gold: number };
   stats: { rounds: number; wins: number; losses: number; pushes: number; biggestWin: number; byGame: GameStatView[] } | null;
   achievements: string[];
+  /** Per-game wins, rounds and streaks (leaderboard statistics); null when stats are hidden. */
+  gameStats: PlayerGameStatView[] | null;
+  /** Leaderboard Top 1/2/3 finishes (public achievements). */
+  awards: LbAwardView[];
   collection: { total: number; titles: string[]; items: string[]; showcase: string[] } | null;
   /** Received gifts; null when hidden by privacy. */
   gifts: GiftShowcaseView | null;
