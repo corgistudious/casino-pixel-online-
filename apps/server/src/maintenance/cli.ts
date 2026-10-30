@@ -6,6 +6,7 @@
  *   create-test-accounts --operator NAME --count N [--prefix tester]   (password from KEYO_TEST_ACCOUNT_PASSWORD)
  *   reset-test-data      --operator NAME [--execute --confirm "RESET <db> <n>"] [--backup-dir DIR]
  *   launch-production    --operator NAME [--execute --confirm "LAUNCH <db>"]  [--backup-dir DIR]
+ *   stats-rebuild        --operator NAME [--execute]   (recompute leaderboard game statistics from settled rounds)
  *   create-owner         --operator NAME --username NAME --email EMAIL [--display-name NAME]
  *                        (only when UID 1002 does not exist; the owner activates it by email)
  */
@@ -20,6 +21,7 @@ import { emailSchema, KEYO_OWNER_UID, usernameSchema } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import { getEnvironmentState } from '../services/environment';
 import { backupDatabase } from './backup';
+import { rebuildGameStats } from '../services/leaderboards';
 import { executeLaunch, executeReset, finishRun, MaintenanceRefused, planLaunch, planReset, startRun } from './testData';
 
 const { positionals, values } = parseArgs({
@@ -206,6 +208,32 @@ async function createOwner(): Promise<number> {
   }
 }
 
+/**
+ * Recomputes player_game_stats / player_game_daily from settled game history (e.g. right after
+ * deploying 0033 on a server with history). Reads game_rounds only; never touches wallets.
+ */
+async function statsRebuild(): Promise<number> {
+  const runId = await startRun(db, 'stats_rebuild', values.execute, operator || process.env.KEYO_OPERATOR || 'unknown', {});
+  try {
+    requireOperator();
+    const [n] = (await db.execute(sql`SELECT count(*) AS rounds FROM game_rounds WHERE status = 'settled' AND bet > 0 AND keyo_board_game(game) IS NOT NULL`)) as unknown as { rounds: string }[];
+    if (!values.execute) {
+      print('Dry run: settled ranked-game rounds that would be counted', { rounds: Number(n!.rounds) });
+      await finishRun(db, runId, 'succeeded', { dryRun: true, rounds: Number(n!.rounds) });
+      return 0;
+    }
+    const result = await db.transaction((tx) => rebuildGameStats(tx));
+    await finishRun(db, runId, 'succeeded', result);
+    print('Leaderboard statistics rebuilt', result);
+    return 0;
+  } catch (err) {
+    const refused = err instanceof MaintenanceRefused;
+    await finishRun(db, runId, refused ? 'refused' : 'failed', { error: String((err as Error).message) });
+    console.error(`\n${refused ? 'REFUSED' : 'FAILED'}: ${(err as Error).message}`);
+    return refused ? 2 : 1;
+  }
+}
+
 let code = 1;
 try {
   switch (command) {
@@ -224,8 +252,11 @@ try {
     case 'create-test-accounts':
       code = await createTestAccounts();
       break;
+    case 'stats-rebuild':
+      code = await statsRebuild();
+      break;
     default:
-      console.error('Usage: maintenance <status | create-owner | create-test-accounts | reset-test-data | launch-production> [options]');
+      console.error('Usage: maintenance <status | create-owner | create-test-accounts | reset-test-data | launch-production | stats-rebuild> [options]');
       code = 1;
   }
 } catch (err) {

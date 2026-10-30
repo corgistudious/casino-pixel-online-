@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS tournament_results;
 DROP TABLE IF EXISTS tournaments;
 DROP TABLE IF EXISTS leaderboard_awards;
 DROP TABLE IF EXISTS leaderboard_snapshots;
+DROP TABLE IF EXISTS leaderboard_state;
 DROP FUNCTION IF EXISTS keyo_append_only();
 DROP TABLE IF EXISTS player_game_daily;
 DROP TABLE IF EXISTS player_game_stats;

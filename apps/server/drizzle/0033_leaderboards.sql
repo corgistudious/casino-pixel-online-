@@ -100,6 +100,15 @@ DROP TRIGGER IF EXISTS game_rounds_leaderboard_stats ON game_rounds;
 CREATE TRIGGER game_rounds_leaderboard_stats AFTER INSERT OR UPDATE OF status ON game_rounds
   FOR EACH ROW EXECUTE FUNCTION keyo_record_game_result();
 --> statement-breakpoint
+-- When statistics started being collected. Months that began earlier are never finalised or
+-- awarded: their game data would be incomplete.
+CREATE TABLE IF NOT EXISTS leaderboard_state (
+  id integer PRIMARY KEY CHECK (id = 1),
+  tracking_since timestamptz NOT NULL DEFAULT now()
+);
+--> statement-breakpoint
+INSERT INTO leaderboard_state (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
+--> statement-breakpoint
 -- Finalised results of a closed period. Written once, never changed.
 CREATE TABLE IF NOT EXISTS leaderboard_snapshots (
   board_id text NOT NULL,

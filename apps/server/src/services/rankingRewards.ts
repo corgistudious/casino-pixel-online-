@@ -31,6 +31,9 @@ async function recipients(tx: Tx, def: LbBoardDef, row: RankedRow): Promise<stri
 export async function finalizeBoard(db: Db, def: LbBoardDef, b: Bounds, now = new Date()): Promise<{ finalized: boolean; awarded: number }> {
   if (!def.reward || !def.active) return { finalized: false, awarded: 0 };
   if (!b.end || b.end.getTime() > now.getTime()) throw fail('bad_request', 'period not closed');
+  // A month that started before statistics were collected is skipped (no snapshot, no award).
+  const [state] = await db.execute<{ since: Date }>(sql`SELECT tracking_since AS since FROM leaderboard_state WHERE id = 1`);
+  if (!state || (b.start && b.start.getTime() < new Date(state.since).getTime())) return { finalized: false, awarded: 0 };
   return db.transaction(async (tx) => {
     await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext(${`lb:${def.id}:${b.key}`}))`);
     const [done] = await tx.execute(sql`SELECT 1 FROM leaderboard_snapshots WHERE board_id = ${def.id} AND period_key = ${b.key}`);

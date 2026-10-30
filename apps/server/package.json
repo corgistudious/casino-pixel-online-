@@ -15,7 +15,8 @@
     "status:data": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts status",
     "create:test-accounts": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts create-test-accounts",
     "reset:test-data": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts reset-test-data",
-    "launch:production": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts launch-production"
+    "launch:production": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts launch-production",
+    "stats:rebuild": "tsx --env-file-if-exists=../../.env src/maintenance/cli.ts stats-rebuild"
   },
   "dependencies": {
     "@casino/shared": "workspace:*",

@@ -181,6 +181,10 @@ describe('closing a month', () => {
     for (let i = 0; i < 5; i++) await W(c, 'roulette', { at: inLast });
     for (let i = 0; i < 3; i++) await W(d, 'roulette', { at: inLast });
     const def = boardById('roulette.wins')!;
+    // A month that began before statistics were collected (the deploy) is never finalised.
+    expect(await finalizeBoard(t.db, def, last)).toEqual({ finalized: false, awarded: 0 });
+    expect(await rows(sql`SELECT 1 FROM leaderboard_snapshots WHERE board_id = 'roulette.wins'`)).toEqual([]);
+    await t.db.execute(sql`UPDATE leaderboard_state SET tracking_since = '2000-01-01'`);
     // A running period is never awarded.
     const now = { ...last, key: 'M-current', start: new Date(), end: new Date(Date.now() + 86_400_000) };
     await expect(finalizeBoard(t.db, def, now)).rejects.toThrow();
