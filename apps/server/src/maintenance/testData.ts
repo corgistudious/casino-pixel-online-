@@ -15,6 +15,9 @@ import { getEnvironmentState } from '../services/environment';
  * key to users (or to a table listed here) is not covered, and a test enforces the same.
  */
 export const TEST_DATA_TABLES = [
+  // Seasonal collections (0035): staff columns move to Keyo Captain, collections are kept.
+  { table: 'cosmetic_collections', column: 'approved_by', action: 'reassign_to_support' },
+  { table: 'cosmetic_collections', column: 'updated_by', action: 'reassign_to_support' },
   // Leaderboards (0033): statistics and awards of TEST accounts go with them; snapshots hold no keys.
   { table: 'player_game_stats', column: 'user_id', action: 'delete' },
   { table: 'player_game_daily', column: 'user_id', action: 'delete' },
@@ -117,8 +120,8 @@ export const TEST_DATA_TABLES = [
 ] as const satisfies readonly { table: string; column: string; action: 'delete' | 'reassign_to_support' }[];
 
 /** Tables whose foreign keys to the tables above are fine without a registry entry. */
-// report_attachments rows cascade with their report (ON DELETE CASCADE).
-const REFERENCE_TABLES = new Set(['roles', 'role_permissions', 'report_attachments']);
+// report_attachments rows cascade with their report; collection_items with their collection (ON DELETE CASCADE).
+const REFERENCE_TABLES = new Set(['roles', 'role_permissions', 'report_attachments', 'collection_items']);
 
 /** Accounts removed by a reset: flagged TEST, ordinary players, never Keyo Support (1000) or the Owner (1002). */
 const TARGETS = sql`SELECT id FROM users WHERE is_test AND account_type = 'player' AND uid NOT IN (${sql.join(
