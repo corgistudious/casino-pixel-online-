@@ -34,7 +34,7 @@ export function LanguageSwitch() {
 
 export function SettingsPage() {
   const { t } = useTranslation();
-  const { volume, reduceMotion, set } = useSettings();
+  const { volume, reduceMotion, victoryEffects, set } = useSettings();
   return (
     <AppShell>
       <div className="flex flex-col gap-4 p-3 lg:p-5">
@@ -57,6 +57,20 @@ export function SettingsPage() {
             >
               <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${reduceMotion ? 'left-8' : 'left-1'}`} />
               <span className="sr-only">{reduceMotion ? t('settings.on') : t('settings.off')}</span>
+            </button>
+          </label>
+          <label className="flex items-center justify-between gap-4">
+            <span>
+              {t('settings.victoryEffects')}
+              <span className="block text-[11px] text-white/45">{t('settings.victoryEffectsHint')}</span>
+            </span>
+            <button
+              onClick={() => set({ victoryEffects: !victoryEffects })}
+              className={`relative h-7 w-14 shrink-0 rounded-full transition ${victoryEffects ? 'bg-gold-sheen' : 'bg-white/15'}`}
+              aria-pressed={victoryEffects}
+            >
+              <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${victoryEffects ? 'left-8' : 'left-1'}`} />
+              <span className="sr-only">{victoryEffects ? t('settings.on') : t('settings.off')}</span>
             </button>
           </label>
           <div className="border-t border-white/10 pt-4 text-sm text-white/50">

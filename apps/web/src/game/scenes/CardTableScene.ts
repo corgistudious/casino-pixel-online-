@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
-import { vipTierOf, type Card, type CardTableView } from '@casino/shared';
+import { vipTierOf, type Card, type CardBackArt, type CardTableView } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
 import { compactChips } from '../../lib/format';
-import { cardKey, chipDenomFor, ensureCardBackTexture, ensureCardTexture, ensureChipTextures, hdImage, hdScale } from '../art';
+import { cardKey, chipDenomFor, ensureCardBackTexture, ensureCardTexture, ensureLibraryCardBack, ensureChipTextures, hdImage, hdScale } from '../art';
 import { assetSrc } from '../../store/catalog';
 import { BaseScene } from './BaseScene';
+import { celebrateWin } from '../../cosmetics/VictoryEffect';
 
 type XY = { x: number; y: number };
 const CENTER: XY = { x: 320, y: 172 };
@@ -33,6 +34,8 @@ export interface CardBackLook {
   key: string;
   colors: string[];
   royal: boolean;
+  /** Seasonal library artwork (drawn instead of the gradient back). */
+  art?: CardBackArt;
 }
 
 /**
@@ -65,17 +68,18 @@ export class CardTableScene extends BaseScene {
   protected build() {
     ensureChipTextures(this);
     ensureCardTexture(this, null);
-    const g = this.add.graphics();
-    // Rail, felt and printed line.
-    g.fillStyle(0x000000, 0.45).fillEllipse(CENTER.x + 3, CENTER.y + 6, 572, 284);
-    g.fillStyle(0x3a1e0c, 1).fillEllipse(CENTER.x, CENTER.y, 570, 280);
-    g.lineStyle(2, 0xe8b64a, 0.9).strokeEllipse(CENTER.x, CENTER.y, 566, 276);
-    g.fillStyle(0x0f5a39, 1).fillEllipse(CENTER.x, CENTER.y, 540, 252);
-    g.fillStyle(0x1f8a5a, 0.35).fillEllipse(CENTER.x, CENTER.y - 20, 420, 150);
-    g.lineStyle(1, 0xf2d38a, 0.5).strokeEllipse(CENTER.x, CENTER.y, 470, 200);
-    this.text(CENTER.x, CENTER.y + 62, 'KEYO', { size: 22, display: true, color: '#f2d38a' }).setAlpha(0.18);
+    // Rail, felt and printed line come from the viewer's table skin (background); same geometry for everyone.
+    this.text(CENTER.x, CENTER.y + 62, 'KEYO', { size: 22, display: true, color: this.skin().lineCss }).setAlpha(0.18);
     this.layer = this.add.container(0, 0);
     this.timer = this.add.graphics().setDepth(30);
+  }
+
+  protected override tableLayout() {
+    return 'oval' as const;
+  }
+
+  protected override tableOval() {
+    return { cx: CENTER.x, cy: CENTER.y, rx: 285, ry: 140 };
   }
 
   /** Localised strings for in-canvas labels (fold, all-in, hand names…). */
@@ -102,7 +106,10 @@ export class CardTableScene extends BaseScene {
   private card(x: number, y: number, card: Card | null, scale: number, back: CardBackLook | undefined, key: string) {
     let tex = cardKey(card);
     if (card) ensureCardTexture(this, card);
-    else if (back) {
+    else if (back?.art) {
+      ensureLibraryCardBack(this, back.key, back.art);
+      tex = back.key;
+    } else if (back) {
       ensureCardBackTexture(this, back.key, back.colors, back.royal);
       tex = back.key;
     }
@@ -270,6 +277,7 @@ export class CardTableScene extends BaseScene {
         const myNet = view.mySeat !== null ? (hand.result.net[view.mySeat] ?? 0) : 0;
         if (myNet > 0) {
           sfx.win();
+          celebrateWin(`card:${hand.id}`, { big: myNet >= view.table.config.bigBlind * 50 });
           this.celebrate(myNet, CENTER.x, CENTER.y + 40, myNet >= view.table.config.bigBlind * 50);
         }
       }

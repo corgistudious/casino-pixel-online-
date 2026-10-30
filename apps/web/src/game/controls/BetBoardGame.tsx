@@ -12,8 +12,9 @@ import { PhaserView } from '../PhaserView';
 import type { TableScene } from '../scenes/TableScene';
 import { GameLayout, Stat } from './GameLayout';
 import { usePlay } from './usePlay';
+import { celebrateWin } from '../../cosmetics/VictoryEffect';
 
-interface Props<S extends TableScene, T extends { balance: number; result: { payout: number } }> {
+interface Props<S extends TableScene, T extends { balance: number; roundId?: string; result: { payout: number } }> {
   title: string;
   actionLabel: string;
   create: () => S;
@@ -22,7 +23,7 @@ interface Props<S extends TableScene, T extends { balance: number; result: { pay
 }
 
 /** Shared flow for roulette & sic bo: place chips on the table, then spin/roll. */
-export function BetBoardGame<S extends TableScene, T extends { balance: number; result: { payout: number } }>(props: Props<S, T>) {
+export function BetBoardGame<S extends TableScene, T extends { balance: number; roundId?: string; result: { payout: number } }>(props: Props<S, T>) {
   const { t, i18n } = useTranslation();
   const scene = useRef<S | null>(null);
   const [chip, setChip] = useState<number>(100);
@@ -55,7 +56,13 @@ export function BetBoardGame<S extends TableScene, T extends { balance: number; 
     const placed = bets;
     const env = await run(
       () => props.request(placed),
-      (e) => props.animate(s, e),
+      (e) =>
+        props.animate(s, e).then(() => {
+          // Settled server result: play my victory effect if the round paid more than I staked.
+          const r = e.result as { payout?: number; bets?: { amount: number }[] };
+          const stake = (r.bets ?? []).reduce((sum, b) => sum + b.amount, 0);
+          if ((r.payout ?? 0) > stake) celebrateWin(`solo:${e.roundId}`, { big: (r.payout ?? 0) >= stake * 10 });
+        }),
     );
     if (env) {
       setLastWin(env.result.payout);

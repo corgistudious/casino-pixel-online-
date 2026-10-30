@@ -1,7 +1,8 @@
-import { DEFAULT_FRAME, type CatalogItem, type EquipSlot, type InventoryEntry, type ItemKind, type PublicUser, type Rarity } from '@casino/shared';
+import { cosmeticDef, DEFAULT_FRAME, DEFAULT_TABLE_SKIN, frameDef, SEASON_THEMES, type CatalogItem, type EquipSlot, type InventoryEntry, type ItemKind, type PublicUser, type Rarity } from '@casino/shared';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { ItemPreviewLarge, ItemThumb } from '../cosmetics/ItemPreview';
 import { errorText } from '../lib/errors';
 import { api } from '../net/api';
 import { assetSrc, itemName, useCatalog } from '../store/catalog';
@@ -12,11 +13,11 @@ import { CardBack, ChatBubble, TitleBadge } from '../ui/Cosmetics';
 import { Button } from '../ui/Button';
 import { toast } from '../ui/toast';
 
-const KINDS: ItemKind[] = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'collectible'];
+const KINDS: ItemKind[] = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'table_skin', 'victory_effect', 'collectible'];
 
 /** The player's equipped item per slot (PublicUser field). */
 const equippedIn = (u: PublicUser, kind: ItemKind): string | null =>
-  ({ frame: u.frame, avatar: u.avatarItem, title: u.title, chat_bubble: u.chatBubble, card_back: u.cardBack, collectible: null })[kind];
+  ({ frame: u.frame, avatar: u.avatarItem, title: u.title, chat_bubble: u.chatBubble, card_back: u.cardBack, table_skin: u.tableSkin, victory_effect: u.victoryEffect, collectible: null })[kind] ?? null;
 
 /** Text/border tone per rarity (text tokens on the dark surface, never color alone: the name is shown too). */
 export const RARITY_TONE: Record<Rarity, string> = {
@@ -42,6 +43,7 @@ export function CollectionPage() {
   const [inventory, setInventory] = useState<InventoryEntry[] | null>(null);
   const [roleFrames, setRoleFrames] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
+  const [season, setSeason] = useState<string>('all');
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -57,8 +59,9 @@ export function CollectionPage() {
 
   const owned = useMemo(() => {
     const groups = new Map<string, Owned>();
-    // The default frame is owned by everyone even though it has no inventory row.
+    // The default frame and the classic table are owned by everyone even without an inventory row.
     if (kind === 'frame') groups.set(DEFAULT_FRAME, { item: catalog[DEFAULT_FRAME], itemId: DEFAULT_FRAME, entries: [] });
+    if (kind === 'table_skin') groups.set(DEFAULT_TABLE_SKIN, { item: catalog[DEFAULT_TABLE_SKIN], itemId: DEFAULT_TABLE_SKIN, entries: [] });
     // Role frames: usable while the player holds the role (no inventory row).
     if (kind === 'frame') for (const id of roleFrames) groups.set(id, { item: catalog[id], itemId: id, entries: [{ instanceId: id, itemId: id, kind: 'frame', source: 'role', acquiredAt: '', expiresAt: null, active: true }] });
     for (const e of inventory ?? []) {
@@ -67,13 +70,14 @@ export function CollectionPage() {
       g.entries.push(e);
       groups.set(e.itemId, g);
     }
-    return [...groups.values()];
-  }, [inventory, catalog, kind, roleFrames]);
+    const themeOf = (id: string) => cosmeticDef(id)?.theme ?? frameDef(id)?.season?.theme ?? null;
+    return [...groups.values()].filter((g) => season === 'all' || (season === 'basic' ? !themeOf(g.itemId) : themeOf(g.itemId) === season));
+  }, [inventory, catalog, kind, roleFrames, season]);
 
   const current = owned.find((o) => o.itemId === selected) ?? owned[0];
   const equippedId = equippedIn(user, kind);
   /** Usable now: permanent, or a timed copy that has not expired. */
-  const activeOf = (o: Owned | undefined) => !o || o.itemId === DEFAULT_FRAME || o.entries.some((e) => e.active);
+  const activeOf = (o: Owned | undefined) => !o || o.itemId === DEFAULT_FRAME || o.itemId === DEFAULT_TABLE_SKIN || o.entries.some((e) => e.active);
   const expiryOf = (o: Owned | undefined) => (o?.entries.some((e) => e.active && !e.expiresAt) ? null : (o?.entries.map((e) => e.expiresAt).filter(Boolean).sort().at(-1) ?? null));
 
   const equip = async (slot: EquipSlot, itemId: string | null) => {
@@ -95,6 +99,7 @@ export function CollectionPage() {
     if (kind === 'title') return <TitleBadge itemId={o.itemId} size={size > 100 ? 'md' : 'sm'} />;
     if (kind === 'chat_bubble') return <ChatBubble itemId={o.itemId}>{t('collection.bubbleSample')}</ChatBubble>;
     if (kind === 'card_back') return <CardBack itemId={o.itemId} width={size > 100 ? 96 : 52} />;
+    if (kind === 'table_skin' || kind === 'victory_effect') return size > 100 ? <ItemPreviewLarge itemId={o.itemId} kind={kind} /> : <ItemThumb itemId={o.itemId} kind={kind} size={size} />;
     return o.item?.assetUrl ? <img src={assetSrc(o.item.assetUrl)} alt="" className="object-contain" style={{ width: size, height: size }} /> : null;
   };
 
@@ -127,6 +132,16 @@ export function CollectionPage() {
             </button>
           ))}
         </div>
+
+        <select className="field !w-auto self-start !py-1 text-xs" value={season} onChange={(e) => setSeason(e.target.value)} aria-label={t('market.season')}>
+          <option value="all">{t('market.allSeasons')}</option>
+          <option value="basic">{t('market.basic')}</option>
+          {SEASON_THEMES.map((th) => (
+            <option key={th} value={th}>
+              {t(`market.themes.${th}`)}
+            </option>
+          ))}
+        </select>
 
         {inventory === null ? (
           <p className="text-white/50">{t('app.loading')}</p>

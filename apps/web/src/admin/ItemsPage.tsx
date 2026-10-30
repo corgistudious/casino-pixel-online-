@@ -23,6 +23,8 @@ interface Draft {
   status: CatalogItem['status'];
   tradable: boolean;
   price: string;
+  /** Gold shop price (an item has at most one price). */
+  priceGold: string;
   assetId: string | null;
   assetUrl: string | null;
   render: FrameRender;
@@ -46,6 +48,7 @@ const EMPTY: Draft = {
   status: 'draft',
   tradable: false,
   price: '',
+  priceGold: '',
   assetId: null,
   assetUrl: null,
   render: { scale: 1.25, offsetX: 0, offsetY: 0 },
@@ -66,6 +69,7 @@ function fromItem(i: AdminItem): Draft {
     status: i.status,
     tradable: i.tradable,
     price: i.priceSilver === null ? '' : String(i.priceSilver),
+    priceGold: i.priceGold === null ? '' : String(i.priceGold),
     assetId: i.assetUrl ? i.assetUrl.split('/').pop()! : null,
     colors: i.style?.colors.join(', ') ?? EMPTY.colors,
     animated: i.style?.animated ?? false,
@@ -180,6 +184,7 @@ function Editor({ initial, isNew, builtIn, onSaved }: { initial: Draft; isNew: b
       status: d.status,
       tradable: d.tradable,
       priceSilver: d.price === '' ? null : Number(d.price),
+      priceGold: d.priceGold === '' ? null : Number(d.priceGold),
       ...(d.kind === 'frame' && !builtIn ? { render: d.render } : {}),
       ...(d.assetId && !builtIn ? { assetId: d.assetId } : {}),
       ...(!d.assetId && DRAWABLE.includes(d.kind) && parseColors(d.colors).length >= 2 ? { style: { colors: parseColors(d.colors), animated: d.animated } } : {}),
@@ -266,7 +271,11 @@ function Editor({ initial, isNew, builtIn, onSaved }: { initial: Draft; isNew: b
           </label>
           <label className="flex flex-col gap-1 text-xs text-white/55">
             {t('admin.items.price')}
-            <input className="field" inputMode="numeric" value={d.price} onChange={(e) => set('price', e.target.value.replace(/\D/g, ''))} disabled={!editable} />
+            <input className="field" inputMode="numeric" value={d.price} onChange={(e) => set('price', e.target.value.replace(/\D/g, ''))} disabled={!editable || d.priceGold !== ''} />
+          </label>
+          <label className="flex flex-col gap-1 text-xs text-white/55">
+            {t('admin.items.priceGold')}
+            <input className="field" inputMode="numeric" value={d.priceGold} onChange={(e) => set('priceGold', e.target.value.replace(/\D/g, ''))} disabled={!editable || d.price !== '' || d.source === 'role'} />
           </label>
         </div>
         <label className="flex items-center gap-2 text-sm text-white/75">

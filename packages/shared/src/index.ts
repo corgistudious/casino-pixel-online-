@@ -25,3 +25,4 @@ export * from './gifts';
 export * from './identity';
 export * from './leaderboards';
 export * from './frameLibrary';
+export * from './cosmeticLibrary';

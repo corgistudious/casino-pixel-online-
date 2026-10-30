@@ -34,17 +34,15 @@ export class BlackjackScene extends BaseScene {
     super(BlackjackScene.KEY);
   }
 
+  protected override tableLayout() {
+    return 'arc' as const;
+  }
+
   protected build() {
     ensureChipTextures(this);
     ensureCardTexture(this, null);
     ensureShoeTexture(this);
-    const g = this.add.graphics();
-    // Printed table markings: gold arcs.
-    g.lineStyle(1.2, 0xf2d38a, 0.8).strokeEllipse(W / 2, 20, 560, 420);
-    g.lineStyle(0.8, 0xf2d38a, 0.45).strokeEllipse(W / 2, 20, 600, 470);
-    // Padded leather rail along the bottom edge
-    g.fillGradientStyle(0x3a1d0b, 0x3a1d0b, 0x170a03, 0x170a03, 1).fillRect(0, H - 14, W, 14);
-    g.fillStyle(0xf2c14e, 1).fillRect(0, H - 14, W, 1);
+    // Printed arcs and the padded rail come from the viewer's table skin (background, 'arc' layout).
 
     hdImage(this, SHOE.x, SHOE.y, 'card-shoe');
     hdImage(this, SHOE.x - 4, SHOE.y - 4, 'card-back', 0.8).setAngle(-12);
@@ -58,9 +56,11 @@ export class BlackjackScene extends BaseScene {
     this.banner = this.text(W / 2, 182, '', { size: 30, display: true, color: '#ffe08a', shadow: true }).setDepth(50);
     this.banner.setStroke('#5a3a06', 3);
 
-    // Betting circle
-    g.lineStyle(1.2, 0xf2d38a, 0.9).strokeCircle(W / 2, 318, 17);
-    g.lineStyle(0.6, 0xf2d38a, 0.5).strokeCircle(W / 2, 318, 20);
+    // Betting circle, printed in the skin's line colour (same place for every skin).
+    const g = this.add.graphics();
+    const line = this.skin().line;
+    g.lineStyle(1.2, line, 0.9).strokeCircle(W / 2, 318, 17);
+    g.lineStyle(0.6, line, 0.5).strokeCircle(W / 2, 318, 20);
     this.betStack = this.add.container(W / 2, 318);
   }
 

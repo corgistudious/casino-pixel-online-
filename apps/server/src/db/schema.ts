@@ -76,6 +76,8 @@ export const users = pgTable(
     equippedTitle: text('equipped_title'),
     equippedBubble: text('equipped_bubble'),
     equippedCardBack: text('equipped_card_back'),
+    equippedTableSkin: text('equipped_table_skin'),
+    equippedVictoryEffect: text('equipped_victory_effect'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
@@ -412,13 +414,14 @@ export const catalogItems = pgTable(
     /** Built-in drawn frames: { colors, animated }. */
     style: jsonb('style'),
     priceSilver: bigint('price_silver', { mode: 'number' }),
+    priceGold: bigint('price_gold', { mode: 'number' }),
     sort: integer('sort').notNull().default(0),
     createdBy: uuid('created_by'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
-    check('catalog_items_kind', sql`${t.kind} IN ('frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'collectible')`),
+    check('catalog_items_kind', sql`${t.kind} IN ('frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'table_skin', 'victory_effect', 'collectible')`),
     check('catalog_items_status', sql`${t.status} IN ('draft', 'released', 'hidden')`),
     check('catalog_items_price', sql`${t.priceSilver} IS NULL OR ${t.priceSilver} >= 0`),
   ],
@@ -447,7 +450,7 @@ export const inventoryItems = pgTable(
   (t) => [
     index('inventory_items_user_idx').on(t.userId),
     index('inventory_items_item_idx').on(t.itemId),
-    uniqueIndex('inventory_items_unique_cosmetic_idx').on(t.userId, t.itemId).where(sql`${t.kind} IN ('frame', 'avatar', 'title', 'chat_bubble', 'card_back')`),
+    uniqueIndex('inventory_items_unique_cosmetic_idx').on(t.userId, t.itemId).where(sql`${t.kind} IN ('frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'table_skin', 'victory_effect')`),
     index('inventory_items_expiry_idx').on(t.expiresAt).where(sql`${t.expiresAt} IS NOT NULL`),
   ],
 );

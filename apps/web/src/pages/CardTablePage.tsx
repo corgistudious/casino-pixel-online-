@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GameLayout, Stat } from '../game/controls/GameLayout';
 import { PhaserView } from '../game/PhaserView';
 import { CardTableScene, type CardBackLook } from '../game/scenes/CardTableScene';
+import { libraryCardBack } from '../cosmetics/cardBackArt';
 import { RoomPasswordPrompt } from '../rooms/RoomForm';
 import { RoomPanel } from '../rooms/RoomPanel';
 import { usePlayerMenu } from '../players/PlayerActions';
@@ -89,8 +90,11 @@ function CardTable({ tableId }: { tableId: string }) {
   const backs = useMemo(() => {
     const out: Record<number, CardBackLook | undefined> = {};
     for (const s of view?.seats ?? []) {
+      // The SEAT OWNER's back (public cosmetic): every viewer sees each player's own choice.
       const item = s.cardBack ? catalog[s.cardBack] : undefined;
-      if (item?.style) out[s.seat] = { key: `cardback-${item.id}`, colors: item.style.colors, royal: item.style.art === 'vuong_gia' };
+      const art = libraryCardBack(item?.style?.art ?? s.cardBack);
+      if (art) out[s.seat] = { key: `cardback-lib-${s.cardBack}`, colors: [], royal: false, art };
+      else if (item?.style) out[s.seat] = { key: `cardback-${item.id}`, colors: item.style.colors, royal: item.style.art === 'vuong_gia' };
     }
     return out;
   }, [view?.seats, catalog]);
@@ -175,6 +179,8 @@ function CardTable({ tableId }: { tableId: string }) {
               if (viewRef.current) s.render(viewRef.current, backs);
             }}
           />
+          {/* Which back each seat shows (seat owner's cosmetic), for QA; no card data. */}
+          <span hidden data-card-backs={JSON.stringify(Object.fromEntries(Object.entries(backs).map(([seat, b]) => [seat, b?.key ?? null])))} />
           {legal && left !== null && (
             <div className={`pointer-events-none absolute right-3 top-2 rounded-full border px-4 py-1.5 text-sm font-bold backdrop-blur ${left <= 5 ? 'animate-pulse border-red-400/80 bg-red-950/80 text-red-100' : 'border-gold-300/50 bg-ink-950/80 text-gold-100'}`} role="status">
               {t('cards.yourTurn')} · {left}s

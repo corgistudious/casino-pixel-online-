@@ -1,7 +1,25 @@
 import type { CatalogItem } from '@casino/shared';
 import { useId, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cosmeticDef, type FrameGlyph } from '@casino/shared';
+import { cardBackDataUrl } from '../cosmetics/cardBackArt';
 import { assetSrc, itemName, useCatalog } from '../store/catalog';
+import { GLYPHS } from './glyphs';
+
+/** Small inline glyph (decorations on titles and bubbles). */
+export function GlyphIcon({ glyph, size, color }: { glyph: FrameGlyph; size: number; color: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden className="shrink-0">
+      <path d={GLYPHS[glyph]} fill={color} fillRule="evenodd" />
+    </svg>
+  );
+}
+
+/** A repeating background tile of one glyph (CSS background-image). */
+function glyphTile(glyph: FrameGlyph, color: string) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path transform='translate(12 12)' d='${GLYPHS[glyph]}' fill='${color}' fill-rule='evenodd'/></svg>`;
+  return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+}
 
 type Look = Pick<CatalogItem, 'assetUrl' | 'style'> | undefined;
 /** An item that may not be in the catalog yet (admin editor preview). */
@@ -17,6 +35,24 @@ export function TitleBadge({ itemId, size = 'md', item: given }: { itemId: strin
   if (!itemId) return null;
   const name = itemName(item, i18n.language, itemId);
   if (item?.assetUrl) return <img src={assetSrc(item.assetUrl)} alt={name} title={name} className={size === 'sm' ? 'h-5' : 'h-7'} />;
+  const lib = cosmeticDef(item?.style?.art ?? itemId);
+  if (lib?.kind === 'title') {
+    const a = lib.art;
+    return (
+      <span
+        className={`relative inline-flex items-center gap-1 overflow-hidden rounded-full border bg-black/55 font-bold tracking-wide shadow-[0_0_10px_-2px_var(--glow)] ${size === 'sm' ? 'px-2 py-px text-[11px]' : 'px-3 py-0.5 text-xs'}`}
+        style={{ borderColor: a.border, ['--glow' as string]: a.border }}
+        title={name}
+        data-title={itemId}
+      >
+        {a.icon && <GlyphIcon glyph={a.icon} size={size === 'sm' ? 11 : 13} color={a.colors[1] ?? a.colors[0]!} />}
+        <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${a.colors.join(', ')})` }}>
+          {name}
+        </span>
+        <span className="sheen opacity-50" />
+      </span>
+    );
+  }
   const colors = colorsOf(item, ['#fff1b8', '#f2c14e']);
   return (
     <span
@@ -38,6 +74,25 @@ export function ChatBubble({ itemId, children, mine = false, item: given }: { it
   const colors = colorsOf(item, ['#272048', '#3a3166']);
   const royal = isVuongGia(item);
   const radius = mine ? 'rounded-2xl rounded-br-md' : 'rounded-2xl rounded-bl-md';
+  const lib = cosmeticDef(item?.style?.art ?? itemId ?? '');
+  if (lib?.kind === 'chat_bubble' && !item?.assetUrl) {
+    const a = lib.art;
+    return (
+      <div
+        data-bubble={itemId ?? undefined}
+        className={`relative max-w-xs px-4 py-2.5 text-sm font-medium text-white ${radius} border`}
+        style={{ background: `linear-gradient(135deg, ${a.bg[0]}, ${a.bg[1]})`, borderColor: a.border, boxShadow: `0 0 14px -4px ${a.glow}, inset 0 1px 0 rgba(255,255,255,0.18)` }}
+      >
+        {a.pattern && <span className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-[0.09]" style={{ backgroundImage: glyphTile(a.pattern, a.border), backgroundSize: '22px 22px' }} />}
+        {a.corner && (
+          <span className={`absolute -top-2.5 ${mine ? '-left-2' : '-right-2'} flex h-5 w-5 items-center justify-center rounded-full border bg-black/70`} style={{ borderColor: a.border }}>
+            <GlyphIcon glyph={a.corner} size={12} color={a.border} />
+          </span>
+        )}
+        <span className="relative drop-shadow-[0_1px_1px_rgba(0,0,0,0.85)]">{children}</span>
+      </div>
+    );
+  }
   if (item?.assetUrl) {
     return (
       <div className={`relative max-w-xs px-4 py-2.5 text-sm font-medium text-white ${radius}`} style={{ backgroundImage: `url(${assetSrc(item.assetUrl)})`, backgroundSize: '100% 100%' }}>
@@ -68,6 +123,8 @@ export function CardBack({ itemId, width = 64, item: given }: { itemId: string |
   const item = given ?? stored;
   const height = Math.round(width * 1.4);
   if (item?.assetUrl) return <img src={assetSrc(item.assetUrl)} alt="" width={width} height={height} className="rounded-md shadow-lg" />;
+  const libUrl = cardBackDataUrl(item?.style?.art ?? itemId ?? '', Math.min(256, width * 2));
+  if (libUrl) return <img src={libUrl} alt={itemName(item, 'vi', itemId ?? '')} width={width} height={Math.round((width * 68) / 48)} className="shrink-0 drop-shadow-lg" />;
   const [a, b, c] = colorsOf(item, ['#7d1222', '#d42a44', '#f7d77a']) as [string, string, string?];
   const accent = c ?? '#f7d77a';
   const royal = isVuongGia(item);

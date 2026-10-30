@@ -236,6 +236,9 @@ export interface PublicUser {
   title: string | null;
   chatBubble: string | null;
   cardBack: string | null;
+  /** Personal cosmetics (only this player sees them): table skin and victory effect. */
+  tableSkin: string | null;
+  victoryEffect: string | null;
   createdAt: string;
   checkin: CheckinState;
 }

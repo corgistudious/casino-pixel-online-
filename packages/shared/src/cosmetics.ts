@@ -4,9 +4,9 @@ import { z } from 'zod';
  * Kinds of owned things. Everything equippable is unique per player (one row, which also keeps the
  * ownership history); collectibles may be held several times.
  */
-export const ITEM_KINDS = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'collectible'] as const;
+export const ITEM_KINDS = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'table_skin', 'victory_effect', 'collectible'] as const;
 export type ItemKind = (typeof ITEM_KINDS)[number];
-export const EQUIP_SLOTS = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back'] as const;
+export const EQUIP_SLOTS = ['frame', 'avatar', 'title', 'chat_bubble', 'card_back', 'table_skin', 'victory_effect'] as const;
 export type EquipSlot = (typeof EQUIP_SLOTS)[number];
 export const UNIQUE_ITEM_KINDS: readonly ItemKind[] = EQUIP_SLOTS;
 
@@ -58,6 +58,8 @@ export interface CatalogItem {
   style: z.infer<typeof legacyFrameStyleSchema> | null;
   /** Shop price in Cxu Bạc; null = not sold in the shop. */
   priceSilver: number | null;
+  /** Shop price in Cxu Vàng instead (at most one of the two is set). */
+  priceGold: number | null;
 }
 
 export interface InventoryEntry {
@@ -75,6 +77,9 @@ export interface InventoryEntry {
 export const itemIdSchema = z.string().regex(/^[a-z0-9_]{2,40}$/);
 
 export const equipSchema = z.object({ slot: z.enum(EQUIP_SLOTS), itemId: itemIdSchema.nullable() });
+/** Buy one item; `expectedPrice`/`expectedCurrency` guard against a price change while the page was open (the server always charges its own price). */
+export const buyItemSchema = z.object({ itemId: itemIdSchema, expectedPrice: z.number().int().min(0).optional(), expectedCurrency: z.enum(['silver', 'gold']).optional() });
+export const equipSetSchema = z.object({ collectionId: z.string().regex(/^[a-z0-9_]{2,40}$/), replaceRoleFrame: z.boolean().optional() });
 
 export const ASSET_MIME = ['image/png', 'image/webp', 'image/gif'] as const;
 export const ASSET_MAX_BYTES = 1_048_576;

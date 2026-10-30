@@ -2,7 +2,7 @@ import { users } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { buyRenameCard, renameInfo, renamePlayer, RENAME_CARD_PRICE_GOLD, RENAME_CARD_ID } from '../services/rename';
-import { clientSeedSchema, shopItemSchema, updateProfileSchema, type CheckinResult, type FairnessInfo } from '@casino/shared';
+import { buyItemSchema, clientSeedSchema, shopItemSchema, updateProfileSchema, type CheckinResult, type FairnessInfo } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { requireAccount, requireActive } from '../auth/session';
@@ -58,9 +58,9 @@ export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub
   });
 
   app.post('/api/shop/buy', { preHandler: authed }, async (req) => {
-    const { itemId } = shopItemSchema.parse(req.body);
+    const { itemId, expectedPrice, expectedCurrency } = buyItemSchema.parse(req.body);
     const user = requireActive(requireAccount(req));
-    await buyItem(db, user.id, itemId);
+    await buyItem(db, user.id, itemId, { price: expectedPrice, currency: expectedCurrency });
     const fresh = await toPublicUser(db, user);
     hub.sendToUser(user.id, { type: 'event', event: 'wallet', data: { balance: fresh.balance, gold: fresh.gold } });
     return { user: fresh };

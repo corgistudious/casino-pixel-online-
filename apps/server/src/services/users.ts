@@ -68,6 +68,8 @@ export async function toPublicUser(db: DbOrTx, user: UserRow, now = new Date()):
     title: gear.title,
     chatBubble: gear.chatBubble,
     cardBack: gear.cardBack,
+    tableSkin: gear.tableSkin,
+    victoryEffect: gear.victoryEffect,
     customAvatar: await activeAvatar(db, user.id),
     vipLevel: (await vipLevelsOf(db, [user.id])).get(user.id) ?? 1,
     charm: await charmOf(db, user.id),

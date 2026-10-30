@@ -1,7 +1,13 @@
 import Phaser from 'phaser';
 import i18n from '../../i18n';
 import { formatChips } from '../../lib/format';
-import { ensureFelt, ensureFxTextures, ensureLounge, hdImage, preloadOverrides } from '../art';
+import { DEFAULT_TABLE_SKIN } from '@casino/shared';
+import { skinColors, type OvalGeometry, type TableLayout } from '../../cosmetics/tableArt';
+import { useSession } from '../../store/session';
+import { ensureFelt, ensureFxTextures, ensureLounge, ensureSkinBackground, hdImage, preloadOverrides } from '../art';
+
+/** The signed-in player's equipped table skin (or the classic table). */
+export const viewerTableSkin = () => useSession.getState().user?.tableSkin ?? DEFAULT_TABLE_SKIN;
 import { FONT_DISPLAY, FONT_UI, RES, WORLD_H, WORLD_W } from '../hd';
 
 export const W = WORLD_W;
@@ -38,9 +44,15 @@ export abstract class BaseScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor('#07060f');
     ensureFxTextures(this);
     const bg = this.background();
-    if (bg === 'felt') ensureFelt(this);
-    else ensureLounge(this);
-    hdImage(this, W / 2, H / 2, bg === 'felt' ? 'bg-felt' : 'bg-lounge').setDepth(-100);
+    const layout = this.tableLayout();
+    if (layout) {
+      // The VIEWER's own table skin (personal cosmetic): never another player's, never room state.
+      hdImage(this, W / 2, H / 2, ensureSkinBackground(this, viewerTableSkin(), layout, this.tableOval())).setDepth(-100);
+    } else {
+      if (bg === 'felt') ensureFelt(this);
+      else ensureLounge(this);
+      hdImage(this, W / 2, H / 2, bg === 'felt' ? 'bg-felt' : 'bg-lounge').setDepth(-100);
+    }
     this.build();
     const onLang = () => this.labels.forEach((l) => l.obj.setText(i18n.t(l.key, l.vars)));
     i18n.on('languageChanged', onLang);
@@ -51,6 +63,21 @@ export abstract class BaseScene extends Phaser.Scene {
 
   protected background(): 'felt' | 'lounge' {
     return 'felt';
+  }
+
+  /** Table layout drawn by the viewer's table skin; null = no skin (e.g. slots). */
+  protected tableLayout(): TableLayout | null {
+    return null;
+  }
+
+  /** The oval card table's geometry, for the 'oval' layout. */
+  protected tableOval(): OvalGeometry | undefined {
+    return undefined;
+  }
+
+  /** Printed-line colour of the viewer's skin, for markings a scene draws itself. */
+  protected skin() {
+    return skinColors(viewerTableSkin());
   }
 
   protected abstract build(): void;
