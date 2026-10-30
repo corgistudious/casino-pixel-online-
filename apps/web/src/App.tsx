@@ -23,6 +23,7 @@ import { GiftcodesPage } from './admin/GiftcodesPage';
 import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
 import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
+import { FrameLibraryPage } from './pages/FrameLibraryPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
@@ -184,6 +185,7 @@ export function App() {
         <Route path="/bjt/:tableId" element={<Authed><BjtTablePage /></Authed>} />
         <Route path="/cards/:tableId" element={<Authed><CardTablePage /></Authed>} />
         <Route path="/collection" element={<Authed><CollectionPage /></Authed>} />
+        <Route path="/frames" element={<Authed><FrameLibraryPage /></Authed>} />
         <Route path="/mail" element={<Authed><MailboxPage /></Authed>} />
         <Route path="/missions" element={<Authed><MissionsPage /></Authed>} />
         <Route path="/guild" element={<Authed><GuildPage /></Authed>} />

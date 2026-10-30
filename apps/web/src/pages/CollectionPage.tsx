@@ -1,6 +1,7 @@
 import { DEFAULT_FRAME, type CatalogItem, type EquipSlot, type InventoryEntry, type ItemKind, type PublicUser, type Rarity } from '@casino/shared';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { errorText } from '../lib/errors';
 import { api } from '../net/api';
 import { assetSrc, itemName, useCatalog } from '../store/catalog';
@@ -39,11 +40,18 @@ export function CollectionPage() {
   const catalog = useCatalog((c) => c.items);
   const [kind, setKind] = useState<ItemKind>('frame');
   const [inventory, setInventory] = useState<InventoryEntry[] | null>(null);
+  const [roleFrames, setRoleFrames] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    void api<{ items: InventoryEntry[] }>('/api/me/inventory').then((r) => setInventory(r.items), (err) => toast(errorText(t, err, i18n.language), 'error'));
+    void api<{ items: InventoryEntry[]; roleFrames?: string[] }>('/api/me/inventory').then(
+      (r) => {
+        setInventory(r.items);
+        setRoleFrames(r.roleFrames ?? []);
+      },
+      (err) => toast(errorText(t, err, i18n.language), 'error'),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -51,6 +59,8 @@ export function CollectionPage() {
     const groups = new Map<string, Owned>();
     // The default frame is owned by everyone even though it has no inventory row.
     if (kind === 'frame') groups.set(DEFAULT_FRAME, { item: catalog[DEFAULT_FRAME], itemId: DEFAULT_FRAME, entries: [] });
+    // Role frames: usable while the player holds the role (no inventory row).
+    if (kind === 'frame') for (const id of roleFrames) groups.set(id, { item: catalog[id], itemId: id, entries: [{ instanceId: id, itemId: id, kind: 'frame', source: 'role', acquiredAt: '', expiresAt: null, active: true }] });
     for (const e of inventory ?? []) {
       if (e.kind !== kind) continue;
       const g = groups.get(e.itemId) ?? { item: catalog[e.itemId], itemId: e.itemId, entries: [] };
@@ -58,7 +68,7 @@ export function CollectionPage() {
       groups.set(e.itemId, g);
     }
     return [...groups.values()];
-  }, [inventory, catalog, kind]);
+  }, [inventory, catalog, kind, roleFrames]);
 
   const current = owned.find((o) => o.itemId === selected) ?? owned[0];
   const equippedId = equippedIn(user, kind);
@@ -91,7 +101,16 @@ export function CollectionPage() {
   return (
     <AppShell>
       <div className="flex flex-col gap-4 p-3 lg:p-5">
-        <PageHeader icon="collection" title={t('collection.title')} subtitle={t('collection.subtitle')} />
+        <PageHeader
+          icon="collection"
+          title={t('collection.title')}
+          subtitle={t('collection.subtitle')}
+          right={
+            <Link to="/frames" className="rounded-full border border-gold-300/50 bg-gold-300/10 px-4 py-1.5 text-sm text-gold-100 hover:bg-gold-300/20">
+              ✨ {t('frameLib.open')}
+            </Link>
+          }
+        />
         <div className="flex gap-1 overflow-x-auto rounded-xl border border-white/10 bg-black/25 p-1" role="tablist">
           {KINDS.map((k) => (
             <button
