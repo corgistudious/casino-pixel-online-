@@ -14,6 +14,8 @@ import type { Db, DbOrTx } from '../db/client';
 import { fail } from '../errors';
 import type { RealtimeHub } from '../realtime/hub';
 import { giftShowcase } from './gifts';
+import { playerGameStats } from './leaderboards';
+import { playerAwards } from './rankingRewards';
 import { rankBadges } from './rank';
 import { blockedBetween, CARD_COLUMNS, CARD_JOIN, presenceOf, toCard, VISIBLE_PLAYER, visiblePlayer, type CardRow } from './social';
 
@@ -219,6 +221,7 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
     db.execute<{ achievement_id: string }>(sql`SELECT achievement_id FROM achievement_claims WHERE user_id = ${p.user_id}::uuid ORDER BY claimed_at`),
     show('showGifts') ? giftShowcase(db, p.user_id) : Promise.resolve(null),
   ]);
+  const [gameStats, awards] = await Promise.all([show('showStats') ? playerGameStats(db, p.user_id) : Promise.resolve(null), playerAwards(db, p.user_id)]);
 
   let stats: PlayerProfileView['stats'] = null;
   if (show('showStats')) {
@@ -269,6 +272,8 @@ export async function playerProfile(db: Db, hub: RealtimeHub, meId: string, uid:
     wallet: { silver: Number(extra!.silver ?? 0), gold: Number(extra!.gold ?? 0) },
     stats,
     achievements: achievements.map((a) => a.achievement_id),
+    gameStats,
+    awards,
     collection,
     gifts,
     ...(self ? { privacy } : {}),
