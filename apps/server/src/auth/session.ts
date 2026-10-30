@@ -3,6 +3,7 @@ import type { Db } from '../db/client';
 import { fail } from '../errors';
 import { activeBan, BannedError } from '../services/accounts';
 import { findUser, type UserRow } from '../services/users';
+import { canSignIn } from './accountRules';
 
 export interface TokenPayload {
   sub: string;
@@ -43,7 +44,7 @@ export async function accountFromToken(app: FastifyInstance, db: Db, token: stri
   }
   if (payload.purpose) throw fail('unauthorized');
   const user = await findUser(db, payload.sub);
-  if (!user || user.tokenVersion !== payload.tv || user.status === 'deleted' || user.accountType !== 'player') throw fail('unauthorized');
+  if (!user || user.tokenVersion !== payload.tv || user.status === 'deleted' || !canSignIn(user)) throw fail('unauthorized');
   const ban = await activeBan(db, user.id);
   if (ban) throw new BannedError(ban.endsAt, ban.reason);
   return user;

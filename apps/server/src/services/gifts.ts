@@ -25,6 +25,7 @@ import { audit } from './audit';
 import { blockedBetween, visiblePlayer } from './social';
 import { assertStaffTarget } from './vip';
 import { applyDelta, getWallet } from './wallet';
+import { playableSql } from '../auth/accountRules';
 
 // ---------------------------------------------------------------- catalogue
 
@@ -300,7 +301,7 @@ export async function giftShowcase(db: DbOrTx, ownerId: string, sort: 'recent' |
 export async function charmBoard(db: Db, limit = 50): Promise<CharmBoardEntry[]> {
   const rows = await db.execute<{ uid: number; display_name: string; total: string }>(sql`
     SELECT u.uid, u.display_name, c.total FROM charm_points c JOIN users u ON u.id = c.user_id
-    WHERE c.total > 0 AND u.account_type = 'player' AND u.status = 'active' AND u.uid <> 1000
+    WHERE c.total > 0 AND ${playableSql()} AND u.status = 'active'
       AND NOT EXISTS (SELECT 1 FROM bans b WHERE b.user_id = u.id AND b.revoked_at IS NULL AND b.starts_at <= now() AND (b.ends_at IS NULL OR b.ends_at > now()))
     ORDER BY c.total DESC, c.updated_at ASC LIMIT ${limit}`);
   return rows.map((r, i) => ({ position: i + 1, uid: Number(r.uid), displayName: r.display_name, charm: Number(r.total) }));
@@ -491,8 +492,8 @@ export async function publishCounts(db: DbOrTx, hub: RealtimeHub, userId: string
   try {
     const [r] = await db.execute<{ uid: number; followers: number; likes: number; charm: string | null }>(sql`
       SELECT u.uid,
-        (SELECT count(*)::int FROM player_follows f JOIN users x ON x.id = f.follower_id WHERE f.followee_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted') AS followers,
-        (SELECT count(*)::int FROM profile_likes l JOIN users x ON x.id = l.liker_id WHERE l.profile_id = u.id AND x.account_type = 'player' AND x.status <> 'deleted') AS likes,
+        (SELECT count(*)::int FROM player_follows f JOIN users x ON x.id = f.follower_id WHERE f.followee_id = u.id AND (x.account_type = 'player' OR x.uid = 1000) AND x.status <> 'deleted') AS followers,
+        (SELECT count(*)::int FROM profile_likes l JOIN users x ON x.id = l.liker_id WHERE l.profile_id = u.id AND (x.account_type = 'player' OR x.uid = 1000) AND x.status <> 'deleted') AS likes,
         (SELECT total FROM charm_points c WHERE c.user_id = u.id) AS charm
       FROM users u WHERE u.id = ${userId}::uuid`);
     if (r) hub.broadcast({ type: 'event', event: 'counts', data: { uid: Number(r.uid), followers: r.followers, likes: r.likes, charm: Number(r.charm ?? 0) } });

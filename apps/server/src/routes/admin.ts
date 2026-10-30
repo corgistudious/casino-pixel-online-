@@ -1,4 +1,4 @@
-import { adminBadgesSchema, adminGrantSchema, DEFAULT_ROLES, PERMISSIONS, passwordSchema, roleRank, SPECIAL_UID_MAX, usernameSchema, emailSchema } from '@casino/shared';
+import { adminBadgesSchema, adminGrantSchema, DEFAULT_ROLES, isOwnerUid, PERMISSIONS, passwordSchema, roleRank, SPECIAL_UID_MAX, usernameSchema, emailSchema } from '@casino/shared';
 import { desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import type { FastifyInstance } from 'fastify';
@@ -26,6 +26,7 @@ import { badgesOf } from '../services/users';
 import { applyDelta, getWallet } from '../services/wallet';
 import type { Config } from '../config';
 import { makeGuards } from './guards';
+import { captainStatus, issueCaptainSetupLink } from '../services/captain';
 
 const uidParam = z.object({ uid: z.coerce.number().int().positive() });
 const page = z.object({ q: z.string().trim().max(100).optional(), limit: z.coerce.number().int().min(1).max(100).default(25), offset: z.coerce.number().int().min(0).default(0) });
@@ -38,6 +39,19 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     const me = req.account!;
     const rank = await rankOf(db, me.id);
     return { uid: me.uid, roles: await userRoleIds(db, me.id), rank, permissions: await userPermissions(db, me.id), grantableRoles: grantableRoles(rank) };
+  });
+
+  // ---------------------------------------------------------------- Keyo Captain (UID 1000) sign-in set-up
+  /** Whether Keyo Captain has a password and the Owner role (Owners only). */
+  app.get('/api/admin/captain', { preHandler: can('system.settings') }, async () => captainStatus(db));
+  /**
+   * One-time 30-minute link for Keyo Captain's FIRST password. Owner only (checked in the service),
+   * password re-confirmed, audited; refused once a password exists. The link is returned once and
+   * never logged.
+   */
+  app.post('/api/admin/captain/setup-link', { preHandler: canReauth('system.settings') }, async (req, reply) => {
+    reply.header('cache-control', 'no-store');
+    return issueCaptainSetupLink(db, req.account!.id, req.ip);
   });
 
   app.get('/api/admin/overview', { preHandler: can('admin.access') }, async () => {
@@ -270,6 +284,8 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     if (input.verified !== undefined) patch.isVerified = input.verified;
     if (input.partner !== undefined) patch.isPartner = input.partner;
     if (Object.keys(patch).length === 0) throw fail('bad_request');
+    // An Owner's badges are changed only by that Owner.
+    if (isOwnerUid(uid) && uid !== req.account!.uid) throw fail('protected_account');
     const row = await db.transaction(async (tx) => {
       const [r] = await tx.update(users).set(patch).where(eq(users.uid, uid)).returning();
       if (!r) throw fail('not_found');
@@ -290,6 +306,8 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     const target = await findByUid(db, uid);
     if (!target) throw fail('not_found');
     if (target.status === 'deleted' || target.accountType !== 'player') throw fail('system_account');
+    // Owners play under the same economy as everyone: no one (themselves included) can grant them Cxu.
+    if (isOwnerUid(target.uid)) throw fail('protected_account');
     const actorId = req.account!.id;
     const { result, replayed } = await runOnce(db, input.idempotencyKey, actorId, 'economy.grant', { uid, amount: input.amount, currency: input.currency, reason: input.reason }, async (tx) => {
       await applyDelta(tx, target.id, input.amount, 'admin_adjust', null, input.currency);

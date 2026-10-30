@@ -1,4 +1,4 @@
-import { KEYO_OWNER_UID, vipProgress, type VipAdjustInput, type VipEventView, type VipLevelInput, type VipLevelView, type VipStatusView } from '@casino/shared';
+import { isOwnerUid, vipProgress, type VipAdjustInput, type VipEventView, type VipLevelInput, type VipLevelView, type VipStatusView } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import type { Db, DbOrTx } from '../db/client';
 import { fail } from '../errors';
@@ -156,8 +156,8 @@ export async function deleteVipLevel(db: Db, actorId: string, level: number, ip?
 type Target = { id: string; uid: number; account_type: string; status: string };
 
 /**
- * Who a staff member may change VIP / Charm for: real player accounts only, never Keyo Support;
- * the Owner account only by the Owner; never yourself (except the Owner); never a staff member
+ * Who a staff member may change VIP / Charm for: real player accounts only, never Keyo Captain;
+ * an Owner account only by that same Owner; never yourself (except an Owner); never a staff member
  * ranked at or above you.
  */
 export async function assertStaffTarget(db: DbOrTx, actorId: string, uid: number): Promise<Target> {
@@ -165,9 +165,15 @@ export async function assertStaffTarget(db: DbOrTx, actorId: string, uid: number
   if (!t || t.status === 'deleted') throw fail('not_found');
   if (t.account_type !== 'player') throw fail('system_account');
   const [actor] = await db.execute<{ uid: number }>(sql`SELECT uid FROM users WHERE id = ${actorId}::uuid`);
-  const actorIsOwner = Number(actor?.uid) === KEYO_OWNER_UID;
-  if (Number(t.uid) === KEYO_OWNER_UID && !actorIsOwner) throw fail('protected_account');
-  if (actorIsOwner) return t;
+  // Owners are equals: an Owner account can only be changed by that same Owner.
+  const actorIsOwner = isOwnerUid(Number(actor?.uid));
+  if (isOwnerUid(Number(t.uid)) && Number(t.uid) !== Number(actor?.uid)) throw fail('protected_account');
+  if (actorIsOwner && t.id === actorId) return t;
+  if (actorIsOwner) {
+    const targetRank = await rankOf(db, t.id);
+    if (targetRank >= 100) throw fail('protected_account');
+    return t;
+  }
   if (t.id === actorId) throw fail('self_action_forbidden');
   const [actorRank, targetRank] = await Promise.all([rankOf(db, actorId), rankOf(db, t.id)]);
   if (targetRank >= actorRank) throw fail('forbidden');

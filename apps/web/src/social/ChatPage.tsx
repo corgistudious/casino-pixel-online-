@@ -1,4 +1,4 @@
-import { KEYO_SUPPORT_UID, SOCIAL_RULES, type ChatChannel, type ChatMessageView, type ConversationView } from '@casino/shared';
+import { KEYO_CAPTAIN_UID, SOCIAL_RULES, type ChatChannel, type ChatMessageView, type ConversationView } from '@casino/shared';
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { NavIcon } from '../ui/NavIcons';
 import { PlayerName } from '../ui/OfficialAssets';
 import { PlayerTrigger, useBlockedUids } from '../players/PlayerActions';
 import { Empty, PlayerChip, useFail } from './parts';
+import { openSupportMenu } from '../support/SupportMenu';
 
 type Tab = 'server' | 'guild' | 'dm';
 const TABS: Tab[] = ['server', 'guild', 'dm'];
@@ -35,6 +36,13 @@ export function ChatContent() {
   const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const tab: Tab = TABS.includes(params.get('tab') as Tab) ? (params.get('tab') as Tab) : params.get('dm') ? 'dm' : 'server';
+  const dm = Number(params.get('dm')) || null;
+  // Keyo Captain takes no direct messages: a link to its conversation opens the Support menu instead.
+  useEffect(() => {
+    if (dm !== KEYO_CAPTAIN_UID) return;
+    openSupportMenu();
+    setParams({ tab: 'dm' }, { replace: true });
+  }, [dm]); // eslint-disable-line react-hooks/exhaustive-deps
   const unread = useSocial((s) => s.unreadDm);
   const online = useSession((s) => s.status === 'online');
   return (
@@ -63,7 +71,7 @@ export function ChatContent() {
         <div className="min-h-0 flex-1">
           {tab === 'server' && <Room key="server" channel="server" />}
           {tab === 'guild' && <Room key="guild" channel="guild" />}
-          {tab === 'dm' && <Private initial={Number(params.get('dm')) || null} />}
+          {tab === 'dm' && <Private initial={dm === KEYO_CAPTAIN_UID ? null : dm} />}
         </div>
       </div>
   );
@@ -391,10 +399,9 @@ type Sender = ChatMessageView['sender'];
  * Who wrote a message, for every message (mine included): avatar inside the equipped frame with the
  * VIP badge, then name, Verified/Partner badges, rank, level, UID and equipped title. All of it
  * comes from the public card the server sends with the message (no extra request per line).
- * Tapping opens the same quick profile as everywhere else; system accounts are shown, not opened.
+ * Tapping opens the same quick profile as everywhere else (Keyo Captain's included).
  */
 function SenderTrigger({ sender, context, children }: { sender: Sender; context?: string; children: ReactNode }) {
-  if (sender.uid === KEYO_SUPPORT_UID) return <span className="inline-flex min-w-0">{children}</span>;
   return (
     <PlayerTrigger uid={sender.uid} label={sender.displayName} context={context}>
       {children}

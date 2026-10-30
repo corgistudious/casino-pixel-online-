@@ -240,7 +240,8 @@ export function AuthPage() {
 }
 
 /** Pages opened from e-mailed links: `#/verify-email?token=`, `#/reset-password?token=`, `#/activate?token=`. */
-export function EmailLinkPage({ kind }: { kind: 'verify' | 'reset' | 'activate' }) {
+/** Links opened from an email (verify, reset, activate) or Keyo Captain's one-time password set-up link. */
+export function EmailLinkPage({ kind }: { kind: 'verify' | 'reset' | 'activate' | 'captain' }) {
   const { t } = useTranslation();
   const [params] = useSearchParams();
   const token = params.get('token') ?? '';
@@ -287,7 +288,12 @@ export function EmailLinkPage({ kind }: { kind: 'verify' | 'reset' | 'activate' 
     if (password !== confirm) return setError(t('errors.password_mismatch'));
     void run(async () => {
       const body = { token, password, confirmPassword: confirm };
-      if (kind === 'activate') {
+      if (kind === 'captain') {
+        await api('/api/auth/captain-setup', { method: 'POST', body });
+        setPassword('');
+        setConfirm('');
+        setDone(true);
+      } else if (kind === 'activate') {
         const res = await api<{ token: string; user: PublicUser }>('/api/auth/activate', { method: 'POST', body });
         signIn(res.token, res.user);
         navigate('/', { replace: true });
@@ -301,10 +307,11 @@ export function EmailLinkPage({ kind }: { kind: 'verify' | 'reset' | 'activate' 
   };
 
   return (
-    <AuthFrame title={kind === 'activate' ? t('auth.activateTitle') : t('auth.forgotTitle')} onSubmit={submit}>
+    <AuthFrame title={kind === 'activate' ? t('auth.activateTitle') : kind === 'captain' ? t('captain.setup.title') : t('auth.forgotTitle')} onSubmit={submit}>
       {kind === 'activate' && <p className="text-sm text-white/60">{t('auth.activateBody')}</p>}
+      {kind === 'captain' && <p className="text-sm text-white/60">{token ? t('captain.setup.body') : t('captain.setup.missing')}</p>}
       {done ? (
-        <p className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-400">{t('auth.resetDone')}</p>
+        <p className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-400">{kind === 'captain' ? t('captain.setup.done') : t('auth.resetDone')}</p>
       ) : (
         <>
           <Field label={t('auth.newPassword')} hint={t('auth.passwordHint')}>
@@ -315,7 +322,7 @@ export function EmailLinkPage({ kind }: { kind: 'verify' | 'reset' | 'activate' 
           </Field>
           {error && <p className="text-sm text-ruby-400" role="alert">{error}</p>}
           <Button variant="gold" size="lg" type="submit" disabled={loading || !token}>
-            {loading ? t('app.loading') : kind === 'activate' ? t('auth.activateSubmit') : t('auth.resetSubmit')}
+            {loading ? t('app.loading') : kind === 'activate' ? t('auth.activateSubmit') : kind === 'captain' ? t('captain.setup.submit') : t('auth.resetSubmit')}
           </Button>
         </>
       )}

@@ -113,11 +113,19 @@ describe('follow, like and block', () => {
     expect(p.social).toMatchObject({ following: false, liked: false });
   });
 
-  it('Keyo Support (UID 1000) cannot be followed, liked, befriended or reported', async () => {
+  it('Keyo Captain (UID 1000) has a real profile that can be followed and liked, but never blocked, reported or befriended by request', async () => {
     const a = await register(t);
-    for (const url of ['/api/players/follow', '/api/players/like', '/api/friends/request']) expect((await call(a, 'POST', url, { uid: KEYO_SUPPORT_UID })).statusCode).toBe(404);
-    expect((await call(a, 'POST', '/api/reports', { uid: KEYO_SUPPORT_UID, category: 'spam', description: 'support account spam' })).statusCode).toBe(404);
-    expect((await call(a, 'GET', `/api/players/${KEYO_SUPPORT_UID}`)).statusCode).toBe(404);
+    const p = await profile(a, KEYO_SUPPORT_UID);
+    expect(p).toMatchObject({ relation: 'friend', online: true, presence: 'online' });
+    await call(a, 'POST', '/api/players/follow', { uid: KEYO_SUPPORT_UID });
+    await call(a, 'POST', '/api/players/like', { uid: KEYO_SUPPORT_UID });
+    expect((await profile(a, KEYO_SUPPORT_UID)).social).toMatchObject({ following: true, liked: true });
+    await call(a, 'POST', '/api/players/unfollow', { uid: KEYO_SUPPORT_UID });
+    expect((await profile(a, KEYO_SUPPORT_UID)).social.following).toBe(false);
+    // Already an official friend: a request is a no-op, never a pending row.
+    expect((await call(a, 'POST', '/api/friends/request', { uid: KEYO_SUPPORT_UID })).json().status).toBe('friends');
+    for (const url of ['/api/players/block', '/api/friends/remove']) expect((await call(a, 'POST', url, { uid: KEYO_SUPPORT_UID })).json().error.code).toBe('official_account');
+    expect((await call(a, 'POST', '/api/reports', { uid: KEYO_SUPPORT_UID, category: 'spam', description: 'support account spam' })).json().error.code).toBe('official_account');
   });
 
   it('a block ends friendship, requests and follows both ways and refuses new ones until unblocked', async () => {

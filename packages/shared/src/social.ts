@@ -93,6 +93,8 @@ export interface FriendView extends PlayerCard {
   since: string;
   /** May receive gifts from me now (friends long enough). */
   giftable: boolean;
+  /** Keyo Captain, the official support account (virtual friend of everyone, cannot be removed). */
+  official?: boolean;
 }
 
 export interface FriendRequestView extends PlayerCard {
@@ -415,5 +417,7 @@ export const supportCreateSchema = z.object({
   category: z.enum(SUPPORT_CATEGORIES),
   subject: z.string().trim().min(4).max(140),
   message: z.string().trim().min(10).max(4000),
+  /** Client key for retries: the same key returns the ticket already created instead of a copy. */
+  requestId: z.string().uuid().optional(),
 });
 export const supportReplySchema = z.object({ message: z.string().trim().min(1).max(4000) });

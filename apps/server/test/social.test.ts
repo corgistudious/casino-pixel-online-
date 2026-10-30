@@ -14,6 +14,7 @@ afterAll(async () => {
 });
 
 type Player = Awaited<ReturnType<typeof register>>;
+const real = (o: FriendsOverview) => o.friends.filter((f) => !f.official);
 const call = (p: Player, method: 'GET' | 'POST' | 'PATCH', url: string, payload?: unknown) =>
   t.app.inject({ method, url, headers: { authorization: `Bearer ${p.token}` }, payload: payload as object, remoteAddress: randomIp() });
 const ok = async <T = Record<string, unknown>>(p: Player, method: 'GET' | 'POST' | 'PATCH', url: string, payload?: unknown): Promise<T> => {
@@ -57,7 +58,7 @@ describe('friends', () => {
     expect((await ok<FriendsOverview>(a, 'GET', '/api/friends')).outgoing.map((r) => r.uid)).toEqual([b.user.uid]);
     // b asking back simply makes them friends.
     expect((await ok(b, 'POST', '/api/friends/request', { uid: a.user.uid })).status).toBe('friends');
-    expect((await ok<FriendsOverview>(a, 'GET', '/api/friends')).friends.map((f) => f.uid)).toEqual([b.user.uid]);
+    expect(real(await ok<FriendsOverview>(a, 'GET', '/api/friends')).map((f) => f.uid)).toEqual([b.user.uid]);
     expect(await code(a, 'POST', '/api/friends/request', { uid: b.user.uid })).toBe('already_owned');
 
     await ok(a, 'POST', '/api/friends/request', { uid: c.user.uid });
@@ -69,33 +70,49 @@ describe('friends', () => {
     expect((await ok<FriendsOverview>(d, 'GET', '/api/friends')).incoming).toEqual([]);
 
     await ok(a, 'POST', '/api/friends/remove', { uid: b.user.uid });
-    expect((await ok<FriendsOverview>(b, 'GET', '/api/friends')).friends).toEqual([]);
+    expect(real(await ok<FriendsOverview>(b, 'GET', '/api/friends'))).toEqual([]);
     expect(await code(a, 'POST', '/api/friends/request', { uid: a.user.uid })).toBe('self_social');
   });
 
   it('shows who is online', async () => {
     const [a, b] = [await register(t), await register(t)];
     await befriend(a, b);
-    expect((await ok<FriendsOverview>(a, 'GET', '/api/friends')).friends[0]!.online).toBe(false);
+    expect(real(await ok<FriendsOverview>(a, 'GET', '/api/friends'))[0]!.online).toBe(false);
     const s = await TestSocket.connect(t.port, b.token);
-    expect((await ok<FriendsOverview>(a, 'GET', '/api/friends')).friends[0]!.online).toBe(true);
+    expect(real(await ok<FriendsOverview>(a, 'GET', '/api/friends'))[0]!.online).toBe(true);
     s.close();
   });
 
-  it('never lists Keyo Support (UID 1000) as a friend, even with a legacy friendship row', async () => {
-    const a = await register(t);
-    const [support] = await t.db.execute<{ id: string }>(sql`SELECT id FROM users WHERE uid = ${KEYO_SUPPORT_UID}`);
-    // New sign-ups are no longer attached to Support by a trigger…
-    const [auto] = await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM friendships WHERE user_id = ${a.user.id} AND friend_id = ${support!.id}`);
-    expect(auto!.n).toBe(0);
-    // …and rows created by the old version stay in the database but are hidden.
-    await t.db.execute(sql`INSERT INTO friendships (user_id, friend_id) VALUES (${a.user.id}, ${support!.id})`);
-    expect((await ok<FriendsOverview>(a, 'GET', '/api/friends')).friends).toEqual([]);
-    expect((await ok<{ players: PlayerSearchResult[] }>(a, 'GET', `/api/friends/search?q=${KEYO_SUPPORT_UID}`)).players).toEqual([]);
-    expect(await code(a, 'POST', '/api/friends/request', { uid: KEYO_SUPPORT_UID })).toBe('not_found');
-    expect(await code(a, 'POST', `/api/chat/dm/${KEYO_SUPPORT_UID}`, { body: 'hi' })).toBe('protected_account');
-    const [kept] = await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM friendships WHERE friend_id = ${support!.id}`);
-    expect(kept!.n).toBeGreaterThan(0);
+  it('lists Keyo Captain (UID 1000) first as a virtual official friend, without rows, slots or legacy duplicates', async () => {
+    const [a, b] = [await register(t), await register(t)];
+    const [captain] = await t.db.execute<{ id: string }>(sql`SELECT id FROM users WHERE uid = ${KEYO_SUPPORT_UID}`);
+    const rowsFor = async (id: string) =>
+      ((await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM friendships WHERE user_id = ${id} AND friend_id = ${captain!.id}`)) as unknown as [{ n: number }])[0].n;
+    // Nothing is written per player…
+    expect(await rowsFor(a.user.id)).toBe(0);
+    await befriend(a, b);
+    const view = await ok<FriendsOverview>(a, 'GET', '/api/friends');
+    expect(view.friends.map((f) => f.uid)).toEqual([KEYO_SUPPORT_UID, b.user.uid]);
+    expect(view.friends[0]).toMatchObject({ official: true, online: true, presence: 'online', giftable: false, displayName: 'Keyo Captain' });
+    expect(view.friends.filter((f) => f.official)).toHaveLength(1);
+    // …a row left by an old version is not shown twice and still kept.
+    await t.db.execute(sql`INSERT INTO friendships (user_id, friend_id) VALUES (${a.user.id}, ${captain!.id})`);
+    expect((await ok<FriendsOverview>(a, 'GET', '/api/friends')).friends.map((f) => f.uid)).toEqual([KEYO_SUPPORT_UID, b.user.uid]);
+    expect(await rowsFor(a.user.id)).toBe(1);
+    expect((await ok<{ players: PlayerSearchResult[] }>(a, 'GET', `/api/friends/search?q=${KEYO_SUPPORT_UID}`)).players.map((p) => [p.uid, p.relation])).toEqual([[KEYO_SUPPORT_UID, 'friend']]);
+    expect((await ok(a, 'POST', '/api/friends/request', { uid: KEYO_SUPPORT_UID })).status).toBe('friends');
+    expect(await code(a, 'POST', '/api/friends/accept', { uid: KEYO_SUPPORT_UID })).toBe('official_account');
+    expect(await code(a, 'POST', '/api/friends/remove', { uid: KEYO_SUPPORT_UID })).toBe('official_account');
+    expect(await code(a, 'POST', '/api/gifts', { id: randomUUID(), kind: 'silver', uid: KEYO_SUPPORT_UID, amount: 1_000 })).toBe('official_account');
+    expect((await ok<FriendsOverview>(a, 'GET', '/api/friends')).friends[0]!.uid).toBe(KEYO_SUPPORT_UID);
+  });
+
+  it('routes direct messages to Keyo Captain into Support, both ways, without touching other DMs', async () => {
+    const [a, b] = [await register(t), await register(t)];
+    expect(await code(a, 'POST', `/api/chat/dm/${KEYO_SUPPORT_UID}`, { body: 'hi' })).toBe('support_only');
+    expect(await code(a, 'GET', `/api/chat/dm/${KEYO_SUPPORT_UID}`)).toBe('support_only');
+    await befriend(a, b);
+    expect((await call(a, 'POST', `/api/chat/dm/${b.user.uid}`, { body: 'xin chào' })).statusCode).toBe(200);
   });
 });
 

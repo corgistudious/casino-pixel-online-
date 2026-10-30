@@ -1,4 +1,4 @@
-import { addMonths, DEFAULT_PARTICIPATION, DEFAULT_RANK_RULES, idempotencyKeySchema, LEVEL_MAX, MAIL_MAX_ATTACHMENTS, mailAttachmentSchema, OFFICIAL_SEASON_REWARDS, participationSchema, SEASON_LENGTH_MONTHS, seasonRewardsSchema } from '@casino/shared';
+import { addMonths, DEFAULT_PARTICIPATION, DEFAULT_RANK_RULES, idempotencyKeySchema, isOwnerUid, LEVEL_MAX, MAIL_MAX_ATTACHMENTS, mailAttachmentSchema, OFFICIAL_SEASON_REWARDS, participationSchema, SEASON_LENGTH_MONTHS, seasonRewardsSchema } from '@casino/shared';
 import { asc, desc, eq, ne, sql } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
@@ -248,6 +248,8 @@ export function registerProgressionRoutes(app: FastifyInstance, db: Db, hub: Rea
     const target = await findByUid(db, uid);
     if (!target) throw fail('not_found');
     if (target.status === 'deleted' || target.accountType !== 'player') throw fail('system_account');
+    // Owners earn EXP and RP like everyone else: no manual corrections on their accounts.
+    if (isOwnerUid(target.uid)) throw fail('protected_account');
     const actorId = req.account!.id;
     const { result, replayed } = await runOnce(db, input.idempotencyKey, actorId, 'progression.adjust', { uid, expDelta: input.expDelta, rpDelta: input.rpDelta, reason: input.reason }, async (tx) => {
       const exp = input.expDelta ? await addExp(tx, target.id, { source: 'admin', sourceKey: `admin:${input.idempotencyKey}`, amount: input.expDelta, actorId, note: input.reason }) : null;

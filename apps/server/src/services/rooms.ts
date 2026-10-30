@@ -29,6 +29,7 @@ import { cardRoom, type CardTableEngine } from './cardTables';
 import { audit } from './audit';
 import { isProtectedDisplayName } from './protectedNames';
 import { blockedBetween, isFriend, visiblePlayer } from './social';
+import { playableSql } from '../auth/accountRules';
 
 type RoomRow = {
   id: string;
@@ -460,7 +461,7 @@ export class RoomService {
               const seatTable = r.engine === 'card' ? sql`card_seats` : sql`bj_seats`;
               const [heir] = await tx.execute<{ user_id: string }>(sql`
                 SELECT s.user_id FROM ${seatTable} s JOIN users u ON u.id = s.user_id
-                WHERE s.table_id = ${r.table_id} AND u.account_type = 'player' AND u.status = 'active'
+                WHERE s.table_id = ${r.table_id} AND ${playableSql()} AND u.status = 'active'
                   AND NOT EXISTS (SELECT 1 FROM game_rooms g WHERE g.owner_id = s.user_id AND g.closed_at IS NULL)
                 ORDER BY s.joined_at, s.seat LIMIT 1`);
               if (heir) {

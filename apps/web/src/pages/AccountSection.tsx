@@ -2,7 +2,7 @@ import type { PublicUser } from '@casino/shared';
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { errorText } from '../lib/errors';
-import { api } from '../net/api';
+import { api, ApiError } from '../net/api';
 import { useSession } from '../store/session';
 import { Button } from '../ui/Button';
 import { toast } from '../ui/toast';
@@ -26,6 +26,8 @@ export function AccountSection() {
   const [delPassword, setDelPassword] = useState('');
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [pw, setPw] = useState({ current: '', next: '', confirm: '' });
+  const signIn = useSession((s) => s.signIn);
   const fail = (err: unknown) => toast(errorText(t, err, i18n.language), 'error');
 
   useEffect(() => {
@@ -61,6 +63,15 @@ export function AccountSection() {
   const resend = act(async () => {
     await api('/api/auth/resend-verification', { method: 'POST' });
     toast(t('auth.resent'), 'success');
+  });
+
+  // Other sessions are signed out by the server; this one continues with the new token it returns.
+  const changePassword = act(async () => {
+    if (pw.next !== pw.confirm) throw new ApiError('password_mismatch', 400);
+    const res = await api<{ token: string; user: PublicUser }>('/api/me/password', { method: 'POST', body: { currentPassword: pw.current, password: pw.next, confirmPassword: pw.confirm } });
+    signIn(res.token, res.user);
+    setPw({ current: '', next: '', confirm: '' });
+    toast(t('account.passwordChanged'), 'success');
   });
 
   const logoutAll = act(async () => {
@@ -148,6 +159,17 @@ export function AccountSection() {
       )}
 
       {user.emailVerified && <p className="text-xs text-white/45">{t('account.changeEmailHint')}</p>}
+
+      <form onSubmit={changePassword} className="flex flex-col gap-2 border-t border-white/10 pt-4">
+        <p className="font-display">{t('account.changePassword')}</p>
+        <input className="field" type="password" placeholder={t('account.currentPassword')} value={pw.current} onChange={(e) => setPw({ ...pw, current: e.target.value })} required autoComplete="current-password" maxLength={128} />
+        <input className="field" type="password" placeholder={t('auth.newPassword')} value={pw.next} onChange={(e) => setPw({ ...pw, next: e.target.value })} required minLength={8} maxLength={128} autoComplete="new-password" />
+        <input className="field" type="password" placeholder={t('auth.confirmPassword')} value={pw.confirm} onChange={(e) => setPw({ ...pw, confirm: e.target.value })} required minLength={8} maxLength={128} autoComplete="new-password" />
+        <p className="text-[11px] text-white/45">{t('auth.passwordHint')}</p>
+        <Button type="submit" variant="gold" disabled={busy || !pw.current || pw.next.length < 8 || !pw.confirm}>
+          {t('account.changePassword')}
+        </Button>
+      </form>
 
       <div className="border-t border-white/10 pt-4">
         <Button disabled={busy} onClick={() => void logoutAll()}>

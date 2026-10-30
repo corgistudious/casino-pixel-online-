@@ -14,6 +14,7 @@ import { toast } from '../ui/toast';
 import { onRelationChange, PlayerTrigger } from '../players/PlayerActions';
 import { RankEmblem } from '../ui/RankEmblem';
 import { GiftDialog } from './dialogs';
+import { CaptainBadges, openSupportMenu } from '../support/SupportMenu';
 import { Empty, PlayerChip, Tabs, useFail, useSocialEvents } from './parts';
 
 type Tab = 'list' | 'requests' | 'search' | 'gifts';
@@ -41,7 +42,9 @@ export function FriendsPage() {
       fail(err);
     }
   };
-  const online = data?.friends.filter((f) => f.online).length ?? 0;
+  // Keyo Captain is a virtual official friend: it takes no slot and is not counted as a player online.
+  const real = data?.friends.filter((f) => !f.official) ?? [];
+  const online = real.filter((f) => f.online).length;
 
   return (
     <AppShell>
@@ -59,7 +62,7 @@ export function FriendsPage() {
             </div>
             {data && (
               <div className="flex gap-3 text-center">
-                <Stat value={data.friends.length} label={t('social.friends.tabs.list')} />
+                <Stat value={real.length} label={t('social.friends.tabs.list')} />
                 <Stat value={online} label={t('social.online')} accent />
                 <Stat value={data.incoming.length} label={t('social.friends.incoming')} />
               </div>
@@ -86,11 +89,15 @@ export function FriendsPage() {
             <Empty icon="👥">{t('social.friends.empty')}</Empty>
           ) : (
             <>
-              <p className="text-xs text-white/50">{t('social.friends.count', { count: data.friends.length, online })}</p>
+              <p className="text-xs text-white/50">{t('social.friends.count', { count: real.length, online })}</p>
               <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                {data.friends.map((f) => (
+                {data.friends.map((f) =>
+                  f.official ? (
+                    <CaptainCard key={f.uid} f={f} />
+                  ) : (
                   <FriendCard key={f.uid} f={f} onGift={() => setGiftTo(f)} onRemove={() => window.confirm(t('social.friends.confirmRemove', { name: f.displayName })) && void post('/api/friends/remove', f.uid)} />
-                ))}
+                  ),
+                )}
               </ul>
             </>
           ))}
@@ -167,6 +174,31 @@ function FriendCard({ f, onGift, onRemove }: { f: FriendView; onGift: () => void
       <div className="grid grid-cols-3 gap-2">
         <Button size="sm" variant="gold" onClick={() => navigate(`/chat?dm=${f.uid}`)}>{t('social.friends.message')}</Button>
         <Button size="sm" onClick={onGift} disabled={!f.giftable} title={f.giftable ? undefined : t('social.gift.tooSoon', { hours: 24 })}>{t('social.friends.gift')}</Button>
+        <Button size="sm" onClick={() => navigate(`/player/${f.uid}`)}>{t('social.friends.profile')}</Button>
+      </div>
+    </li>
+  );
+}
+
+/** Keyo Captain: pinned first, always online (official status), no remove; Message opens Support. */
+function CaptainCard({ f }: { f: FriendView }) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  return (
+    <li className="relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-gold-300/50 bg-gradient-to-br from-violet-800/40 via-[#1a0d30] to-black/60 p-4 shadow-[0_0_24px_-8px_rgba(242,193,78,0.45)] sm:col-span-2 xl:col-span-1">
+      <span className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gold-300/10 blur-2xl" />
+      <div className="relative flex min-w-0 items-start gap-2">
+        <PlayerTrigger uid={f.uid} label={f.displayName} context="friends">
+          <PlayerChip card={f} online="online" />
+        </PlayerTrigger>
+      </div>
+      <div className="relative flex flex-wrap items-center gap-1.5">
+        <CaptainBadges />
+        <span className="text-[11px] text-white/45">UID {f.uid}</span>
+      </div>
+      <p className="relative text-[11px] text-white/50">{t('captain.officialFriend')}</p>
+      <div className="relative grid grid-cols-2 gap-2">
+        <Button size="sm" variant="gold" onClick={() => openSupportMenu()}>{t('social.friends.message')}</Button>
         <Button size="sm" onClick={() => navigate(`/player/${f.uid}`)}>{t('social.friends.profile')}</Button>
       </div>
     </li>

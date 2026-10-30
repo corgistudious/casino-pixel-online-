@@ -35,6 +35,7 @@ import { playerRanks, rankEvents, rankSeasonResults, rankSeasons, rewardFlags, s
 import { fail } from '../errors';
 import { deliverReward } from './rewards';
 import { applyDelta } from './wallet';
+import { playableSql } from '../auth/accountRules';
 
 type SeasonRow = typeof rankSeasons.$inferSelect;
 type RankRow = typeof playerRanks.$inferSelect;
@@ -53,7 +54,7 @@ export async function activeSeason(db: DbOrTx): Promise<SeasonRow | undefined> {
 }
 
 /** Players present in the ladder: active player accounts that are not banned or disqualified. */
-const ladderMember = sql`NOT ${playerRanks.disqualified} AND EXISTS (SELECT 1 FROM users u WHERE u.id = ${playerRanks.userId} AND u.account_type = 'player' AND u.status = 'active'
+const ladderMember = sql`NOT ${playerRanks.disqualified} AND EXISTS (SELECT 1 FROM users u WHERE u.id = ${playerRanks.userId} AND ${playableSql()} AND u.status = 'active'
   AND NOT EXISTS (SELECT 1 FROM bans b WHERE b.user_id = u.id AND b.revoked_at IS NULL AND b.starts_at <= now() AND (b.ends_at IS NULL OR b.ends_at > now())))`;
 
 /**
@@ -82,7 +83,7 @@ export async function topPosition(db: DbOrTx, seasonId: number, userId: string):
   const [{ ahead }] = (await db.execute(sql`
     SELECT count(*)::int AS ahead FROM player_ranks pr JOIN users u ON u.id = pr.user_id
     WHERE pr.season_id = ${seasonId} AND pr.division = ${MAX_DIVISION} AND pr.rp >= ${RP_PER_DIVISION} AND NOT pr.disqualified
-      AND u.account_type = 'player' AND u.status = 'active'
+      AND ${playableSql()} AND u.status = 'active'
       AND (pr.rp > ${me.rp} OR (pr.rp = ${me.rp} AND (pr.rp_at < ${me.rpAt.toISOString()}::timestamptz OR (pr.rp_at = ${me.rpAt.toISOString()}::timestamptz AND u.uid < (SELECT uid FROM users WHERE id = ${userId})))))
       AND NOT EXISTS (SELECT 1 FROM bans b WHERE b.user_id = u.id AND b.revoked_at IS NULL AND b.starts_at <= now() AND (b.ends_at IS NULL OR b.ends_at > now()))`)) as unknown as [{ ahead: number }];
   const position = ahead + 1;
@@ -355,7 +356,7 @@ const topRankingSql = (seasonId: number) => sql`
   SELECT p.user_id, row_number() OVER (ORDER BY p.rp DESC, p.rp_at ASC, u.uid ASC) AS pos
   FROM player_ranks p JOIN users u ON u.id = p.user_id
   WHERE p.season_id = ${seasonId} AND p.division = ${MAX_DIVISION} AND p.rp >= ${RP_PER_DIVISION} AND NOT p.disqualified
-    AND u.account_type = 'player' AND u.status = 'active'
+    AND ${playableSql()} AND u.status = 'active'
     AND NOT EXISTS (SELECT 1 FROM bans b WHERE b.user_id = u.id AND b.revoked_at IS NULL AND b.starts_at <= now() AND (b.ends_at IS NULL OR b.ends_at > now()))`;
 
 /**
@@ -364,7 +365,7 @@ const topRankingSql = (seasonId: number) => sql`
  */
 const rewardEligibleSql = sql`(r.wins + r.losses) > 0
   AND NOT pr.disqualified
-  AND u.account_type = 'player' AND u.status = 'active'
+  AND ${playableSql()} AND u.status = 'active'
   AND NOT EXISTS (SELECT 1 FROM bans b WHERE b.user_id = u.id AND b.revoked_at IS NULL AND b.starts_at <= now() AND (b.ends_at IS NULL OR b.ends_at > now()))`;
 
 export interface EndSeasonResult {

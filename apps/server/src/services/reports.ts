@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { SOCIAL_RULES, type MyReportView, type ReportAttachmentView, type ReportCategory, type ReportInput, type ReportStatus, type StaffReportView } from '@casino/shared';
+import { KEYO_SUPPORT_UID, SOCIAL_RULES, type MyReportView, type ReportAttachmentView, type ReportCategory, type ReportInput, type ReportStatus, type StaffReportView } from '@casino/shared';
 import { sql } from 'drizzle-orm';
 import type { Db } from '../db/client';
 import { fail } from '../errors';
@@ -17,6 +17,8 @@ const iso = (v: string | Date | null) => (v ? new Date(v).toISOString() : null);
 
 export async function createReport(db: Db, me: { id: string; uid: number }, input: ReportInput): Promise<{ id: string }> {
   if (input.uid === me.uid) throw fail('self_social');
+  // Concerns about the official account go through the Support Center instead.
+  if (input.uid === KEYO_SUPPORT_UID) throw fail('official_account');
   return db.transaction(async (tx) => {
     const target = await visiblePlayer(tx, input.uid);
     // Serialises one reporter's reports so the daily limit holds under concurrent requests.

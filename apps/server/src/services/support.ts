@@ -9,7 +9,7 @@ import { userPermissions } from './rbac';
 /**
  * Support Center tickets. A ticket is private to its player and to staff holding support.read
  * (reading) / support.reply (answering, status) — Support, Admin and above. Players see staff
- * replies as "Keyo Support"; staff names stay internal. Every staff status change is audited.
+ * replies as "Keyo Captain"; staff names stay internal. Every staff status change is audited.
  */
 
 export async function isSupportStaff(db: DbOrTx, userId: string, need: 'support.read' | 'support.reply' = 'support.read'): Promise<boolean> {
@@ -54,15 +54,21 @@ const TICKET_COLUMNS = sql`t.id, t.user_id, t.category, t.subject, t.status, t.c
   t.last_staff_reply_at, t.last_player_reply_at, t.player_seen_at, t.staff_seen_at,
   (SELECT left(m.body, 140) FROM support_ticket_messages m WHERE m.ticket_id = t.id ORDER BY m.created_at DESC, m.id DESC LIMIT 1) AS last_message`;
 
-export async function createTicket(db: Db, userId: string, input: { category: SupportCategory; subject: string; message: string }) {
+export async function createTicket(db: Db, userId: string, input: { category: SupportCategory; subject: string; message: string; requestId?: string }) {
   return db.transaction(async (tx) => {
+    // Serialise this player's ticket creation so a retry cannot race the first attempt.
+    await tx.execute(sql`SELECT id FROM users WHERE id = ${userId}::uuid FOR UPDATE`);
+    if (input.requestId) {
+      const [prior] = await tx.execute<{ id: string }>(sql`SELECT id FROM support_tickets WHERE user_id = ${userId}::uuid AND client_key = ${input.requestId}::uuid`);
+      if (prior) return { id: prior.id, replayed: true };
+    }
     const [open] = await tx.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM support_tickets WHERE user_id = ${userId}::uuid AND status <> 'closed'`);
     if (open!.n >= 5) throw fail('too_many_attempts');
     const [t] = await tx.execute<{ id: string }>(sql`
-      INSERT INTO support_tickets (user_id, category, subject, player_seen_at, staff_seen_at, last_player_reply_at)
-      VALUES (${userId}::uuid, ${input.category}, ${input.subject}, now(), NULL, now()) RETURNING id`);
+      INSERT INTO support_tickets (user_id, category, subject, player_seen_at, staff_seen_at, last_player_reply_at, client_key)
+      VALUES (${userId}::uuid, ${input.category}, ${input.subject}, now(), NULL, now(), ${input.requestId ?? null}::uuid) RETURNING id`);
     await tx.execute(sql`INSERT INTO support_ticket_messages (ticket_id, author_id, body, from_staff) VALUES (${t!.id}::uuid, ${userId}::uuid, ${input.message}, false)`);
-    return { id: t!.id };
+    return { id: t!.id, replayed: false };
   });
 }
 
@@ -104,7 +110,7 @@ export async function ticketDetail(db: Db, userId: string, id: string): Promise<
     messages: rows.map((m) => ({
       id: m.id,
       fromStaff: m.from_staff,
-      author: m.from_staff ? (staff ? `Keyo Support · ${m.author_name} (#${m.author_uid})` : 'Keyo Support') : m.author_name,
+      author: m.from_staff ? (staff ? `Keyo Captain · ${m.author_name} (#${m.author_uid})` : 'Keyo Captain') : m.author_name,
       body: m.body,
       createdAt: iso(m.created_at)!,
     })),

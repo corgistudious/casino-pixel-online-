@@ -13,6 +13,7 @@ import { createActiveSeed } from './fair';
 import { assertOutranks, bootstrapOwner, isProtected, rankOf } from './rbac';
 import { isUniqueViolation, type UserRow } from './users';
 import { applyDelta } from './wallet';
+import { canSignIn } from '../auth/accountRules';
 
 export const MAX_FAILED_LOGINS = 5;
 export const LOCKOUT_MS = 15 * 60 * 1000;
@@ -177,7 +178,7 @@ export async function login(db: Db, loginName: string, password: string, ctx: Ac
     .from(users)
     .where(key.includes('@') ? and(eq(users.emailLower, key), sql`${users.emailVerifiedAt} IS NOT NULL`) : /^\d+$/.test(key) ? eq(users.uid, Number(key)) : eq(users.usernameLower, key));
   const now = new Date();
-  if (!user || user.accountType !== 'player' || user.status === 'deleted' || user.status === 'pending_activation') {
+  if (!user || !canSignIn(user) || user.status === 'deleted' || user.status === 'pending_activation') {
     await verifyPassword(password, await dummyPasswordHash());
     throw fail('invalid_credentials');
   }
@@ -477,7 +478,7 @@ export async function bootstrapSystemAccounts(db: Db): Promise<void> {
         uid: KEYO_SUPPORT_UID,
         username,
         usernameLower: username,
-        displayName: 'Keyo Support',
+        displayName: 'Keyo Captain',
         passwordHash: UNUSABLE_PASSWORD,
         accountType: 'system_support',
         status: 'active',

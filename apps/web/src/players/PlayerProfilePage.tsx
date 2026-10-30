@@ -1,4 +1,4 @@
-import { SOCIAL_RULES, type FollowListEntry, type InventoryEntry, type PlayerProfileView, type ProfilePrivacy } from '@casino/shared';
+import { KEYO_CAPTAIN_UID, SOCIAL_RULES, type FollowListEntry, type InventoryEntry, type PlayerProfileView, type ProfilePrivacy } from '@casino/shared';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { toast } from '../ui/toast';
 import { VipEmblem } from '../ui/VipEmblem';
 import { onRelationChange, PlayerTrigger, usePlayerActionItems } from './PlayerActions';
 import { ReportDialog } from './ReportDialog';
+import { CaptainBadges } from '../support/SupportMenu';
 import { AvatarCropDialog } from './AvatarCropDialog';
 import { GiftHistory, GiftShowcase } from './GiftShowcase';
 import { PlayerAvatar, PlayerRankBadge, useLiveCounts } from './identity';
@@ -103,6 +104,7 @@ export function PlayerProfilePage() {
                     <span>{p.presence === null ? t('people.profile.hiddenOnline') : t(`identity.presence.${p.presence}`)}</span>
                     <span>· {t('people.profile.joined', { date: new Date(p.createdAt).toLocaleDateString(i18n.language) })}</span>
                   </div>
+                  {p.uid === KEYO_CAPTAIN_UID && <CaptainBadges className="mt-2" />}
                   {p.title && (
                     <div className="mt-2">
                       <TitleBadge itemId={p.title} size="sm" />

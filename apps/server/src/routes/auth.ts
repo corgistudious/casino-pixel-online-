@@ -1,4 +1,6 @@
 import {
+  captainSetupSchema,
+  changePasswordSchema,
   deletionRequestSchema,
   forgotPasswordSchema,
   linkEmailSchema,
@@ -31,6 +33,7 @@ import {
   type AccountContext,
 } from '../services/accounts';
 import { toPublicUser } from '../services/users';
+import { changeOwnPassword, completeCaptainSetup } from '../services/captain';
 import { audit } from '../services/audit';
 import { fail } from '../errors';
 import { makeGuards } from './guards';
@@ -49,6 +52,21 @@ export function registerAuthRoutes(app: FastifyInstance, db: Db, hub: RealtimeHu
   app.post('/api/auth/login', { config: strict }, async (req) => {
     const input = loginSchema.parse(req.body);
     const user = await login(db, input.login, input.password, ctx(req));
+    return { token: signToken(app, user), user: await toPublicUser(db, user) };
+  });
+
+  /** Keyo Captain's first password, from the one-time link an Owner created (no session needed). */
+  app.post('/api/auth/captain-setup', { config: strict }, async (req) => {
+    const input = captainSetupSchema.parse(req.body);
+    await completeCaptainSetup(db, input.token, input.password, req.ip);
+    return { ok: true };
+  });
+
+  /** Change my own password (current one required). Other sessions are signed out; this one gets a new token. */
+  app.post('/api/me/password', { preHandler: authed, config: strict }, async (req) => {
+    const input = changePasswordSchema.parse(req.body);
+    const user = await changeOwnPassword(db, requireAccount(req), input.currentPassword, input.password, req.ip);
+    hub.kick(user.id);
     return { token: signToken(app, user), user: await toPublicUser(db, user) };
   });
 

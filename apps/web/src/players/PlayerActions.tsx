@@ -1,4 +1,4 @@
-import type { PlayerProfileView } from '@casino/shared';
+import { KEYO_CAPTAIN_UID, type PlayerProfileView } from '@casino/shared';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { useGiftShop } from './GiftShopDialog';
 import { PlayerAvatar, PlayerRankBadge, PlayerVipBadge, useLiveCounts } from './identity';
 import { toast } from '../ui/toast';
 import { ReportDialog } from './ReportDialog';
+import { CaptainBadges, openSupportMenu } from '../support/SupportMenu';
 
 /**
  * One interaction menu for every place a player's name or avatar appears (chat, friends, guild,
@@ -106,6 +107,23 @@ export function usePlayerActionItems(p: PlayerProfileView | null, reload: () => 
     return items;
   }
   if (opts.onViewProfile) items.push({ key: 'view', label: t('people.viewProfile'), onSelect: opts.onViewProfile, tone: 'gold' });
+  if (p.uid === KEYO_CAPTAIN_UID) {
+    // Keyo Captain: permanent official friend. "Message" opens the Support menu (no direct messages);
+    // it cannot be unfriended, blocked or reported, but can be followed, liked and gifted like anyone.
+    items.push({ key: 'message', label: t('people.message'), onSelect: () => openSupportMenu(), tone: 'gold' });
+    items.push(
+      p.social.following
+        ? { key: 'unfollow', label: t('people.unfollow'), onSelect: () => void run('/api/players/unfollow', p.uid, 'unfollowed') }
+        : { key: 'follow', label: t('people.follow'), onSelect: () => void run('/api/players/follow', p.uid, 'followed') },
+    );
+    items.push(
+      p.social.liked
+        ? { key: 'unlike', label: t('people.unlike'), onSelect: () => void run('/api/players/unlike', p.uid, 'unliked') }
+        : { key: 'like', label: t('people.like'), onSelect: () => void run('/api/players/like', p.uid, 'liked') },
+    );
+    items.push({ key: 'gift', label: t('giftShop.open'), onSelect: () => (opts.onGift ? opts.onGift() : useGiftShop.getState().open(p)), tone: 'gold' });
+    return items;
+  }
   const blocked = p.social.blocked || p.social.blockedBy;
   if (!blocked) {
     if (p.relation === 'none') items.push({ key: 'add', label: t('people.addFriend'), onSelect: () => void run('/api/friends/request', p.uid, 'request') });
@@ -286,6 +304,7 @@ export function PlayerActionHost() {
                     <PlayerName name={p.displayName} badges={p.badges} size={14} className="min-w-0 font-strong text-white" />
                     <PlayerRankBadge rank={p.rank} size={16} />
                   </div>
+                  {p.uid === KEYO_CAPTAIN_UID && <CaptainBadges />}
                   {p.title && <TitleBadge itemId={p.title} size="sm" />}
                   <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-white/55">
                     <span className="tabular-nums">UID {p.uid}</span>

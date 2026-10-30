@@ -2,6 +2,7 @@ import {
   KEYO_SUPPORT_UID,
   SOCIAL_RULES,
   type FriendRequestView,
+  type FriendView,
   type FriendsOverview,
   type GiftInput,
   type GiftsOverview,
@@ -29,8 +30,13 @@ export const CARD_COLUMNS = sql`u.id AS user_id, u.uid, u.display_name, u.avatar
 export const CARD_JOIN = sql`LEFT JOIN player_progress pp ON pp.user_id = u.id
   LEFT JOIN vip_progress cvp ON cvp.user_id = u.id
   LEFT JOIN avatar_uploads cav ON cav.user_id = u.id AND cav.status = 'active'`;
-/** Players other people may see and interact with: never Keyo Support, system or deleted accounts. */
-export const VISIBLE_PLAYER = sql`u.account_type = 'player' AND u.status <> 'deleted' AND u.uid <> ${KEYO_SUPPORT_UID}`;
+/**
+ * Players other people may see and interact with (profile, follow, like, Gift Shop, rooms):
+ * regular players plus Keyo Captain (UID 1000); never other system or deleted accounts.
+ */
+export const VISIBLE_PLAYER = sql`(u.account_type = 'player' OR u.uid = ${KEYO_SUPPORT_UID}) AND u.status <> 'deleted'`;
+/** Keyo Captain is everybody's friend by design; friend lists and limits leave it out (it is added virtually). */
+const NOT_CAPTAIN = sql`u.uid <> ${KEYO_SUPPORT_UID}`;
 
 export type CardRow = {
   user_id: string;
@@ -112,21 +118,45 @@ const notify = (hub: RealtimeHub, userId: string, data: Record<string, unknown>)
 
 // ---------------------------------------------------------------- friends
 
+/**
+ * Keyo Captain as a virtual friend for every other account: no friendship row is needed, it is
+ * not counted towards the friend limit and cannot be removed. Its presence is its official
+ * support status (always reachable through the Support menu), shown as online; it does not change
+ * any table's or room's real player counts. Keyo Captain itself does not see itself.
+ */
+async function captainFriend(db: DbOrTx, meId: string): Promise<FriendView | null> {
+  const [r] = await db.execute<CardRow & { status: string }>(sql`
+    SELECT ${CARD_COLUMNS}, u.status FROM users u ${CARD_JOIN} WHERE u.uid = ${KEYO_SUPPORT_UID} AND u.status <> 'deleted' AND u.id <> ${meId}::uuid`);
+  if (!r) return null;
+  const ranks = await rankBadges(db, [r.user_id]);
+  const rank = ranks.get(r.user_id);
+  return {
+    ...toCard(r),
+    rank: rank ? { division: rank.division, topTitle: rank.topTitle } : (toCard(r).rank ?? null),
+    online: true,
+    presence: 'online',
+    since: new Date(0).toISOString(),
+    giftable: false,
+    official: true,
+  };
+}
+
 export async function friendsOverview(db: Db, hub: RealtimeHub, meId: string): Promise<FriendsOverview> {
   const giftAfter = SOCIAL_RULES.gift.friendForHours;
   const [friends, incoming, outgoing] = await Promise.all([
     db.execute<CardRow & { since: string; giftable: boolean }>(sql`
       SELECT ${CARD_COLUMNS}, f.created_at AS since, f.created_at <= now() - make_interval(hours => ${giftAfter}) AS giftable
       FROM friendships f JOIN users u ON u.id = f.friend_id ${CARD_JOIN}
-      WHERE f.user_id = ${meId}::uuid AND ${VISIBLE_PLAYER}
+      WHERE f.user_id = ${meId}::uuid AND ${VISIBLE_PLAYER} AND ${NOT_CAPTAIN}
       ORDER BY u.display_name`),
     db.execute<CardRow & { created_at: string }>(sql`
       SELECT ${CARD_COLUMNS}, r.created_at FROM friend_requests r JOIN users u ON u.id = r.sender_id ${CARD_JOIN}
-      WHERE r.receiver_id = ${meId}::uuid AND ${VISIBLE_PLAYER} ORDER BY r.created_at DESC`),
+      WHERE r.receiver_id = ${meId}::uuid AND ${VISIBLE_PLAYER} AND ${NOT_CAPTAIN} ORDER BY r.created_at DESC`),
     db.execute<CardRow & { created_at: string }>(sql`
       SELECT ${CARD_COLUMNS}, r.created_at FROM friend_requests r JOIN users u ON u.id = r.receiver_id ${CARD_JOIN}
-      WHERE r.sender_id = ${meId}::uuid AND ${VISIBLE_PLAYER} ORDER BY r.created_at DESC`),
+      WHERE r.sender_id = ${meId}::uuid AND ${VISIBLE_PLAYER} AND ${NOT_CAPTAIN} ORDER BY r.created_at DESC`),
   ]);
+  const captain = await captainFriend(db, meId);
   const [presence, ranks] = await Promise.all([presenceOf(db, hub, friends.map((f) => f.user_id)), rankBadges(db, friends.map((f) => f.user_id))]);
   const request = (r: CardRow & { created_at: string }): FriendRequestView => ({ ...toCard(r), createdAt: iso(r.created_at) });
   const badge = (id: string) => {
@@ -134,12 +164,16 @@ export async function friendsOverview(db: Db, hub: RealtimeHub, meId: string): P
     return r ? { division: r.division, topTitle: r.topTitle } : null;
   };
   return {
-    friends: friends
-      .map((f) => {
-        const status = presence.get(f.user_id) ?? 'offline';
-        return { ...toCard(f), rank: badge(f.user_id), online: status !== 'offline', presence: status, since: iso(f.since), giftable: f.giftable };
-      })
-      .sort((a, b) => Number(b.online) - Number(a.online) || a.displayName.localeCompare(b.displayName)),
+    // Keyo Captain always comes first; it takes no friend slot and cannot be removed.
+    friends: [
+      ...(captain ? [captain] : []),
+      ...friends
+        .map((f) => {
+          const status = presence.get(f.user_id) ?? 'offline';
+          return { ...toCard(f), rank: badge(f.user_id), online: status !== 'offline', presence: status, since: iso(f.since), giftable: f.giftable };
+        })
+        .sort((a, b) => Number(b.online) - Number(a.online) || a.displayName.localeCompare(b.displayName)),
+    ],
     incoming: incoming.map(request),
     outgoing: outgoing.map(request),
   };
@@ -155,6 +189,7 @@ export async function searchPlayers(db: Db, hub: RealtimeHub, meId: string, quer
   const rows = await db.execute<CardRow & { relation: RelationStatus }>(sql`
     SELECT ${CARD_COLUMNS},
       CASE WHEN u.id = ${meId}::uuid THEN 'self'
+           WHEN u.uid = ${KEYO_SUPPORT_UID} THEN 'friend'
            WHEN EXISTS (SELECT 1 FROM friendships f WHERE f.user_id = ${meId}::uuid AND f.friend_id = u.id) THEN 'friend'
            WHEN EXISTS (SELECT 1 FROM friend_requests r WHERE r.sender_id = ${meId}::uuid AND r.receiver_id = u.id) THEN 'outgoing'
            WHEN EXISTS (SELECT 1 FROM friend_requests r WHERE r.sender_id = u.id AND r.receiver_id = ${meId}::uuid) THEN 'incoming'
@@ -167,7 +202,7 @@ export async function searchPlayers(db: Db, hub: RealtimeHub, meId: string, quer
 }
 
 async function friendCount(db: DbOrTx, userId: string) {
-  const [row] = await db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM friendships f JOIN users u ON u.id = f.friend_id WHERE f.user_id = ${userId}::uuid AND ${VISIBLE_PLAYER}`);
+  const [row] = await db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM friendships f JOIN users u ON u.id = f.friend_id WHERE f.user_id = ${userId}::uuid AND ${VISIBLE_PLAYER} AND ${NOT_CAPTAIN}`);
   return row!.n;
 }
 
@@ -180,6 +215,9 @@ async function makeFriends(db: DbOrTx, a: string, b: string) {
 /** Sends a request; if the other player already asked me, we simply become friends. */
 export async function sendFriendRequest(db: Db, hub: RealtimeHub, me: { id: string; uid: number }, uid: number): Promise<{ status: 'sent' | 'friends' }> {
   if (uid === me.uid) throw fail('self_social');
+  // Keyo Captain is already everyone's friend; it does not send or receive requests.
+  if (uid === KEYO_SUPPORT_UID) return { status: 'friends' };
+  if (me.uid === KEYO_SUPPORT_UID) throw fail('official_account');
   const result = await db.transaction(async (tx) => {
     // Lock both accounts in a fixed order so crossing requests cannot deadlock or double-insert.
     const other = await visiblePlayer(tx, uid);
@@ -204,6 +242,7 @@ export async function sendFriendRequest(db: Db, hub: RealtimeHub, me: { id: stri
 }
 
 export async function acceptFriendRequest(db: Db, hub: RealtimeHub, me: { id: string; uid: number }, uid: number) {
+  if (uid === KEYO_SUPPORT_UID || me.uid === KEYO_SUPPORT_UID) throw fail('official_account');
   const otherId = await db.transaction(async (tx) => {
     const other = await visiblePlayer(tx, uid);
     const [first, second] = [me.id, other.user_id].sort();
@@ -226,7 +265,7 @@ export async function dropFriendRequest(db: Db, meId: string, uid: number, which
 }
 
 export async function removeFriend(db: Db, hub: RealtimeHub, me: { id: string; uid: number }, uid: number) {
-  if (uid === KEYO_SUPPORT_UID) throw fail('protected_account');
+  if (uid === KEYO_SUPPORT_UID) throw fail('official_account');
   const other = await visiblePlayer(db, uid);
   const rows = await db.execute(sql`
     DELETE FROM friendships WHERE (user_id = ${me.id}::uuid AND friend_id = ${other.user_id}::uuid) OR (user_id = ${other.user_id}::uuid AND friend_id = ${me.id}::uuid)
@@ -289,6 +328,8 @@ export async function giftsOverview(db: Db, meId: string): Promise<GiftsOverview
 export async function sendGift(db: Db, hub: RealtimeHub, me: { id: string; uid: number }, input: GiftInput) {
   const rules = SOCIAL_RULES.gift;
   if (input.uid === me.uid) throw fail('bad_request');
+  // Cxu and items never move to or from the official account outside the Gift Shop (no back channel).
+  if (input.uid === KEYO_SUPPORT_UID || me.uid === KEYO_SUPPORT_UID) throw fail('official_account');
   const result = await db.transaction(async (tx) => {
     await tx.execute(sql`SELECT id FROM users WHERE id = ${me.id}::uuid FOR UPDATE`);
     const prior = await tx.execute<{ sender_id: string; receiver_uid: number; kind: string; amount: string; item_instance_id: string | null }>(sql`

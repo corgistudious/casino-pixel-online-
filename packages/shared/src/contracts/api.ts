@@ -32,6 +32,16 @@ export const passwordSchema = z
   .regex(/[A-Za-z]/)
   .regex(/[0-9]/);
 
+/** One-time Keyo Captain (UID 1000) password set-up from an Owner-issued link. */
+export const captainSetupSchema = z
+  .object({ token: z.string().min(20).max(200), password: passwordSchema, confirmPassword: z.string() })
+  .refine((v) => v.password === v.confirmPassword, { message: 'password_mismatch', path: ['confirmPassword'] });
+
+/** A signed-in account changes its own password. */
+export const changePasswordSchema = z
+  .object({ currentPassword: z.string().min(1).max(128), password: passwordSchema, confirmPassword: z.string() })
+  .refine((v) => v.password === v.confirmPassword, { message: 'password_mismatch', path: ['confirmPassword'] });
+
 export const registerSchema = z
   .object({
     displayName: z.string().trim().min(1).max(24),

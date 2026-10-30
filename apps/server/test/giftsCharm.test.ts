@@ -160,7 +160,7 @@ describe('sending a gift', () => {
     const [a, b] = [await sender(), await sender()];
     expect(code(await send(a, a, 'rose', 500))).toBe('self_social');
     expect(code(await send(a, b, 'rose', 400))).toBe('gift_price_changed');
-    expect(code(await call(auth(a), 'POST', '/api/gifts/send', { id: randomUUID(), uid: 1000, giftId: 'rose', expectedPrice: 500 }))).toBe('not_found');
+    expect(code(await call(auth(a), 'POST', '/api/gifts/send', { id: randomUUID(), uid: 999_999_999, giftId: 'rose', expectedPrice: 500 }))).toBe('not_found');
     expect(code(await send(a, b, 'yacht', 1_000_000))).toBe('gift_unavailable'); // not on sale
     await call(auth(b), 'POST', '/api/players/block', { uid: a.user.uid });
     expect(code(await send(a, b, 'rose', 500))).toBe('blocked');
