@@ -1,26 +1,6 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HashRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
-import { BlackjackGame } from './game/controls/BlackjackGame';
-import { RouletteGame } from './game/controls/RouletteGame';
-import { SicBoGame } from './game/controls/SicBoGame';
-import { SlotsGame } from './game/controls/SlotsGame';
-import { SharedTableGame } from './game/controls/SharedTableGame';
-import { AdminLayout, RequirePerm } from './admin/AdminLayout';
-import { AuditPage } from './admin/AuditPage';
-import { DashboardPage } from './admin/DashboardPage';
-import { DeletionsPage, SystemPage, UidsPage } from './admin/MiscPages';
-import { PlayersPage } from './admin/PlayersPage';
-import { VipAdminPage } from './admin/VipAdminPage';
-import { GiftsAdminPage } from './admin/GiftsAdminPage';
-import { CharmAdminPage } from './admin/CharmAdminPage';
-import { StaffPage } from './admin/StaffPage';
-import { ItemsPage } from './admin/ItemsPage';
-import { CollectionsAdminPage } from './admin/CollectionsAdminPage';
-import { MailAdminPage } from './admin/MailAdminPage';
-import { ProgressionAdminPage } from './admin/ProgressionAdminPage';
-import { SeasonRewardsPage } from './admin/SeasonRewardsPage';
-import { GiftcodesPage } from './admin/GiftcodesPage';
 import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
 import { GameHub } from './hub/GameHub';
 import { LeaderboardPage } from './pages/LeaderboardPage';
@@ -34,12 +14,8 @@ import { MailboxPage } from './pages/MailboxPage';
 import { VipPage } from './pages/VipPage';
 import { BankPage } from './pages/BankPage';
 import { SupportPage } from './support/SupportPage';
-import { SupportAdminPage } from './admin/SupportAdminPage';
-import { MissionConfigPage } from './admin/MissionConfigPage';
 import { BjtLobbyPage } from './bjt/BjtLobbyPage';
-import { BjtTablePage } from './bjt/BjtTablePage';
 import { AchievementsPage } from './pages/AchievementsPage';
-import { RoomsAdminPage } from './admin/RoomsAdminPage';
 import { TradingPage } from './pages/TradingPage';
 import { MissionsPage } from './pages/MissionsPage';
 import { ChatPage, ChatContent } from './social/ChatPage';
@@ -49,7 +25,6 @@ import { GuildPage } from './social/GuildPage';
 import { RankPage } from './pages/RankPage';
 import { GiftcodePage } from './pages/GiftcodePage';
 import { CardLobbyPage } from './pages/CardLobbyPage';
-import { CardTablePage } from './pages/CardTablePage';
 import { PlayerActionHost } from './players/PlayerActions';
 import { IdentitySync } from './players/identity';
 import { GiftShopHost } from './players/GiftShopDialog';
@@ -58,13 +33,48 @@ import { VictoryEffectHost } from './cosmetics/VictoryEffect';
 import { PlayerProfilePage } from './players/PlayerProfilePage';
 import { RoomInviteHost } from './rooms/RoomInviteHost';
 import { RoomsPage } from './rooms/RoomsPage';
-import { ReportsAdminPage } from './admin/ReportsAdminPage';
 import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, LevelUpBanner, TestEnvBadge, Toasts } from './ui/Chrome';
 import { OrientationGuard } from './ui/OrientationGuard';
 import { KeyoLogo } from './ui/KeyoLogo';
+
+// Heavy, rarely-first screens load on demand: the game rooms (Phaser) and the staff console.
+// Game rooms are prefetched once the player is signed in and the app is idle, so entering a room stays instant.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const named = <M extends Record<K, ComponentType<any>>, K extends keyof M & string>(load: () => Promise<M>, key: K) => lazy(() => load().then((m) => ({ default: m[key] })));
+const loadGames = {
+  blackjack: () => import('./game/controls/BlackjackGame'),
+  roulette: () => import('./game/controls/RouletteGame'),
+  sicbo: () => import('./game/controls/SicBoGame'),
+  slots: () => import('./game/controls/SlotsGame'),
+  shared: () => import('./game/controls/SharedTableGame'),
+  cards: () => import('./pages/CardTablePage'),
+  bjt: () => import('./bjt/BjtTablePage'),
+};
+const BlackjackGame = named(loadGames.blackjack, 'BlackjackGame');
+const RouletteGame = named(loadGames.roulette, 'RouletteGame');
+const SicBoGame = named(loadGames.sicbo, 'SicBoGame');
+const SlotsGame = named(loadGames.slots, 'SlotsGame');
+const SharedTableGame = named(loadGames.shared, 'SharedTableGame');
+const CardTablePage = named(loadGames.cards, 'CardTablePage');
+const BjtTablePage = named(loadGames.bjt, 'BjtTablePage');
+const AdminRoutes = named(() => import('./admin/AdminRoutes'), 'AdminRoutes');
+
+function prefetchGames() {
+  const run = () => Object.values(loadGames).forEach((load) => void load().catch(() => {}));
+  if ('requestIdleCallback' in window) window.requestIdleCallback(run, { timeout: 4000 });
+  else setTimeout(run, 2000);
+}
+
+function RouteLoading() {
+  return (
+    <div className="flex h-full items-center justify-center" role="status" aria-live="polite">
+      <div className="h-[3px] w-40 animate-pulse rounded-full bg-gradient-to-r from-transparent via-gold-300 to-transparent" />
+    </div>
+  );
+}
 
 function GameRoute() {
   const { game } = useParams();
@@ -102,13 +112,13 @@ function InGameChat() {
         onClick={() => setOpen((v) => !v)}
         aria-label="Chat"
         title="Chat"
-        className="fixed bottom-3 left-3 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-[#f2c14e]/70 bg-[#180f38]/95 shadow-lg hover:brightness-125"
+        className="hide-on-keyboard fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-[max(0.75rem,env(safe-area-inset-left))] z-40 flex h-11 w-11 items-center justify-center rounded-full border border-[#f2c14e]/70 bg-[#180f38]/95 shadow-lg hover:brightness-125"
       >
         <NavIcon name="chat" size={23} active />
       </button>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-2 sm:p-4" role="dialog" aria-modal="true" aria-label="Chat">
-          <div className="flex h-[min(92dvh,680px)] w-[min(94vw,850px)] min-h-0 flex-col overflow-hidden rounded-2xl border border-[#f2c14e]/50 bg-[#0b0920] shadow-2xl">
+        <div className="overlay z-50 flex items-center justify-center bg-black/60" role="dialog" aria-modal="true" aria-label="Chat">
+          <div className="flex h-[min(100%,680px)] w-[min(94vw,850px)] min-h-0 flex-col overflow-hidden rounded-2xl border border-[#f2c14e]/50 bg-[#0b0920] shadow-2xl">
             <div className="flex shrink-0 justify-end border-b border-white/10 px-3 py-1">
               <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="rounded-lg px-3 py-1 text-lg text-white hover:bg-white/10">×</button>
             </div>
@@ -134,6 +144,10 @@ export function App() {
   const booting = useSession((s) => s.booting);
   const boot = useSession((s) => s.boot);
   const reduceMotion = useSettings((s) => s.reduceMotion);
+  const signedIn = useSession((s) => !!s.user);
+  useEffect(() => {
+    if (signedIn) prefetchGames();
+  }, [signedIn]);
 
   const loadCatalog = useCatalog((c) => c.load);
   useEffect(() => {
@@ -169,6 +183,7 @@ export function App() {
       <VictoryEffectHost />
       <RoomInviteHost />
       <InGameChat />
+      <Suspense fallback={<RouteLoading />}>
       <Routes>
         <Route path="/" element={<Authed><GameHub /></Authed>} />
         <Route path="/play/:game" element={<Authed><GameRoute /></Authed>} />
@@ -199,37 +214,14 @@ export function App() {
         <Route path="/leaderboard" element={<Authed><LeaderboardPage /></Authed>} />
         <Route path="/rank" element={<Authed><RankPage /></Authed>} />
         <Route path="/settings" element={<Authed><SettingsPage /></Authed>} />
-        <Route path="/admin" element={<Authed admin><AdminLayout /></Authed>}>
-          <Route path="dashboard" element={<RequirePerm perm="dashboard.read"><DashboardPage /></RequirePerm>} />
-          <Route path="players" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
-          <Route path="players/:uid" element={<RequirePerm perm="users.read"><PlayersPage /></RequirePerm>} />
-          <Route path="vip" element={<RequirePerm perm="vip.read"><VipAdminPage /></RequirePerm>} />
-          <Route path="vip/:uid" element={<RequirePerm perm="vip.read"><VipAdminPage /></RequirePerm>} />
-          <Route path="gifts" element={<RequirePerm perm="gifts.read"><GiftsAdminPage /></RequirePerm>} />
-          <Route path="charm" element={<RequirePerm perm="charm.read"><CharmAdminPage /></RequirePerm>} />
-          <Route path="charm/:uid" element={<RequirePerm perm="charm.read"><CharmAdminPage /></RequirePerm>} />
-          <Route path="staff" element={<RequirePerm perm="staff.read"><StaffPage /></RequirePerm>} />
-          <Route path="support" element={<RequirePerm perm="support.read"><SupportAdminPage /></RequirePerm>} />
-          <Route path="reports" element={<RequirePerm perm="reports.manage"><ReportsAdminPage /></RequirePerm>} />
-          <Route path="progression" element={<RequirePerm perm="progression.read"><ProgressionAdminPage /></RequirePerm>} />
-          <Route path="missions" element={<RequirePerm perm="progression.read"><MissionConfigPage /></RequirePerm>} />
-          <Route path="season-rewards" element={<RequirePerm perm="progression.read"><SeasonRewardsPage /></RequirePerm>} />
-          <Route path="giftcodes" element={<RequirePerm perm="giftcode.manage"><GiftcodesPage /></RequirePerm>} />
-          <Route path="rooms" element={<RequirePerm perm="rooms.manage"><RoomsAdminPage /></RequirePerm>} />
-          <Route path="items" element={<RequirePerm perm="items.read"><ItemsPage /></RequirePerm>} />
-          <Route path="collections" element={<RequirePerm perm="items.read"><CollectionsAdminPage /></RequirePerm>} />
-          <Route path="mail" element={<RequirePerm perm="mail.send"><MailAdminPage /></RequirePerm>} />
-          <Route path="audit" element={<RequirePerm perm="audit.read"><AuditPage /></RequirePerm>} />
-          <Route path="uids" element={<RequirePerm perm="uid.assign"><UidsPage /></RequirePerm>} />
-          <Route path="deletions" element={<RequirePerm perm="deletion.manage"><DeletionsPage /></RequirePerm>} />
-          <Route path="system" element={<RequirePerm perm="mail.read"><SystemPage /></RequirePerm>} />
-        </Route>
+        <Route path="/admin/*" element={<Authed admin><Suspense fallback={<RouteLoading />}><AdminRoutes /></Suspense></Authed>} />
         <Route path="/verify-email" element={<EmailLinkPage kind="verify" />} />
         <Route path="/reset-password" element={<EmailLinkPage kind="reset" />} />
         <Route path="/activate" element={<EmailLinkPage kind="activate" />} />
         <Route path="/captain-setup" element={<EmailLinkPage kind="captain" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
     </HashRouter>
   );
 }
