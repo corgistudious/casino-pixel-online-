@@ -1,5 +1,5 @@
 import { KEYO_CAPTAIN_UID, SOCIAL_RULES, type ChatChannel, type ChatMessageView, type ConversationView } from '@casino/shared';
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 import { api, ApiError } from '../net/api';
@@ -46,14 +46,14 @@ export function ChatContent() {
   const unread = useSocial((s) => s.unreadDm);
   const online = useSession((s) => s.status === 'online');
   return (
-      <div className="flex h-full min-h-0 flex-col gap-3 p-3 lg:p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="chat-shell flex h-full min-h-0 flex-col gap-3 p-3 lg:p-5 short:gap-2 short:p-2">
+        <div className="hide-on-keyboard flex flex-wrap items-center justify-between gap-3">
           <h1 className="flex items-center gap-2 font-display text-2xl font-heading text-white">
             <NavIcon name="chat" size={26} active /> {t('social.chat.title')}
           </h1>
           {!online && <span className="rounded-full bg-amber-500/15 px-3 py-1 text-xs text-amber-200" role="status">{t('social.chat.reconnecting')}</span>}
         </div>
-        <div className="flex gap-1 rounded-2xl border border-cyan-300/20 bg-black/35 p-1" role="tablist">
+        <div className="chat-tabs flex shrink-0 gap-1 rounded-2xl border border-cyan-300/20 bg-black/35 p-1" role="tablist">
           {TABS.map((id) => (
             <button
               key={id}
@@ -283,19 +283,57 @@ function Thread({ messages: all, more, onOlder, onRemove, context }: { messages:
   const { t, i18n } = useTranslation();
   const me = useSession((s) => s.user?.uid);
   const box = useRef<HTMLDivElement>(null);
+  // Follow new messages only while the reader is at the bottom; reading history is never yanked down.
   const stick = useRef(true);
+  const [unseen, setUnseen] = useState(false);
   const last = messages?.at(-1)?.id;
+  const first = messages?.[0]?.id;
+  const anchor = useRef<{ first: number | undefined; fromBottom: number }>({ first: undefined, fromBottom: 0 });
+  // A new conversation (list reset to loading) starts at its latest message.
+  useLayoutEffect(() => {
+    if (messages !== null) return;
+    stick.current = true;
+    anchor.current.first = undefined;
+    setUnseen(false);
+  }, [messages === null]); // eslint-disable-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    if (anchor.current.first !== undefined && first !== anchor.current.first && !stick.current) {
+      // Older messages were prepended: keep the message being read where it was.
+      el.scrollTop = el.scrollHeight - anchor.current.fromBottom;
+    } else if (stick.current) el.scrollTop = el.scrollHeight;
+    else setUnseen(true);
+    anchor.current.first = first;
+  }, [last, first, messages?.length]);
+  // The list shrinks when the keyboard opens: stay pinned to the latest message if we were there.
   useEffect(() => {
     const el = box.current;
-    if (el && stick.current) el.scrollTop = el.scrollHeight;
-  }, [last, messages?.length]);
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => {
+      if (stick.current) el.scrollTop = el.scrollHeight;
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [messages === null]); // eslint-disable-line react-hooks/exhaustive-deps
+  const toLatest = () => {
+    const el = box.current;
+    if (!el) return;
+    stick.current = true;
+    setUnseen(false);
+    el.scrollTop = el.scrollHeight;
+  };
   if (!messages) return <div className="flex-1 p-4 text-sm text-white/45">{t('app.loading')}</div>;
   return (
+    <div className="relative flex min-h-0 flex-1 flex-col">
     <div
       ref={box}
       onScroll={(e) => {
         const el = e.currentTarget;
-        stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+        const fromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+        stick.current = fromBottom < 80;
+        anchor.current.fromBottom = el.scrollHeight - el.scrollTop;
+        if (stick.current && unseen) setUnseen(false);
       }}
       className="min-h-0 flex-1 overflow-y-auto px-3 py-3"
       role="log"
@@ -336,18 +374,44 @@ function Thread({ messages: all, more, onOlder, onRemove, context }: { messages:
         })}
       </ol>
     </div>
+    {unseen && (
+      <button type="button" onClick={toLatest} className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-gold-300/60 bg-ink-900/95 px-3 py-1 text-xs text-gold-100 shadow-lg">
+        ↓ {t('social.chat.newMessages')}
+      </button>
+    )}
+    </div>
   );
 }
+
+/** Unsent text per conversation, kept while the app is open (closing the keyboard, switching tabs or rooms never loses it). */
+const drafts = new Map<string, string>();
 
 function Composer({ channel, path, locked = false }: { channel: ChatChannel; path: string; locked?: boolean }) {
   const { t } = useTranslation();
   const fail = useFail();
-  const [body, setBody] = useState('');
+  const [body, setBodyState] = useState(() => drafts.get(path) ?? '');
   const [busy, setBusy] = useState(false);
+  const sending = useRef(false);
+  const input = useRef<HTMLTextAreaElement>(null);
   const max = SOCIAL_RULES.chat.maxLength;
+  const setBody = (v: string) => {
+    setBodyState(v);
+    if (v) drafts.set(path, v);
+    else drafts.delete(path);
+  };
+  useEffect(() => setBodyState(drafts.get(path) ?? ''), [path]);
+  // Grow with the text up to the max height (measured once per change, not per frame).
+  useLayoutEffect(() => {
+    const el = input.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 112)}px`;
+  }, [body]);
   const send = async () => {
     const text = body.trim();
-    if (!text || busy) return;
+    // A ref, not state: two taps in the same frame must not post twice.
+    if (!text || sending.current) return;
+    sending.current = true;
     setBusy(true);
     try {
       await api(path, { method: 'POST', body: { body: text } });
@@ -355,6 +419,7 @@ function Composer({ channel, path, locked = false }: { channel: ChatChannel; pat
     } catch (err) {
       fail(err);
     } finally {
+      sending.current = false;
       setBusy(false);
     }
   };
@@ -369,6 +434,7 @@ function Composer({ channel, path, locked = false }: { channel: ChatChannel; pat
     <div className="border-t border-white/10 bg-black/25 p-2">
       <div className="flex items-end gap-2">
         <textarea
+          ref={input}
           className="field max-h-28 min-h-[44px] flex-1 resize-none"
           rows={1}
           maxLength={max}
@@ -379,12 +445,13 @@ function Composer({ channel, path, locked = false }: { channel: ChatChannel; pat
           aria-label={t('social.chat.placeholder')}
           data-channel={channel}
         />
-        <Button variant="gold" onClick={() => void send()} disabled={busy || !body.trim()}>
+        {/* Keep focus in the field: tapping Send must not close the keyboard and shift the layout mid-tap. */}
+        <Button variant="gold" className="min-h-[44px]" onPointerDown={(e) => e.preventDefault()} onClick={() => void send()} disabled={busy || !body.trim()}>
           {t('social.chat.send')}
         </Button>
       </div>
       <div className="mt-1 flex justify-between px-1 text-[10px] text-white/35">
-        <span>{t('social.chat.rules')}</span>
+        <span className="hide-on-keyboard">{t('social.chat.rules')}</span>
         <span className="tabular-nums">
           {body.length}/{max}
         </span>
