@@ -1,3 +1,4 @@
+import { ACCOUNT_NAME_MAX, accountNameProblem } from '@casino/shared';
 import { type FairnessInfo, type PlayerStats, type PublicUser, type RevealedSeed, type RoundSummary } from '@casino/shared';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -226,8 +227,11 @@ export function ProfilePage() {
 
             <section className="glass flex flex-col gap-3 p-4">
               <label className="flex flex-col gap-1 text-sm">
-                <span className="text-white/60">{t('auth.displayName')}</span>
-                <input className="field" value={displayName} maxLength={24} onChange={(e) => setDisplayName(e.target.value)} />
+                <span className="text-white/60">{t('auth.accountName')}</span>
+                <input className="field" value={displayName} maxLength={ACCOUNT_NAME_MAX} onChange={(e) => setDisplayName(e.target.value)} autoCapitalize="none" spellCheck={false} />
+                <span className={`text-[11px] ${displayName.trim() && accountNameProblem(displayName) ? 'text-ruby-300' : 'text-white/45'}`}>
+                  {displayName.trim() && accountNameProblem(displayName) ? t('errors.name_invalid') : t('auth.accountNameHint')}
+                </span>
               </label>
               <div className="flex items-center gap-3 rounded-xl border border-gold-300/20 bg-black/20 p-3 text-xs text-white/70">
                 <img src="/assets/official/rename-card.png" alt={t('market.renameCard')} className="h-16 w-16 shrink-0 object-contain short:h-12 short:w-12" />

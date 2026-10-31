@@ -1,3 +1,4 @@
+import { ACCOUNT_NAME_MAX, accountNameProblem } from '@casino/shared';
 import { ECONOMY, type PublicUser } from '@casino/shared';
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -159,8 +160,11 @@ export function AuthPage() {
 
       {mode === 'register' && (
         <>
-          <Field label={t('auth.displayName')}>
-            <input className="field" value={displayName} onChange={(e) => setDisplayName(e.target.value)} maxLength={24} placeholder="Keyo Player" autoComplete="nickname" required />
+          <Field label={t('auth.accountName')}>
+            <input className="field" value={displayName} onChange={(e) => setDisplayName(e.target.value)} maxLength={ACCOUNT_NAME_MAX} placeholder="KeyoPlayer" autoComplete="username" autoCapitalize="none" spellCheck={false} required aria-describedby="account-name-hint" />
+            <span id="account-name-hint" className={`text-[11px] ${displayName.trim() && accountNameProblem(displayName) ? 'text-ruby-300' : 'text-white/45'}`}>
+              {displayName.trim() && accountNameProblem(displayName) ? t('errors.name_invalid') : t('auth.accountNameHint')}
+            </span>
           </Field>
           <Field label={t('auth.email')}>
             <input className="field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" maxLength={254} />
