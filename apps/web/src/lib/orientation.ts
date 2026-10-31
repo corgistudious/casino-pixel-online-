@@ -22,7 +22,8 @@ export function readOrientation(env: OrientationEnv): Orientation {
   return env.mediaPortrait ? 'portrait' : 'landscape';
 }
 
-function current(): Orientation {
+/** The device's physical orientation right now (see readOrientation). */
+export function currentOrientation(): Orientation {
   const w = window as Window & { orientation?: number };
   return readOrientation({
     screenType: typeof screen !== 'undefined' ? screen.orientation?.type ?? null : null,
@@ -33,9 +34,9 @@ function current(): Orientation {
 
 /** Live orientation: follows rotations without reloading or remounting anything. */
 export function useOrientation(): Orientation {
-  const [o, setO] = useState<Orientation>(() => (typeof window === 'undefined' ? 'landscape' : current()));
+  const [o, setO] = useState<Orientation>(() => (typeof window === 'undefined' ? 'landscape' : currentOrientation()));
   useEffect(() => {
-    const update = () => setO(current());
+    const update = () => setO(currentOrientation());
     const mq = typeof window.matchMedia === 'function' ? window.matchMedia('(orientation: portrait)') : null;
     screen.orientation?.addEventListener?.('change', update);
     window.addEventListener('orientationchange', update);

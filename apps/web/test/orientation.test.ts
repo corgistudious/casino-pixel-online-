@@ -102,3 +102,19 @@ describe('keyboardState', () => {
     expect(keyboardState(844, 503.6, true)).toEqual({ open: true, appHeight: 504 });
   });
 });
+
+describe('standaloneAppSize', () => {
+  it('sizes an iPhone home-screen app from the screen, by physical orientation', async () => {
+    const { standaloneAppSize } = await import('../src/lib/viewport');
+    const iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15';
+    // iOS reports screen.width/height portrait-fixed (430×932 on a Pro Max) whatever the rotation.
+    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'landscape' })).toEqual({ w: 932, h: 430 });
+    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'portrait' })).toEqual({ w: 430, h: 932 });
+    // Same result if a browser reports the screen already rotated.
+    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 932, screenH: 430, orientation: 'landscape' })).toEqual({ w: 932, h: 430 });
+    // Safari tab (not installed), iPad (multitasking windows) and Android: leave the size to the browser.
+    expect(standaloneAppSize({ standalone: false, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'landscape' })).toBeNull();
+    expect(standaloneAppSize({ standalone: true, userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X)', screenW: 820, screenH: 1180, orientation: 'landscape' })).toBeNull();
+    expect(standaloneAppSize({ standalone: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) Mobile', screenW: 412, screenH: 915, orientation: 'landscape' })).toBeNull();
+  });
+});

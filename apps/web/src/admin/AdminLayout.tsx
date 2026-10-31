@@ -50,7 +50,7 @@ export function AdminLayout() {
   if (location.pathname.replace(/\/+$/, '') === '/admin') return <Navigate to={sections[0] ? `/admin/${sections[0].path}` : '/'} replace />;
 
   return (
-    <div className="flex h-full flex-col bg-[radial-gradient(ellipse_at_20%_0%,#24185a,#0b0822_55%,#05040f)] lg:flex-row">
+    <div className="safe-pad flex h-full flex-col bg-[radial-gradient(ellipse_at_20%_0%,#24185a,#0b0822_55%,#05040f)] lg:flex-row">
       <ReauthDialog />
       <aside className="flex shrink-0 flex-col gap-3 border-b border-white/10 bg-black/25 p-3 lg:w-60 lg:border-b-0 lg:border-r lg:p-4">
         <div className="flex items-center justify-between gap-2">

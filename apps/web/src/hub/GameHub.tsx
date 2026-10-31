@@ -457,6 +457,8 @@ export function GameHub() {
       <WelcomeModal />
       <div className="relative min-h-0 flex-1">
         <LoungeBackground />
+        {/* The lounge background fills the screen; the scaled stage keeps clear of the notch and home indicator. */}
+        <div className="safe-pad absolute inset-0">
         <Stage>
           {({ compact, width }) => {
             const s = sizes(compact);
@@ -484,6 +486,7 @@ export function GameHub() {
             );
           }}
         </Stage>
+        </div>
       </div>
       {checkinOpen && (
         <div className="overlay z-40 flex items-center justify-center bg-[#05040f]/80 backdrop-blur-sm" onClick={() => setCheckinOpen(false)} role="dialog" aria-modal="true">

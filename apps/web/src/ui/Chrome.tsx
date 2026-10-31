@@ -38,7 +38,7 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
   const user = useSession((s) => s.user);
   const online = useSession((s) => s.online);
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-white/5 bg-ink-950/60 px-4 backdrop-blur-xl">
+    <header className="box-content flex h-14 shrink-0 items-center gap-3 border-b border-white/5 bg-ink-950/60 pl-[max(1rem,var(--sa-l))] pr-[max(1rem,var(--sa-r))] pt-[var(--sa-t)] backdrop-blur-xl">
       {back ? (
         <button onClick={() => navigate('/')} className="rounded-lg px-2 py-1 text-sm text-white/70 transition hover:bg-white/10 hover:text-white">
           ← {t('nav.back')}
@@ -102,7 +102,7 @@ export function TestEnvBadge() {
   if (!test) return null;
   return (
     <div
-      className="hide-on-keyboard pointer-events-none fixed bottom-[max(0.5rem,env(safe-area-inset-bottom))] left-[max(0.5rem,env(safe-area-inset-left))] z-[55] max-w-[min(22rem,calc(100vw-1rem))] rounded-lg border border-neon-cyan/50 bg-ink-950/85 px-2.5 py-1.5 text-[10px] leading-snug text-neon-cyan shadow-lg backdrop-blur"
+      className="hide-on-keyboard pointer-events-none fixed bottom-[max(0.5rem,env(safe-area-inset-bottom))] left-[max(0.5rem,env(safe-area-inset-left))] z-[55] short:bottom-auto short:left-1/2 short:top-1 short:-translate-x-1/2 short:py-0.5 max-w-[min(22rem,calc(100vw-1rem))] rounded-lg border border-neon-cyan/50 bg-ink-950/85 px-2.5 py-1.5 text-[10px] leading-snug text-neon-cyan shadow-lg backdrop-blur"
       role="note"
     >
       <span className="font-bold tracking-wider">{t('env.test')}</span>

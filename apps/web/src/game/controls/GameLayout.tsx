@@ -11,7 +11,7 @@ export function GameLayout({ title, canvas, panel }: { title: string; canvas: Re
     <div className="flex h-full flex-col">
       <DemoBanner />
       <TopBar title={title} back />
-      <div className="flex min-h-0 flex-1 gap-2 p-2 sm:gap-3 sm:p-3">
+      <div className="flex min-h-0 flex-1 gap-2 pb-[max(0.5rem,var(--sa-b))] pl-[max(0.5rem,var(--sa-l))] pr-[max(0.5rem,var(--sa-r))] pt-2 sm:gap-3 sm:pt-3">
         <div className="relative min-w-0 flex-1 animate-rise">
           {canvas}
           {IS_DEMO && (
