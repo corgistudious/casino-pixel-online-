@@ -99,7 +99,7 @@ export function CollectionsAdminPage() {
     void run(() => adminApi(`/api/admin/collections/${c.id}/rerun`, { method: 'POST', body: { id: `${c.theme}_${year}`, year, startsAt: shift(c.startsAt), endsAt: shift(c.endsAt) } }));
   };
 
-  if (!rows) return <Panel title={t('admin.nav.collections')}><Empty>{t('common.loading')}</Empty></Panel>;
+  if (!rows) return <Panel title={t('admin.nav.collections')}><Empty>{t('app.loading')}</Empty></Panel>;
   return (
     <Panel title={t('admin.nav.collections')}>
       <p className="text-xs text-white/55">{t('admin.collections.hint')}</p>
