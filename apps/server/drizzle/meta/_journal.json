@@ -253,6 +253,13 @@
       "when": 1793051955929,
       "tag": "0035_seasonal_cosmetics",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1793138355929,
+      "tag": "0036_account_name_sync",
+      "breakpoints": true
     }
   ]
 }
