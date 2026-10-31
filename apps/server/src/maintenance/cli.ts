@@ -7,7 +7,9 @@
  *   reset-test-data      --operator NAME [--execute --confirm "RESET <db> <n>"] [--backup-dir DIR]
  *   launch-production    --operator NAME [--execute --confirm "LAUNCH <db>"]  [--backup-dir DIR]
  *   stats-rebuild        --operator NAME [--execute]   (recompute leaderboard game statistics from settled rounds)
- *   create-owner         --operator NAME --username NAME --email EMAIL [--display-name NAME]
+ *   names-audit                                    (read-only: accounts whose @username differs from the display name)
+ *   names-sync           --operator NAME [--execute] [--backup-dir DIR]   (set @username = display name where that is safe; backup first)
+ *   create-owner         --operator NAME --username NAME --email EMAIL   (the name is also the display name)
  *                        (only when UID 1002 does not exist; the owner activates it by email)
  */
 import { writeFileSync } from 'node:fs';
@@ -22,6 +24,7 @@ import { sql } from 'drizzle-orm';
 import { getEnvironmentState } from '../services/environment';
 import { backupDatabase } from './backup';
 import { rebuildGameStats } from '../services/leaderboards';
+import { executeNameSync, planNameSync, type NameSyncPlan } from '../services/nameSync';
 import { executeLaunch, executeReset, finishRun, MaintenanceRefused, planLaunch, planReset, startRun } from './testData';
 
 const { positionals, values } = parseArgs({
@@ -35,7 +38,6 @@ const { positionals, values } = parseArgs({
     prefix: { type: 'string', default: 'tester' },
     username: { type: 'string' },
     email: { type: 'string' },
-    'display-name': { type: 'string' },
   },
 });
 
@@ -196,7 +198,8 @@ async function createOwner(): Promise<number> {
     if (!username.success || !email.success) throw new MaintenanceRefused('--username (3-20 letters, digits, _) and a valid --email are required.');
     if ((await ownerStatus()).exists) throw new MaintenanceRefused(`UID ${KEYO_OWNER_UID} already exists; the Owner role is attached to it automatically at server start.`);
     const appUrl = process.env.APP_URL ?? 'http://localhost:5173';
-    const user = await createOwnerAccount(db, { username: username.data, displayName: values['display-name'] ?? 'Keyo GM', email: email.data }, { appUrl });
+    // One account name: display name and @username are the same value.
+    const user = await createOwnerAccount(db, { username: username.data, email: email.data }, { appUrl });
     await finishRun(db, runId, 'succeeded', { uid: user.uid, username: user.username });
     print('Owner account created (activation email queued)', { uid: user.uid, username: user.username, status: user.status });
     return 0;
@@ -234,6 +237,53 @@ async function statsRebuild(): Promise<number> {
   }
 }
 
+const planSummary = (p: NameSyncPlan) => ({
+  players: p.players,
+  synced: p.synced,
+  unsynced: p.unsynced,
+  willSync: p.syncable.length,
+  needPlayerChoice: { total: p.needsChoice.length, invalid: p.needsChoice.filter((x) => x.issue === 'invalid').length, reserved: p.needsChoice.filter((x) => x.issue === 'reserved').length, duplicate: p.needsChoice.filter((x) => x.issue === 'duplicate').length },
+  protectedAccounts: p.protectedAccounts,
+  sampleWillSync: p.syncable.slice(0, 20),
+  sampleNeedChoice: p.needsChoice.slice(0, 20),
+});
+
+/** Read-only report: how many players still have a @username different from their display name. */
+async function namesAudit(): Promise<number> {
+  print('Account names (read-only)', planSummary(await planNameSync(db)));
+  return 0;
+}
+
+/** Sets @username = display name where the display name is a valid, free account name. Backup first; dry run by default. */
+async function namesSync(): Promise<number> {
+  const runId = await startRun(db, 'names_sync', values.execute, operator || process.env.KEYO_OPERATOR || 'unknown', {});
+  let backupPath: string | undefined;
+  try {
+    requireOperator();
+    const plan = await planNameSync(db);
+    if (!values.execute) {
+      print('Dry run: account names', planSummary(plan));
+      await finishRun(db, runId, 'succeeded', { dryRun: true, ...planSummary(plan) });
+      return 0;
+    }
+    const backup = backupDatabase(url!, values['backup-dir']!, 'pre-names-sync');
+    backupPath = backup.path;
+    print('Backup verified', backup);
+    const result = await executeNameSync(db, operator);
+    const report = { kind: 'names_sync', operator, backup, plan, result, finishedAt: new Date().toISOString() };
+    const reportPath = writeReport(dirname(backup.path), `${backup.path.split('/').pop()!.replace('.dump', '')}.report.json`, report);
+    await finishRun(db, runId, 'succeeded', { ...result, reportPath }, backupPath);
+    print('Account names synchronised', result);
+    console.log(`\nReport: ${reportPath}`);
+    return 0;
+  } catch (err) {
+    const refused = err instanceof MaintenanceRefused;
+    await finishRun(db, runId, refused ? 'refused' : 'failed', { error: String((err as Error).message) }, backupPath);
+    console.error(`\n${refused ? 'REFUSED' : 'FAILED'}: ${(err as Error).message}`);
+    return refused ? 2 : 1;
+  }
+}
+
 let code = 1;
 try {
   switch (command) {
@@ -255,8 +305,14 @@ try {
     case 'stats-rebuild':
       code = await statsRebuild();
       break;
+    case 'names-audit':
+      code = await namesAudit();
+      break;
+    case 'names-sync':
+      code = await namesSync();
+      break;
     default:
-      console.error('Usage: maintenance <status | create-owner | create-test-accounts | reset-test-data | launch-production | stats-rebuild> [options]');
+      console.error('Usage: maintenance <status | create-owner | create-test-accounts | reset-test-data | launch-production | stats-rebuild | names-audit | names-sync> [options]');
       code = 1;
   }
 } catch (err) {

@@ -18,6 +18,7 @@ import {
   updateBanEnd,
 } from '../services/accounts';
 import { adminResetPassword, adminUnlinkEmail, maskEmail } from '../services/adminAccounts';
+import { adminRenamePlayer } from '../services/accountName';
 import { audit } from '../services/audit';
 import { repairGuildsOf } from '../services/guilds';
 import { runOnce } from '../services/adminOps';
@@ -196,6 +197,15 @@ export function registerAdminRoutes(app: FastifyInstance, db: Db, hub: RealtimeH
     const { userId } = await adminResetPassword(db, req.account!.id, uid, input.password, input.reason, req.ip);
     hub.kick(userId);
     return { ok: true };
+  });
+
+  /** Rename a player: account name = display name = @username (both written together, audited). */
+  app.post('/api/admin/users/:uid/rename', { preHandler: canReauth('users.rename') }, async (req) => {
+    const { uid } = uidParam.parse(req.params);
+    const input = recoverySchema.extend({ name: z.string().max(64) }).parse(req.body);
+    const row = await adminRenamePlayer(db, req.account!.id, uid, input.name, input.reason, req.ip);
+    void publishIdentity(db, hub, row.id);
+    return { uid: row.uid, username: row.username, displayName: row.displayName };
   });
 
   app.post('/api/admin/users/:uid/email/unlink', { preHandler: canReauth('users.email_unlink') }, async (req) => {
