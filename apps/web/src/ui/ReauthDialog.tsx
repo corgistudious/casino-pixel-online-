@@ -35,7 +35,7 @@ export function ReauthDialog() {
     if (password) close(password);
   };
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-ink-950/80 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="reauth-title">
+    <div className="overlay z-[70] flex items-center justify-center bg-ink-950/80 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="reauth-title">
       <form onSubmit={submit} className="glass flex w-full max-w-sm flex-col gap-3 p-5">
         <h2 id="reauth-title" className="font-display text-xl">{t('admin.reauthTitle')}</h2>
         <p className="text-sm text-white/60">{t('admin.reauthBody')}</p>

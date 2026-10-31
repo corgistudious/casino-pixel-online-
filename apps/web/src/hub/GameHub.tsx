@@ -486,7 +486,7 @@ export function GameHub() {
         </Stage>
       </div>
       {checkinOpen && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-[#05040f]/80 p-4 backdrop-blur-sm" onClick={() => setCheckinOpen(false)} role="dialog" aria-modal="true">
+        <div className="overlay z-40 flex items-center justify-center bg-[#05040f]/80 backdrop-blur-sm" onClick={() => setCheckinOpen(false)} role="dialog" aria-modal="true">
           <div className="w-full max-w-md animate-rise" onClick={(e) => e.stopPropagation()}>
             <CheckinPanel />
             <button onClick={() => setCheckinOpen(false)} className="mx-auto mt-3 block rounded-full border border-white/20 px-5 py-1.5 text-sm text-white/70 hover:text-white">

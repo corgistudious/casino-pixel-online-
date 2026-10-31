@@ -279,7 +279,7 @@ export function PlayerActionHost() {
 
   return (
     <>
-      {open && sheet && <div className="fixed inset-0 z-[79] bg-ink-950/60 backdrop-blur-[1px]" aria-hidden onClick={close} />}
+      {open && sheet && <div className="overlay z-[79] bg-ink-950/60 backdrop-blur-[1px]" aria-hidden onClick={close} />}
       {open && (
         <div
           ref={box}
@@ -288,7 +288,7 @@ export function PlayerActionHost() {
           style={sheet ? undefined : { top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: WIDTH, transformOrigin: pos?.origin ?? 'top' }}
           className={
             sheet
-              ? `fixed inset-x-0 bottom-0 z-[80] max-h-[85vh] overflow-y-auto rounded-t-2xl border-t border-gold-300/25 bg-ink-900/97 pb-[env(safe-area-inset-bottom)] shadow-[0_-18px_50px_-10px_rgba(0,0,0,0.8)] transition duration-150 motion-reduce:transition-none ${shown ? 'translate-y-0' : 'translate-y-full'}`
+              ? `fixed inset-x-0 bottom-[var(--kb,0px)] z-[80] max-h-[calc(var(--vvh,100dvh)*0.85)] overflow-y-auto rounded-t-2xl border-t border-gold-300/25 bg-ink-900/97 pb-[env(safe-area-inset-bottom)] shadow-[0_-18px_50px_-10px_rgba(0,0,0,0.8)] transition duration-150 motion-reduce:transition-none ${shown ? 'translate-y-0' : 'translate-y-full'}`
               : `fixed z-[80] overflow-hidden rounded-2xl border border-gold-300/25 bg-ink-900/95 shadow-[0_18px_50px_-10px_rgba(0,0,0,0.8)] backdrop-blur-xl transition duration-150 ease-out motion-reduce:transition-none ${shown ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`
           }
         >

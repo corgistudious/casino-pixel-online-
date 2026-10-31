@@ -297,8 +297,8 @@ function PreviewDialog({ itemId, kind, item, offer, collection, owned, onClose, 
   };
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-end justify-center bg-ink-950/70 p-0 sm:items-center sm:p-4 short:items-center short:p-2" onClick={onClose}>
-      <div role="dialog" aria-modal="true" aria-label={itemName(item, i18n.language, itemId)} onClick={(e) => e.stopPropagation()} className="flex max-h-[92dvh] w-full flex-col gap-3 overflow-y-auto rounded-t-3xl border border-gold-300/45 bg-gradient-to-b from-[#24103f] to-[#08050f] p-4 sm:max-w-lg sm:rounded-3xl short:max-w-3xl short:flex-row short:rounded-2xl">
+    <div className="overlay z-[80] flex items-end justify-center bg-ink-950/70 p-0 sm:items-center sm:p-4 short:items-center short:p-2" onClick={onClose}>
+      <div role="dialog" aria-modal="true" aria-label={itemName(item, i18n.language, itemId)} onClick={(e) => e.stopPropagation()} className="flex max-h-full w-full flex-col gap-3 overflow-y-auto rounded-t-3xl border border-gold-300/45 bg-gradient-to-b from-[#24103f] to-[#08050f] p-4 sm:max-w-lg sm:rounded-3xl short:max-w-3xl short:flex-row short:rounded-2xl">
         <div className="flex min-w-0 flex-1 items-center justify-center rounded-2xl bg-black/30 p-3">
           <ItemPreviewLarge itemId={itemId} kind={kind} />
         </div>

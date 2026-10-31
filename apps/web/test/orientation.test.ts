@@ -87,3 +87,18 @@ describe('requiredOrientation', () => {
     expect(requiredOrientation({ signedIn: true, verified: true, pathname: '/admin/items' })).toBe('landscape');
   });
 });
+
+describe('keyboardState', () => {
+  it('only shrinks the app while a field is focused and the visible area is clearly shorter', async () => {
+    const { keyboardState } = await import('../src/lib/viewport');
+    // iPhone landscape, keyboard up: layout 390, visible 180.
+    expect(keyboardState(390, 180, true)).toEqual({ open: true, appHeight: 180 });
+    // Same heights but nothing focused (e.g. a toolbar hiding): leave the layout alone.
+    expect(keyboardState(390, 180, false)).toEqual({ open: false, appHeight: null });
+    // Small changes (browser chrome, suggestion bar) never resize the app.
+    expect(keyboardState(844, 790, true)).toEqual({ open: false, appHeight: null });
+    // Android resizes-content: layout already equals the visible height.
+    expect(keyboardState(420, 420, true)).toEqual({ open: false, appHeight: null });
+    expect(keyboardState(844, 503.6, true)).toEqual({ open: true, appHeight: 504 });
+  });
+});

@@ -68,7 +68,7 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
 export function Toasts() {
   const toasts = useToasts((s) => s.toasts);
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-16 z-50 flex flex-col items-center gap-2 px-4">
+    <div className="pointer-events-none fixed inset-x-0 top-[calc(4rem+env(safe-area-inset-top))] z-50 flex flex-col items-center gap-2 px-4">
       {toasts.map((t) => (
         <div
           key={t.id}
@@ -85,7 +85,7 @@ export function ConnectionBanner() {
   const { t } = useTranslation();
   const status = useSession((s) => s.status);
   if (status !== 'offline') return null;
-  return <div className="fixed inset-x-0 top-0 z-50 bg-ruby-600/90 py-1 text-center text-xs font-medium backdrop-blur">{t('app.offline')}</div>;
+  return <div className="fixed inset-x-0 top-0 z-50 bg-ruby-600/90 pb-1 pt-[max(0.25rem,env(safe-area-inset-top))] text-center text-xs font-medium backdrop-blur">{t('app.offline')}</div>;
 }
 
 /**
@@ -102,10 +102,13 @@ export function TestEnvBadge() {
   if (!test) return null;
   return (
     <div
-      className="pointer-events-none fixed bottom-2 left-2 z-[55] max-w-[min(22rem,calc(100vw-1rem))] rounded-lg border border-neon-cyan/50 bg-ink-950/85 px-2.5 py-1.5 text-[10px] leading-snug text-neon-cyan shadow-lg backdrop-blur"
+      className="hide-on-keyboard pointer-events-none fixed bottom-[max(0.5rem,env(safe-area-inset-bottom))] left-[max(0.5rem,env(safe-area-inset-left))] z-[55] max-w-[min(22rem,calc(100vw-1rem))] rounded-lg border border-neon-cyan/50 bg-ink-950/85 px-2.5 py-1.5 text-[10px] leading-snug text-neon-cyan shadow-lg backdrop-blur"
       role="note"
     >
-      <span className="font-bold tracking-wider">{t('env.test')}</span> · <span className="text-white/70">{t('env.testNote')}</span>
+      <span className="font-bold tracking-wider">{t('env.test')}</span>
+      {/* Phones in landscape: just the label, so the badge never covers game controls or the nav. */}
+      <span className="short:hidden"> · </span>
+      <span className="text-white/70 short:hidden">{t('env.testNote')}</span>
     </div>
   );
 }

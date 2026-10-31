@@ -3,7 +3,7 @@
   "short_name": "Keyo Game",
   "start_url": "./",
   "display": "fullscreen",
-  "orientation": "landscape",
+  "orientation": "any",
   "background_color": "#05040b",
   "theme_color": "#05040b",
   "icons": [{ "src": "/assets/official/keyo-game-logo.png", "sizes": "any", "type": "image/png", "purpose": "any" }]

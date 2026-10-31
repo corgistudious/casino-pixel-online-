@@ -11,9 +11,29 @@
     --fw-heading: 800;
   }
   html,
-  body,
-  #root {
+  body {
     height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  /*
+   * The app root is pinned to the viewport and the browser sizes it; only while the on-screen
+   * keyboard is up does lib/viewport.ts set --vvh (the visible height) so the app ends just above
+   * the keyboard. Safe-area insets are applied here once; children must not add them again
+   * (fixed overlays, which live outside this box, add their own).
+   */
+  #root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--vvh, 100%);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    overflow: hidden;
+  }
+  .keyboard-open #root {
+    /* The keyboard covers the home indicator. */
+    padding-bottom: 0;
   }
   body {
     @apply bg-ink-950 bg-lounge font-sans text-white antialiased;
@@ -23,8 +43,47 @@
     -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
-  input {
+  input,
+  textarea,
+  [contenteditable='true'] {
     user-select: text;
+    -webkit-user-select: text;
+  }
+  /* Scroll areas never drag the whole app (no scroll chaining / rubber-banding of the page). */
+  .overflow-y-auto,
+  .overflow-auto,
+  .overflow-x-auto {
+    overscroll-behavior: contain;
+  }
+  /* Keyboard users on PC always see where they are (mouse / touch clicks do not show the ring). */
+  :focus-visible {
+    outline: 2px solid #f2c14e;
+    outline-offset: 2px;
+  }
+  .field:focus-visible,
+  [role='dialog']:focus-visible {
+    outline: none;
+  }
+  /*
+   * Phones and tablets: large backdrop blurs over animated canvases are the most expensive thing
+   * the GPU does on iOS; a light blur keeps the glass look at a fraction of the cost.
+   */
+  @media (pointer: coarse) {
+    .glass,
+    .backdrop-blur-xl,
+    .backdrop-blur-lg {
+      --tw-backdrop-blur: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+    }
+  }
+  /* iOS zooms into any field under 16px on focus and may not zoom back: keep fields at 16px on touch screens. */
+  @media (pointer: coarse) {
+    input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
   }
   h1 {
     font-weight: var(--fw-heading);
@@ -63,6 +122,35 @@
   .field {
     @apply w-full rounded-xl border border-white/10 bg-black/30 px-4 py-2.5 text-white outline-none transition placeholder:text-white/30 focus:border-gold-300/70 focus:ring-2 focus:ring-gold-300/20;
   }
+  /*
+   * Full-screen layer for dialogs and sheets: spans the VISIBLE viewport (it ends above the
+   * on-screen keyboard) and keeps content clear of the notch / home indicator. Utilities such as
+   * p-0 (bottom sheets) override the padding.
+   */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--vvh, 100%);
+    padding: max(0.75rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+  }
+  .keyboard-open .overlay {
+    padding-bottom: 0.75rem;
+  }
+  /* Floating badges/buttons that would sit on top of a chat composer while typing. */
+  .keyboard-open .hide-on-keyboard {
+    display: none;
+  }
+  /* While typing on a phone the chat keeps only tabs, messages and the composer. */
+  .keyboard-open .chat-shell {
+    gap: 0.25rem;
+    padding: 0.25rem;
+  }
+  .keyboard-open .chat-tabs [role='tab'] {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
   .sheen {
     @apply pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-sheen bg-gradient-to-r from-transparent via-white/40 to-transparent;
   }
@@ -70,18 +158,15 @@
 
 /*
  * Sign-in pages on short screens (a phone held sideways, or the keyboard open): smaller logo and
- * tighter spacing so the whole form fits or scrolls; content stays clear of the notch / home bar.
+ * tighter spacing so the whole form fits or scrolls (the app root already keeps clear of the notch / home bar).
  */
 .auth-shell {
-  padding-top: max(1rem, env(safe-area-inset-top));
-  padding-bottom: max(1rem, env(safe-area-inset-bottom));
-  padding-left: max(1rem, env(safe-area-inset-left));
-  padding-right: max(1rem, env(safe-area-inset-right));
+  padding: 1rem;
 }
 @media (max-height: 560px) {
   .auth-shell {
-    padding-top: max(0.5rem, env(safe-area-inset-top));
-    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
   .auth-card {
     gap: 0.5rem;
