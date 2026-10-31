@@ -66,13 +66,13 @@ export function ProfilePage() {
     setRenameBusy(true);
     try {
       const {user:fresh}=await api<{user:PublicUser}>('/api/me/rename',{method:'POST',body:{displayName:displayName.trim(),useCard:useRenameCard}});
-      setUser(fresh);setUseRenameCard(false);toast('Đổi tên thành công / Name changed','success');
+      setUser(fresh);setUseRenameCard(false);toast(t('profile.rename.done'),'success');
     } catch(err){fail(err);} finally {setRenameBusy(false);}
   };
   const buyRenameCard = async () => {
     setRenameBusy(true);
     try { const {user:fresh}=await api<{user:PublicUser}>('/api/shop/rename-card',{method:'POST'});
-      setUser(fresh);toast('Đã mua Thẻ Đổi Tên / Rename Card purchased','success');
+      setUser(fresh);toast(t('profile.rename.bought'),'success');
     } catch(err){fail(err);} finally{setRenameBusy(false);}
   };
 
@@ -229,14 +229,18 @@ export function ProfilePage() {
                 <span className="text-white/60">{t('auth.displayName')}</span>
                 <input className="field" value={displayName} maxLength={24} onChange={(e) => setDisplayName(e.target.value)} />
               </label>
-              <div className="rounded-xl border border-gold-300/20 p-3 text-xs text-white/70">
-                <img src="/assets/official/rename-card.png" alt="Rename Card" className="mx-auto h-20 object-contain" />
-                <p>{user.renameFreeAvailable ? 'Đổi tên lần đầu miễn phí / First rename free' : user.renameAvailableAt && new Date(user.renameAvailableAt)>new Date() ? `Miễn phí lại sau / Free after: ${new Date(user.renameAvailableAt).toLocaleDateString()}` : 'Đã hết thời gian chờ / Free rename available'}</p>
-                <p>Thẻ Đổi Tên / Rename Cards: {user.renameCards}</p>
-                <label className="flex items-center gap-2 py-2"><input type="checkbox" checked={useRenameCard} onChange={e=>setUseRenameCard(e.target.checked)} /> Dùng thẻ nếu đang chờ 60 ngày / Use card to skip cooldown</label>
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="gold" disabled={renameBusy||displayName.trim()===user.displayName} onClick={()=>void rename()}>Đổi tên / Rename</Button>
-                  <Button variant="gold" disabled={renameBusy||user.gold<300} onClick={()=>void buyRenameCard()}>Mua thẻ / Buy · 300 Cxu Vàng</Button>
+              <div className="flex items-center gap-3 rounded-xl border border-gold-300/20 bg-black/20 p-3 text-xs text-white/70">
+                <img src="/assets/official/rename-card.png" alt={t('market.renameCard')} className="h-16 w-16 shrink-0 object-contain short:h-12 short:w-12" />
+                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                  <p>{user.renameFreeAvailable ? t('profile.rename.free') : user.renameAvailableAt && new Date(user.renameAvailableAt) > new Date() ? t('profile.rename.freeAfter', { date: new Date(user.renameAvailableAt).toLocaleDateString(i18n.language) }) : t('profile.rename.freeNow')}</p>
+                  <p className="font-semibold text-gold-100">{t('profile.rename.cards', { n: user.renameCards })}</p>
+                  <label className="flex min-h-[40px] items-center gap-2">
+                    <input type="checkbox" className="h-5 w-5 accent-gold-300" checked={useRenameCard} onChange={(e) => setUseRenameCard(e.target.checked)} /> {t('profile.rename.useCard')}
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="gold" size="sm" disabled={renameBusy || displayName.trim() === user.displayName} onClick={() => void rename()}>{t('profile.rename.submit')}</Button>
+                    <Button size="sm" disabled={renameBusy || user.gold < 300} onClick={() => void buyRenameCard()}>{t('profile.rename.buyCard')}</Button>
+                  </div>
                 </div>
               </div>
               <div>
