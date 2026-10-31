@@ -24,8 +24,15 @@
 	}
 	handle {
 		root * /srv
-		@assets path /assets/*
-		header @assets Cache-Control "public, max-age=31536000, immutable"
+		# Vite bundles are content-hashed (/assets/<name>-<hash>.<ext>): cache forever. Named public
+		# images under /assets/<folder>/ can be replaced in place: revalidate daily. The HTML shell
+		# and the manifest must always be revalidated so players (PWA included) pick up a new build.
+		@hashed path_regexp ^/assets/[^/]+$
+		header @hashed Cache-Control "public, max-age=31536000, immutable"
+		@public path_regexp ^/assets/.+/.+$
+		header @public Cache-Control "public, max-age=86400"
+		@shell path / /index.html /manifest.webmanifest
+		header @shell Cache-Control "no-cache"
 		try_files {path} /index.html
 		file_server
 	}
