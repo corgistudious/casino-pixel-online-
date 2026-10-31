@@ -57,6 +57,33 @@ Chỉ đổi `apps/web`, `packages/shared/src/i18n` và cấu hình phục vụ 
 
 ## 3. Kiểm thử đã chạy
 
+**Lần kiểm tra trước deploy (commit `6cfd911`)**
+
+- Đã sửa thêm sau khi review:
+  - **Tải lại một lần** khi chunk của bản build cũ không còn (sau deploy), có màn "Tải lại" nếu vẫn lỗi và không lặp vô hạn.
+  - Nút Gửi hoạt động khi chạm thật (trước đó `pointerdown` bị chặn làm mất click).
+  - Không reset pan khi bàn phím iOS đang trượt lên.
+  - Escape luôn gọi `onClose` mới nhất.
+  - Không báo "tin nhắn mới" sai khi một tin bị xoá.
+- Typecheck và build production qua. Server vitest **326/326** (có PostgreSQL và Redis). Web 16/16. Shared 97/97.
+- E2E:
+  - bàn phím **29/29** (thêm: chạm thật vào Gửi, chunk cũ sau deploy);
+  - OrientationGuard **105/105**;
+  - responsive **320/320**;
+  - mỹ phẩm/multiplayer hai tài khoản **37/37**;
+  - không có lỗi console.
+- Caddyfile, kiểm tra bằng `caddy` 2.6.2 thật:
+  - `deploy/Caddyfile`: **Valid configuration**.
+  - `deploy/vps/Caddyfile`: 2.6.2 không biết global option `trusted_proxies` (có từ Caddy 2.7, image dùng 2.10). Bản cũ trên Corgi-Casino báo **đúng lỗi đó**, nên đây không phải thay đổi mới. Bỏ dòng đó ra thì config mới **Valid**.
+  - Chạy thật Caddy với config mới phục vụ `dist`:
+    - `/`, `/index.html`, `/manifest.webmanifest` → `no-cache`;
+    - bundle có hash → `immutable` 1 năm;
+    - `/assets/official/*` → 1 ngày;
+    - `/api/health` qua reverse proxy → 200;
+    - gzip bật.
+
+**Lần đầu**
+
 - Typecheck và production build qua. Web vitest 16/16; shared 97/97.
 - E2E bàn phím (giả lập iOS: chỉ `visualViewport` co lại, layout giữ nguyên):
   - **iPhone ngang:** Chat máy chủ, ô đổi tên, modal có mật khẩu (Tạo phòng), chat trong phòng Tài Xỉu.
@@ -73,7 +100,6 @@ Chỉ đổi `apps/web`, `packages/shared/src/i18n` và cấu hình phục vụ 
 
 - **Chưa thử trên iPhone/iPad/Android thật.** Mọi kết quả trên là giả lập Chromium; bàn phím iOS thật, thanh gợi ý, bàn phím tiếng Việt bên thứ ba và emoji chưa được kiểm trên máy.
 - `env(safe-area-inset-*)` luôn bằng 0 trong Chromium. Notch/Dynamic Island và dải đen PWA chỉ kiểm được trên máy thật.
-- Caddyfile mới chưa được `caddy validate` (môi trường không có Docker daemon/caddy).
 - Repo chưa có service worker. Bản mới đến người chơi qua HTTP cache (`index.html` `no-cache`).
 
 ## 5. Deploy và rollback (chưa deploy)
