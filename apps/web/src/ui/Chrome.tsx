@@ -110,21 +110,6 @@ export function TestEnvBadge() {
   );
 }
 
-/** Mobile web in portrait: ask the player to rotate (gameplay is landscape-only). */
-export function RotateOverlay() {
-  const { t } = useTranslation();
-  return (
-    <div className="fixed inset-0 z-[60] hidden flex-col items-center justify-center gap-6 bg-ink-950 p-8 text-center portrait:max-md:flex">
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" className="animate-pulse">
-        <rect x="22" y="8" width="28" height="48" rx="5" stroke="#f2c14e" strokeWidth="3" />
-        <path d="M58 40a22 22 0 0 1-22 22" stroke="#f2c14e" strokeWidth="3" strokeLinecap="round" />
-        <path d="M36 56l0 6 6-2" stroke="#f2c14e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      <p className="font-display text-xl text-gold-100">{t('app.rotate')}</p>
-    </div>
-  );
-}
-
 /** Level-up celebration: a short, non-blocking banner (the game keeps running underneath). */
 export function LevelUpBanner() {
   const { t } = useTranslation();

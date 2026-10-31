@@ -149,3 +149,15 @@
 }
 .reduce-motion .kf-sheen { display: none; }
 .reduce-motion .kf-twinkle { animation: none; }
+
+/* Orientation guard: the phone icon turns toward the wanted orientation. */
+@keyframes orientation-turn-landscape { 0%, 25% { transform: rotate(0deg); } 60%, 100% { transform: rotate(-90deg); } }
+@keyframes orientation-turn-portrait { 0%, 25% { transform: rotate(-90deg); } 60%, 100% { transform: rotate(0deg); } }
+.orientation-turn-landscape { animation: orientation-turn-landscape 2.4s ease-in-out infinite alternate; }
+.orientation-turn-portrait { animation: orientation-turn-portrait 2.4s ease-in-out infinite alternate; }
+.reduce-motion .orientation-turn-landscape { animation: none; transform: rotate(-90deg); }
+.reduce-motion .orientation-turn-portrait { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .orientation-turn-landscape { animation: none; transform: rotate(-90deg); }
+  .orientation-turn-portrait { animation: none; }
+}

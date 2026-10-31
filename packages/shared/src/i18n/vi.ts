@@ -7,7 +7,13 @@ export const vi: Translation = {
     loading: 'Đang tải…',
     disclaimer:
       'Chỉ nhằm mục đích giải trí. Cxu Bạc và Cxu Vàng là tiền ảo, không thể mua, không có giá trị tiền mặt và không thể quy đổi, rút hay đổi thành tiền thật hoặc giải thưởng.',
-    rotate: 'Vui lòng xoay ngang thiết bị',
+    orientation: {
+      landscapeTitle: 'Xoay ngang thiết bị',
+      landscapeBody: 'Sảnh game, phòng chơi và mọi tính năng sau khi đăng nhập được thiết kế cho màn hình ngang. Hãy xoay điện thoại hoặc máy tính bảng để tiếp tục — mọi thao tác của bạn vẫn được giữ nguyên.',
+      portraitTitle: 'Xoay dọc thiết bị',
+      portraitBody: 'Đăng nhập, đăng ký và khôi phục mật khẩu được thiết kế cho màn hình dọc. Hãy xoay điện thoại hoặc máy tính bảng để tiếp tục — nội dung bạn đã nhập vẫn được giữ.',
+      hint: 'Màn hình tự cập nhật ngay khi xoay đúng chiều.',
+    },
     offline: 'Mất kết nối. Đang kết nối lại…',
     online: '{{count}} đang online',
   },

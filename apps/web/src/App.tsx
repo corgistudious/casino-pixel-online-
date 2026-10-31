@@ -62,7 +62,8 @@ import { ReportsAdminPage } from './admin/ReportsAdminPage';
 import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
-import { ConnectionBanner, LevelUpBanner, RotateOverlay, TestEnvBadge, Toasts } from './ui/Chrome';
+import { ConnectionBanner, LevelUpBanner, TestEnvBadge, Toasts } from './ui/Chrome';
+import { OrientationGuard } from './ui/OrientationGuard';
 import { KeyoLogo } from './ui/KeyoLogo';
 
 function GameRoute() {
@@ -158,7 +159,7 @@ export function App() {
     <HashRouter>
       <ConnectionBanner />
       <TestEnvBadge />
-      <RotateOverlay />
+      <OrientationGuard />
       <Toasts />
       <LevelUpBanner />
       <PlayerActionHost />
