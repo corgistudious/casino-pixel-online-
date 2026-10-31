@@ -194,7 +194,7 @@ describe('0020–0022 social, missions and support upgrade', () => {
     ]);
     expect(await rows(sql`SELECT vip_exp FROM quest_claims`)).toEqual([{ vip_exp: 0 }]);
     // New players are no longer attached to Keyo Support.
-    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (100903, 'fresh', 'fresh', 'x', 'Fresh')`);
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (100903, 'fresh', 'fresh', 'x', 'fresh')`);
     expect(await rows(sql`SELECT 1 FROM friendships f JOIN users u ON u.id = f.user_id WHERE u.uid = 100903`)).toEqual([]);
   });
 });
@@ -341,5 +341,38 @@ describe('0032 Keyo Captain dual Owner upgrade', () => {
     expect(await rows(sql`SELECT to_regclass('account_setup_tokens') AS t`)).toEqual([{ t: null }]);
     await expect(db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid = 1000`)).rejects.toThrow();
     await expect(db.execute(sql`DELETE FROM user_roles WHERE role_id = 'owner'`)).rejects.toThrow();
+  });
+});
+
+describe('0036 account name sync', () => {
+  it('changes no existing account, then refuses unsynchronised name writes; rollback removes only the trigger', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(36) }); // 0000–0035: the schema live servers run before this release
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name, account_type) VALUES
+      (1000, 'keyo_support', 'keyo_support', '!disabled', 'Keyo Captain', 'system_support'),
+      (1002, 'Keyo_GM', 'keyo_gm', 'x', 'Lemon_GM', 'player'),
+      (101400, 'player_abc', 'player_abc', 'y', 'Người Chơi', 'player'),
+      (101401, 'same', 'same', 'z', 'same', 'player')`);
+    await db.execute(sql`INSERT INTO wallets (user_id, balance, gold) SELECT id, uid * 3, uid % 7 FROM users`);
+    const snapshot = sql`SELECT
+      (SELECT json_agg(json_build_object('u', uid, 'n', username, 'l', username_lower, 'd', display_name, 'p', password_hash) ORDER BY uid) FROM users) AS users,
+      (SELECT json_agg(json_build_object('b', balance, 'g', gold) ORDER BY user_id) FROM wallets) AS wallets`;
+    const before = await rows(snapshot);
+
+    await runMigrations(db);
+    expect(await rows(snapshot)).toEqual(before); // nothing renamed
+    // Old rows keep working for every non-name update (sign-in bookkeeping, settings…).
+    await db.execute(sql`UPDATE users SET failed_logins = 1, locale = 'en' WHERE uid IN (1002, 101400)`);
+    // Name writes must keep both fields equal from now on.
+    await expect(db.execute(sql`UPDATE users SET display_name = 'Other' WHERE uid = 101400`)).rejects.toThrow();
+    await db.execute(sql`UPDATE users SET username = 'Lemon_GM', display_name = 'Lemon_GM' WHERE uid = 1002`);
+    expect(await rows(sql`SELECT username_lower FROM users WHERE uid = 1002`)).toEqual([{ username_lower: 'lemon_gm' }]);
+    await runMigrations(db); // re-run: no-op
+
+    const down = readFileSync(resolve(__dirname, '../drizzle/rollback/0036_account_name_sync.down.sql'), 'utf8').replace(/^(BEGIN|COMMIT);$/gm, '');
+    await db.transaction((tx) => tx.execute(sql.raw(down)));
+    expect(await rows(sql`SELECT count(*)::int AS n FROM pg_trigger WHERE tgname = 'users_name_sync'`)).toEqual([{ n: 0 }]);
+    expect(await rows(sql`SELECT username, display_name FROM users WHERE uid = 1002`)).toEqual([{ username: 'Lemon_GM', display_name: 'Lemon_GM' }]);
+    await db.execute(sql`UPDATE users SET display_name = 'Free again' WHERE uid = 101400`); // old behaviour restored
   });
 });

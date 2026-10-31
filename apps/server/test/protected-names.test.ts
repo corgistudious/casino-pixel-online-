@@ -37,8 +37,9 @@ describe('protected player display names', () => {
         },
       });
 
-      expect(res.statusCode).toBe(409);
-      expect(res.json().error.code).toBe('username_taken');
+      // Official names are refused; a name with a space also fails the account-name rule first.
+      expect([400, 409]).toContain(res.statusCode);
+      expect(['name_reserved', 'name_invalid']).toContain(res.json().error.code);
     }
   });
 
@@ -47,7 +48,7 @@ describe('protected player display names', () => {
       method: 'POST',
       url: '/api/auth/register',
       payload: {
-        displayName: 'Normal Player',
+        displayName: 'Normal_Player',
         password: TEST_PASSWORD,
         confirmPassword: TEST_PASSWORD,
         acceptTerms: true,
@@ -62,13 +63,13 @@ describe('protected player display names', () => {
       url: '/api/me/rename',
       headers: { authorization: `Bearer ${token}` },
       payload: {
-        displayName: 'Keyo Support',
+        displayName: 'Keyo_Support',
         useCard: false,
       },
     });
 
     expect(rename.statusCode).toBe(409);
-    expect(rename.json().error.code).toBe('username_taken');
+    expect(rename.json().error.code).toBe('name_reserved');
 
     const info = await t.app.inject({
       method: 'GET',

@@ -71,7 +71,7 @@ describe('Owner (UID 1002)', () => {
   });
 
   it('the server-shell owner bootstrap refuses to create a second UID 1002', async () => {
-    await expect(createOwnerAccount(t.db, { username: 'gm_two', displayName: 'GM', email: 'gm2@example.test' }, { appUrl: 'http://x' })).rejects.toMatchObject({ code: 'uid_taken' });
+    await expect(createOwnerAccount(t.db, { username: 'gm_two', email: 'gm2@example.test' }, { appUrl: 'http://x' })).rejects.toMatchObject({ code: 'uid_taken' });
   });
 
   it('a client cannot claim to be the Owner: rights follow the authenticated account only', async () => {

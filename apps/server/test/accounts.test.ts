@@ -66,14 +66,14 @@ describe('Keyo Support UID 1000', () => {
 
   it('reserves official display names', async () => {
     const res = await post('/api/auth/register', {
-      displayName: 'Keyo Support',
+      displayName: 'Keyo_Support',
       password: TEST_PASSWORD,
       confirmPassword: TEST_PASSWORD,
       acceptTerms: true,
     });
 
     expect(res.statusCode).not.toBe(200);
-    expect(res.json().error.code).toBe('username_taken');
+    expect(res.json().error.code).toBe('name_reserved');
   });
 
 });
@@ -109,8 +109,7 @@ describe('registration and email verification', () => {
   it('rejects duplicate emails', async () => {
     const a = await registerPending(t);
     const res = await post('/api/auth/register', {
-      username: `dup_${randomUUID().slice(0, 6)}`,
-      displayName: 'D',
+      displayName: `dup_${randomUUID().slice(0, 6)}`,
       email: a.user.email.toUpperCase(),
       password: TEST_PASSWORD,
       confirmPassword: TEST_PASSWORD,
@@ -255,17 +254,19 @@ describe('password reset', () => {
 
 describe('custom UID accounts', () => {
   const PW = 'Special-pass-42';
-  const body = (uid: number, extra: Record<string, unknown> = {}) => ({ uid, displayName: 'VIP Khách', password: PW, confirmPassword: PW, ...extra });
+  // Account names are unique, so each special account gets its own (VIP_<uid>).
+  const body = (uid: number, extra: Record<string, unknown> = {}) => ({ uid, displayName: `VIP_${Math.trunc(uid)}`, password: PW, confirmPassword: PW, ...extra });
 
   it('creates an active player from UID, display name and password; it signs in by UID at once, no email, no test flag, no role', async () => {
     const uid = 4242;
     const res = await post('/api/admin/accounts', body(uid), admin);
     expect(res.statusCode).toBe(200);
     expect(res.headers['cache-control']).toBe('no-store');
-    expect(res.json()).toEqual({ uid, displayName: 'VIP Khách', status: 'active', replayed: false });
+    expect(res.json()).toEqual({ uid, displayName: `VIP_${uid}`, status: 'active', replayed: false });
     expect(res.body).not.toContain(PW);
     const [row] = await t.db.select().from(users).where(sql`${users.uid} = ${uid}`);
-    expect(row).toMatchObject({ username: `uid_${uid}`, email: null, emailVerifiedAt: null, isTest: false, status: 'active', accountType: 'player' });
+    // One account name: the @username is the name the admin typed.
+    expect(row).toMatchObject({ username: `VIP_${uid}`, displayName: `VIP_${uid}`, email: null, emailVerifiedAt: null, isTest: false, status: 'active', accountType: 'player' });
     expect(row!.passwordHash).not.toContain(PW);
     const roles = await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM user_roles WHERE user_id = ${row!.id}`);
     expect(roles[0]!.n).toBe(0);
@@ -322,12 +323,14 @@ describe('custom UID accounts', () => {
     for (const uid of [0, 100_000, 1.5]) expect((await post('/api/admin/accounts', body(uid), admin)).statusCode).toBe(400);
     expect((await post('/api/admin/accounts', body(4546, { confirmPassword: 'Different-pass-1' }), admin)).statusCode).toBe(400);
     for (const weak of ['short1', 'onlyletters', '12345678']) expect((await post('/api/admin/accounts', body(4547, { password: weak, confirmPassword: weak }), admin)).statusCode).toBe(400);
-    expect((await post('/api/admin/accounts', body(4548, { displayName: 'Keyo Captain' }), admin)).json().error.code).toBe('username_taken');
+    expect((await post('/api/admin/accounts', body(4548, { displayName: 'Keyo_Captain' }), admin)).json().error.code).toBe('name_reserved');
+    expect((await post('/api/admin/accounts', body(4548, { displayName: 'VIP Khách' }), admin)).json().error.code).toBe('name_invalid');
+    expect((await post('/api/admin/accounts', body(4548, { displayName: 'vip_4545' }), admin)).json().error.code).toBe('username_taken');
     // Old fields are not part of the contract any more and change nothing.
     const legacy = await post('/api/admin/accounts', body(4549, { username: 'chosen', email: 'x@example.test', isTest: true }), admin);
     expect(legacy.statusCode).toBe(200);
     const [row] = await t.db.select().from(users).where(sql`${users.uid} = 4549`);
-    expect(row).toMatchObject({ username: 'uid_4549', email: null, isTest: false });
+    expect(row).toMatchObject({ username: 'VIP_4549', displayName: 'VIP_4549', email: null, isTest: false });
     const player = await register(t);
     expect((await post('/api/admin/accounts', body(777), auth(player.token))).json().error.code).toBe('forbidden');
     const [n] = await t.db.execute<{ n: number }>(sql`SELECT count(*)::int AS n FROM users WHERE uid IN (4546, 4547, 4548, 777)`);

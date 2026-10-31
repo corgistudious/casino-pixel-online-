@@ -25,7 +25,7 @@ describe('rename cooldown expiry', () => {
       method: 'POST',
       url: '/api/auth/register',
       payload: {
-        displayName: 'Cooldown Tester',
+        displayName: 'Cooldown_Tester',
         password: TEST_PASSWORD,
         confirmPassword: TEST_PASSWORD,
         acceptTerms: true,
@@ -44,7 +44,7 @@ describe('rename cooldown expiry', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'First Name',
+        displayName: 'First_Name',
         useCard: false,
       },
     });
@@ -63,7 +63,7 @@ describe('rename cooldown expiry', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'Too Early Name',
+        displayName: 'Too_Early_Name',
         useCard: false,
       },
     });
@@ -82,14 +82,14 @@ describe('rename cooldown expiry', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'After Cooldown',
+        displayName: 'After_Cooldown',
         useCard: false,
       },
     });
 
     expect(second.statusCode).toBe(200);
     expect(second.json().user.displayName)
-      .toBe('After Cooldown');
+      .toBe('After_Cooldown');
 
     const info = await t.app.inject({
       method: 'GET',

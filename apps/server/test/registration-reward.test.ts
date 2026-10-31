@@ -73,7 +73,7 @@ describe('new registration starter reward', () => {
   }
 
   it('grants welcome silver without an email', async () => {
-    const { user } = await register('No Email Player');
+    const { user } = await register('No_Email_Player');
     expect(user.status).toBe('active');
     expect(user.uid).toBeGreaterThanOrEqual(100000);
     await checkReward(user.id);
@@ -81,7 +81,7 @@ describe('new registration starter reward', () => {
 
   it('grants welcome silver before email verification', async () => {
     const { user } = await register(
-      'Email Player',
+      'Email_Player',
       'reward-test@example.test',
     );
 
@@ -92,7 +92,7 @@ describe('new registration starter reward', () => {
 
   it('does not grant the reward twice after verification', async () => {
     const email = 'reward-verify@example.test';
-    const { user, token } = await register('Verify Player', email);
+    const { user, token } = await register('Verify_Player', email);
 
     await checkReward(user.id);
 

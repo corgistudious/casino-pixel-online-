@@ -31,7 +31,7 @@ const count = async (q: ReturnType<typeof sql>) => Number(((await t.db.execute(q
 async function officialAccount(uid: number) {
   const [u] = await t.db
     .insert(users)
-    .values({ uid, username: `official${uid}`, usernameLower: `official${uid}`, passwordHash: '!disabled', displayName: 'Official', status: 'active', isTest: false })
+    .values({ uid, username: `official${uid}`, usernameLower: `official${uid}`, passwordHash: '!disabled', displayName: `official${uid}`, status: 'active', isTest: false })
     .returning();
   await t.db.insert(wallets).values({ userId: u!.id, balance: 0 });
   await applyDelta(t.db, u!.id, 1234, 'admin_adjust');
@@ -154,7 +154,7 @@ describe('reset:test-data and launch:production', () => {
     // First real player gets UID 100000 and is not a test account.
     const [first] = await t.db
       .insert(users)
-      .values({ username: 'firstplayer', usernameLower: 'firstplayer', passwordHash: 'x', displayName: 'First' })
+      .values({ username: 'firstplayer', usernameLower: 'firstplayer', passwordHash: 'x', displayName: 'firstplayer' })
       .returning();
     expect(first!.uid).toBe(100000);
     expect(first!.isTest).toBe(false);

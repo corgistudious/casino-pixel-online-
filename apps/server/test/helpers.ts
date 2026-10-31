@@ -183,7 +183,7 @@ export async function createOwner(t: TestApp) {
       username: 'keyo_gm',
       usernameLower: 'keyo_gm',
       passwordHash,
-      displayName: 'Keyo GM',
+      displayName: 'keyo_gm',
       email: 'gm@example.test',
       emailLower: 'gm@example.test',
       emailVerifiedAt: now,

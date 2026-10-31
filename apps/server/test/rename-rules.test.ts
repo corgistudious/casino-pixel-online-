@@ -24,7 +24,7 @@ describe('rename rules', () => {
       method: 'POST',
       url: '/api/auth/register',
       payload: {
-        displayName: 'Original Player',
+        displayName: 'Original_Player',
         password: TEST_PASSWORD,
         confirmPassword: TEST_PASSWORD,
         acceptTerms: true,
@@ -49,13 +49,13 @@ describe('rename rules', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'Renamed Player',
+        displayName: 'Renamed_Player',
         useCard: false,
       },
     });
 
     expect(first.statusCode).toBe(200);
-    expect(first.json().user.displayName).toBe('Renamed Player');
+    expect(first.json().user.displayName).toBe('Renamed_Player');
 
     const info = await t.app.inject({
       method: 'GET',
@@ -78,7 +78,7 @@ describe('rename rules', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'Another Player',
+        displayName: 'Another_Player',
         useCard: false,
       },
     });
