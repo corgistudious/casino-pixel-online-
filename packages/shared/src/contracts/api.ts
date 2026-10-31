@@ -45,7 +45,8 @@ export const changePasswordSchema = z
 
 export const registerSchema = z
   .object({
-    displayName: z.string().trim().min(1).max(24),
+    /** The account name (display name = @username); the server enforces the account-name rule. */
+    displayName: z.string().max(64),
     email: emailSchema.optional(),
     password: passwordSchema,
     confirmPassword: z.string(),
@@ -266,7 +267,8 @@ export const idempotencyKeySchema = z.string().uuid();
 export const customUidAccountSchema = z
   .object({
     uid: z.number().int().min(1).max(SPECIAL_UID_MAX),
-    displayName: z.string().trim().min(1).max(24),
+    /** The account name (display name = @username); the server enforces the account-name rule. */
+    displayName: z.string().max(64),
     password: passwordSchema,
     confirmPassword: z.string(),
     /** Retry key: the same key returns the account already created instead of an error. */

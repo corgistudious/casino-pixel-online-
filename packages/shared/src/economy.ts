@@ -45,6 +45,8 @@ export const ERROR_CODES = [
   'rate_limited',
   'internal',
   'username_taken',
+  'name_invalid',
+  'name_reserved',
   'invalid_credentials',
   'insufficient_funds',
   'invalid_bet',
