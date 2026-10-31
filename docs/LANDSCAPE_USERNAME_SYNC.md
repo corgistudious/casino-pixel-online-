@@ -60,7 +60,7 @@ Hồi quy cũng qua: bàn phím 29/29, OrientationGuard 105/105, responsive 320/
 | `PATCH /api/me` | Vẫn cấm đổi tên (như cũ). |
 
 - **Chống race:** unique index `users_username_lower_idx` sẵn có quyết định khi hai yêu cầu cùng tên.
-- **Chặn cứng ở DB (migration `0036_account_name_sync`):** trigger từ chối mọi INSERT, hoặc UPDATE chạm vào tên, khiến hai trường của người chơi lệch nhau. Trigger cũng tự đặt `username_lower`.
+- **Chặn cứng ở DB (migration `0037_account_name_sync`):** trigger từ chối mọi INSERT, hoặc UPDATE chạm vào tên, khiến hai trường của người chơi lệch nhau. Trigger cũng tự đặt `username_lower`.
   - Tài khoản cũ đang lệch **không bị đổi** và vẫn hoạt động bình thường (đăng nhập, ví, trang bị…), cho tới lần đổi tên tiếp theo.
   - Tài khoản đã xóa và Keyo Captain (UID 1000) được miễn.
 - **Hiển thị:** đổi tên phát sự kiện identity qua WebSocket. Danh sách, chat và hồ sơ nhận ngay; phiên của chính người bị đổi tên tự tải lại `/api/me`, không cần đăng nhập lại.
@@ -91,7 +91,7 @@ pnpm --filter @casino/server names:sync --operator TÊN --execute           # pg
   - tài khoản cũ được đồng bộ khi đổi tên; Owner tự đổi tên và vẫn giữ quyền;
   - admin đổi tên (cần nhập lại mật khẩu, audit, chặn Admin/Owner/Keyo Support/tự đổi);
   - trigger; `names-audit`/`names-sync`.
-- `migrations.test.ts`: chạy 0036 không đổi dữ liệu cũ; chặn ghi lệch; rollback chỉ gỡ trigger.
+- `migrations.test.ts`: chạy 0037 không đổi dữ liệu cũ; chặn ghi lệch; rollback chỉ gỡ trigger. Có thêm bài **nâng cấp từ trạng thái Production** (xem mục bên dưới).
 - Web 18/18. Test mới kiểm mọi key i18n tĩnh có trong vi và en; nó đã phát hiện lỗi chuỗi đổi tên ở Hồ sơ bị đặt sai chỗ (đang hiện key thô trên Production) và đã sửa.
 - E2E trên trình duyệt `names.mjs`: **13/13** (đăng ký qua UI, tên trùng, đổi tên ở Hồ sơ, người khác thấy tên mới, admin đổi tên cập nhật trang người chơi đang mở, Owner không đổi).
 
@@ -100,9 +100,9 @@ pnpm --filter @casino/server names:sync --operator TÊN --execute           # pg
 **Thứ tự đề xuất: backend → frontend.**
 
 1. **Backend** (`keyo-game/server:<tag mới>`):
-   - Có migration 0036 (chỉ thêm trigger, không đổi dữ liệu). Server phải khởi động lại để chạy migration.
+   - Có migration 0037 (chỉ thêm trigger, không đổi dữ liệu). Server phải khởi động lại để chạy migration.
    - Làm trước: `pg_dump -Fc` và thử khôi phục vào DB tạm.
-   - **Lưu ý:** image production hiện là `pr28-fix36`, không có trong repo. Phải kiểm tra `SELECT count(*), max(created_at) FROM drizzle.__drizzle_migrations` (mong đợi 36 dòng, 0000–0035) để chắc VPS không có migration riêng trùng số 0036.
+   - Production đã có `0036_fix_dual_owner` (xem mục dưới). Trước khi deploy, kiểm tra `SELECT hash, created_at FROM drizzle.__drizzle_migrations ORDER BY created_at DESC LIMIT 1` trả về hash `7693…cc92` và `1793051955930`.
    - Sau deploy: kiểm tra `SELECT count(*) FROM pg_trigger WHERE tgname = 'users_name_sync'` = 1, và tổng ví không đổi.
 2. **Frontend** (`keyo-game/web:<tag mới>`): chỉ thay container `web` (`compose up -d --no-deps --no-build web`), như hướng dẫn ở `docs/DEPLOY_FRONTEND_UI_KB.md`.
    - Nếu chỉ deploy frontend mà chưa có backend mới: sửa landscape và i18n có tác dụng ngay. Nút "Đổi tên tài khoản" trong Admin sẽ báo lỗi, và đăng ký vẫn tạo `player_…` như cũ cho tới khi backend lên.
@@ -112,9 +112,55 @@ pnpm --filter @casino/server names:sync --operator TÊN --execute           # pg
 
 - **Frontend:** `KEYO_IMAGE_TAG=<tag web cũ> compose up -d --no-deps --no-build web`.
 - **Backend — BẮT BUỘC làm cả hai bước, theo thứ tự:**
-  1. Gỡ trigger **trước**: `psql -v ON_ERROR_STOP=1 -f apps/server/drizzle/rollback/0036_account_name_sync.down.sql`, rồi xóa dòng 0036 trong `drizzle.__drizzle_migrations`. Chỉ gỡ trigger, không đổi dữ liệu.
+  1. Gỡ trigger **trước**: `psql -v ON_ERROR_STOP=1 -f apps/server/drizzle/rollback/0037_account_name_sync.down.sql`, rồi xóa dòng của 0037 (theo hash) trong `drizzle.__drizzle_migrations`. Chỉ gỡ trigger, không đổi dữ liệu.
   2. Deploy lại image server cũ.
 
   Lý do: code cũ đăng ký với `username = player_…` khác tên hiển thị, và đổi tên chỉ ghi `display_name`. Nếu trigger còn, **cả đăng ký lẫn đổi tên đều bị từ chối**.
 - **`names:sync`:** khôi phục từ file `pg_dump` tạo ngay trước khi chạy (đường dẫn có trong báo cáo JSON), hoặc đổi tên lại từng tài khoản theo audit.
 - Không bao giờ `docker compose down -v` hay `volume prune`.
+
+## Tương thích với migration Production `0036_fix_dual_owner`
+
+Production (Corgi-Casino `3dee1fb`) đã chạy thêm một bản vá trên server:
+
+- tag `0036_fix_dual_owner`, idx 36, timestamp `1793051955930`;
+- SHA-256 `76939175bf523aa64433cd76b45682300a3838b1e8a1a1947df6a9c0a5cccc92`.
+
+Vì vậy migration đồng bộ tên của PR này mang số **0037** (`0037_account_name_sync`, timestamp `1793138355929`).
+
+- **Cách Drizzle nâng cấp:** chạy mọi mục trong journal có timestamp lớn hơn `created_at` mới nhất đã ghi trong `drizzle.__drizzle_migrations`. Production có mục mới nhất là 0036 (`…930`), nên chỉ **0037** được chạy. Migration Owner **không chạy lại và không bị sửa**.
+- **Đã kiểm tra trên PostgreSQL cô lập dựng lại đúng trạng thái Production** (`migrations.test.ts` → "upgrade from the Production migration state"):
+  - 0000–0035;
+  - bản ghi `0036_fix_dual_owner` với đúng hash và timestamp;
+  - UID 1000 và 1002 đều là Owner; các trigger bảo vệ Owner bật.
+
+  Kết quả: chỉ thêm đúng một dòng (hash = SHA-256 của file 0037); dòng 0036 giữ nguyên; danh sách Owner và **mọi trigger** trên `users`/`user_roles` y như trước; không tài khoản nào bị đổi tên; chạy lại là no-op; rollback 0037 chỉ gỡ trigger đồng bộ tên.
+- **`migrationJournal.test.ts`** chạy không cần DB:
+  - timestamp tăng dần, đủ file, không trùng số migration;
+  - mọi migration từ 0037 có timestamp sau `1793051955930`;
+  - số 0036 chỉ dành cho `0036_fix_dual_owner`;
+  - khi file 0036 được thêm vào, nó **phải** có SHA-256 `7693…cc92` và mục journal idx 36 / `1793051955930`.
+
+### Còn thiếu: nội dung gốc của `0036_fix_dual_owner.sql`
+
+File này không có trên GitHub (mọi nhánh), không có trong lịch sử git và không có trên máy làm việc. Không thể viết lại mà vẫn khớp hash, nên **chưa được thêm vào repo**. Cách thêm, giữ nguyên byte:
+
+```bash
+# trên VPS (chỉ đọc, không sửa gì)
+sha256sum /opt/keyo-game/apps/server/drizzle/0036_fix_dual_owner.sql   # phải ra 7693…cc92
+grep -A6 '"0036_fix_dual_owner"' /opt/keyo-game/apps/server/drizzle/meta/_journal.json
+# chép nguyên file vào repo: apps/server/drizzle/0036_fix_dual_owner.sql (không mở bằng editor đổi xuống dòng)
+```
+
+Sau đó thêm vào journal, ngay giữa 0035 và 0037, mục:
+
+`{ "idx": 36, "version": "7", "when": 1793051955930, "tag": "0036_fix_dual_owner", "breakpoints": true }`
+
+(lấy đúng `version`/`breakpoints` theo journal trên VPS).
+
+`migrationJournal.test.ts` sẽ báo lỗi nếu hash hoặc timestamp sai.
+
+Trước khi file này có trong repo:
+
+- **Production:** an toàn. Nó đã có 0036; 0037 được chạy sau.
+- **Database mới cài từ đầu (CI, môi trường test):** thiếu bản vá Owner của 0036. Phải thêm file trước khi dựng một môi trường mới từ repo.

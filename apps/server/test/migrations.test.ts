@@ -344,7 +344,7 @@ describe('0032 Keyo Captain dual Owner upgrade', () => {
   });
 });
 
-describe('0036 account name sync', () => {
+describe('0037 account name sync', () => {
   it('changes no existing account, then refuses unsynchronised name writes; rollback removes only the trigger', async () => {
     await resetDatabase();
     await migrate(db, { migrationsFolder: migrationsUpTo(36) }); // 0000–0035: the schema live servers run before this release
@@ -369,10 +369,67 @@ describe('0036 account name sync', () => {
     expect(await rows(sql`SELECT username_lower FROM users WHERE uid = 1002`)).toEqual([{ username_lower: 'lemon_gm' }]);
     await runMigrations(db); // re-run: no-op
 
-    const down = readFileSync(resolve(__dirname, '../drizzle/rollback/0036_account_name_sync.down.sql'), 'utf8').replace(/^(BEGIN|COMMIT);$/gm, '');
+    const down = readFileSync(resolve(__dirname, '../drizzle/rollback/0037_account_name_sync.down.sql'), 'utf8').replace(/^(BEGIN|COMMIT);$/gm, '');
     await db.transaction((tx) => tx.execute(sql.raw(down)));
     expect(await rows(sql`SELECT count(*)::int AS n FROM pg_trigger WHERE tgname = 'users_name_sync'`)).toEqual([{ n: 0 }]);
     expect(await rows(sql`SELECT username, display_name FROM users WHERE uid = 1002`)).toEqual([{ username: 'Lemon_GM', display_name: 'Lemon_GM' }]);
     await db.execute(sql`UPDATE users SET display_name = 'Free again' WHERE uid = 101400`); // old behaviour restored
+  });
+});
+
+/**
+ * Production (Corgi-Casino 3dee1fb) has 0000–0035 plus a hotfix applied on the server:
+ * 0036_fix_dual_owner (hash 7693…cc92, created_at 1793051955930), not yet in this repository.
+ * Drizzle applies every journal entry newer than the last applied created_at, so 0037 must sort
+ * after that hotfix and must not disturb it or the Owner rows and triggers it left in place.
+ */
+describe('upgrade from the Production migration state (0036_fix_dual_owner applied on the server)', () => {
+  const PROD_0036 = { hash: '76939175bf523aa64433cd76b45682300a3838b1e8a1a1947df6a9c0a5cccc92', createdAt: 1793051955930 };
+  it('applies only 0037, keeps the 0036 record, both Owners and every Owner trigger; rollback removes only the name trigger', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(36) }); // 0000–0035
+    await bootstrapRoles(db);
+    // The state Production verified after its 0036: UID 1000 and 1002 both Owner, Owner triggers enabled.
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name, account_type) VALUES
+      (1000, 'keyo_support', 'keyo_support', '!disabled', 'Keyo Captain', 'system_support'),
+      (1002, 'Keyo_GM', 'keyo_gm', 'x', 'Lemon_GM', 'player'),
+      (101500, 'player_old', 'player_old', 'y', 'Old Name', 'player')`);
+    await db.execute(sql`INSERT INTO wallets (user_id, balance, gold) SELECT id, uid * 11, uid % 13 FROM users`);
+    await db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid IN (1000, 1002)`);
+    await db.execute(sql`INSERT INTO drizzle.__drizzle_migrations (hash, created_at) VALUES (${PROD_0036.hash}, ${PROD_0036.createdAt})`);
+
+    const migrations = sql`SELECT hash, created_at::text AS created_at FROM drizzle.__drizzle_migrations ORDER BY created_at, id`;
+    const ownerTriggers = sql`SELECT c.relname AS tbl, t.tgname AS name, t.tgenabled AS enabled FROM pg_trigger t JOIN pg_class c ON c.oid = t.tgrelid
+      WHERE NOT t.tgisinternal AND c.relname IN ('users', 'user_roles') AND t.tgname <> 'users_name_sync' ORDER BY 1, 2`;
+    const owners = sql`SELECT u.uid::int AS uid FROM user_roles r JOIN users u ON u.id = r.user_id WHERE r.role_id = 'owner' ORDER BY u.uid`;
+    const people = sql`SELECT json_agg(json_build_object('u', uid, 'n', username, 'd', display_name, 'p', password_hash, 't', account_type) ORDER BY uid) AS users,
+      (SELECT json_agg(json_build_object('b', balance, 'g', gold) ORDER BY user_id) FROM wallets) AS wallets FROM users`;
+    const before = { migrations: await rows(migrations), triggers: await rows(ownerTriggers), owners: await rows(owners), people: await rows(people) };
+    expect(before.owners).toEqual([{ uid: 1000 }, { uid: 1002 }]);
+    expect((before.triggers as { enabled: string }[]).every((t) => t.enabled === 'O')).toBe(true);
+
+    await runMigrations(db); // what the server does at start on Production
+    const after = await rows<{ hash: string; created_at: string }>(migrations);
+    const file0037 = readFileSync(resolve(__dirname, '../drizzle/0037_account_name_sync.sql'), 'utf8');
+    const { createHash } = await import('node:crypto');
+    // Exactly one new row, for 0037 (Drizzle stores the SHA-256 of the file); 0036's record untouched.
+    expect(after.slice(0, before.migrations.length)).toEqual(before.migrations);
+    expect(after.slice(before.migrations.length)).toEqual([{ hash: createHash('sha256').update(file0037).digest('hex'), created_at: '1793138355929' }]);
+    expect(after.find((m) => m.hash === PROD_0036.hash)).toEqual({ hash: PROD_0036.hash, created_at: String(PROD_0036.createdAt) });
+    expect(await rows(ownerTriggers)).toEqual(before.triggers);
+    expect(await rows(owners)).toEqual(before.owners);
+    expect(await rows(people)).toEqual(before.people); // no account renamed
+    expect(await rows(sql`SELECT count(*)::int AS n FROM pg_trigger WHERE tgname = 'users_name_sync' AND tgenabled = 'O'`)).toEqual([{ n: 1 }]);
+    // Owner protection still holds; the name rule now holds for writes.
+    await expect(db.execute(sql`DELETE FROM user_roles WHERE role_id = 'owner'`)).rejects.toThrow();
+    await expect(db.execute(sql`UPDATE users SET display_name = 'Mismatch' WHERE uid = 1002`)).rejects.toThrow();
+    await runMigrations(db); // re-run: no-op
+    expect((await rows(migrations)).length).toBe(after.length);
+
+    const down = readFileSync(resolve(__dirname, '../drizzle/rollback/0037_account_name_sync.down.sql'), 'utf8').replace(/^(BEGIN|COMMIT);$/gm, '');
+    await db.transaction((tx) => tx.execute(sql.raw(down)));
+    expect(await rows(sql`SELECT count(*)::int AS n FROM pg_trigger WHERE tgname = 'users_name_sync'`)).toEqual([{ n: 0 }]);
+    expect(await rows(ownerTriggers)).toEqual(before.triggers);
+    expect(await rows(owners)).toEqual(before.owners);
   });
 });

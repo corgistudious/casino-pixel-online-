@@ -10,7 +10,7 @@ import { isProtectedDisplayName } from './protectedNames';
 /**
  * Account names: one value is both the display name and the username (shown as @name). Every
  * path that creates or renames a player goes through here, and the database trigger
- * users_name_sync (0036) refuses any name write that would leave the two apart.
+ * users_name_sync (0037) refuses any name write that would leave the two apart.
  */
 
 /** Trims and validates a requested name: rule first (name_invalid), then official names (name_reserved). */
