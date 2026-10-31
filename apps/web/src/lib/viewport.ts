@@ -71,9 +71,11 @@ export function installViewport(): () => void {
       }
       lastHeight = appHeight;
     }
-    // Undo the browser's page pan (keyboard reveal, or a pan left behind after it closed / after
-    // returning from the background). The document itself never scrolls in this app.
-    if (window.scrollX !== 0 || window.scrollY !== 0) window.scrollTo(0, 0);
+    // Undo the browser's page pan once the app fits above the keyboard, or once no field is focused
+    // (a pan left behind after the keyboard closed / after returning from the background). While a
+    // field is focused but the keyboard is still animating in, iOS is mid-pan: leave it alone.
+    // The document itself never scrolls in this app.
+    if ((open || !focused) && (window.scrollX !== 0 || window.scrollY !== 0)) window.scrollTo(0, 0);
     if (open && focused) reveal(active, visible);
   };
   const schedule = () => {

@@ -288,12 +288,13 @@ function Thread({ messages: all, more, onOlder, onRemove, context }: { messages:
   const [unseen, setUnseen] = useState(false);
   const last = messages?.at(-1)?.id;
   const first = messages?.[0]?.id;
-  const anchor = useRef<{ first: number | undefined; fromBottom: number }>({ first: undefined, fromBottom: 0 });
+  const anchor = useRef<{ first: number | undefined; last: number | undefined; fromBottom: number }>({ first: undefined, last: undefined, fromBottom: 0 });
   // A new conversation (list reset to loading) starts at its latest message.
   useLayoutEffect(() => {
     if (messages !== null) return;
     stick.current = true;
     anchor.current.first = undefined;
+    anchor.current.last = undefined;
     setUnseen(false);
   }, [messages === null]); // eslint-disable-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
@@ -303,8 +304,9 @@ function Thread({ messages: all, more, onOlder, onRemove, context }: { messages:
       // Older messages were prepended: keep the message being read where it was.
       el.scrollTop = el.scrollHeight - anchor.current.fromBottom;
     } else if (stick.current) el.scrollTop = el.scrollHeight;
-    else setUnseen(true);
+    else if (last !== undefined && last !== anchor.current.last && anchor.current.last !== undefined) setUnseen(true);
     anchor.current.first = first;
+    anchor.current.last = last;
   }, [last, first, messages?.length]);
   // The list shrinks when the keyboard opens: stay pinned to the latest message if we were there.
   useEffect(() => {
@@ -446,7 +448,7 @@ function Composer({ channel, path, locked = false }: { channel: ChatChannel; pat
           data-channel={channel}
         />
         {/* Keep focus in the field: tapping Send must not close the keyboard and shift the layout mid-tap. */}
-        <Button variant="gold" className="min-h-[44px]" onPointerDown={(e) => e.preventDefault()} onClick={() => void send()} disabled={busy || !body.trim()}>
+        <Button variant="gold" className="min-h-[44px]" onMouseDown={(e) => e.preventDefault()} onClick={() => void send()} disabled={busy || !body.trim()}>
           {t('social.chat.send')}
         </Button>
       </div>

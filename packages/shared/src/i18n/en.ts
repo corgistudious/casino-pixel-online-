@@ -13,6 +13,8 @@ export const en = {
       hint: 'The screen updates by itself once rotated.',
     },
     offline: 'Connection lost. Reconnecting…',
+    loadFailed: 'This screen could not be loaded. Check your connection and try again.',
+    reload: 'Reload',
     online: '{{count}} online',
   },
   nav: {

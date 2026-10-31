@@ -15,6 +15,8 @@ export const vi: Translation = {
       hint: 'Màn hình tự cập nhật ngay khi xoay đúng chiều.',
     },
     offline: 'Mất kết nối. Đang kết nối lại…',
+    loadFailed: 'Không tải được màn hình này. Hãy kiểm tra kết nối rồi thử lại.',
+    reload: 'Tải lại',
     online: '{{count}} đang online',
   },
   nav: {

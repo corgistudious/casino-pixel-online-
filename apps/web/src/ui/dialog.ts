@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -8,15 +8,18 @@ const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), selec
  * closes, and on close focus returns to whatever opened the dialog — all without scrolling.
  */
 export function useDialogFocus(ref: RefObject<HTMLElement | null>, onClose?: () => void) {
+  // Always call the latest onClose (it may close over fresh state) without re-binding focus.
+  const close = useRef(onClose);
+  close.current = onClose;
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     if (!el.contains(document.activeElement)) el.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && onClose) {
+      if (e.key === 'Escape' && close.current) {
         e.stopPropagation();
-        onClose();
+        close.current();
         return;
       }
       if (e.key !== 'Tab') return;
@@ -37,7 +40,5 @@ export function useDialogFocus(ref: RefObject<HTMLElement | null>, onClose?: () 
       el.removeEventListener('keydown', onKey);
       if (opener?.isConnected) opener.focus({ preventScroll: true });
     };
-    // Bind once per open; onClose identity changes must not steal focus back.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
 }

@@ -1,4 +1,5 @@
-import { lazy, Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
+import { Component, lazy, Suspense, useEffect, useState, type ComponentType, type ReactNode } from 'react';
+import i18n from './i18n';
 import { useTranslation } from 'react-i18next';
 import { HashRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { AuthPage, EmailLinkPage, VerifyEmailGate } from './pages/AuthPage';
@@ -42,8 +43,37 @@ import { KeyoLogo } from './ui/KeyoLogo';
 
 // Heavy, rarely-first screens load on demand: the game rooms (Phaser) and the staff console.
 // Game rooms are prefetched once the player is signed in and the app is idle, so entering a room stays instant.
+// After a deploy the previous build's chunks no longer exist: a player still running the old page
+// would fail to open a room. Reload once to pick up the new build (guarded so it cannot loop).
+const RELOAD_KEY = 'keyo.chunkReload';
+function loadChunk<M>(load: () => Promise<M>): Promise<M> {
+  return load().then(
+    (m) => {
+      try {
+        sessionStorage.removeItem(RELOAD_KEY);
+      } catch {
+        /* storage unavailable */
+      }
+      return m;
+    },
+    (err) => {
+      let reloaded = false;
+      try {
+        reloaded = sessionStorage.getItem(RELOAD_KEY) === '1';
+        if (!reloaded) sessionStorage.setItem(RELOAD_KEY, '1');
+      } catch {
+        reloaded = true; // without storage, do not risk a reload loop
+      }
+      if (!reloaded) {
+        window.location.reload();
+        return new Promise<M>(() => {}); // keep the loader on screen until the reload
+      }
+      throw err;
+    },
+  );
+}
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const named = <M extends Record<K, ComponentType<any>>, K extends keyof M & string>(load: () => Promise<M>, key: K) => lazy(() => load().then((m) => ({ default: m[key] })));
+const named = <M extends Record<K, ComponentType<any>>, K extends keyof M & string>(load: () => Promise<M>, key: K) => lazy(() => loadChunk(load).then((m) => ({ default: m[key] })));
 const loadGames = {
   blackjack: () => import('./game/controls/BlackjackGame'),
   roulette: () => import('./game/controls/RouletteGame'),
@@ -66,6 +96,25 @@ function prefetchGames() {
   const run = () => Object.values(loadGames).forEach((load) => void load().catch(() => {}));
   if ('requestIdleCallback' in window) window.requestIdleCallback(run, { timeout: 4000 });
   else setTimeout(run, 2000);
+}
+
+/** A screen that failed to load (e.g. offline) shows a retry instead of blanking the whole app. */
+class RouteErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  override state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  override render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center" role="alert">
+        <p className="max-w-sm text-sm text-white/75">{i18n.t('app.loadFailed')}</p>
+        <button type="button" onClick={() => window.location.reload()} className="rounded-xl bg-gold-sheen px-5 py-2 font-strong text-ink-900">
+          {i18n.t('app.reload')}
+        </button>
+      </div>
+    );
+  }
 }
 
 function RouteLoading() {
@@ -183,6 +232,7 @@ export function App() {
       <VictoryEffectHost />
       <RoomInviteHost />
       <InGameChat />
+      <RouteErrorBoundary>
       <Suspense fallback={<RouteLoading />}>
       <Routes>
         <Route path="/" element={<Authed><GameHub /></Authed>} />
@@ -222,6 +272,7 @@ export function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>
+      </RouteErrorBoundary>
     </HashRouter>
   );
 }
