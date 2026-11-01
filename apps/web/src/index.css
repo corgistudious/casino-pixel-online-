@@ -259,3 +259,15 @@
   .orientation-turn-landscape { animation: none; transform: rotate(-90deg); }
   .orientation-turn-portrait { animation: none; }
 }
+
+/* PWA notice (ui/PwaBlockedScreen.tsx): a short, light entrance; none with reduced motion. */
+@keyframes pwa-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+.pwa-in {
+  animation: pwa-in 0.45s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pwa-in { animation: none; }
+}

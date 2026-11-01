@@ -971,6 +971,18 @@ export const en = {
     created: 'Room created.',
     saved: 'Room settings saved.',
   },
+  pwaBlock: {
+    title: 'App Mode Temporarily Unavailable',
+    body1: 'Keyo Game has temporarily disabled mobile app mode while we upgrade and improve the experience.',
+    body2: 'You can keep playing Keyo Game normally in Safari or Chrome.',
+    copy: 'Copy Website Link',
+    copied: 'Link copied! Open Safari or Chrome and paste the link to continue playing.',
+    copyManual: 'Copying is not available here: press and hold the link above, choose Copy, then paste it into Safari or Chrome.',
+    linkLabel: 'Website address',
+    howTo: 'Open Safari or Chrome, tap the address bar, paste the link and go. If a link opens this app again, open the browser yourself and paste it there.',
+    footer: 'Thank you for being part of Keyo Game!',
+    language: 'Language',
+  },
   iosWindow: {
     title: 'iOS opened Keyo with a shorter screen',
     body: 'iOS kept {{px}}px for the portrait status bar after rotating. To use the full screen: swipe up to the App Switcher, close Keyo, then open it again while holding the phone sideways.',

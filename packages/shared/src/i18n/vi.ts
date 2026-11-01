@@ -973,6 +973,18 @@ export const vi: Translation = {
     created: 'Đã tạo phòng.',
     saved: 'Đã lưu cài đặt phòng.',
   },
+  pwaBlock: {
+    title: 'Tạm ngừng hỗ trợ ứng dụng',
+    body1: 'Keyo Game hiện tạm ngừng hỗ trợ chế độ ứng dụng trên điện thoại để nâng cấp và cải thiện trải nghiệm.',
+    body2: 'Bạn vẫn có thể chơi Keyo Game bình thường bằng trình duyệt Safari hoặc Chrome.',
+    copy: 'Sao chép liên kết',
+    copied: 'Đã sao chép! Hãy mở Safari hoặc Chrome và dán liên kết để tiếp tục chơi.',
+    copyManual: 'Không thể tự sao chép tại đây: hãy nhấn giữ liên kết phía trên, chọn Sao chép rồi dán vào Safari hoặc Chrome.',
+    linkLabel: 'Địa chỉ website',
+    howTo: 'Mở Safari hoặc Chrome, chạm vào thanh địa chỉ, dán liên kết và truy cập. Nếu liên kết mở lại ứng dụng này, hãy tự mở trình duyệt rồi dán vào đó.',
+    footer: 'Cảm ơn bạn đã đồng hành cùng Keyo Game!',
+    language: 'Ngôn ngữ',
+  },
   iosWindow: {
     title: 'iOS mở Keyo với màn hình bị thiếu',
     body: 'iOS vẫn giữ {{px}}px cho thanh trạng thái dọc sau khi xoay. Để dùng toàn màn hình: vuốt lên mở trình chuyển ứng dụng, đóng Keyo rồi mở lại khi vẫn cầm ngang máy.',
