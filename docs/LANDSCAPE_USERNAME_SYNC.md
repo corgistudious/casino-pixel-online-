@@ -141,26 +141,17 @@ Vì vậy migration đồng bộ tên của PR này mang số **0037** (`0037_ac
   - số 0036 chỉ dành cho `0036_fix_dual_owner`;
   - khi file 0036 được thêm vào, nó **phải** có SHA-256 `7693…cc92` và mục journal idx 36 / `1793051955930`.
 
-### Còn thiếu: nội dung gốc của `0036_fix_dual_owner.sql`
+### `0036_fix_dual_owner.sql` đã có trong repo
 
-File này không có trên GitHub (mọi nhánh), không có trong lịch sử git và không có trên máy làm việc. Không thể viết lại mà vẫn khớp hash, nên **chưa được thêm vào repo**. Cách thêm, giữ nguyên byte:
-
-```bash
-# trên VPS (chỉ đọc, không sửa gì)
-sha256sum /opt/keyo-game/apps/server/drizzle/0036_fix_dual_owner.sql   # phải ra 7693…cc92
-grep -A6 '"0036_fix_dual_owner"' /opt/keyo-game/apps/server/drizzle/meta/_journal.json
-# chép nguyên file vào repo: apps/server/drizzle/0036_fix_dual_owner.sql (không mở bằng editor đổi xuống dòng)
-```
-
-Sau đó thêm vào journal, ngay giữa 0035 và 0037, mục:
-
-`{ "idx": 36, "version": "7", "when": 1793051955930, "tag": "0036_fix_dual_owner", "breakpoints": true }`
-
-(lấy đúng `version`/`breakpoints` theo journal trên VPS).
-
-`migrationJournal.test.ts` sẽ báo lỗi nếu hash hoặc timestamp sai.
-
-Trước khi file này có trong repo:
-
-- **Production:** an toàn. Nó đã có 0036; 0037 được chạy sau.
-- **Database mới cài từ đầu (CI, môi trường test):** thiếu bản vá Owner của 0036. Phải thêm file trước khi dựng một môi trường mới từ repo.
+- Lấy nguyên văn từ VPS: 1375 byte, LF, có một dòng trống cuối file. SHA-256 `76939175bf523aa64433cd76b45682300a3838b1e8a1a1947df6a9c0a5cccc92`, khớp Production.
+- Journal: idx 36, timestamp `1793051955930`, nằm giữa 0035 (`…929`) và 0037 (`1793138355929`).
+- `migrationJournal.test.ts` khóa hash và timestamp: chỉ cần đổi một byte là test fail.
+- **Nội dung 0036:**
+  - thay hàm `keyo_protect_owner_roles()`: chỉ UID 1000/1002 được giữ Owner; không gỡ, đổi hay thêm vai trò khác cho hai tài khoản này;
+  - cấp Owner cho UID 1000 nếu còn thiếu (`ON CONFLICT DO NOTHING`).
+- **Lệch giữa repo và Production:**
+  - Trên Production có một trigger "legacy" gọi hàm `keyo_protect_owner_roles()`. Trigger này được tạo thẳng trên server, **không có trong migration nào của repo**.
+  - Database dựng từ repo chỉ có hàm (do 0036 tạo), không có trigger đó. Bảo vệ Owner ở đó do `user_roles_owner_guard` (0004/0032) và `users_guard` đảm nhiệm.
+  - Bài test nâng cấp gắn lại trigger legacy để mô phỏng đúng Production.
+  - Nếu muốn repo và Production giống hệt nhau, cần thêm migration mới tạo trigger đó, kèm định nghĩa lấy từ `pg_dump --schema-only` của Production. Việc này chưa làm vì không có định nghĩa gốc.
+- **Database dựng mới từ repo:** chạy đủ 0000–0037 (toàn bộ test server đều đi đường này).
