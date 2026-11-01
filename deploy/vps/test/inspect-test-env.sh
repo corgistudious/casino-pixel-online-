@@ -29,4 +29,4 @@ else echo "not a git checkout"; fi
 hr "Production (read-only): /opt/keyo-game git + web/server container start times"
 git -C /opt/keyo-game log --oneline -1 2>/dev/null
 for c in $(docker ps --filter label=com.docker.compose.project=keyo-game --format '{{.Names}}'); do echo "$c $(docker inspect "$c" --format '{{.Config.Image}} started {{.State.StartedAt}}')"; done
-hr "tools"; for t in node pnpm docker git rsync; do printf '%s: ' "$t"; command -v "$t" >/dev/null && "$t" --version 2>/dev/null | head -1 || echo missing; done
+hr "tools"; for t in node pnpm docker git; do printf '%s: ' "$t"; command -v "$t" >/dev/null && "$t" --version 2>/dev/null | head -1 || echo missing; done

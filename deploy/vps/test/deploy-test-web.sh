@@ -49,12 +49,17 @@ TS=$(date -u +%Y%m%d-%H%M%S)
 if [[ -n "${TEST_STATIC_DIR:-}" ]]; then
   BAK="${TEST_STATIC_DIR%/}.bak-$TS"
   log "backup $TEST_STATIC_DIR -> $BAK"; cp -a "$TEST_STATIC_DIR" "$BAK"
-  rsync -a --delete "$DIST"/ "${TEST_STATIC_DIR%/}"/
-  echo "Rollback: rsync -a --delete $BAK/ ${TEST_STATIC_DIR%/}/"
+  # Assets first, index.html last (players switch only when the new shell is in place); old hashed
+  # assets are left in place (harmless, and they are in the backup anyway).
+  D="${TEST_STATIC_DIR%/}"
+  mkdir -p "$D/assets" && cp -a "$DIST/assets/." "$D/assets/"
+  for f in "$DIST"/*; do [[ "$(basename "$f")" =~ ^(assets|index.html)$ ]] || cp -a "$f" "$D/"; done
+  cp -a "$DIST/index.html" "$D/index.html"
+  echo "Rollback: rm -rf $D && mv $BAK $D"
 else
   BAK="$(dirname "$TEST_SRC")/web-srv-backup-$TS"
   log "backup $TEST_WEB_CONTAINER:/srv -> $BAK"; docker cp "$TEST_WEB_CONTAINER":/srv "$BAK"
-  # Old hashed assets stay (harmless); index.html is copied last so the switch is atomic for players.
+  # Same order: assets, other files, index.html last.
   docker cp "$DIST/assets/." "$TEST_WEB_CONTAINER":/srv/assets/
   for f in "$DIST"/*; do [[ "$(basename "$f")" =~ ^(assets|index.html)$ ]] || docker cp "$f" "$TEST_WEB_CONTAINER":/srv/; done
   docker cp "$DIST/index.html" "$TEST_WEB_CONTAINER":/srv/index.html
