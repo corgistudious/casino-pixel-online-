@@ -17,6 +17,12 @@ COPY apps/server apps/server
 COPY apps/web apps/web
 ARG VITE_API_URL=""
 ENV VITE_API_URL=$VITE_API_URL
+# Optional build stamp shown in index.html (<meta name="keyo-build">); .git is not in the build context.
+ARG KEYO_COMMIT=""
+ENV KEYO_COMMIT=$KEYO_COMMIT
+# Test builds only: "1" shows the viewport diagnostics overlay. Empty (default) for Production.
+ARG VITE_VIEWPORT_DIAG=""
+ENV VITE_VIEWPORT_DIAG=$VITE_VIEWPORT_DIAG
 RUN pnpm --filter @casino/server build && pnpm --filter @casino/web build
 RUN pnpm --filter @casino/server deploy --legacy --prod /out/server \
   && cp -r apps/server/dist apps/server/drizzle /out/server/

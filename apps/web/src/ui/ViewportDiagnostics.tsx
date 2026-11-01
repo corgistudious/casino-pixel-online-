@@ -55,7 +55,7 @@ export function ViewportDiagnostics() {
 
   const last = samples[samples.length - 1];
   const copy = async () => {
-    const text = JSON.stringify({ userAgent: navigator.userAgent, samples }, null, 2);
+    const text = JSON.stringify({ commit: __APP_COMMIT__, userAgent: navigator.userAgent, samples }, null, 2);
     try {
       await navigator.clipboard.writeText(text);
     } catch {
@@ -86,6 +86,7 @@ export function ViewportDiagnostics() {
               <button type="button" className="rounded border border-neon-cyan/50 px-1" onClick={() => void copy()}>{copied ? 'copied' : 'copy JSON'}</button>
               <button type="button" className="rounded border border-neon-cyan/50 px-1" onClick={() => setProbe(!probe)}>probe {probe ? 'off' : 'on'}</button>
             </div>
+            <div className="text-white/60">build {__APP_COMMIT__}</div>
             {last && (
               <div className="text-white/80">
                 screen {last.screen} · client {last.client} · root {last.root} · {last.orientation} · standalone {String(last.navigatorStandalone)} · {last.displayMode} · bar {last.statusBarMeta} · safe {last.safeArea.top}/{last.safeArea.right}/{last.safeArea.bottom}/{last.safeArea.left}
