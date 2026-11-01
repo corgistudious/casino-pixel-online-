@@ -973,6 +973,11 @@ export const vi: Translation = {
     created: 'Đã tạo phòng.',
     saved: 'Đã lưu cài đặt phòng.',
   },
+  iosWindow: {
+    title: 'iOS mở Keyo với màn hình bị thiếu',
+    body: 'iOS vẫn giữ {{px}}px cho thanh trạng thái dọc sau khi xoay. Để dùng toàn màn hình: vuốt lên mở trình chuyển ứng dụng, đóng Keyo rồi mở lại khi vẫn cầm ngang máy.',
+    dismiss: 'Đã hiểu',
+  },
   env: {
     test: 'MÔI TRƯỜNG THỬ NGHIỆM',
     testNote: 'Dữ liệu thử nghiệm — tài khoản, Cxu và lịch sử sẽ bị xóa trước khi ra mắt chính thức.',

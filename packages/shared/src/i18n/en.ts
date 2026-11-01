@@ -971,6 +971,11 @@ export const en = {
     created: 'Room created.',
     saved: 'Room settings saved.',
   },
+  iosWindow: {
+    title: 'iOS opened Keyo with a shorter screen',
+    body: 'iOS kept {{px}}px for the portrait status bar after rotating. To use the full screen: swipe up to the App Switcher, close Keyo, then open it again while holding the phone sideways.',
+    dismiss: 'Got it',
+  },
   env: {
     test: 'TEST ENVIRONMENT',
     testNote: 'Test data — accounts, Cxu and history will be deleted before the official launch.',

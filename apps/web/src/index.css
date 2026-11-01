@@ -33,17 +33,15 @@
    * The app root covers the WHOLE screen, edge to edge: backgrounds run under the notch and the home
    * indicator, and each screen shell insets only its controls with the --sa-* variables (padding the
    * root itself left dark bands around every screen in iPhone landscape).
-   * The browser sizes the root; lib/viewport.ts overrides only (a) --vvh while the keyboard is up and
-   * (b) --app-w/--app-h for an iPhone home-screen app, whose reported size is wrong when it is
-   * launched in landscape.
+   * The browser sizes the root (the window iOS/Android gives the page); lib/viewport.ts overrides
+   * only --vvh while the keyboard is up.
    */
   #root {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    width: var(--app-w, auto);
-    height: var(--vvh, var(--app-h, 100%));
+    height: var(--vvh, 100%);
     overflow: hidden;
   }
   body {

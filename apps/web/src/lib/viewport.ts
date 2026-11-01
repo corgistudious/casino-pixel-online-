@@ -12,16 +12,12 @@
  * Android with `interactive-widget=resizes-content` already shrinks the layout viewport, so the
  * visible height equals the layout height and nothing is applied there.
  *
- * iPhone home-screen app (PWA): when it is LAUNCHED in landscape, iOS reports a layout viewport that
- * is too short (the app showed a large empty band at the bottom until the phone was rotated once).
- * A home-screen app on iPhone always covers the whole screen, so its size is taken from `screen`
- * (oriented by the physical orientation) instead of the reported viewport. iPads are excluded:
- * Split View / Stage Manager windows are smaller than the screen.
+ * iPhone home-screen app (PWA): the app always uses the window iOS gives it. When iOS opens the
+ * app with a short window (see lib/viewportProbe.ts), sizing the root to the screen would push the
+ * bottom of the UI out of sight, so it is never done; the condition is reported instead.
  *
  * Updates are coalesced to one per animation frame and only written when the value changes.
  */
-import { currentOrientation, type Orientation } from './orientation';
-
 const KEYBOARD_MIN_PX = 120;
 const TEXT_INPUTS = new Set(['text', 'search', 'email', 'password', 'tel', 'url', 'number', 'date', 'datetime-local', 'time', 'month', 'week']);
 
@@ -37,21 +33,12 @@ export function keyboardState(layoutHeight: number, visibleHeight: number, field
   return { open, appHeight: open ? Math.round(visibleHeight) : null };
 }
 
-/** Pure: the size of an iPhone home-screen app (null when not one). `screenW/H` are the portrait-fixed iOS screen sizes. */
-export function standaloneAppSize(env: { standalone: boolean; userAgent: string; screenW: number; screenH: number; orientation: Orientation }): { w: number; h: number } | null {
-  if (!env.standalone || !/iPhone|iPod/.test(env.userAgent) || !env.screenW || !env.screenH) return null;
-  const short = Math.min(env.screenW, env.screenH);
-  const long = Math.max(env.screenW, env.screenH);
-  return env.orientation === 'landscape' ? { w: long, h: short } : { w: short, h: long };
-}
-
 export function installViewport(): () => void {
   if (typeof window === 'undefined') return () => {};
   const vv = window.visualViewport;
   const root = document.documentElement;
   let frame = 0;
   let lastHeight: number | null = null;
-  let lastApp = '';
   let lastOpen = false;
   let revealed: Element | null = null;
 
@@ -70,26 +57,7 @@ export function installViewport(): () => void {
     frame = 0;
     const active = document.activeElement;
     const focused = isTextField(active);
-    const app = standaloneAppSize({
-      standalone: (navigator as Navigator & { standalone?: boolean }).standalone === true,
-      userAgent: navigator.userAgent,
-      screenW: screen.width,
-      screenH: screen.height,
-      orientation: currentOrientation(),
-    });
-    const appKey = app ? `${app.w}x${app.h}` : '';
-    if (appKey !== lastApp) {
-      if (app) {
-        root.style.setProperty('--app-w', `${app.w}px`);
-        root.style.setProperty('--app-h', `${app.h}px`);
-      } else {
-        root.style.removeProperty('--app-w');
-        root.style.removeProperty('--app-h');
-      }
-      lastApp = appKey;
-    }
-    // Layout viewport height (unaffected by the iOS keyboard); for an iPhone home-screen app, its real size.
-    const layout = app ? app.h : root.clientHeight;
+    const layout = root.clientHeight; // layout viewport: unaffected by the iOS keyboard
     const visible = vv ? vv.height : layout;
     const { open, appHeight } = keyboardState(layout, visible, focused);
     if (open !== lastOpen) {
@@ -148,7 +116,5 @@ export function installViewport(): () => void {
     root.classList.remove('keyboard-open');
     root.style.removeProperty('--vvh');
     root.style.removeProperty('--kb');
-    root.style.removeProperty('--app-w');
-    root.style.removeProperty('--app-h');
   };
 }

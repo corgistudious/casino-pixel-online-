@@ -103,18 +103,31 @@ describe('keyboardState', () => {
   });
 });
 
-describe('standaloneAppSize', () => {
-  it('sizes an iPhone home-screen app from the screen, by physical orientation', async () => {
-    const { standaloneAppSize } = await import('../src/lib/viewport');
-    const iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15';
-    // iOS reports screen.width/height portrait-fixed (430×932 on a Pro Max) whatever the rotation.
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'landscape' })).toEqual({ w: 932, h: 430 });
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'portrait' })).toEqual({ w: 430, h: 932 });
-    // Same result if a browser reports the screen already rotated.
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 932, screenH: 430, orientation: 'landscape' })).toEqual({ w: 932, h: 430 });
-    // Safari tab (not installed), iPad (multitasking windows) and Android: leave the size to the browser.
-    expect(standaloneAppSize({ standalone: false, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'landscape' })).toBeNull();
-    expect(standaloneAppSize({ standalone: true, userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X)', screenW: 820, screenH: 1180, orientation: 'landscape' })).toBeNull();
-    expect(standaloneAppSize({ standalone: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) Mobile', screenW: 412, screenH: 915, orientation: 'landscape' })).toBeNull();
+describe('startupInset (iOS home-screen app opened with a short landscape window)', () => {
+  const iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15';
+  const base = { standalone: true, userAgent: iphone, landscape: true, screenW: 440, screenH: 956, innerHeight: 440, visualHeight: 440 };
+  it('reports the gap from the real-device sample (956×378 window on a 440×956 screen)', async () => {
+    const { startupInset } = await import('../src/lib/viewportProbe');
+    expect(startupInset({ ...base, innerHeight: 378, visualHeight: 378 })).toBe(62);
+    // iOS may report the screen already rotated: same result.
+    expect(startupInset({ ...base, screenW: 956, screenH: 440, innerHeight: 378, visualHeight: 378 })).toBe(62);
+    // visualViewport missing: innerHeight alone decides.
+    expect(startupInset({ ...base, innerHeight: 378, visualHeight: null })).toBe(62);
+  });
+  it('reports nothing for a full window or in every other context', async () => {
+    const { startupInset } = await import('../src/lib/viewportProbe');
+    expect(startupInset(base)).toBe(0);
+    // Small differences (rounding, a few px) are not the bug.
+    expect(startupInset({ ...base, innerHeight: 420, visualHeight: 420 })).toBe(0);
+    // Safari tab: toolbars legitimately take height.
+    expect(startupInset({ ...base, standalone: false, innerHeight: 330, visualHeight: 330 })).toBe(0);
+    // Portrait (auth / email verification) is never flagged.
+    expect(startupInset({ ...base, landscape: false, innerHeight: 894, visualHeight: 894 })).toBe(0);
+    // iPad multitasking, Android, desktop: smaller windows are legitimate.
+    expect(startupInset({ ...base, userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X)', screenW: 820, screenH: 1180, innerHeight: 600, visualHeight: 600 })).toBe(0);
+    expect(startupInset({ ...base, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) Mobile', screenW: 412, screenH: 915, innerHeight: 340, visualHeight: 340 })).toBe(0);
+    expect(startupInset({ ...base, userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', screenW: 1920, screenH: 1080, innerHeight: 900, visualHeight: 900 })).toBe(0);
+    // Missing measurements never produce a false alarm.
+    expect(startupInset({ ...base, innerHeight: 0, visualHeight: null })).toBe(0);
   });
 });
