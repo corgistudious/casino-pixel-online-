@@ -154,3 +154,25 @@ describe('startupInset (iOS home-screen app opened with a short landscape window
     expect(startupInset({ ...base, innerHeight: 0, visualHeight: null })).toBe(0);
   });
 });
+
+describe('classifyBand (where a missing strip is, from what WebKit reports)', () => {
+  const land = { landscape: true, screenW: 440, screenH: 956 };
+  it('full window → full', async () => {
+    const { classifyBand } = await import('../src/lib/viewportProbe');
+    expect(classifyBand({ ...land, innerHeight: 440, visualHeight: 440, lvh: 440 })).toEqual({ verdict: 'full', gap: 0 });
+    expect(classifyBand({ landscape: false, screenW: 440, screenH: 956, innerHeight: 956, visualHeight: 956, lvh: 956 }).verdict).toBe('full');
+  });
+  it('real-device bug numbers (378 on a 440 side): lvh decides inside vs outside the web view', async () => {
+    const { classifyBand } = await import('../src/lib/viewportProbe');
+    // WebKit's large viewport is short too → the web view itself is short (iOS area, not paintable).
+    expect(classifyBand({ ...land, innerHeight: 378, visualHeight: 378, lvh: 378 })).toEqual({ verdict: 'window-short', gap: 62 });
+    // Large viewport still spans the screen → the web view extends into the strip (app-fixable).
+    expect(classifyBand({ ...land, innerHeight: 378, visualHeight: 378, lvh: 440 })).toEqual({ verdict: 'layout-short', gap: 62 });
+    // lvh unsupported (null) → treated as no evidence of a taller web view.
+    expect(classifyBand({ ...land, innerHeight: 378, visualHeight: null, lvh: null }).verdict).toBe('window-short');
+  });
+  it('portrait with a non-translucent status bar (894 of 956) is reported too', async () => {
+    const { classifyBand } = await import('../src/lib/viewportProbe');
+    expect(classifyBand({ landscape: false, screenW: 440, screenH: 956, innerHeight: 894, visualHeight: 894, lvh: 894 })).toEqual({ verdict: 'window-short', gap: 62 });
+  });
+});
