@@ -1,5 +1,4 @@
-import { isProtectedDisplayName } from './protectedNames';
-import { randomUUID } from 'node:crypto';
+import { assertAccountName, assertNameFree, nameColumns } from './accountName';
 import { ECONOMY, KEYO_OWNER_UID, KEYO_SUPPORT_UID, PROTECTED_UIDS, SPECIAL_UID_MAX, type RegisterInput } from '@casino/shared';
 import { and, desc, eq, gt, isNull, lte, or, sql } from 'drizzle-orm';
 import { dummyPasswordHash, hashPassword, needsRehash, UNUSABLE_PASSWORD, verifyPassword } from '../auth/password';
@@ -47,20 +46,17 @@ async function createWalletAndSeed(tx: DbOrTx, userId: string) {
 // ---------------------------------------------------------------- registration & verification
 
 export async function registerAccount(db: Db, input: RegisterInput, ctx: AccountContext): Promise<UserRow> {
-  if (isProtectedDisplayName(input.displayName)) throw fail('username_taken');
-
-  const username = `player_${randomUUID().replace(/-/g, '').slice(0, 20)}`;
-  const usernameLower = username.toLowerCase();
+  // One account name: it is the display name and the @username.
+  const name = assertAccountName(input.displayName);
   const passwordHash = await hashPassword(input.password);
   try {
     return await db.transaction(async (tx) => {
+      await assertNameFree(tx, name);
       const [user] = await tx
         .insert(users)
         .values({
-          username,
-          usernameLower,
+          ...nameColumns(name),
           passwordHash,
-          displayName: input.displayName,
           email: input.email,
           emailLower: input.email?.toLowerCase() ?? null,
           status: 'active',
@@ -348,22 +344,17 @@ export async function createCustomUidAccount(
   if (!Number.isInteger(input.uid) || input.uid < 1 || input.uid > SPECIAL_UID_MAX) throw fail('bad_request');
   // Keyo Captain (1000) and Keyo_GM (1002) are never assigned through the API.
   if (PROTECTED_UIDS.includes(input.uid)) throw fail('uid_reserved');
-  const displayName = input.displayName.trim();
-  if (isProtectedDisplayName(displayName)) throw fail('username_taken');
+  // The admin types one account name: it becomes both the display name and the @username.
+  const displayName = assertAccountName(input.displayName);
   const passwordHash = await hashPassword(input.password);
   const create = async (tx: Tx) => {
-    // Technical username, never typed by the admin: uid_<UID>, with a suffix if a legacy account took it.
-    const base = `uid_${input.uid}`;
-    const [clash] = await tx.select({ id: users.id }).from(users).where(eq(users.usernameLower, base));
-    const username = clash ? `${base}_${randomUUID().replace(/-/g, '').slice(0, 6)}` : base;
+    await assertNameFree(tx, displayName);
     const now = new Date();
     const [user] = await tx
       .insert(users)
       .values({
         uid: input.uid,
-        username,
-        usernameLower: username,
-        displayName,
+        ...nameColumns(displayName),
         passwordHash,
         status: 'active',
         // Policy for special accounts: no starter reward (also not later, when an email is verified).
@@ -553,7 +544,8 @@ export async function createTestAccount(db: Db, input: { username: string; passw
  * on the server, never through the API. The account has no usable password: the owner receives
  * an activation email and chooses one. The Owner role is attached immediately.
  */
-export async function createOwnerAccount(db: Db, input: { username: string; displayName: string; email: string }, ctx: AccountContext): Promise<UserRow> {
+export async function createOwnerAccount(db: Db, input: { username: string; email: string }, ctx: AccountContext): Promise<UserRow> {
+  const name = assertAccountName(input.username);
   const user = await db.transaction(async (tx) => {
     const [existing] = await tx.select({ id: users.id }).from(users).where(eq(users.uid, KEYO_OWNER_UID));
     if (existing) throw fail('uid_taken');
@@ -561,9 +553,7 @@ export async function createOwnerAccount(db: Db, input: { username: string; disp
       .insert(users)
       .values({
         uid: KEYO_OWNER_UID,
-        username: input.username,
-        usernameLower: input.username.toLowerCase(),
-        displayName: input.displayName,
+        ...nameColumns(name),
         email: input.email,
         emailLower: input.email.toLowerCase(),
         passwordHash: UNUSABLE_PASSWORD,

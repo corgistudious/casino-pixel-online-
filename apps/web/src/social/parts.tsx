@@ -1,11 +1,12 @@
 import type { GuildColor, GuildEmblem, PlayerCard, PresenceStatus } from '@casino/shared';
-import { useEffect, useId, type ReactNode } from 'react';
+import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { errorText } from '../lib/errors';
 import { socket } from '../net/socket';
 import { PlayerAvatar, PlayerRankBadge, useLiveIdentity } from '../players/identity';
 import { PlayerName } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
+import { useDialogFocus } from '../ui/dialog';
 
 /** Toast for any failed social call, translated from the server's error code. */
 export function useFail() {
@@ -69,23 +70,26 @@ export function Tabs<T extends string>({ value, onChange, items, tone = 'gold' }
 }
 
 /** Centered dialog. Closes on Escape and backdrop click. */
+/**
+ * Centered dialog sized to the VISIBLE viewport (it never reaches under the phone keyboard): the
+ * title bar stays put and only the body scrolls. Closes on Escape, the × button and backdrop click;
+ * focus is kept inside and returned to the opener on close.
+ */
 export function Modal({ title, onClose, children, width = 'max-w-md' }: { title: string; onClose: () => void; children: ReactNode; width?: string }) {
+  const { t } = useTranslation();
   const id = useId();
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  const box = useRef<HTMLDivElement>(null);
+  useDialogFocus(box, onClose);
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-ink-950/80 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby={id} onClick={onClose}>
-      <div className={`glass flex max-h-[90vh] w-full ${width} flex-col gap-4 overflow-y-auto p-5 [&>*]:shrink-0`} onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-start justify-between gap-3">
+    <div className="overlay z-[70] flex items-center justify-center bg-ink-950/80 backdrop-blur-sm" onClick={onClose}>
+      <div ref={box} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={id} className={`glass flex max-h-full w-full ${width} flex-col overflow-hidden outline-none`} onClick={(e) => e.stopPropagation()}>
+        <div className="flex shrink-0 items-center justify-between gap-3 px-5 pb-2 pt-4 short:px-4 short:pt-3">
           <h2 id={id} className="font-display text-xl font-heading text-white">{title}</h2>
-          <button type="button" onClick={onClose} className="rounded-lg px-2 text-xl leading-none text-white/50 hover:bg-white/10 hover:text-white" aria-label="×">
+          <button type="button" onClick={onClose} className="-mr-2 flex h-10 w-10 items-center justify-center rounded-xl text-2xl leading-none text-white/55 hover:bg-white/10 hover:text-white" aria-label={t('market.close')}>
             ×
           </button>
         </div>
-        {children}
+        <div className="flex min-h-0 flex-col gap-4 overflow-y-auto px-5 pb-5 [&>*]:shrink-0 short:px-4 short:pb-4">{children}</div>
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ describe('rename availability API', () => {
       method: 'POST',
       url: '/api/auth/register',
       payload: {
-        displayName: 'Rename Info Tester',
+        displayName: 'Rename_Info_Tester',
         password: TEST_PASSWORD,
         confirmPassword: TEST_PASSWORD,
         acceptTerms: true,
@@ -55,7 +55,7 @@ describe('rename availability API', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'First Rename',
+        displayName: 'First_Rename',
         useCard: false,
       },
     });
@@ -94,7 +94,7 @@ describe('rename availability API', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'Second Free Rename',
+        displayName: 'Second_Free_Rename',
         useCard: false,
       },
     });

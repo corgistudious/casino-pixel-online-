@@ -43,8 +43,9 @@ export function registerApiRoutes(app: FastifyInstance, db: Db, hub: RealtimeHub
   });
 
   app.post('/api/me/rename', { preHandler: authed }, async req => {
-    const input=z.object({ displayName:z.string().trim().min(1).max(24), useCard:z.boolean().default(false) }).parse(req.body);
-    await renamePlayer(db,requireAccount(req).id,input.displayName,input.useCard);
+    // The service enforces the account-name rule (name_invalid / name_reserved / username_taken).
+    const input=z.object({ displayName:z.string().max(64), useCard:z.boolean().default(false) }).parse(req.body);
+    await renamePlayer(db,requireAccount(req).id,input.displayName,input.useCard,req.ip);
     void publishIdentity(db, hub, requireAccount(req).id);
     const [fresh]=await db.select().from(users).where(eq(users.id,requireAccount(req).id));
     return { user: await toPublicUser(db,fresh!) };

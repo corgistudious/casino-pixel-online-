@@ -17,7 +17,7 @@ import type { UserRow } from './users';
  * - the actor outranks the target, so a Super Admin cannot act on another Super Admin;
  * - the actor's own account goes through its own settings, not the admin tools.
  */
-async function loadTarget(tx: DbOrTx, actorId: string, uid: number): Promise<UserRow> {
+export async function loadTarget(tx: DbOrTx, actorId: string, uid: number): Promise<UserRow> {
   const roles = await userRoleIds(tx, actorId);
   if (!roles.some((r) => (HIGH_TRUST_ROLES as readonly string[]).includes(r))) throw fail('forbidden');
   const [target] = await tx.select().from(users).where(eq(users.uid, uid)).for('update');

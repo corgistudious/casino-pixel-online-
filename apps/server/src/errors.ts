@@ -38,6 +38,7 @@ export function statusFor(code: ErrorCode): number {
     case 'item_not_found':
       return 404;
     case 'username_taken':
+    case 'name_reserved':
     case 'round_active':
     case 'round_finished':
     case 'already_owned':

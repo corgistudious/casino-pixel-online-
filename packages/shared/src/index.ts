@@ -1,4 +1,5 @@
 export * from './economy';
+export * from './accountName';
 export * from './checkin';
 export * from './shop';
 export * from './cosmetics';

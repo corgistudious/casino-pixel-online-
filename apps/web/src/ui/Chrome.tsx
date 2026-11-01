@@ -38,7 +38,7 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
   const user = useSession((s) => s.user);
   const online = useSession((s) => s.online);
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-white/5 bg-ink-950/60 px-4 backdrop-blur-xl">
+    <header className="box-content flex h-14 shrink-0 items-center gap-3 border-b border-white/5 bg-ink-950/60 pl-[max(1rem,var(--sa-l))] pr-[max(1rem,var(--sa-r))] pt-[var(--sa-t)] backdrop-blur-xl">
       {back ? (
         <button onClick={() => navigate('/')} className="rounded-lg px-2 py-1 text-sm text-white/70 transition hover:bg-white/10 hover:text-white">
           ← {t('nav.back')}
@@ -68,7 +68,7 @@ export function TopBar({ title, back = false }: { title?: string; back?: boolean
 export function Toasts() {
   const toasts = useToasts((s) => s.toasts);
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-16 z-50 flex flex-col items-center gap-2 px-4">
+    <div className="pointer-events-none fixed inset-x-0 top-[calc(4rem+env(safe-area-inset-top))] z-50 flex flex-col items-center gap-2 px-4">
       {toasts.map((t) => (
         <div
           key={t.id}
@@ -85,7 +85,7 @@ export function ConnectionBanner() {
   const { t } = useTranslation();
   const status = useSession((s) => s.status);
   if (status !== 'offline') return null;
-  return <div className="fixed inset-x-0 top-0 z-50 bg-ruby-600/90 py-1 text-center text-xs font-medium backdrop-blur">{t('app.offline')}</div>;
+  return <div className="fixed inset-x-0 top-0 z-50 bg-ruby-600/90 pb-1 pt-[max(0.25rem,env(safe-area-inset-top))] text-center text-xs font-medium backdrop-blur">{t('app.offline')}</div>;
 }
 
 /**
@@ -102,25 +102,13 @@ export function TestEnvBadge() {
   if (!test) return null;
   return (
     <div
-      className="pointer-events-none fixed bottom-2 left-2 z-[55] max-w-[min(22rem,calc(100vw-1rem))] rounded-lg border border-neon-cyan/50 bg-ink-950/85 px-2.5 py-1.5 text-[10px] leading-snug text-neon-cyan shadow-lg backdrop-blur"
+      className="hide-on-keyboard pointer-events-none fixed bottom-[max(0.5rem,env(safe-area-inset-bottom))] left-[max(0.5rem,env(safe-area-inset-left))] z-[55] short:bottom-auto short:left-1/2 short:top-1 short:-translate-x-1/2 short:py-0.5 max-w-[min(22rem,calc(100vw-1rem))] rounded-lg border border-neon-cyan/50 bg-ink-950/85 px-2.5 py-1.5 text-[10px] leading-snug text-neon-cyan shadow-lg backdrop-blur"
       role="note"
     >
-      <span className="font-bold tracking-wider">{t('env.test')}</span> · <span className="text-white/70">{t('env.testNote')}</span>
-    </div>
-  );
-}
-
-/** Mobile web in portrait: ask the player to rotate (gameplay is landscape-only). */
-export function RotateOverlay() {
-  const { t } = useTranslation();
-  return (
-    <div className="fixed inset-0 z-[60] hidden flex-col items-center justify-center gap-6 bg-ink-950 p-8 text-center portrait:max-md:flex">
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" className="animate-pulse">
-        <rect x="22" y="8" width="28" height="48" rx="5" stroke="#f2c14e" strokeWidth="3" />
-        <path d="M58 40a22 22 0 0 1-22 22" stroke="#f2c14e" strokeWidth="3" strokeLinecap="round" />
-        <path d="M36 56l0 6 6-2" stroke="#f2c14e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      <p className="font-display text-xl text-gold-100">{t('app.rotate')}</p>
+      <span className="font-bold tracking-wider">{t('env.test')}</span>
+      {/* Phones in landscape: just the label, so the badge never covers game controls or the nav. */}
+      <span className="short:hidden"> · </span>
+      <span className="text-white/70 short:hidden">{t('env.testNote')}</span>
     </div>
   );
 }

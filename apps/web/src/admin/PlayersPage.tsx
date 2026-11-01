@@ -1,3 +1,4 @@
+import { ACCOUNT_NAME_MAX, accountNameProblem } from '@casino/shared';
 import type { Badge, Currency } from '@casino/shared';
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -369,9 +370,15 @@ function Recovery({ detail, call }: { detail: Detail; call: (m: string, p: strin
   const [confirm, setConfirm] = useState('');
   const [reason, setReason] = useState('');
   const [checked, setChecked] = useState(false);
+  const [newName, setNewName] = useState('');
   const highTrust = me?.roles.some((r) => HIGH_TRUST.includes(r)) ?? false;
   const eligible = highTrust && !u.protected && u.uid !== me?.uid && u.accountType === 'player' && u.status !== 'deleted';
-  if (!eligible || !(can('users.password_reset') || can('users.email_unlink'))) return null;
+  if (!eligible || !(can('users.password_reset') || can('users.email_unlink') || can('users.rename'))) return null;
+  const nameProblem = newName.trim() && accountNameProblem(newName) ? t('errors.name_invalid') : '';
+  const rename = () => {
+    if (!window.confirm(t('admin.recovery.confirmRename', { name: u.displayName, next: newName.trim() }))) return;
+    void call('POST', `/api/admin/users/${u.uid}/rename`, { name: newName.trim(), reason: reason.trim() }).then((ok) => ok && (setNewName(''), setReason(''), setChecked(false)));
+  };
   const reasonOk = reason.trim().length >= 3;
   const pwError = password && !strongPassword(password) ? t('admin.recovery.weak') : confirm && confirm !== password ? t('admin.recovery.mismatch') : '';
   const reset = () => {
@@ -400,6 +407,15 @@ function Recovery({ detail, call }: { detail: Detail; call: (m: string, p: strin
             {t('admin.recovery.resetPassword')}
           </Button>
           {pwError && <p className="w-full text-xs text-ruby-400" role="alert">{pwError}</p>}
+        </div>
+      )}
+      {can('users.rename') && (
+        <div className="flex flex-wrap items-start gap-2">
+          <input className="field max-w-56" placeholder={t('admin.recovery.newName')} value={newName} onChange={(e) => setNewName(e.target.value)} maxLength={ACCOUNT_NAME_MAX} autoComplete="off" />
+          <Button variant="ruby" disabled={!checked || !reasonOk || !newName.trim() || !!nameProblem} onClick={rename}>
+            {t('admin.recovery.rename')}
+          </Button>
+          <p className={`w-full text-xs ${nameProblem ? 'text-ruby-400' : 'text-white/45'}`} role={nameProblem ? 'alert' : undefined}>{nameProblem || t('admin.recovery.renameHint')}</p>
         </div>
       )}
       {can('users.email_unlink') && (

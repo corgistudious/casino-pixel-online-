@@ -30,7 +30,7 @@ export function RoomInviteHost() {
   }, [invite]);
   if (!invite) return null;
   return (
-    <div role="alertdialog" aria-label={t('room.invite.title')} className="fixed bottom-4 right-4 z-[75] w-[min(92vw,320px)] animate-rise rounded-2xl border border-gold-300/40 bg-ink-900/95 p-4 shadow-glow backdrop-blur">
+    <div role="alertdialog" aria-label={t('room.invite.title')} className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-[75] w-[min(92vw,320px)] animate-rise rounded-2xl border border-gold-300/40 bg-ink-900/95 p-4 shadow-glow backdrop-blur">
       <div className="font-display text-base text-gold-100">{t('room.invite.title')}</div>
       <p className="mt-1 text-sm text-white/80">{t('room.invite.body', { name: invite.from.displayName, room: invite.room.name, game: t(`room.games.${invite.room.game}`) })}</p>
       <div className="mt-3 flex justify-end gap-2">

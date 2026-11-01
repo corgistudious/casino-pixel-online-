@@ -26,7 +26,7 @@ describe('rename concurrency safety', () => {
       method: 'POST',
       url: '/api/auth/register',
       payload: {
-        displayName: 'Concurrency Tester',
+        displayName: 'Concurrency_Tester',
         password: TEST_PASSWORD,
         confirmPassword: TEST_PASSWORD,
         acceptTerms: true,
@@ -46,7 +46,7 @@ describe('rename concurrency safety', () => {
           url: '/api/me/rename',
           headers,
           payload: {
-            displayName: `Free Name ${i}`,
+            displayName: `Free_Name_${i}`,
             useCard: false,
           },
         })
@@ -102,7 +102,7 @@ describe('rename concurrency safety', () => {
           url: '/api/me/rename',
           headers,
           payload: {
-            displayName: `Card Name ${i}`,
+            displayName: `Card_Name_${i}`,
             useCard: true,
           },
         })

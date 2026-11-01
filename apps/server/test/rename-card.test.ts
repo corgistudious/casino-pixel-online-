@@ -26,7 +26,7 @@ describe('rename card economy', () => {
       method: 'POST',
       url: '/api/auth/register',
       payload: {
-        displayName: 'Card Tester',
+        displayName: 'Card_Tester',
         password: TEST_PASSWORD,
         confirmPassword: TEST_PASSWORD,
         acceptTerms: true,
@@ -91,7 +91,7 @@ describe('rename card economy', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'First Rename',
+        displayName: 'First_Rename',
         useCard: false,
       },
     });
@@ -103,13 +103,13 @@ describe('rename card economy', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'Card Rename',
+        displayName: 'Card_Rename',
         useCard: true,
       },
     });
 
     expect(second.statusCode).toBe(200);
-    expect(second.json().user.displayName).toBe('Card Rename');
+    expect(second.json().user.displayName).toBe('Card_Rename');
 
     info = await t.app.inject({
       method: 'GET',
@@ -124,12 +124,12 @@ describe('rename card economy', () => {
       url: '/api/me/rename',
       headers,
       payload: {
-        displayName: 'Keyo Support',
+        displayName: 'Keyo_Support',
         useCard: true,
       },
     });
 
-    expect(blocked.json().error.code).toBe('username_taken');
+    expect(blocked.json().error.code).toBe('name_reserved');
 
     const ledger = await t.db.execute<{
       delta: string;

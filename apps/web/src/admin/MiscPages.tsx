@@ -1,3 +1,4 @@
+import { ACCOUNT_NAME_MAX, accountNameProblem } from '@casino/shared';
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { adminApi } from '../net/adminApi';
@@ -67,8 +68,11 @@ export function SpecialUidForm({ onCreated }: { onCreated: () => void }) {
         <input className="field tabular-nums" inputMode="numeric" required value={form.uid} onChange={set('uid')} placeholder="1–99999" />
       </label>
       <label className={label}>
-        {t('admin.specialFields.displayName')}
-        <input className="field" required maxLength={24} value={form.displayName} onChange={set('displayName')} />
+        {t('auth.accountName')}
+        <input className="field" required maxLength={ACCOUNT_NAME_MAX} value={form.displayName} onChange={set('displayName')} autoCapitalize="none" spellCheck={false} />
+        <span className={`text-[11px] ${form.displayName.trim() && accountNameProblem(form.displayName) ? 'text-ruby-300' : 'text-white/45'}`}>
+          {form.displayName.trim() && accountNameProblem(form.displayName) ? t('errors.name_invalid') : t('auth.accountNameHint')}
+        </span>
       </label>
       <label className={label}>
         {t('admin.specialFields.password')}

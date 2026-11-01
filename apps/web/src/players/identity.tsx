@@ -1,8 +1,10 @@
-import { vipTierOf, type Badge, type PresenceStatus, type PublicIdentity, type RankBadge } from '@casino/shared';
+import { vipTierOf, type Badge, type PresenceStatus, type PublicIdentity, type PublicUser, type RankBadge } from '@casino/shared';
 import { useEffect, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { create } from 'zustand';
+import { api } from '../net/api';
 import { socket } from '../net/socket';
+import { useSession } from '../store/session';
 import { Avatar } from '../ui/Avatar';
 import { PlayerName } from '../ui/OfficialAssets';
 import { RankEmblem, useRankName } from '../ui/RankEmblem';
@@ -49,7 +51,15 @@ export function startIdentitySync() {
   if (wired) return;
   wired = true;
   socket.listen((ev) => {
-    if (ev.event === 'identity') useIdentityStore.setState((s) => ({ live: { ...s.live, [ev.data.uid]: ev.data } }));
+    if (ev.event === 'identity') {
+      useIdentityStore.setState((s) => ({ live: { ...s.live, [ev.data.uid]: ev.data } }));
+      // Renamed (by a staff member, or on another device): reload the own account so the header
+      // and profile show the new name and @username without signing in again.
+      const me = useSession.getState().user;
+      if (me && ev.data.uid === me.uid && ev.data.displayName !== me.displayName) {
+        void api<{ user: PublicUser }>('/api/me').then((r) => useSession.getState().setUser(r.user), () => {});
+      }
+    }
     else if (ev.event === 'counts') useIdentityStore.setState((s) => ({ counts: { ...s.counts, [ev.data.uid]: { followers: ev.data.followers, likes: ev.data.likes, charm: ev.data.charm } } }));
   });
 }

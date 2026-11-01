@@ -31,7 +31,8 @@ describe('auth & profile', () => {
     expect(me.statusCode).toBe(200);
     expect(me.json().user.uid).toBe(user.uid);
     expect(me.json().user.username).toBe(user.username);
-    expect(user.username).toMatch(/^player_[a-f0-9]+$/);
+    // One account name: the @username is the display name the player chose.
+    expect(me.json().user.displayName).toBe(user.username);
   });
 
   it('rejects duplicate emails case-insensitively', async () => {
@@ -41,7 +42,7 @@ describe('auth & profile', () => {
       method: 'POST',
       url: '/api/auth/register',
       payload: {
-        displayName: 'Another Player',
+        displayName: 'Another_Player',
         email: email.toUpperCase(),
         password: 'password123',
         confirmPassword: 'password123',

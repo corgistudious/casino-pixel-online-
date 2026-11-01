@@ -212,14 +212,14 @@ export function SupportMenuHost() {
   const back = view === 'official' ? 'contact' : 'home';
 
   return (
-    <div className="fixed inset-0 z-[85] flex items-end justify-center bg-ink-950/70 p-0 backdrop-blur-[2px] sm:items-center sm:p-4 short:items-center short:p-2" onClick={hide}>
+    <div className="overlay z-[85] flex items-end justify-center bg-ink-950/70 p-0 backdrop-blur-[2px] sm:items-center sm:p-4 short:items-center short:p-2" onClick={hide}>
       <div
         ref={box}
         role="dialog"
         aria-modal="true"
         aria-labelledby="support-menu-title"
         onClick={(e) => e.stopPropagation()}
-        className="flex max-h-[min(88dvh,640px)] w-full flex-col overflow-hidden rounded-t-3xl border border-gold-300/45 bg-gradient-to-b from-[#24103f] via-[#140a26] to-[#08050f] shadow-[0_0_0_1px_rgba(0,0,0,0.6),0_24px_70px_-10px_rgba(0,0,0,0.9)] sm:max-w-md sm:rounded-3xl short:max-h-[94dvh] short:max-w-2xl short:rounded-2xl"
+        className="flex max-h-[min(100%,640px)] w-full flex-col overflow-hidden rounded-t-3xl border border-gold-300/45 bg-gradient-to-b from-[#24103f] via-[#140a26] to-[#08050f] shadow-[0_0_0_1px_rgba(0,0,0,0.6),0_24px_70px_-10px_rgba(0,0,0,0.9)] sm:max-w-md sm:rounded-3xl short:max-h-full short:max-w-2xl short:rounded-2xl"
       >
         <header className="flex shrink-0 items-center gap-3 border-b border-gold-300/20 bg-gradient-to-r from-violet-700/30 via-fuchsia-700/10 to-transparent px-4 py-3 short:py-2">
           {view !== 'home' ? (

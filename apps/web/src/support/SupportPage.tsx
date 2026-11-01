@@ -68,7 +68,7 @@ export function SupportPage() {
 
   return (
     <AppShell>
-      <div className="flex min-h-full flex-col gap-3 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:gap-4 lg:p-5 short:gap-2 short:p-2">
+      <div className="flex min-h-full flex-col gap-3 p-3 lg:gap-4 lg:p-5 short:gap-2 short:p-2">
         <section className="relative shrink-0 overflow-hidden rounded-3xl border border-gold-300/35 bg-gradient-to-r from-[#2a1150] via-[#170c2e] to-[#07050d] p-4 shadow-panel lg:p-5 short:rounded-2xl short:p-2.5">
           <div className="pointer-events-none absolute -right-12 -top-16 h-52 w-52 rounded-full bg-fuchsia-500/20 blur-3xl" />
           <div className="relative flex flex-wrap items-center gap-3 short:flex-nowrap">

@@ -37,7 +37,7 @@ export function WelcomeModal() {
     catch {setError(vi?'Không thể lưu hồ sơ. Vui lòng thử lại.':'Could not save profile. Please retry.');}
     finally {setBusy(false);}
   };
-  return <div className="fixed inset-0 z-40 flex items-center justify-center bg-ink-950/90 p-4" role="dialog" aria-modal="true">
+  return <div className="overlay z-40 flex items-center justify-center bg-ink-950/90" role="dialog" aria-modal="true">
     <div className="glass w-full max-w-md space-y-4 p-6">
       <img src="/assets/official/keyo-game-logo.png" alt="Keyo Game" className="mx-auto h-24 object-contain" />
       <h2 className="text-center font-display text-xl font-bold text-gold">{vi?'Tài khoản đã tạo thành công!':'Account created!'}</h2>

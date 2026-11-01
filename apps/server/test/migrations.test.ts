@@ -194,7 +194,7 @@ describe('0020–0022 social, missions and support upgrade', () => {
     ]);
     expect(await rows(sql`SELECT vip_exp FROM quest_claims`)).toEqual([{ vip_exp: 0 }]);
     // New players are no longer attached to Keyo Support.
-    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (100903, 'fresh', 'fresh', 'x', 'Fresh')`);
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name) VALUES (100903, 'fresh', 'fresh', 'x', 'fresh')`);
     expect(await rows(sql`SELECT 1 FROM friendships f JOIN users u ON u.id = f.user_id WHERE u.uid = 100903`)).toEqual([]);
   });
 });
@@ -341,5 +341,104 @@ describe('0032 Keyo Captain dual Owner upgrade', () => {
     expect(await rows(sql`SELECT to_regclass('account_setup_tokens') AS t`)).toEqual([{ t: null }]);
     await expect(db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid = 1000`)).rejects.toThrow();
     await expect(db.execute(sql`DELETE FROM user_roles WHERE role_id = 'owner'`)).rejects.toThrow();
+  });
+});
+
+describe('0037 account name sync', () => {
+  it('changes no existing account, then refuses unsynchronised name writes; rollback removes only the trigger', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(36) }); // 0000–0035: the schema live servers run before this release
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name, account_type) VALUES
+      (1000, 'keyo_support', 'keyo_support', '!disabled', 'Keyo Captain', 'system_support'),
+      (1002, 'Keyo_GM', 'keyo_gm', 'x', 'Lemon_GM', 'player'),
+      (101400, 'player_abc', 'player_abc', 'y', 'Người Chơi', 'player'),
+      (101401, 'same', 'same', 'z', 'same', 'player')`);
+    await db.execute(sql`INSERT INTO wallets (user_id, balance, gold) SELECT id, uid * 3, uid % 7 FROM users`);
+    const snapshot = sql`SELECT
+      (SELECT json_agg(json_build_object('u', uid, 'n', username, 'l', username_lower, 'd', display_name, 'p', password_hash) ORDER BY uid) FROM users) AS users,
+      (SELECT json_agg(json_build_object('b', balance, 'g', gold) ORDER BY user_id) FROM wallets) AS wallets`;
+    const before = await rows(snapshot);
+
+    await runMigrations(db);
+    expect(await rows(snapshot)).toEqual(before); // nothing renamed
+    // Old rows keep working for every non-name update (sign-in bookkeeping, settings…).
+    await db.execute(sql`UPDATE users SET failed_logins = 1, locale = 'en' WHERE uid IN (1002, 101400)`);
+    // Name writes must keep both fields equal from now on.
+    await expect(db.execute(sql`UPDATE users SET display_name = 'Other' WHERE uid = 101400`)).rejects.toThrow();
+    await db.execute(sql`UPDATE users SET username = 'Lemon_GM', display_name = 'Lemon_GM' WHERE uid = 1002`);
+    expect(await rows(sql`SELECT username_lower FROM users WHERE uid = 1002`)).toEqual([{ username_lower: 'lemon_gm' }]);
+    await runMigrations(db); // re-run: no-op
+
+    const down = readFileSync(resolve(__dirname, '../drizzle/rollback/0037_account_name_sync.down.sql'), 'utf8').replace(/^(BEGIN|COMMIT);$/gm, '');
+    await db.transaction((tx) => tx.execute(sql.raw(down)));
+    expect(await rows(sql`SELECT count(*)::int AS n FROM pg_trigger WHERE tgname = 'users_name_sync'`)).toEqual([{ n: 0 }]);
+    expect(await rows(sql`SELECT username, display_name FROM users WHERE uid = 1002`)).toEqual([{ username: 'Lemon_GM', display_name: 'Lemon_GM' }]);
+    await db.execute(sql`UPDATE users SET display_name = 'Free again' WHERE uid = 101400`); // old behaviour restored
+  });
+});
+
+/**
+ * Production (Corgi-Casino 3dee1fb) has 0000–0036, where 0036_fix_dual_owner (hash 7693…cc92,
+ * created_at 1793051955930) was written on the server. It replaces keyo_protect_owner_roles(), the
+ * function of a legacy Owner trigger that exists only on Production (never in this repository), so
+ * the test attaches it the same way. Drizzle applies every journal entry newer than the last
+ * applied created_at: 0037 must run after 0036 and leave it, the Owners and every trigger alone.
+ */
+describe('upgrade from the Production migration state (0036_fix_dual_owner applied on the server)', () => {
+  const PROD_0036 = { hash: '76939175bf523aa64433cd76b45682300a3838b1e8a1a1947df6a9c0a5cccc92', createdAt: 1793051955930 };
+  it('applies only 0037, keeps the 0036 record, both Owners and every Owner trigger; rollback removes only the name trigger', async () => {
+    await resetDatabase();
+    await migrate(db, { migrationsFolder: migrationsUpTo(37) }); // 0000–0036: what Production has run
+    await bootstrapRoles(db);
+    // Production's legacy Owner trigger (created on the server, not by a migration) uses the function 0036 replaced.
+    await db.execute(sql`CREATE TRIGGER user_roles_protect_owner_legacy BEFORE INSERT OR UPDATE OR DELETE ON user_roles FOR EACH ROW EXECUTE FUNCTION keyo_protect_owner_roles()`);
+    // The state Production verified after its 0036: UID 1000 and 1002 both Owner, Owner triggers enabled.
+    await db.execute(sql`INSERT INTO users (uid, username, username_lower, password_hash, display_name, account_type) VALUES
+      (1000, 'keyo_support', 'keyo_support', '!disabled', 'Keyo Captain', 'system_support'),
+      (1002, 'Keyo_GM', 'keyo_gm', 'x', 'Lemon_GM', 'player'),
+      (101500, 'player_old', 'player_old', 'y', 'Old Name', 'player')`);
+    await db.execute(sql`INSERT INTO wallets (user_id, balance, gold) SELECT id, uid * 11, uid % 13 FROM users`);
+    await db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid IN (1000, 1002)`);
+    // Drizzle recorded 0036 with exactly Production's hash and timestamp.
+    expect(await rows(sql`SELECT hash, created_at::text AS created_at FROM drizzle.__drizzle_migrations ORDER BY created_at DESC LIMIT 1`)).toEqual([{ hash: PROD_0036.hash, created_at: String(PROD_0036.createdAt) }]);
+
+    const migrations = sql`SELECT hash, created_at::text AS created_at FROM drizzle.__drizzle_migrations ORDER BY created_at, id`;
+    const ownerTriggers = sql`SELECT c.relname AS tbl, t.tgname AS name, t.tgenabled AS enabled FROM pg_trigger t JOIN pg_class c ON c.oid = t.tgrelid
+      WHERE NOT t.tgisinternal AND c.relname IN ('users', 'user_roles') AND t.tgname <> 'users_name_sync' ORDER BY 1, 2`;
+    const owners = sql`SELECT u.uid::int AS uid FROM user_roles r JOIN users u ON u.id = r.user_id WHERE r.role_id = 'owner' ORDER BY u.uid`;
+    const people = sql`SELECT json_agg(json_build_object('u', uid, 'n', username, 'd', display_name, 'p', password_hash, 't', account_type) ORDER BY uid) AS users,
+      (SELECT json_agg(json_build_object('b', balance, 'g', gold) ORDER BY user_id) FROM wallets) AS wallets FROM users`;
+    const before = { migrations: await rows(migrations), triggers: await rows(ownerTriggers), owners: await rows(owners), people: await rows(people) };
+    expect(before.owners).toEqual([{ uid: 1000 }, { uid: 1002 }]);
+    expect((before.triggers as { name: string }[]).map((t) => t.name)).toEqual(expect.arrayContaining(['user_roles_owner_guard', 'user_roles_protect_owner_legacy', 'users_guard']));
+    expect((before.triggers as { enabled: string }[]).every((t) => t.enabled === 'O')).toBe(true);
+
+    await runMigrations(db); // what the server does at start on Production
+    const after = await rows<{ hash: string; created_at: string }>(migrations);
+    const file0037 = readFileSync(resolve(__dirname, '../drizzle/0037_account_name_sync.sql'), 'utf8');
+    const { createHash } = await import('node:crypto');
+    // Exactly one new row, for 0037 (Drizzle stores the SHA-256 of the file); 0036's record untouched.
+    expect(after.slice(0, before.migrations.length)).toEqual(before.migrations);
+    expect(after.slice(before.migrations.length)).toEqual([{ hash: createHash('sha256').update(file0037).digest('hex'), created_at: '1793138355929' }]);
+    expect(after.find((m) => m.hash === PROD_0036.hash)).toEqual({ hash: PROD_0036.hash, created_at: String(PROD_0036.createdAt) });
+    expect(await rows(ownerTriggers)).toEqual(before.triggers);
+    expect(await rows(owners)).toEqual(before.owners);
+    expect(await rows(people)).toEqual(before.people); // no account renamed by the migration
+    expect(await rows(sql`SELECT count(*)::int AS n FROM pg_trigger WHERE tgname = 'users_name_sync' AND tgenabled = 'O'`)).toEqual([{ n: 1 }]);
+    // Owner protection still holds; the name rule now holds for writes.
+    await expect(db.execute(sql`DELETE FROM user_roles WHERE role_id = 'owner'`)).rejects.toThrow();
+    await expect(db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'owner' FROM users WHERE uid = 101500`)).rejects.toThrow();
+    await expect(db.execute(sql`INSERT INTO user_roles (user_id, role_id) SELECT id, 'admin' FROM users WHERE uid = 1002`)).rejects.toThrow();
+    await expect(db.execute(sql`UPDATE users SET display_name = 'Mismatch' WHERE uid = 1002`)).rejects.toThrow();
+    // A synchronised rename of the Owner (what renamePlayer writes) passes every trigger.
+    await db.execute(sql`UPDATE users SET username = 'Lemon_GM', display_name = 'Lemon_GM' WHERE uid = 1002`);
+    await runMigrations(db); // re-run: no-op
+    expect((await rows(migrations)).length).toBe(after.length);
+
+    const down = readFileSync(resolve(__dirname, '../drizzle/rollback/0037_account_name_sync.down.sql'), 'utf8').replace(/^(BEGIN|COMMIT);$/gm, '');
+    await db.transaction((tx) => tx.execute(sql.raw(down)));
+    expect(await rows(sql`SELECT count(*)::int AS n FROM pg_trigger WHERE tgname = 'users_name_sync'`)).toEqual([{ n: 0 }]);
+    expect(await rows(ownerTriggers)).toEqual(before.triggers);
+    expect(await rows(owners)).toEqual(before.owners);
   });
 });

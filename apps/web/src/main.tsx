@@ -11,6 +11,7 @@ import './i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { installViewport } from './lib/viewport';
 
 /** Canvas textures bake text in, so the fonts must be ready before any scene draws. */
 async function loadFonts() {
@@ -21,6 +22,10 @@ async function loadFonts() {
     /* fall back to system fonts */
   }
 }
+
+// The single keyboard / visible-viewport controller (see lib/viewport.ts).
+const uninstallViewport = installViewport();
+import.meta.hot?.dispose(uninstallViewport);
 
 void loadFonts().then(() => {
   createRoot(document.getElementById('root')!).render(

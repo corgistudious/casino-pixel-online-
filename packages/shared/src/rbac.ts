@@ -13,6 +13,8 @@ export const PERMISSIONS = [
   'users.password_reset',
   /** Remove the email linked to another account. Owner and Super Admin only. */
   'users.email_unlink',
+  /** Rename another player (account name = display name = @username). Owner and Super Admin only. */
+  'users.rename',
   'staff.read',
   /** Grant/revoke staff roles strictly below the actor's own rank. */
   'staff.manage',
@@ -127,7 +129,7 @@ export const DEFAULT_ROLES: Record<RoleId, { name: string; description: string; 
  * Account-takeover-grade permissions. The server checks the actor's built-in role as well as the
  * permission, so these can never work through a custom role even if one were granted them.
  */
-export const HIGH_TRUST_PERMISSIONS = ['users.password_reset', 'users.email_unlink'] as const satisfies readonly Permission[];
+export const HIGH_TRUST_PERMISSIONS = ['users.password_reset', 'users.email_unlink', 'users.rename'] as const satisfies readonly Permission[];
 export const HIGH_TRUST_ROLES: readonly RoleId[] = ['owner', 'super_admin'];
 
 /** Rank of a custom (non built-in) role: below every built-in staff role. */

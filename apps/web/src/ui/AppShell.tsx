@@ -98,7 +98,7 @@ function PlayerBar() {
   const gold = useSession((s) => s.gold);
   const fmt = (n: number) => formatChips(n, i18n.language);
   return (
-    <header className="relative z-10 flex h-14 shrink-0 items-center gap-3 border-b border-gold-300/15 bg-gradient-to-b from-ink-800/95 to-ink-900/90 px-3 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)] backdrop-blur-xl lg:h-16 lg:gap-5 lg:px-5">
+    <header className="hide-on-keyboard relative z-10 box-content flex h-14 shrink-0 items-center gap-3 border-b border-gold-300/15 bg-gradient-to-b from-ink-800/95 to-ink-900/90 pl-[max(0.75rem,var(--sa-l))] pr-[max(0.75rem,var(--sa-r))] pt-[var(--sa-t)] shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)] backdrop-blur-xl lg:h-16 lg:gap-5 lg:pl-[max(1.25rem,var(--sa-l))] lg:pr-[max(1.25rem,var(--sa-r))]">
       <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold-300/60 to-transparent" />
       <NavLink to="/profile" className="flex min-w-0 items-center gap-2.5">
         <Avatar customAvatar={user.customAvatar} index={user.avatar} frame={user.frame} avatarItem={user.avatarItem} size={40} />
@@ -139,7 +139,7 @@ function NavRail() {
   const { t } = useTranslation();
   const badges: Record<string, number> = { '/support': useSocial((s) => s.unreadSupport) };
   return (
-    <nav className="relative flex w-[60px] shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-gold-300/10 bg-ink-950/70 px-1.5 py-2 backdrop-blur-xl lg:w-52 lg:px-3 lg:py-4">
+    <nav className="relative flex w-[calc(60px+var(--sa-l))] shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-gold-300/10 bg-ink-950/70 pb-[calc(0.5rem+var(--sa-b))] pl-[calc(0.375rem+var(--sa-l))] pr-1.5 pt-2 backdrop-blur-xl lg:w-[calc(13rem+var(--sa-l))] lg:pb-[calc(1rem+var(--sa-b))] lg:pl-[calc(0.75rem+var(--sa-l))] lg:pr-3 lg:pt-4">
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.to}
@@ -186,7 +186,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <PlayerBar />
       <div className="flex min-h-0 flex-1">
         <NavRail />
-        <main className="min-w-0 flex-1 overflow-y-auto">{children}</main>
+        <main className="min-w-0 flex-1 overflow-y-auto pb-[var(--sa-b)] pr-[var(--sa-r)]">{children}</main>
       </div>
     </div>
   );

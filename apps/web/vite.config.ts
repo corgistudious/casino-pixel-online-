@@ -17,7 +17,12 @@ export default defineConfig({
     target: 'es2022',
     chunkSizeWarningLimit: 2000,
     rollupOptions: {
-      output: { manualChunks: { phaser: ['phaser'] } },
+      output: {
+        // Only Phaser's own files: with the object form Rollup also put its CommonJS interop helper in
+        // this chunk, so the entry imported (and preloaded) all of Phaser on every page.
+        // Its interop helper (shared with app code) gets its own tiny chunk for the same reason.
+        manualChunks: (id) => (id.includes('/node_modules/phaser/') ? 'phaser' : id.includes('commonjsHelpers') ? 'cjs' : undefined),
+      },
     },
   },
   define: {

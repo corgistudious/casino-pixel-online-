@@ -209,7 +209,7 @@ describe('ranked seasons', () => {
     // 40 more MAX players above push the climber to position 53: back to plain Thần Thoại.
     await t.db.execute(sql`
       INSERT INTO users (uid, username, username_lower, password_hash, display_name, status)
-      SELECT 400000 + i, 'mx' || i, 'mx' || i, '!', 'Mx' || i, 'active' FROM generate_series(1, 40) i`);
+      SELECT 400000 + i, 'mx' || i, 'mx' || i, '!', 'mx' || i, 'active' FROM generate_series(1, 40) i`);
     await t.db.execute(sql`
       INSERT INTO player_ranks (season_id, user_id, division, rp, streak, peak_division, wins)
       SELECT ${seasonId}, id, ${MAX_DIVISION}, 500 + uid - 400000, 0, ${MAX_DIVISION}, 1 FROM users WHERE uid BETWEEN 400001 AND 400040`);
