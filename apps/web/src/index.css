@@ -33,17 +33,15 @@
    * The app root covers the WHOLE screen, edge to edge: backgrounds run under the notch and the home
    * indicator, and each screen shell insets only its controls with the --sa-* variables (padding the
    * root itself left dark bands around every screen in iPhone landscape).
-   * The browser sizes the root; lib/viewport.ts overrides only (a) --vvh while the keyboard is up and
-   * (b) --app-w/--app-h for an iPhone home-screen app, whose reported size is wrong when it is
-   * launched in landscape.
+   * The browser sizes the root (the window iOS/Android gives the page); lib/viewport.ts overrides
+   * only --vvh/--vvt while the keyboard is up (the visible area above it).
    */
   #root {
     position: fixed;
-    top: 0;
+    top: var(--vvt, 0px);
     left: 0;
     right: 0;
-    width: var(--app-w, auto);
-    height: var(--vvh, var(--app-h, 100%));
+    height: var(--vvh, 100%);
     overflow: hidden;
   }
   body {
@@ -140,7 +138,7 @@
    */
   .overlay {
     position: fixed;
-    top: 0;
+    top: var(--vvt, 0px);
     left: 0;
     right: 0;
     height: var(--vvh, 100%);
@@ -260,4 +258,16 @@
 @media (prefers-reduced-motion: reduce) {
   .orientation-turn-landscape { animation: none; transform: rotate(-90deg); }
   .orientation-turn-portrait { animation: none; }
+}
+
+/* PWA notice (ui/PwaBlockedScreen.tsx): a short, light entrance; none with reduced motion. */
+@keyframes pwa-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+.pwa-in {
+  animation: pwa-in 0.45s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pwa-in { animation: none; }
 }

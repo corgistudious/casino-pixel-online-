@@ -103,18 +103,100 @@ describe('keyboardState', () => {
   });
 });
 
-describe('standaloneAppSize', () => {
-  it('sizes an iPhone home-screen app from the screen, by physical orientation', async () => {
-    const { standaloneAppSize } = await import('../src/lib/viewport');
-    const iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15';
-    // iOS reports screen.width/height portrait-fixed (430×932 on a Pro Max) whatever the rotation.
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'landscape' })).toEqual({ w: 932, h: 430 });
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'portrait' })).toEqual({ w: 430, h: 932 });
-    // Same result if a browser reports the screen already rotated.
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 932, screenH: 430, orientation: 'landscape' })).toEqual({ w: 932, h: 430 });
-    // Safari tab (not installed), iPad (multitasking windows) and Android: leave the size to the browser.
-    expect(standaloneAppSize({ standalone: false, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'landscape' })).toBeNull();
-    expect(standaloneAppSize({ standalone: true, userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X)', screenW: 820, screenH: 1180, orientation: 'landscape' })).toBeNull();
-    expect(standaloneAppSize({ standalone: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) Mobile', screenW: 412, screenH: 915, orientation: 'landscape' })).toBeNull();
+describe('keyboardFrame (app follows the visual viewport while the keyboard is up)', () => {
+  it('case A: no pan — same as before (top 0, height = visible)', async () => {
+    const { keyboardFrame } = await import('../src/lib/viewport');
+    expect(keyboardFrame(440, 210, 0, true)).toEqual({ open: true, top: 0, height: 210, kb: 230 });
+  });
+  it('case B: iOS pans the visual viewport — the root moves with it, no band under it', async () => {
+    const { keyboardFrame } = await import('../src/lib/viewport');
+    // 378 px window, keyboard leaves 168 px visible, iOS panned 62 px: the app spans 62..230.
+    const f = keyboardFrame(378, 168, 62, true)!;
+    expect(f).toEqual({ open: true, top: 62, height: 168, kb: 148 });
+    // The visible area is covered exactly: no strip between the app's bottom and the keyboard.
+    expect(f.top + f.height + f.kb).toBe(378);
+    expect(keyboardFrame(378, 168.4, 61.6, true)).toEqual({ open: true, top: 62, height: 168, kb: 148 });
+  });
+  it('closed keyboard / nothing focused / negative offsets', async () => {
+    const { keyboardFrame } = await import('../src/lib/viewport');
+    expect(keyboardFrame(440, 440, 0, true)).toBeNull();
+    expect(keyboardFrame(440, 210, 62, false)).toBeNull();
+    // iOS rubber-band can report a small negative offset: never above the layout top.
+    expect(keyboardFrame(440, 210, -3, true)).toEqual({ open: true, top: 0, height: 210, kb: 230 });
+  });
+});
+
+describe('startupInset (iOS home-screen app opened with a short landscape window)', () => {
+  const iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15';
+  const base = { standalone: true, userAgent: iphone, landscape: true, screenW: 440, screenH: 956, innerHeight: 440, visualHeight: 440 };
+  it('reports the gap from the real-device sample (956×378 window on a 440×956 screen)', async () => {
+    const { startupInset } = await import('../src/lib/viewportProbe');
+    expect(startupInset({ ...base, innerHeight: 378, visualHeight: 378 })).toBe(62);
+    // iOS may report the screen already rotated: same result.
+    expect(startupInset({ ...base, screenW: 956, screenH: 440, innerHeight: 378, visualHeight: 378 })).toBe(62);
+    // visualViewport missing: innerHeight alone decides.
+    expect(startupInset({ ...base, innerHeight: 378, visualHeight: null })).toBe(62);
+  });
+  it('reports nothing for a full window or in every other context', async () => {
+    const { startupInset } = await import('../src/lib/viewportProbe');
+    expect(startupInset(base)).toBe(0);
+    // Small differences (rounding, a few px) are not the bug.
+    expect(startupInset({ ...base, innerHeight: 420, visualHeight: 420 })).toBe(0);
+    // Safari tab: toolbars legitimately take height.
+    expect(startupInset({ ...base, standalone: false, innerHeight: 330, visualHeight: 330 })).toBe(0);
+    // Portrait (auth / email verification) is never flagged.
+    expect(startupInset({ ...base, landscape: false, innerHeight: 894, visualHeight: 894 })).toBe(0);
+    // iPad multitasking, Android, desktop: smaller windows are legitimate.
+    expect(startupInset({ ...base, userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X)', screenW: 820, screenH: 1180, innerHeight: 600, visualHeight: 600 })).toBe(0);
+    expect(startupInset({ ...base, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) Mobile', screenW: 412, screenH: 915, innerHeight: 340, visualHeight: 340 })).toBe(0);
+    expect(startupInset({ ...base, userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', screenW: 1920, screenH: 1080, innerHeight: 900, visualHeight: 900 })).toBe(0);
+    // Missing measurements never produce a false alarm.
+    expect(startupInset({ ...base, innerHeight: 0, visualHeight: null })).toBe(0);
+  });
+});
+
+describe('classifyBand (where a missing strip is, from what WebKit reports)', () => {
+  const land = { landscape: true, screenW: 440, screenH: 956 };
+  it('full window → full', async () => {
+    const { classifyBand } = await import('../src/lib/viewportProbe');
+    expect(classifyBand({ ...land, innerHeight: 440, visualHeight: 440, lvh: 440 })).toEqual({ verdict: 'full', gap: 0 });
+    expect(classifyBand({ landscape: false, screenW: 440, screenH: 956, innerHeight: 956, visualHeight: 956, lvh: 956 }).verdict).toBe('full');
+  });
+  it('real-device bug numbers (378 on a 440 side): lvh decides inside vs outside the web view', async () => {
+    const { classifyBand } = await import('../src/lib/viewportProbe');
+    // WebKit's large viewport is short too → the web view itself is short (iOS area, not paintable).
+    expect(classifyBand({ ...land, innerHeight: 378, visualHeight: 378, lvh: 378 })).toEqual({ verdict: 'window-short', gap: 62 });
+    // Large viewport still spans the screen → the web view extends into the strip (app-fixable).
+    expect(classifyBand({ ...land, innerHeight: 378, visualHeight: 378, lvh: 440 })).toEqual({ verdict: 'layout-short', gap: 62 });
+    // lvh unsupported (null) → treated as no evidence of a taller web view.
+    expect(classifyBand({ ...land, innerHeight: 378, visualHeight: null, lvh: null }).verdict).toBe('window-short');
+  });
+  it('portrait with a non-translucent status bar (894 of 956) is reported too', async () => {
+    const { classifyBand } = await import('../src/lib/viewportProbe');
+    expect(classifyBand({ landscape: false, screenW: 440, screenH: 956, innerHeight: 894, visualHeight: 894, lvh: 894 })).toEqual({ verdict: 'window-short', gap: 62 });
+  });
+});
+
+describe('stableBox (scale-based renderers ignore the on-screen keyboard)', () => {
+  it('keyboard up: a height-only shrink keeps the previous box (no rescale of the game)', async () => {
+    const { stableBox } = await import('../src/lib/viewport');
+    const land = { w: 956, h: 440 };
+    expect(stableBox(land, { w: 956, h: 230 }, true)).toBe(land);
+    // Sub-pixel width jitter is not a rotation.
+    expect(stableBox(land, { w: 955.5, h: 230 }, true)).toBe(land);
+  });
+  it('keyboard closes or grows: the real size is taken (restores without a jump)', async () => {
+    const { stableBox } = await import('../src/lib/viewport');
+    const land = { w: 956, h: 440 };
+    expect(stableBox(land, { w: 956, h: 440 }, false)).toEqual(land);
+    expect(stableBox({ w: 956, h: 230 }, land, true)).toEqual(land);
+  });
+  it('a real rotation / window resize always applies, keyboard or not', async () => {
+    const { stableBox } = await import('../src/lib/viewport');
+    expect(stableBox({ w: 956, h: 440 }, { w: 440, h: 500 }, true)).toEqual({ w: 440, h: 500 });
+    expect(stableBox({ w: 956, h: 440 }, { w: 440, h: 956 }, false)).toEqual({ w: 440, h: 956 });
+    // Android resizes-content: no keyboard-open state, so the layout follows as before.
+    expect(stableBox({ w: 915, h: 412 }, { w: 915, h: 200 }, false)).toEqual({ w: 915, h: 200 });
+    expect(stableBox(null, { w: 956, h: 230 }, true)).toEqual({ w: 956, h: 230 });
   });
 });

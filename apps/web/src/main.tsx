@@ -11,7 +11,9 @@ import './i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { resolvePwaBlock } from './lib/pwaBlock';
 import { installViewport } from './lib/viewport';
+import { PwaBlockedScreen } from './ui/PwaBlockedScreen';
 
 /** Canvas textures bake text in, so the fonts must be ready before any scene draws. */
 async function loadFonts() {
@@ -27,10 +29,8 @@ async function loadFonts() {
 const uninstallViewport = installViewport();
 import.meta.hot?.dispose(uninstallViewport);
 
-void loadFonts().then(() => {
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  );
+// The installed home-screen app may be blocked (lib/pwaBlock.ts): decided once, before the game
+// mounts. Browsers and PCs resolve immediately; a failed check never blocks by itself.
+void Promise.all([loadFonts(), resolvePwaBlock().catch(() => null)]).then(([, blocked]) => {
+  createRoot(document.getElementById('root')!).render(<StrictMode>{blocked ? <PwaBlockedScreen policy={blocked} /> : <App />}</StrictMode>);
 });

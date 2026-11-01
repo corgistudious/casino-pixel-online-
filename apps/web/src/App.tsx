@@ -39,6 +39,8 @@ import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, LevelUpBanner, TestEnvBadge, Toasts } from './ui/Chrome';
 import { OrientationGuard } from './ui/OrientationGuard';
+import { StandaloneInsetHint } from './ui/StandaloneInsetHint';
+import { ViewportDiagnostics, viewportDiagEnabled } from './ui/ViewportDiagnostics';
 import { KeyoLogo } from './ui/KeyoLogo';
 
 // Heavy, rarely-first screens load on demand: the game rooms (Phaser) and the staff console.
@@ -223,6 +225,8 @@ export function App() {
       <ConnectionBanner />
       <TestEnvBadge />
       <OrientationGuard />
+      <StandaloneInsetHint />
+      {viewportDiagEnabled() && <ViewportDiagnostics />}
       <Toasts />
       <LevelUpBanner />
       <PlayerActionHost />
