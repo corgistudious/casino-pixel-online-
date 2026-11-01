@@ -18,8 +18,16 @@
  * app with a short window (see lib/viewportProbe.ts), sizing the root to the screen would push the
  * bottom of the UI out of sight, so it is never done; the condition is reported instead.
  *
+ * Scale-based renderers (the lobby Stage, Phaser game rooms) must NOT follow the keyboard: the app
+ * root fitting above the keyboard used to make them re-measure a shorter box and shrink the whole
+ * game, then snap back on close. They size themselves with useStableSize(), which ignores a
+ * height-only shrink while `keyboard-open` is set (their bottom is clipped behind the keyboard
+ * instead) and accepts every width change (a real rotation / window resize) immediately.
+ * DOM surfaces (pages, forms, dialogs) keep fitting the visible area so inputs stay reachable.
+ *
  * Updates are coalesced to one per animation frame and only written when the value changes.
  */
+import { useLayoutEffect, useState, type RefObject } from 'react';
 const KEYBOARD_MIN_PX = 120;
 const TEXT_INPUTS = new Set(['text', 'search', 'email', 'password', 'tel', 'url', 'number', 'date', 'datetime-local', 'time', 'month', 'week']);
 
@@ -49,6 +57,50 @@ export function keyboardFrame(layoutHeight: number, visibleHeight: number, offse
   if (!open || appHeight === null) return null;
   const top = Math.max(0, Math.round(offsetTop));
   return { open, top, height: appHeight, kb: Math.max(0, Math.round(layoutHeight - top - appHeight)) };
+}
+
+export interface Box {
+  w: number;
+  h: number;
+}
+
+/**
+ * Pure: the box a scale-based renderer should lay out in. While the keyboard is up, a shrink that
+ * only changes the height (the app fitting above the keyboard) keeps the previous box; any width
+ * change (rotation, window resize) or growth is taken as is. With the keyboard closed, always `next`.
+ */
+export function stableBox(prev: Box | null, next: Box, keyboardOpen: boolean): Box {
+  if (!prev || !keyboardOpen) return next;
+  if (Math.abs(next.w - prev.w) > 1) return next;
+  return next.h >= prev.h ? next : prev;
+}
+
+/** Whether the controller currently reports an on-screen keyboard (set in the same frame as --vvh). */
+export function keyboardOpenNow(): boolean {
+  return typeof document !== 'undefined' && document.documentElement.classList.contains('keyboard-open');
+}
+
+/** The element's size for a scale-based renderer (see stableBox). null until first measured. */
+export function useStableSize(ref: RefObject<HTMLElement | null>): Box | null {
+  const [box, setBox] = useState<Box | null>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let last: Box | null = null;
+    const update = () => {
+      const next = { w: el.clientWidth, h: el.clientHeight };
+      if (!next.w || !next.h) return;
+      const b = stableBox(last, next, keyboardOpenNow());
+      if (last && b.w === last.w && b.h === last.h) return; // no re-render, no resize loop
+      last = b;
+      setBox(b);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  return box;
 }
 
 export function installViewport(): () => void {

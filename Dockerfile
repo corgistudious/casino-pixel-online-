@@ -23,6 +23,9 @@ ENV KEYO_COMMIT=$KEYO_COMMIT
 # Test builds only: "1" shows the viewport diagnostics overlay. Empty (default) for Production.
 ARG VITE_VIEWPORT_DIAG=""
 ENV VITE_VIEWPORT_DIAG=$VITE_VIEWPORT_DIAG
+# Installed-app (PWA) block: all (default when empty) | ios | android | off. See apps/web/src/lib/pwaBlock.ts.
+ARG VITE_PWA_BLOCK=""
+ENV VITE_PWA_BLOCK=$VITE_PWA_BLOCK
 RUN pnpm --filter @casino/server build && pnpm --filter @casino/web build
 RUN pnpm --filter @casino/server deploy --legacy --prod /out/server \
   && cp -r apps/server/dist apps/server/drizzle /out/server/

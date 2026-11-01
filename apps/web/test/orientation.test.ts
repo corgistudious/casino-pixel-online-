@@ -176,3 +176,27 @@ describe('classifyBand (where a missing strip is, from what WebKit reports)', ()
     expect(classifyBand({ landscape: false, screenW: 440, screenH: 956, innerHeight: 894, visualHeight: 894, lvh: 894 })).toEqual({ verdict: 'window-short', gap: 62 });
   });
 });
+
+describe('stableBox (scale-based renderers ignore the on-screen keyboard)', () => {
+  it('keyboard up: a height-only shrink keeps the previous box (no rescale of the game)', async () => {
+    const { stableBox } = await import('../src/lib/viewport');
+    const land = { w: 956, h: 440 };
+    expect(stableBox(land, { w: 956, h: 230 }, true)).toBe(land);
+    // Sub-pixel width jitter is not a rotation.
+    expect(stableBox(land, { w: 955.5, h: 230 }, true)).toBe(land);
+  });
+  it('keyboard closes or grows: the real size is taken (restores without a jump)', async () => {
+    const { stableBox } = await import('../src/lib/viewport');
+    const land = { w: 956, h: 440 };
+    expect(stableBox(land, { w: 956, h: 440 }, false)).toEqual(land);
+    expect(stableBox({ w: 956, h: 230 }, land, true)).toEqual(land);
+  });
+  it('a real rotation / window resize always applies, keyboard or not', async () => {
+    const { stableBox } = await import('../src/lib/viewport');
+    expect(stableBox({ w: 956, h: 440 }, { w: 440, h: 500 }, true)).toEqual({ w: 440, h: 500 });
+    expect(stableBox({ w: 956, h: 440 }, { w: 440, h: 956 }, false)).toEqual({ w: 440, h: 956 });
+    // Android resizes-content: no keyboard-open state, so the layout follows as before.
+    expect(stableBox({ w: 915, h: 412 }, { w: 915, h: 200 }, false)).toEqual({ w: 915, h: 200 });
+    expect(stableBox(null, { w: 956, h: 230 }, true)).toEqual({ w: 956, h: 230 });
+  });
+});
