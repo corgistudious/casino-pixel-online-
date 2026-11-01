@@ -91,6 +91,9 @@ export function sampleViewport() {
     statusBarMeta: document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')?.getAttribute('content') ?? 'absent',
     viewportMeta: document.querySelector('meta[name="viewport"]')?.getAttribute('content') ?? 'absent',
     safeArea: safe,
+    scroll: `${Math.round(window.scrollX)},${Math.round(window.scrollY)}`,
+    keyboard: document.documentElement.classList.contains('keyboard-open'),
+    vars: ['--vvt', '--vvh', '--kb'].map((v) => document.documentElement.style.getPropertyValue(v) || '-').join(' '),
     dpr: window.devicePixelRatio,
     startupInset: currentStartupInset(),
   };

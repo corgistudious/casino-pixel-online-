@@ -103,6 +103,29 @@ describe('keyboardState', () => {
   });
 });
 
+describe('keyboardFrame (app follows the visual viewport while the keyboard is up)', () => {
+  it('case A: no pan — same as before (top 0, height = visible)', async () => {
+    const { keyboardFrame } = await import('../src/lib/viewport');
+    expect(keyboardFrame(440, 210, 0, true)).toEqual({ open: true, top: 0, height: 210, kb: 230 });
+  });
+  it('case B: iOS pans the visual viewport — the root moves with it, no band under it', async () => {
+    const { keyboardFrame } = await import('../src/lib/viewport');
+    // 378 px window, keyboard leaves 168 px visible, iOS panned 62 px: the app spans 62..230.
+    const f = keyboardFrame(378, 168, 62, true)!;
+    expect(f).toEqual({ open: true, top: 62, height: 168, kb: 148 });
+    // The visible area is covered exactly: no strip between the app's bottom and the keyboard.
+    expect(f.top + f.height + f.kb).toBe(378);
+    expect(keyboardFrame(378, 168.4, 61.6, true)).toEqual({ open: true, top: 62, height: 168, kb: 148 });
+  });
+  it('closed keyboard / nothing focused / negative offsets', async () => {
+    const { keyboardFrame } = await import('../src/lib/viewport');
+    expect(keyboardFrame(440, 440, 0, true)).toBeNull();
+    expect(keyboardFrame(440, 210, 62, false)).toBeNull();
+    // iOS rubber-band can report a small negative offset: never above the layout top.
+    expect(keyboardFrame(440, 210, -3, true)).toEqual({ open: true, top: 0, height: 210, kb: 230 });
+  });
+});
+
 describe('startupInset (iOS home-screen app opened with a short landscape window)', () => {
   const iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15';
   const base = { standalone: true, userAgent: iphone, landscape: true, screenW: 440, screenH: 956, innerHeight: 440, visualHeight: 440 };

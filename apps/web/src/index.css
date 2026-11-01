@@ -34,11 +34,11 @@
    * indicator, and each screen shell insets only its controls with the --sa-* variables (padding the
    * root itself left dark bands around every screen in iPhone landscape).
    * The browser sizes the root (the window iOS/Android gives the page); lib/viewport.ts overrides
-   * only --vvh while the keyboard is up.
+   * only --vvh/--vvt while the keyboard is up (the visible area above it).
    */
   #root {
     position: fixed;
-    top: 0;
+    top: var(--vvt, 0px);
     left: 0;
     right: 0;
     height: var(--vvh, 100%);
@@ -138,7 +138,7 @@
    */
   .overlay {
     position: fixed;
-    top: 0;
+    top: var(--vvt, 0px);
     left: 0;
     right: 0;
     height: var(--vvh, 100%);

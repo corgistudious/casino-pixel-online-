@@ -27,19 +27,28 @@ export function ViewportDiagnostics() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    const take = (event: string) => setSamples((s) => [...s.slice(-40), { t: Math.round(performance.now()), event, ...sampleViewport() }]);
+    const take = (event: string) => setSamples((s) => [...s.slice(-80), { t: Math.round(performance.now()), event, ...sampleViewport() }]);
     const timers = TIMES.map((ms) => window.setTimeout(() => take(`+${ms}ms`), ms));
     const events = ['resize', 'orientationchange', 'pageshow', 'focus'] as const;
     const handlers = events.map((e) => [e, () => take(e)] as const);
     handlers.forEach(([e, h]) => window.addEventListener(e, h));
     const onVis = () => take(`visibility:${document.visibilityState}`);
     document.addEventListener('visibilitychange', onVis);
+    // Keyboard: focus changes, then the visual viewport settles a few frames later.
+    const onFocus = (e: FocusEvent) => { take(e.type); window.setTimeout(() => take(`${e.type}+400ms`), 400); };
+    document.addEventListener('focusin', onFocus);
+    document.addEventListener('focusout', onFocus);
+    const onVvScroll = () => take('vv.scroll');
+    window.visualViewport?.addEventListener('scroll', onVvScroll);
     const onVv = () => take('vv.resize');
     window.visualViewport?.addEventListener('resize', onVv);
     return () => {
       timers.forEach((id) => window.clearTimeout(id));
       handlers.forEach(([e, h]) => window.removeEventListener(e, h));
       document.removeEventListener('visibilitychange', onVis);
+      document.removeEventListener('focusin', onFocus);
+      document.removeEventListener('focusout', onFocus);
+      window.visualViewport?.removeEventListener('scroll', onVvScroll);
       window.visualViewport?.removeEventListener('resize', onVv);
     };
   }, []);
@@ -84,7 +93,7 @@ export function ViewportDiagnostics() {
             )}
             <div className="max-h-32 overflow-auto text-white/70">
               {samples.map((s, i) => (
-                <div key={i}>{s.t}ms {s.event}: {s.inner} vv {s.visual}</div>
+                <div key={i}>{s.t}ms {s.event}: {s.inner} vv {s.visual} sc {s.scroll}{s.keyboard ? ` kb ${s.vars}` : ''}</div>
               ))}
             </div>
           </div>

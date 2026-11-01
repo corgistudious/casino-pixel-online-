@@ -81,3 +81,40 @@ git revert <commit>
 # hoặc
 git apply -R ios-pwa-landscape-startup.patch
 ```
+
+# Dải đen khi mở bàn phím (trường hợp B)
+
+- Trường hợp A (mở app khi đang dọc rồi xoay ngang): bàn phím bình thường.
+- Trường hợp B (mở app khi đã ngang): mở bàn phím trong Chat thì có dải đen ở đáy.
+
+## Cơ chế
+
+- Khi bàn phím mở, iOS không thu nhỏ layout viewport. Nó chỉ thu nhỏ visual viewport, và có thể **dời visual viewport xuống** (`visualViewport.offsetTop > 0`) để lộ ô nhập.
+  - `window.scrollTo(0,0)` không hoàn tác được phần dời này.
+- `#root` là `position: fixed`, nên được đặt trong **layout viewport**.
+  - Trước bản vá, khi bàn phím mở, root được đặt ở `top: 0` với chiều cao bằng `visualViewport.height`.
+  - Nếu iOS dời `offsetTop` = N px, người chơi nhìn thấy vùng [N, N + height]. Root khi đó bị lệch lên N px, và dưới root, ngay trên bàn phím, là N px trống: chính là dải đen.
+  - Ở trường hợp A, `offsetTop` = 0 nên không có dải.
+- Ở trường hợp B, iOS cấp cửa sổ lệch (xem phần trên), nên cách iOS tính phần dời cho bàn phím khác trường hợp A.
+- **Chưa đo trên máy thật:** giá trị `offsetTop` cụ thể ở trường hợp B. Overlay chẩn đoán ghi `vv WxH @offsetTop` ở mỗi lần focus và mỗi lần visual viewport thay đổi, để xác nhận.
+
+## Bản vá
+
+- `lib/viewport.ts` có thêm hàm `keyboardFrame()`. Khi bàn phím mở, root đặt `top = offsetTop`, `height = visualViewport.height` (biến `--vvt` và `--vvh`), nên phủ đúng vùng nhìn thấy phía trên bàn phím.
+  - `--kb` = layout − top − height, dùng cho bottom sheet.
+  - Khi bàn phím đóng, các biến bị xóa, layout trở lại như cũ.
+  - Khi `offsetTop` = 0 (trường hợp A), kết quả giống hệt trước đây.
+- `.overlay` (dialog) cũng dùng `top: var(--vvt)`.
+- Phần kiểm tra ô nhập có đang hiện hay không (`reveal`) giờ tính theo vùng [offsetTop, offsetTop + height].
+- Không reload, không giả lập xoay, không ép kích thước theo `screen`, không che bằng CSS.
+
+## Kiểm thử bàn phím trên iPhone
+
+1. Thử trường hợp B với build có overlay:
+   - Giữ máy dọc ở màn hình chính, xoay ngang rồi mở app.
+   - Vào Chat, chạm ô nhập.
+   - Không còn dải đen; ô nhập và nút Gửi nằm ngay trên bàn phím.
+2. Đóng/mở bàn phím nhiều lần, chuyển giữa các ô nhập, gửi tin, chuyển sang app khác rồi quay lại. Nội dung đang gõ phải được giữ.
+3. Lặp lại với trường hợp A (mở khi dọc rồi xoay ngang). Kết quả phải giống trước.
+4. Nếu vẫn còn dải: bấm `VP`, chọn "copy JSON" và gửi lại. Cần các dòng `focusin+400ms` với `vv` (có `@offsetTop`), `sc` (scrollY) và `kb` (`--vvt --vvh --kb`).
+   - Nếu `offsetTop` = 0 mà vẫn có dải, dải đó nằm ngoài cửa sổ trang (giới hạn của iOS), không phải do layout.

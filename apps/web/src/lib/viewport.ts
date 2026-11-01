@@ -9,6 +9,8 @@
  * which hid the bottom of the app and made swipes fight between the pan and inner scrollers. Once
  * the app fits above the keyboard that pan is undone (scrollTo 0,0) and, only if the focused field
  * is still out of view, it is revealed once with scrollIntoView({ block: 'nearest' }).
+ * If iOS also pans the visual viewport (visualViewport.offsetTop > 0, which scrollTo cannot undo),
+ * the app follows it (--vvt) so it always fills exactly the area above the keyboard.
  * Android with `interactive-widget=resizes-content` already shrinks the layout viewport, so the
  * visible height equals the layout height and nothing is applied there.
  *
@@ -33,19 +35,35 @@ export function keyboardState(layoutHeight: number, visibleHeight: number, field
   return { open, appHeight: open ? Math.round(visibleHeight) : null };
 }
 
+/**
+ * Pure: where the app sits while the keyboard is up, in layout-viewport px (null = closed, CSS
+ * decides). The root is position: fixed, i.e. placed in the LAYOUT viewport, while the player sees
+ * the VISUAL viewport, which iOS may pan down by `offsetTop` when a field takes focus (window.scrollTo
+ * cannot undo that pan). With the root kept at top 0 the visible area would show the root shifted up
+ * and `offsetTop` px of empty page — a black band — under it. So the root follows the visual
+ * viewport: top = offsetTop, height = visible height. When iOS does not pan (offsetTop 0) this is
+ * exactly the previous behaviour.
+ */
+export function keyboardFrame(layoutHeight: number, visibleHeight: number, offsetTop: number, fieldFocused: boolean): { open: boolean; top: number; height: number; kb: number } | null {
+  const { open, appHeight } = keyboardState(layoutHeight, visibleHeight, fieldFocused);
+  if (!open || appHeight === null) return null;
+  const top = Math.max(0, Math.round(offsetTop));
+  return { open, top, height: appHeight, kb: Math.max(0, Math.round(layoutHeight - top - appHeight)) };
+}
+
 export function installViewport(): () => void {
   if (typeof window === 'undefined') return () => {};
   const vv = window.visualViewport;
   const root = document.documentElement;
   let frame = 0;
-  let lastHeight: number | null = null;
+  let lastFrame = '';
   let lastOpen = false;
   let revealed: Element | null = null;
 
-  const reveal = (el: HTMLElement, visible: number) => {
+  const reveal = (el: HTMLElement, top: number, visible: number) => {
     if (revealed === el) return;
-    const r = el.getBoundingClientRect();
-    if (r.top >= 0 && r.bottom <= visible - 4) {
+    const r = el.getBoundingClientRect(); // layout-viewport px, like top
+    if (r.top >= top && r.bottom <= top + visible - 4) {
       revealed = el;
       return;
     }
@@ -59,28 +77,32 @@ export function installViewport(): () => void {
     const focused = isTextField(active);
     const layout = root.clientHeight; // layout viewport: unaffected by the iOS keyboard
     const visible = vv ? vv.height : layout;
-    const { open, appHeight } = keyboardState(layout, visible, focused);
+    const frameNow = keyboardFrame(layout, visible, vv ? vv.offsetTop : 0, focused);
+    const open = frameNow !== null;
     if (open !== lastOpen) {
       root.classList.toggle('keyboard-open', open);
       lastOpen = open;
       if (!open) revealed = null;
     }
-    if (appHeight !== lastHeight) {
-      if (appHeight === null) {
+    const key = frameNow ? `${frameNow.top}/${frameNow.height}/${frameNow.kb}` : '';
+    if (key !== lastFrame) {
+      if (!frameNow) {
         root.style.removeProperty('--vvh');
+        root.style.removeProperty('--vvt');
         root.style.removeProperty('--kb');
       } else {
-        root.style.setProperty('--vvh', `${appHeight}px`);
-        root.style.setProperty('--kb', `${Math.max(0, layout - appHeight)}px`);
+        root.style.setProperty('--vvh', `${frameNow.height}px`);
+        root.style.setProperty('--vvt', `${frameNow.top}px`);
+        root.style.setProperty('--kb', `${frameNow.kb}px`);
       }
-      lastHeight = appHeight;
+      lastFrame = key;
     }
     // Undo the browser's page pan once the app fits above the keyboard, or once no field is focused
     // (a pan left behind after the keyboard closed / after returning from the background). While a
     // field is focused but the keyboard is still animating in, iOS is mid-pan: leave it alone.
     // The document itself never scrolls in this app.
     if ((open || !focused) && (window.scrollX !== 0 || window.scrollY !== 0)) window.scrollTo(0, 0);
-    if (open && focused) reveal(active, visible);
+    if (frameNow && focused) reveal(active, frameNow.top, visible);
   };
   const schedule = () => {
     if (!frame) frame = requestAnimationFrame(apply);
@@ -115,6 +137,7 @@ export function installViewport(): () => void {
     document.removeEventListener('visibilitychange', onVisible);
     root.classList.remove('keyboard-open');
     root.style.removeProperty('--vvh');
+    root.style.removeProperty('--vvt');
     root.style.removeProperty('--kb');
   };
 }
