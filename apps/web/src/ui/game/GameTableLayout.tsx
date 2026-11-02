@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { create } from 'zustand';
+import { useFullscreen, toggleFullscreen } from '../../lib/fullscreen';
 import { DemoBanner } from '../AppShell';
 import { GameIconButton } from './GameButton';
 import { GameIcon, type GameIconName } from './GameIcons';
@@ -48,6 +49,7 @@ export function GameTableLayout({
   controls: ReactNode;
 }) {
   const { t } = useTranslation();
+  const fs = useFullscreen();
   const navigate = useNavigate();
   const [openId, setOpenId] = useState<string | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -94,6 +96,11 @@ export function GameTableLayout({
             <GameIconButton label={t('gameUi.chat')} expanded={chatOpen} onClick={() => useGameChat.getState().toggle()}>
               <GameIcon name="chat" />
             </GameIconButton>
+            {fs.supported && (
+              <GameIconButton label={t(fs.active ? 'gameUi.exitFullscreen' : 'gameUi.fullscreen')} expanded={fs.active} onClick={() => void toggleFullscreen()}>
+                <GameIcon name={fs.active ? 'shrink' : 'expand'} />
+              </GameIconButton>
+            )}
             <div className="ghud-balance">
               <GameBalance />
             </div>

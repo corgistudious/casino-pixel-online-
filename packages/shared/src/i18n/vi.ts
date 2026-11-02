@@ -1835,6 +1835,8 @@ export const vi: Translation = {
     },
   },
   gameUi: {
+    fullscreen: 'Toàn màn hình',
+    exitFullscreen: 'Thoát toàn màn hình',
     chips: 'Mệnh giá chip',
     chat: 'Trò chuyện',
     controls: 'Điều khiển ván chơi',

@@ -1833,6 +1833,8 @@ export const en = {
     },
   },
   gameUi: {
+    fullscreen: 'Full screen',
+    exitFullscreen: 'Exit full screen',
     chips: 'Chip value',
     chat: 'Chat',
     controls: 'Game controls',

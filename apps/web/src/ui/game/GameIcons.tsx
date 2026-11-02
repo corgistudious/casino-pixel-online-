@@ -1,5 +1,5 @@
 /** Stroke icons for the game HUD (own artwork, no third-party icon set). */
-export type GameIconName = 'back' | 'chat' | 'players' | 'stats' | 'info' | 'room' | 'close';
+export type GameIconName = 'back' | 'chat' | 'players' | 'stats' | 'info' | 'room' | 'close' | 'expand' | 'shrink';
 
 const PATHS: Record<GameIconName, string> = {
   back: 'M15 5l-7 7 7 7',
@@ -9,6 +9,8 @@ const PATHS: Record<GameIconName, string> = {
   info: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 11v6M12 7.5v.01',
   room: 'M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M14 12v.01',
   close: 'M6 6l12 12M18 6L6 18',
+  expand: 'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',
+  shrink: 'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5',
 };
 
 export function GameIcon({ name }: { name: GameIconName }) {
