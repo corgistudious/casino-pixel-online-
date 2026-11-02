@@ -1,0 +1,17 @@
+# Unity generated
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/MemoryCaptures/
+*.csproj
+!/dotnet/**/*.csproj
+*.sln
+*.pidb.meta
+*.pdb.meta
+# .NET test project
+/dotnet/**/bin/
+/dotnet/**/obj/
