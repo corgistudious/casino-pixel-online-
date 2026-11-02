@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { create } from 'zustand';
 import { DemoBanner } from '../AppShell';
-import { BalancePill } from '../Chrome';
 import { GameIconButton } from './GameButton';
 import { GameIcon, type GameIconName } from './GameIcons';
+import { GameBalance } from './GameParts';
 
 /** In-room chat is opened from the table HUD (the old floating button would sit on the control bar). */
 export const useGameChat = create<{ open: boolean; hudOwned: number; toggle: () => void; close: () => void }>((set) => ({
@@ -24,10 +24,11 @@ export interface GameTool {
 }
 
 /**
- * Table screen layout (Tài Xỉu, Xì Tố … — design system in index.css):
- *   HUD (back · title · status · tools · balance)
- *   stage  — the table, centred; it keeps its own aspect ratio (Phaser FIT) and only gets smaller
- *   bar    — the game's actions and chips, one or two rows depending on width
+ * Table screen layout (Tài Xỉu, Xì Tố … — design system in index.css). No right-hand sidebar:
+ *   tall screens:  HUD on top · table · bottom control bar
+ *   short & wide screens (phones in landscape): the HUD splits into two slim icon columns beside
+ *   the table (space a 16:9 table leaves empty anyway), so the table keeps the full height above
+ *   the control bar and stays at least as large as in the previous layout.
  * Everything the old right-hand sidebar showed is in `tools`: one floating panel (drawer in
  * landscape, bottom sheet in portrait), so no function is lost. No fullscreen, no stretching.
  */
@@ -69,34 +70,40 @@ export function GameTableLayout({
 
   return (
     <div className="game-shell" data-game-layout>
-      <div>
-        <DemoBanner />
-      </div>
-      <header className="ghud">
-        <GameIconButton label={t('nav.back')} onClick={() => navigate('/')}>
-          <GameIcon name="back" />
-        </GameIconButton>
-        <div className="ghud-title">
-          <h1>{title}</h1>
-          {subtitle && <span className="ghud-sub">{subtitle}</span>}
+      <div className="game-grid">
+        <div className="gbanner">
+          <DemoBanner />
         </div>
-        {status}
-        <div className="ghud-tools">
-          {tools.map((tool) => (
-            <GameIconButton key={tool.id} label={tool.label} badge={tool.badge} expanded={openId === tool.id} onClick={() => setOpenId(openId === tool.id ? null : tool.id)}>
-              <GameIcon name={tool.icon} />
+        <header className="ghud">
+          <div className="ghud-left">
+            <GameIconButton label={t('nav.back')} onClick={() => navigate('/')}>
+              <GameIcon name="back" />
             </GameIconButton>
-          ))}
-          <GameIconButton label={t('gameUi.chat')} expanded={chatOpen} onClick={() => useGameChat.getState().toggle()}>
-            <GameIcon name="chat" />
-          </GameIconButton>
-          <BalancePill compact />
-        </div>
-      </header>
-      <main className="gstage">{stage}</main>
-      <footer className="gbar" aria-label={t('gameUi.controls')}>
-        {controls}
-      </footer>
+            <div className="ghud-title">
+              <h1>{title}</h1>
+              {subtitle && <span className="ghud-sub">{subtitle}</span>}
+            </div>
+            {status}
+          </div>
+          <div className="ghud-tools">
+            {tools.map((tool) => (
+              <GameIconButton key={tool.id} label={tool.label} badge={tool.badge} expanded={openId === tool.id} onClick={() => setOpenId(openId === tool.id ? null : tool.id)}>
+                <GameIcon name={tool.icon} />
+              </GameIconButton>
+            ))}
+            <GameIconButton label={t('gameUi.chat')} expanded={chatOpen} onClick={() => useGameChat.getState().toggle()}>
+              <GameIcon name="chat" />
+            </GameIconButton>
+            <div className="ghud-balance">
+              <GameBalance />
+            </div>
+          </div>
+        </header>
+        <main className="gstage">{stage}</main>
+        <footer className="gbar" aria-label={t('gameUi.controls')}>
+          {controls}
+        </footer>
+      </div>
       {open && (
         <>
           <div className="gpanel-scrim" onClick={() => setOpenId(null)} aria-hidden />

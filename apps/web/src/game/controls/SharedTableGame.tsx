@@ -293,7 +293,7 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
             <div className="gbar-group">
               <GameChipRack values={CHIP_VALUES} value={chip} onChange={setChip} />
             </div>
-            <div className="gbar-group">
+            <div className="gbar-group gbar-group--wide">
               <GameStat label={t('tables.pending')} value={formatChips(pendingTotal, lang)} accent />
               <GameStat label={t('tables.placed')} value={formatChips(placedTotal, lang)} />
               {lastWin !== null && <GameStat label={t('play.lastWin')} value={formatChips(lastWin, lang)} accent={lastWin > 0} />}
@@ -307,6 +307,7 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
               </GameButton>
               <GameButton tone="primary" loading={placing} onClick={() => void confirm()} disabled={!canBet || pendingTotal === 0}>
                 {placing ? t('tables.placing') : t('tables.confirm')}
+                {!placing && pendingTotal > 0 && <span className="tabular-nums"> · {formatChips(pendingTotal, lang)}</span>}
               </GameButton>
             </div>
           </>

@@ -296,8 +296,8 @@ function CardTable({ tableId }: { tableId: string }) {
                   )}
                 </div>
                 {legal.canRaise && legal.minRaiseTo < legal.maxRaiseTo && (
-                  <div className="gbar-group">
-                    <input type="range" className="grange" min={legal.minRaiseTo} max={legal.maxRaiseTo} step={cfg?.bigBlind ?? 1} value={raise} onChange={(e) => setRaise(Number(e.target.value))} aria-label={t('cards.raiseTo')} />
+                  <>
+                  <div className="gbar-group gbar-group--wide">
                     {[
                       ['½', Math.floor(pot / 2)],
                       [t('cards.potShort'), pot],
@@ -307,10 +307,14 @@ function CardTable({ tableId }: { tableId: string }) {
                         {label}
                       </GameButton>
                     ))}
+                  </div>
+                  <div className="gbar-group">
+                    <input type="range" className="grange" min={legal.minRaiseTo} max={legal.maxRaiseTo} step={cfg?.bigBlind ?? 1} value={raise} onChange={(e) => setRaise(Number(e.target.value))} aria-label={t('cards.raiseTo')} />
                     <GameButton tone="primary" loading={acting === 'raise' || acting === 'bet'} disabled={busy} onClick={() => void send(hand!.currentBet > 0 ? 'raise' : 'bet', raise)}>
                       {raiseLabel} {fmt(raise)}
                     </GameButton>
                   </div>
+                  </>
                 )}
                 <div className="gbar-group">
                   <GameButton tone="danger" loading={acting === 'allin'} disabled={busy} onClick={() => void send('allin')}>

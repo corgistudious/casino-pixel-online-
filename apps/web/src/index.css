@@ -306,9 +306,6 @@
 .game-shell {
   position: relative;
   height: 100%;
-  display: grid;
-  /* demo banner (empty in live builds) · HUD · stage · control bar */
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
   container-type: size;
   container-name: game;
   color: var(--g-text);
@@ -319,6 +316,20 @@
   padding-right: var(--sa-r);
   overflow: hidden;
 }
+
+.game-grid {
+  height: 100%;
+  display: grid;
+  /* demo banner (empty in live builds) · HUD · stage · control bar */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-areas: "banner" "hud" "stage" "bar";
+}
+.gbanner { grid-area: banner; }
+.ghud { grid-area: hud; }
+.gstage { grid-area: stage; }
+.gbar { grid-area: bar; }
+.ghud-left { display: flex; align-items: center; gap: clamp(6px, 1.1cqw, 12px); min-width: 0; }
 
 /* --- Top HUD ------------------------------------------------------------------------------ */
 .ghud {
@@ -374,6 +385,8 @@
   column-gap: clamp(8px, 1.6cqw, 18px);
   row-gap: clamp(4px, 1cqh, 8px);
   padding: clamp(4px, 1.2cqh, 10px) clamp(8px, 1.4cqw, 16px) max(clamp(4px, 1.2cqh, 10px), var(--sa-b));
+  /* One button row is always reserved, so turn / phase changes never resize the table. */
+  min-height: calc(clamp(var(--g-touch-min), 10cqh, 50px) + 2 * clamp(4px, 1.2cqh, 10px) + var(--sa-b));
   border-top: var(--g-border) solid var(--g-line);
   background: linear-gradient(180deg, rgba(12, 10, 30, 0.6), rgba(7, 5, 18, 0.95));
   box-shadow: 0 -12px 28px -18px rgba(0, 0, 0, 0.9);
@@ -524,4 +537,37 @@
   .gpanel, .gpanel-scrim { animation: none; }
   .gtimer--warn { animation: none; }
   .gbtn-spin { animation-duration: 2s; }
+}
+
+.gbalance { display: flex; align-items: center; gap: 10px; padding: 3px 12px; border-radius: 999px; border: var(--g-border) solid rgba(242, 193, 78, 0.45); background: var(--g-glass); font-weight: 700; font-size: clamp(12px, 3.3cqh, 15px); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.gbalance-row { display: inline-flex; align-items: center; gap: 4px; color: var(--g-text); }
+.gbalance-row--gold { color: var(--g-gold-hi); }
+.gbalance-short { display: none; }
+
+/* Short & wide (phones in landscape): HUD → two slim columns beside the table. */
+@container game (max-height: 560px) and (min-aspect-ratio: 16/10) {
+  .game-grid {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "banner banner banner" "lrail stage rrail" "bar bar bar";
+  }
+  .ghud { display: contents; }
+  .ghud-left, .ghud-tools {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: clamp(4px, 1.4cqh, 8px);
+    padding: calc(var(--sa-t) + clamp(4px, 1.6cqh, 8px)) clamp(4px, 0.8cqw, 8px) 4px;
+    margin: 0;
+  }
+  .ghud-left { grid-area: lrail; }
+  .ghud-tools { grid-area: rrail; }
+  .ghud-title { display: none; }
+  .ghud-left .gtimer { flex-direction: column; height: auto; gap: 0; padding: 6px 8px; border-radius: 14px; font-size: clamp(10px, 2.6cqh, 12px); text-align: center; white-space: normal; max-width: 92px; line-height: 1.15; }
+  .ghud-balance { order: -1; }
+  .gbalance { flex-direction: column; align-items: flex-start; gap: 2px; padding: 5px 7px; border-radius: 12px; font-size: clamp(10px, 2.8cqh, 12px); }
+  .gbalance-full { display: none; }
+  .gbalance-short { display: inline; }
+  .ghud-left .gtimer { max-width: 76px; }
+  .gstage { padding: clamp(2px, 0.8cqh, 6px) 0; }
 }
