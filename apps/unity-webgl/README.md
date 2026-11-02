@@ -53,7 +53,7 @@ Unity version: **6000.0.85f1 (Unity 6 LTS)**. A GameCI image exists (`unityci/ed
 ```bash
 dotnet test apps/unity-webgl/dotnet/KeyoGame.Core.Tests     # core C# (no Unity needed)
 node --test "apps/unity-webgl/web-tests/*.test.mjs"        # viewport manager
-packages/shared/node_modules/.bin/tsx apps/unity-webgl/tools/export-i18n.mts   # after changing i18n
+pnpm --filter @casino/server exec tsx ../unity-webgl/tools/export-i18n.mts   # after changing i18n
 ```
 
 ## CI / build (GitHub Actions + GameCI, `.github/workflows/unity.yml`)

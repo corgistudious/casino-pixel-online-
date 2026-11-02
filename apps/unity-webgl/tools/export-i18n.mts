@@ -1,7 +1,7 @@
 /**
  * Exports the VI/EN translations of the React app (packages/shared/src/i18n — the single source)
  * to Assets/KeyoGame/Localization/Resources/keyo-i18n.json for the Unity Localizer.
- *   packages/shared/node_modules/.bin/tsx apps/unity-webgl/tools/export-i18n.mts [--check]
+ *   pnpm --filter @casino/server exec tsx ../unity-webgl/tools/export-i18n.mts [--check]
  * --check exits 1 when the committed JSON is out of date (used by CI).
  */
 import { readFileSync, writeFileSync } from 'node:fs';

@@ -32,9 +32,10 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile --filter "@casino/shared..."
+      # tsx is a dev dependency of @casino/server (which also pulls the shared workspace).
+      - run: pnpm install --frozen-lockfile --filter "@casino/server..."
       - name: i18n export is up to date (Unity reads the same VI/EN as React)
-        run: packages/shared/node_modules/.bin/tsx apps/unity-webgl/tools/export-i18n.mts --check
+        run: pnpm --filter @casino/server exec tsx ../unity-webgl/tools/export-i18n.mts --check
       - name: Core C# tests (same files Unity compiles)
         run: dotnet test apps/unity-webgl/dotnet/KeyoGame.Core.Tests --logger "trx;LogFileName=core.trx"
       - name: Viewport manager tests
