@@ -87,6 +87,36 @@ export class CardTableScene extends BaseScene {
     this.strings = labels;
   }
 
+  private light?: Phaser.GameObjects.Image;
+
+  /**
+   * HD stage light: a soft additive spotlight over the felt (the new table layout opts in per game,
+   * so screens not yet redesigned keep their current look). Purely visual.
+   */
+  setStageLight(on: boolean) {
+    if (!on) {
+      this.light?.destroy();
+      this.light = undefined;
+      return;
+    }
+    if (this.light) return;
+    const key = 'fx-stage-light';
+    if (!this.textures.exists(key)) {
+      const size = 512;
+      const tex = this.textures.createCanvas(key, size, size)!;
+      const c = tex.getContext();
+      const g = c.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      g.addColorStop(0, 'rgba(255,248,225,0.95)');
+      g.addColorStop(0.5, 'rgba(255,240,205,0.4)');
+      g.addColorStop(1, 'rgba(255,240,205,0)');
+      c.fillStyle = g;
+      c.fillRect(0, 0, size, size);
+      tex.refresh();
+    }
+    const o = this.tableOval()!;
+    this.light = this.add.image(o.cx, o.cy - 12, key).setDepth(-90).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.3).setDisplaySize(o.rx * 2.1, o.ry * 2.3);
+  }
+
   setSeatHandler(fn: (uid: number, at: { x: number; y: number }) => void) {
     this.onSeat = fn;
   }

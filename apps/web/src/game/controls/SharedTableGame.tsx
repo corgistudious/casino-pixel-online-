@@ -25,6 +25,9 @@ import { TaiXiuScene } from '../scenes/TaiXiuScene';
 import { GameLayout, Stat } from './GameLayout';
 import { PlayerIdentityCompact } from '../../players/identity';
 import { celebrateWin } from '../../cosmetics/VictoryEffect';
+import { GameButton } from '../../ui/game/GameButton';
+import { GameCard, GameChipRack, GameStat, GameTimer } from '../../ui/game/GameParts';
+import { GameTableLayout, type GameTool } from '../../ui/game/GameTableLayout';
 
 type View = Omit<TableRoundView, 'myBets'>;
 type Scene = TaiXiuScene | RouletteTableScene;
@@ -207,22 +210,117 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
       ? t('tables.rouletteRevealing')
       : t(`tables.phase.${info.phase}`);
 
+  const rebet = () => totalOf(lastBets) <= useSession.getState().balance && setPending(lastBets);
+  const canvas = view && (
+    <PhaserView<Scene>
+      create={() => (view.table.game === 'roulette' ? new RouletteTableScene() : new TaiXiuScene())}
+      onReady={(s) => {
+        scene.current = s;
+        s.setRound(state.current.view!.round, now);
+        if (s instanceof RouletteTableScene && seedRef.current) s.seedHistory(seedRef.current);
+        s.events.on('spot', onSpot);
+      }}
+    />
+  );
+
+  // Tài Xỉu: new table layout (HUD · centred table · bottom control bar · floating tools).
+  // Roulette keeps the previous layout until its redesign is approved.
+  if (game !== 'roulette') {
+    const tools: GameTool[] = view
+      ? [
+          {
+            id: 'players',
+            label: t('gameUi.players'),
+            icon: 'players',
+            badge: view.bettors || undefined,
+            content: (
+              <>
+                <GameCard title={t('gameUi.bettors', { n: view.bettors })}>
+                  <IdentityList players={view.players} empty={t('gameUi.noBettors')} context={`table:${view.table.id}`} />
+                </GameCard>
+                <GameCard title={t('gameUi.atTable', { n: view.watchers })}>
+                  <IdentityList players={view.members} empty={t('gameUi.noViewers')} context={`table:${view.table.id}`} />
+                </GameCard>
+              </>
+            ),
+          },
+          {
+            id: 'stats',
+            label: t('gameUi.stats'),
+            icon: 'stats',
+            content: (
+              <>
+                <Pool view={view} />
+                <GameCard>
+                  <History game={view.table.game} items={view.history} />
+                </GameCard>
+              </>
+            ),
+          },
+          {
+            id: 'info',
+            label: t('gameUi.info'),
+            icon: 'info',
+            content: (
+              <>
+                <GameCard>
+                  <div className="flex items-center justify-between text-xs text-white/60">
+                    <span>{t('tables.round', { seq: view.round.seq })}</span>
+                    <span>{t('tables.players', { n: view.bettors, w: view.watchers })}</span>
+                  </div>
+                  {canBet && placedTotal > 0 && <p className="mt-2 text-[11px] text-white/50">{t('tables.sameRound')}</p>}
+                </GameCard>
+                <Fairness round={view.round} />
+                <Link to="/play/sicbo" className="text-center text-xs text-white/55 underline hover:text-white/80">
+                  {t('tables.solo')}
+                </Link>
+                <p className="text-[11px] leading-snug text-white/40">{t('app.disclaimer')}</p>
+              </>
+            ),
+          },
+        ]
+      : [];
+    return (
+      <GameTableLayout
+        title={view ? view.table.name[lang === 'en' ? 'en' : 'vi'] : t('tables.live')}
+        subtitle={view ? t('tables.round', { seq: view.round.seq }) : undefined}
+        status={<GameTimer label={warn ? t('tables.closingSoon', { s: seconds }) : phaseLabel} seconds={info && !warn ? seconds : null} warn={warn} />}
+        tools={tools}
+        stage={<div className="gstage-canvas">{canvas}</div>}
+        controls={
+          <>
+            {view?.table.status === 'paused' && <p className="gbar-note w-full">{t('tables.paused')}</p>}
+            <div className="gbar-group">
+              <GameChipRack values={CHIP_VALUES} value={chip} onChange={setChip} />
+            </div>
+            <div className="gbar-group">
+              <GameStat label={t('tables.pending')} value={formatChips(pendingTotal, lang)} accent />
+              <GameStat label={t('tables.placed')} value={formatChips(placedTotal, lang)} />
+              {lastWin !== null && <GameStat label={t('play.lastWin')} value={formatChips(lastWin, lang)} accent={lastWin > 0} />}
+            </div>
+            <div className="gbar-group">
+              <GameButton size="sm" onClick={() => setPending({})} disabled={placing || pendingTotal === 0}>
+                {t('play.clear')}
+              </GameButton>
+              <GameButton size="sm" onClick={rebet} disabled={!canBet || placing || totalOf(lastBets) === 0}>
+                {t('play.rebet')}
+              </GameButton>
+              <GameButton tone="primary" loading={placing} onClick={() => void confirm()} disabled={!canBet || pendingTotal === 0}>
+                {placing ? t('tables.placing') : t('tables.confirm')}
+              </GameButton>
+            </div>
+          </>
+        }
+      />
+    );
+  }
+
   return (
     <GameLayout
       title={view ? view.table.name[lang === 'en' ? 'en' : 'vi'] : t('tables.live')}
       canvas={
         <>
-          {view && (
-            <PhaserView<Scene>
-              create={() => (view.table.game === 'roulette' ? new RouletteTableScene() : new TaiXiuScene())}
-              onReady={(s) => {
-                scene.current = s;
-                s.setRound(state.current.view!.round, now);
-                if (s instanceof RouletteTableScene && seedRef.current) s.seedHistory(seedRef.current);
-                s.events.on('spot', onSpot);
-              }}
-            />
-          )}
+          {canvas}
           {/* Top-right is empty on both table layouts, so the timer never covers the felt. */}
           <div className="pointer-events-none absolute right-2 top-2 flex justify-end sm:right-3">
             <div
@@ -295,7 +393,7 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
             </Button>
             <Button
               size="sm"
-              onClick={() => totalOf(lastBets) <= useSession.getState().balance && setPending(lastBets)}
+              onClick={rebet}
               disabled={!canBet || placing || totalOf(lastBets) === 0}
             >
               {t('play.rebet')}
@@ -313,6 +411,20 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
         </>
       }
     />
+  );
+}
+
+/** Public identities as compact pills (opens the player menu on tap). */
+function IdentityList({ players, empty, context }: { players: View['players']; empty: string; context: string }) {
+  if (!players.length) return <p className="text-xs text-white/45">{empty}</p>;
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {players.map((player) => (
+        <span key={player.uid} className="rounded-full border border-white/15 bg-white/10 py-0.5 pl-0.5 pr-2">
+          <PlayerIdentityCompact player={player} size={22} context={context} />
+        </span>
+      ))}
+    </div>
   );
 }
 

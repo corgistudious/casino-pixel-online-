@@ -271,3 +271,257 @@
 @media (prefers-reduced-motion: reduce) {
   .pwa-in { animation: none; }
 }
+
+/* ============================================================================================
+ * Keyo Game — gameplay design system (ui/game/*). One set of tokens for every table screen.
+ * Sizes use container query units of `.game-shell` (container-type: size), so HUD, buttons and
+ * chips follow the space actually available — never the device name or a single global scale.
+ * ============================================================================================ */
+:root {
+  --g-ink: #070512;
+  --g-navy: #10183a;
+  --g-plum: #1c1238;
+  --g-gold: #f2c14e;
+  --g-gold-hi: #fff0b5;
+  --g-gold-lo: #c88d24;
+  --g-champagne: #f6e3b0;
+  --g-cyan: #5ad8ff;
+  --g-positive: #1f9d61;
+  --g-danger: #b3233c;
+  --g-text: #f4f1ff;
+  --g-muted: rgba(244, 241, 255, 0.62);
+  --g-line: rgba(242, 193, 78, 0.22);
+  --g-glass: rgba(10, 12, 32, 0.72);
+  --g-radius: 14px;
+  --g-radius-lg: 20px;
+  --g-border: 1px;
+  --g-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.85);
+  --g-dur-fast: 120ms;
+  --g-dur: 220ms;
+  --g-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Touch target floor (WCAG 2.5.8 ≥ 24px; we keep ≥ 32px on the smallest screens). */
+  --g-touch-min: 32px;
+}
+
+.game-shell {
+  position: relative;
+  height: 100%;
+  display: grid;
+  /* demo banner (empty in live builds) · HUD · stage · control bar */
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  container-type: size;
+  container-name: game;
+  color: var(--g-text);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(90, 216, 255, 0.08), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 45%, var(--g-plum) 0%, var(--g-navy) 45%, var(--g-ink) 100%);
+  padding-left: var(--sa-l);
+  padding-right: var(--sa-r);
+  overflow: hidden;
+}
+
+/* --- Top HUD ------------------------------------------------------------------------------ */
+.ghud {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.1cqw, 12px);
+  min-height: clamp(40px, 10.5cqh, 56px);
+  padding: var(--sa-t) clamp(8px, 1.4cqw, 16px) 0;
+  border-bottom: var(--g-border) solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(7, 5, 18, 0.85), rgba(7, 5, 18, 0.35));
+}
+.ghud-title {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.ghud-title h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(14px, 4.6cqh, 21px);
+  color: var(--g-champagne);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ghud-sub {
+  font-size: clamp(10px, 2.9cqh, 12px);
+  color: var(--g-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ghud-tools { margin-left: auto; display: flex; align-items: center; gap: clamp(4px, 0.8cqw, 8px); }
+
+/* --- Stage: the table keeps its own aspect (Phaser FIT) and is centred in what is left --- */
+.gstage {
+  position: relative;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2px, 1cqh, 8px) clamp(6px, 1.2cqw, 16px);
+}
+.gstage-canvas { position: relative; width: 100%; height: 100%; }
+
+/* --- Bottom control bar ------------------------------------------------------------------- */
+.gbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: clamp(8px, 1.6cqw, 18px);
+  row-gap: clamp(4px, 1cqh, 8px);
+  padding: clamp(4px, 1.2cqh, 10px) clamp(8px, 1.4cqw, 16px) max(clamp(4px, 1.2cqh, 10px), var(--sa-b));
+  border-top: var(--g-border) solid var(--g-line);
+  background: linear-gradient(180deg, rgba(12, 10, 30, 0.6), rgba(7, 5, 18, 0.95));
+  box-shadow: 0 -12px 28px -18px rgba(0, 0, 0, 0.9);
+}
+.gbar-group { display: flex; align-items: center; gap: clamp(4px, 0.9cqw, 10px); flex-wrap: nowrap; min-width: 0; }
+.gbar-group--grow { flex: 1 1 auto; justify-content: center; }
+.gbar-note { font-size: clamp(11px, 3cqh, 13px); color: var(--g-muted); text-align: center; }
+/* Secondary stats that the table itself already shows: only when the bar has room for them. */
+@container game (max-width: 1080px) { .gbar-group--wide { display: none; } }
+
+/* --- Stats -------------------------------------------------------------------------------- */
+.gstat { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.gstat-label { font-size: clamp(9px, 2.5cqh, 11px); letter-spacing: 0.08em; text-transform: uppercase; color: var(--g-muted); white-space: nowrap; }
+.gstat-value { font-weight: 800; font-size: clamp(13px, 3.8cqh, 17px); font-variant-numeric: tabular-nums; color: var(--g-text); white-space: nowrap; }
+.gstat--accent .gstat-value { color: var(--g-gold); }
+
+/* --- Buttons: one language for every action ----------------------------------------------- */
+.gbtn {
+  --h: clamp(var(--g-touch-min), 10cqh, 50px);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  height: var(--h);
+  min-width: calc(var(--h) * 1.7);
+  padding: 0 clamp(12px, 2cqw, 22px);
+  border-radius: calc(var(--h) / 2.4);
+  border: var(--g-border) solid transparent;
+  font-family: "Be Vietnam Pro", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(12px, 3.5cqh, 16px);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), var(--g-shadow);
+  transition: transform var(--g-dur-fast) var(--g-ease), filter var(--g-dur-fast) var(--g-ease), box-shadow var(--g-dur) var(--g-ease);
+}
+.gbtn--sm { --h: clamp(var(--g-touch-min), 8.4cqh, 42px); min-width: calc(var(--h) * 1.5); font-size: clamp(11px, 3.1cqh, 14px); }
+.gbtn--primary { background: linear-gradient(180deg, var(--g-gold-hi), var(--g-gold) 46%, var(--g-gold-lo)); color: #2a1a04; border-color: rgba(255, 241, 184, 0.85); }
+.gbtn--positive { background: linear-gradient(180deg, #52d293, var(--g-positive) 55%, #11683b); color: #fff; border-color: rgba(167, 240, 200, 0.5); }
+.gbtn--danger { background: linear-gradient(180deg, #e3566c, var(--g-danger) 55%, #7a1427); color: #fff; border-color: rgba(255, 170, 182, 0.45); }
+.gbtn--neutral { background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)); color: var(--g-text); border-color: rgba(255, 255, 255, 0.18); }
+.gbtn--ghost-danger { background: rgba(179, 35, 60, 0.14); color: #ffc2cb; border-color: rgba(255, 140, 156, 0.55); }
+@media (hover: hover) { .gbtn:hover:not(:disabled) { filter: brightness(1.08); } }
+.gbtn:active:not(:disabled) { transform: translateY(1px) scale(0.97); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 10px -6px rgba(0, 0, 0, 0.8); }
+.gbtn:focus-visible { outline: 2px solid var(--g-cyan); outline-offset: 2px; }
+.gbtn[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--g-gold), inset 0 1px 0 rgba(255, 255, 255, 0.32), var(--g-shadow); }
+.gbtn:disabled { cursor: not-allowed; opacity: 0.42; filter: saturate(0.35); box-shadow: none; }
+.gbtn[aria-busy="true"] { opacity: 0.85; cursor: progress; }
+.gbtn-spin {
+  width: 0.95em; height: 0.95em; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent;
+  animation: gspin 0.7s linear infinite;
+}
+@keyframes gspin { to { transform: rotate(360deg); } }
+
+/* Round icon button (HUD tools). */
+.gicon {
+  --s: clamp(var(--g-touch-min), 8.6cqh, 44px);
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--s); height: var(--s); border-radius: 50%;
+  color: var(--g-champagne);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+  border: var(--g-border) solid rgba(242, 193, 78, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform var(--g-dur-fast) var(--g-ease), background var(--g-dur) var(--g-ease);
+  touch-action: manipulation;
+}
+.gicon svg { width: 52%; height: 52%; }
+.gicon:active { transform: scale(0.94); }
+.gicon:focus-visible { outline: 2px solid var(--g-cyan); outline-offset: 2px; }
+.gicon[aria-expanded="true"], .gicon[aria-pressed="true"] { background: rgba(242, 193, 78, 0.22); border-color: var(--g-gold); }
+.gicon-badge { position: absolute; top: -3px; right: -3px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--g-gold); color: #2a1a04; font-size: 10px; font-weight: 800; line-height: 16px; text-align: center; }
+
+/* Chip rack (radiogroup). */
+.gchips { display: flex; align-items: center; gap: clamp(2px, 0.6cqw, 6px); }
+.gchip {
+  --c: clamp(30px, 9.2cqh, 46px);
+  width: var(--c); height: var(--c); border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform var(--g-dur) var(--g-ease), opacity var(--g-dur) var(--g-ease);
+  opacity: 0.82;
+  touch-action: manipulation;
+}
+.gchip svg { width: 100%; height: 100%; }
+.gchip[aria-checked="true"] { transform: translateY(-5px) scale(1.08); opacity: 1; }
+.gchip:focus-visible { outline: 2px solid var(--g-cyan); outline-offset: 2px; }
+.gchip:disabled { opacity: 0.35; }
+
+/* Status pill / timer. */
+.gtimer {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  height: clamp(28px, 7.6cqh, 38px);
+  padding: 0 clamp(10px, 1.6cqw, 16px);
+  border-radius: 999px;
+  border: var(--g-border) solid rgba(242, 193, 78, 0.5);
+  background: var(--g-glass);
+  color: var(--g-champagne);
+  font-size: clamp(11px, 3.1cqh, 14px);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.gtimer b { font-family: "Playfair Display", Georgia, serif; font-size: 1.35em; font-variant-numeric: tabular-nums; }
+.gtimer--warn { border-color: rgba(255, 120, 120, 0.85); background: rgba(80, 10, 20, 0.85); color: #ffe3e3; animation: gpulse 1s ease-in-out infinite; }
+@keyframes gpulse { 50% { box-shadow: 0 0 0 4px rgba(255, 80, 80, 0.18); } }
+
+/* Range (raise / buy-in). */
+.grange { appearance: none; -webkit-appearance: none; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--g-gold-lo), var(--g-gold)); width: clamp(90px, 14cqw, 220px); }
+.grange::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--g-gold) 60%, var(--g-gold-lo)); border: 2px solid #2a1a04; }
+.grange::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--g-gold); border: 2px solid #2a1a04; }
+.grange:focus-visible { outline: 2px solid var(--g-cyan); outline-offset: 4px; }
+
+/* --- Floating panel: side drawer in landscape, bottom sheet in portrait --------------------- */
+.gpanel-scrim { position: absolute; inset: 0; z-index: 40; background: rgba(3, 2, 10, 0.45); animation: gfade var(--g-dur) var(--g-ease); }
+.gpanel {
+  position: absolute; z-index: 41;
+  top: 0; right: 0; bottom: 0;
+  width: min(380px, 48cqw);
+  display: flex; flex-direction: column;
+  padding: calc(var(--sa-t) + 8px) max(12px, var(--sa-r)) max(12px, var(--sa-b)) 14px;
+  background: linear-gradient(180deg, rgba(20, 16, 44, 0.98), rgba(8, 6, 20, 0.98));
+  border-left: var(--g-border) solid var(--g-line);
+  box-shadow: -24px 0 48px -24px rgba(0, 0, 0, 0.9);
+  animation: gslide-in var(--g-dur) var(--g-ease);
+}
+@container game (orientation: portrait) {
+  .gpanel { top: auto; left: 0; width: auto; max-height: 72cqh; border-left: 0; border-top: var(--g-border) solid var(--g-line); border-radius: var(--g-radius-lg) var(--g-radius-lg) 0 0; animation-name: gsheet-in; padding-left: max(14px, var(--sa-l)); }
+}
+.gpanel-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.gpanel-head h2 { flex: 1; font-family: "Playfair Display", Georgia, serif; font-size: 18px; color: var(--g-champagne); }
+.gpanel-tabs { display: flex; gap: 6px; margin-bottom: 10px; overflow-x: auto; }
+.gpanel-tabs button { flex: none; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--g-muted); border: var(--g-border) solid rgba(255, 255, 255, 0.12); }
+.gpanel-tabs button[aria-selected="true"] { color: #2a1a04; background: var(--g-gold); border-color: var(--g-gold); }
+.gpanel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 10px; }
+.gcard { border-radius: var(--g-radius); border: var(--g-border) solid rgba(242, 193, 78, 0.18); background: rgba(0, 0, 0, 0.28); padding: 10px 12px; }
+.gcard-title { margin-bottom: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--g-muted); }
+@keyframes gfade { from { opacity: 0; } }
+@keyframes gslide-in { from { transform: translateX(24px); opacity: 0; } }
+@keyframes gsheet-in { from { transform: translateY(24px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .gbtn, .gicon, .gchip { transition: none; }
+  .gbtn:active:not(:disabled), .gicon:active { transform: none; }
+  .gpanel, .gpanel-scrim { animation: none; }
+  .gtimer--warn { animation: none; }
+  .gbtn-spin { animation-duration: 2s; }
+}

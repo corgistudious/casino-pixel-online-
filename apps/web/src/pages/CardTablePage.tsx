@@ -18,6 +18,9 @@ import { useCatalog } from '../store/catalog';
 import { useSession } from '../store/session';
 import { Button } from '../ui/Button';
 import { toast } from '../ui/toast';
+import { GameButton } from '../ui/game/GameButton';
+import { GameCard, GameStat, GameTimer } from '../ui/game/GameParts';
+import { GameTableLayout, type GameTool } from '../ui/game/GameTableLayout';
 
 const HAND_LABELS = ['high_card', 'pair', 'two_pair', 'trips', 'straight', 'flush', 'full_house', 'quads', 'straight_flush', 'sap', 'lieng', 'anh', 'diem'];
 
@@ -39,6 +42,7 @@ function CardTable({ tableId }: { tableId: string }) {
   const [buyIn, setBuyIn] = useState(0);
   const [pickSeat, setPickSeat] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
+  const [acting, setActing] = useState<string | null>(null);
   const [locked, setLocked] = useState(false);
   const [joinKey, setJoinKey] = useState(0);
   const [, setTick] = useState(0);
@@ -115,6 +119,7 @@ function CardTable({ tableId }: { tableId: string }) {
     const s = scene.current;
     if (!s || !view) return;
     s.setLabels(labels);
+    s.setStageLight(view.table.game === 'xito');
     s.render(view, backs);
   }, [view, backs, labels]);
 
@@ -125,14 +130,16 @@ function CardTable({ tableId }: { tableId: string }) {
   }, [legal?.minRaiseTo, hand?.seq, hand?.street]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const send = async (action: 'fold' | 'check' | 'call' | 'bet' | 'raise' | 'allin', amount?: number) => {
-    if (!hand) return;
+    if (!hand || busy) return;
     setBusy(true);
+    setActing(action);
     try {
       await socket.request('card.act', { tableId, handId: hand.id, action, amount });
     } catch (err) {
       toast(errorText(t, err, i18n.language), 'error');
     } finally {
       setBusy(false);
+      setActing(null);
     }
   };
 
@@ -164,34 +171,209 @@ function CardTable({ tableId }: { tableId: string }) {
   const left = hand?.deadline ? Math.max(0, Math.ceil((hand.deadline - now()) / 1000)) : null;
   const pot = hand?.pot ?? 0;
 
+  const myStack = mySeat ? (hand?.players.find((p) => p.seat === mySeat.seat)?.stack ?? mySeat.stack) : 0;
+  const configLine = cfg
+    ? `${view.table.game === 'poker' ? t('cards.blinds', { sb: fmt(cfg.smallBlind), bb: fmt(cfg.bigBlind) }) : t('cards.ante', { ante: fmt(cfg.ante) })}${hand ? ` · ${t('cards.hand', { n: hand.seq })}` : ''}${view.match ? ` · ${t('cards.matchHands', { n: view.match.hands, max: view.match.maxHands })}` : ''}`
+    : '';
+  const passwordPrompt = locked && (
+    <RoomPasswordPrompt
+      roomId={`card:${tableId}`}
+      onClose={() => navigate('/custom-rooms')}
+      onJoined={() => {
+        setLocked(false);
+        setJoinKey((k) => k + 1);
+      }}
+    />
+  );
+  const canvas = (
+    <>
+      <PhaserView<CardTableScene>
+        create={() => new CardTableScene()}
+        onReady={(s) => {
+          scene.current = s;
+          s.setClock(now);
+          s.setSeatHandler((uid, at) => usePlayerMenu.getState().show({ uid, context: `table:card:${tableId}`, rect: { top: at.y, bottom: at.y, left: at.x, right: at.x } }));
+          s.setLabels(labels);
+          if (viewRef.current) s.render(viewRef.current, backs);
+        }}
+      />
+      {/* Which back each seat shows (seat owner's cosmetic), for QA; no card data. */}
+      <span hidden data-card-backs={JSON.stringify(Object.fromEntries(Object.entries(backs).map(([seat, b]) => [seat, b?.key ?? null])))} />
+      {view?.match && view.match.status !== 'active' && (
+        <div className="absolute inset-x-0 top-1/3 mx-auto w-fit rounded-2xl border border-gold-300/60 bg-ink-950/90 px-6 py-4 text-center shadow-glow">
+          <div className="font-display text-2xl font-extrabold text-gold-100">{view.match.winnerUid === me?.uid ? t('cards.matchWon') : view.match.winnerUid ? t('cards.matchLost') : t('cards.matchVoid')}</div>
+          <Link to="/rank" className="mt-2 inline-block text-sm font-semibold text-white/80 underline">
+            {t('rank.title')}
+          </Link>
+        </div>
+      )}
+    </>
+  );
+
+  // Xì Tố: new table layout. Poker and Liêng keep the previous layout until their redesign is approved.
+  // Known before the first server view arrives (table ids name their game), so the loading state of a
+  // Xì Tố table already uses the new layout.
+  const xito = view ? view.table.game === 'xito' : /(^|[-_])xito([-_]|$)/.test(tableId);
+  if (xito) {
+    const standButton = mySeat && (
+      <GameButton size="sm" onClick={() => void stand()}>
+        {ranked ? t('cards.forfeit') : t('cards.stand')}
+      </GameButton>
+    );
+    const tools: GameTool[] = [
+      {
+        id: 'room',
+        label: t('gameUi.room'),
+        icon: 'room',
+        content: (
+          <>
+            <RoomPanel engine="card" tableId={tableId} members={view?.seats ?? []} />
+            {configLine && <GameCard><p className="text-xs font-semibold text-white/65">{configLine}</p></GameCard>}
+            {standButton}
+            <Link to="/rooms" className="text-center text-xs text-white/55 underline">
+              {t('cards.backToLobby')}
+            </Link>
+            <p className="text-[11px] leading-snug text-white/40">{ranked ? t('cards.rankedNote') : t('app.disclaimer')}</p>
+          </>
+        ),
+      },
+      {
+        id: 'info',
+        label: t('gameUi.info'),
+        icon: 'info',
+        content: hand ? (
+          <GameCard title={t('fairness.title')}>
+            <div className="space-y-1 break-all font-mono text-[11px] text-white/60">
+              <div>
+                <span className="font-sans text-white/40">{t('tables.seedHash')}</span> {hand.seedHash}
+              </div>
+              {hand.serverSeed && (
+                <div>
+                  <span className="font-sans text-white/40">{t('tables.seed')}</span> {hand.serverSeed}
+                </div>
+              )}
+              <p className="font-sans text-white/45">{t('cards.fairHint')}</p>
+            </div>
+          </GameCard>
+        ) : (
+          <p className="text-xs text-white/50">{t('cards.nextHand')}</p>
+        ),
+      },
+    ];
+    const raiseLabel = hand && hand.currentBet > 0 ? t('cards.raiseTo') : t('cards.bet');
+    return (
+      <GameTableLayout
+        title={view ? view.table.name[i18n.language === 'en' ? 'en' : 'vi'] : t('cards.lobby')}
+        subtitle={configLine}
+        status={legal && left !== null ? <GameTimer label={t('cards.yourTurn')} seconds={left} warn={left <= 5} /> : undefined}
+        tools={tools}
+        stage={
+          <div className="gstage-canvas">
+            {canvas}
+            {passwordPrompt}
+          </div>
+        }
+        controls={
+          <>
+            <div className="gbar-group gbar-group--wide">
+              <GameStat label={t('cards.pot')} value={fmt(pot)} accent />
+              {mySeat && <GameStat label={ranked ? t('cards.matchChips') : t('cards.myStack')} value={fmt(myStack)} />}
+            </div>
+            {legal ? (
+              <>
+                <div className="gbar-group">
+                  <GameButton tone="ghost-danger" loading={acting === 'fold'} disabled={busy} onClick={() => void send('fold')}>
+                    {t('cards.fold')}
+                  </GameButton>
+                  {legal.canCheck ? (
+                    <GameButton tone="positive" loading={acting === 'check'} disabled={busy} onClick={() => void send('check')}>
+                      {t('cards.check')}
+                    </GameButton>
+                  ) : (
+                    <GameButton tone="positive" loading={acting === 'call'} disabled={busy} onClick={() => void send('call')}>
+                      {t('cards.call', { n: fmt(legal.toCall) })}
+                    </GameButton>
+                  )}
+                </div>
+                {legal.canRaise && legal.minRaiseTo < legal.maxRaiseTo && (
+                  <div className="gbar-group">
+                    <input type="range" className="grange" min={legal.minRaiseTo} max={legal.maxRaiseTo} step={cfg?.bigBlind ?? 1} value={raise} onChange={(e) => setRaise(Number(e.target.value))} aria-label={t('cards.raiseTo')} />
+                    {[
+                      ['½', Math.floor(pot / 2)],
+                      [t('cards.potShort'), pot],
+                      ['2×', (hand?.currentBet ?? 0) * 2],
+                    ].map(([label, v]) => (
+                      <GameButton key={String(label)} size="sm" disabled={busy} onClick={() => setRaise(Math.min(legal.maxRaiseTo, Math.max(legal.minRaiseTo, Number(v))))}>
+                        {label}
+                      </GameButton>
+                    ))}
+                    <GameButton tone="primary" loading={acting === 'raise' || acting === 'bet'} disabled={busy} onClick={() => void send(hand!.currentBet > 0 ? 'raise' : 'bet', raise)}>
+                      {raiseLabel} {fmt(raise)}
+                    </GameButton>
+                  </div>
+                )}
+                <div className="gbar-group">
+                  <GameButton tone="danger" loading={acting === 'allin'} disabled={busy} onClick={() => void send('allin')}>
+                    {t('cards.allInBtn')}
+                  </GameButton>
+                </div>
+              </>
+            ) : mySeat ? (
+              <div className="gbar-group">
+                <p className="gbar-note">{hand?.phase === 'betting' ? t('cards.waitTurn') : t('cards.nextHand')}</p>
+                {mySeat.status === 'sitting_out' && (
+                  <GameButton tone="primary" onClick={() => void socket.request('card.back', { tableId }).then(apply, (err) => toast(errorText(t, err, i18n.language), 'error'))}>
+                    {t('cards.imBack')}
+                  </GameButton>
+                )}
+                {standButton}
+              </div>
+            ) : !ranked && cfg ? (
+              <>
+                <div className="gbar-group" role="group" aria-label={t('cards.chooseSeat')}>
+                  <span className="gbar-note">{t('cards.chooseSeat')}</span>
+                  {freeSeats.map((seatNo) => (
+                    <GameButton
+                      key={seatNo}
+                      size="sm"
+                      selected={pickSeat === seatNo}
+                      aria-label={t('gameUi.seat', { n: seatNo + 1 })}
+                      onClick={() => {
+                        setPickSeat(seatNo);
+                        setBuyIn(Math.min(cfg.maxBuyIn, Math.max(cfg.minBuyIn, Math.min(balance, cfg.minBuyIn * 5))));
+                      }}
+                    >
+                      {seatNo + 1}
+                    </GameButton>
+                  ))}
+                  {freeSeats.length === 0 && <span className="gbar-note">{t('cards.full')}</span>}
+                </div>
+                {pickSeat !== null && (
+                  <div className="gbar-group">
+                    <input type="range" className="grange" min={cfg.minBuyIn} max={Math.min(cfg.maxBuyIn, Math.max(cfg.minBuyIn, balance))} step={cfg.bigBlind} value={buyIn} onChange={(e) => setBuyIn(Number(e.target.value))} aria-label={t('cards.buyInLabel')} />
+                    <GameButton tone="primary" onClick={() => void sit()} disabled={balance < cfg.minBuyIn}>
+                      {t('cards.sitWith', { n: fmt(buyIn) })}
+                    </GameButton>
+                    {balance < cfg.minBuyIn && <span className="gbar-note text-red-200">{t('errors.insufficient_funds')}</span>}
+                  </div>
+                )}
+              </>
+            ) : null}
+          </>
+        }
+      />
+    );
+  }
+
   return (
     <GameLayout
       title={view ? view.table.name[i18n.language === 'en' ? 'en' : 'vi'] : t('cards.lobby')}
       canvas={
         <>
-          <PhaserView<CardTableScene>
-            create={() => new CardTableScene()}
-            onReady={(s) => {
-              scene.current = s;
-              s.setClock(now);
-              s.setSeatHandler((uid, at) => usePlayerMenu.getState().show({ uid, context: `table:card:${tableId}`, rect: { top: at.y, bottom: at.y, left: at.x, right: at.x } }));
-              s.setLabels(labels);
-              if (viewRef.current) s.render(viewRef.current, backs);
-            }}
-          />
-          {/* Which back each seat shows (seat owner's cosmetic), for QA; no card data. */}
-          <span hidden data-card-backs={JSON.stringify(Object.fromEntries(Object.entries(backs).map(([seat, b]) => [seat, b?.key ?? null])))} />
+          {canvas}
           {legal && left !== null && (
             <div className={`pointer-events-none absolute right-3 top-2 rounded-full border px-4 py-1.5 text-sm font-bold backdrop-blur ${left <= 5 ? 'animate-pulse border-red-400/80 bg-red-950/80 text-red-100' : 'border-gold-300/50 bg-ink-950/80 text-gold-100'}`} role="status">
               {t('cards.yourTurn')} · {left}s
-            </div>
-          )}
-          {view?.match && view.match.status !== 'active' && (
-            <div className="absolute inset-x-0 top-1/3 mx-auto w-fit rounded-2xl border border-gold-300/60 bg-ink-950/90 px-6 py-4 text-center shadow-glow">
-              <div className="font-display text-2xl font-extrabold text-gold-100">{view.match.winnerUid === me?.uid ? t('cards.matchWon') : view.match.winnerUid ? t('cards.matchLost') : t('cards.matchVoid')}</div>
-              <Link to="/rank" className="mt-2 inline-block text-sm font-semibold text-white/80 underline">
-                {t('rank.title')}
-              </Link>
             </div>
           )}
         </>
@@ -199,16 +381,7 @@ function CardTable({ tableId }: { tableId: string }) {
       panel={
         <>
           <RoomPanel engine="card" tableId={tableId} members={view?.seats ?? []} />
-          {locked && (
-            <RoomPasswordPrompt
-              roomId={`card:${tableId}`}
-              onClose={() => navigate('/custom-rooms')}
-              onJoined={() => {
-                setLocked(false);
-                setJoinKey((k) => k + 1);
-              }}
-            />
-          )}
+          {passwordPrompt}
           {cfg && (
             <div className="text-[11px] font-semibold text-white/55">
               {view.table.game === 'poker' ? t('cards.blinds', { sb: fmt(cfg.smallBlind), bb: fmt(cfg.bigBlind) }) : t('cards.ante', { ante: fmt(cfg.ante) })}

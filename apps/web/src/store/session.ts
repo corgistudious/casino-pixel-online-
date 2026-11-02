@@ -108,7 +108,7 @@ export const useSession = create<SessionStore>((set, get) => {
       if (IS_DEMO) {
         const { user } = await api<{ user: PublicUser }>('/api/me');
         const { wins } = await api<{ wins: BigWinEvent[] }>('/api/bigwins');
-        return set({ token: DEMO_TOKEN, user, balance: user.balance, gold: user.gold, online: 1, bigWins: wins, booting: false });
+        return set({ token: DEMO_TOKEN, user, balance: user.balance, gold: user.gold, online: 1, bigWins: wins, booting: false, status: 'online' });
       }
       const token = storage.get(TOKEN_KEY);
       if (!token) return set({ booting: false });

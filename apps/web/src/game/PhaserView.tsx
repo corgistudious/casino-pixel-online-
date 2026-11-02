@@ -12,6 +12,7 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
   // Phaser FIT scales to its parent: the parent keeps the stable box so the on-screen keyboard never
   // shrinks the table (its bottom is clipped behind the keyboard instead). See lib/viewport.ts.
   const box = useStableSize(frame);
+  const gameRef = useRef<Phaser.Game | null>(null);
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   // The viewer's own table skin, fixed for the scene's lifetime (exposed for QA, never sent anywhere).
@@ -35,15 +36,27 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
       banner: false,
       scene,
     });
+    gameRef.current = game;
     let alive = true;
     void scene.ready.then(() => alive && readyRef.current(scene));
     return () => {
       alive = false;
+      gameRef.current = null;
       game.destroy(true);
     };
     // The scene factory is stable per mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Phaser only re-fits on window resize; the layout around the table can change without one
+  // (fonts loading, the HUD or control bar changing height): re-fit whenever the stable box changes.
+  useEffect(() => {
+    const scale = gameRef.current?.scale;
+    if (!box || !scale) return;
+    // refresh() reuses the cached parent size; re-measure the parent first.
+    scale.getParentBounds();
+    scale.refresh();
+  }, [box?.w, box?.h]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div ref={frame} data-table-skin={skin} className="h-full w-full overflow-hidden rounded-2xl">
