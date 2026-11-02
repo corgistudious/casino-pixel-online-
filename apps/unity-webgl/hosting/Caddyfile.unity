@@ -1,0 +1,19 @@
+# Serving the Unity WebGL build under /unity/ on STAGING (add inside the site block of the staging
+# web container; never applied to Production without Owner approval).
+# Build files are named by content hash (nameFilesAsHashes) → cache forever; the page is no-cache.
+handle_path /unity/* {
+	root * /srv/unity
+	@br path *.br
+	header @br Content-Encoding br
+	@wasm path *.wasm.br
+	header @wasm Content-Type application/wasm
+	@js path *.js.br
+	header @js Content-Type application/javascript
+	@data path *.data.br
+	header @data Content-Type application/octet-stream
+	@build path /Build/*
+	header @build Cache-Control "public, max-age=31536000, immutable"
+	@page path / /index.html /keyoViewport.js
+	header @page Cache-Control "no-cache"
+	file_server
+}

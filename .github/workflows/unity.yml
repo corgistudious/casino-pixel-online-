@@ -1,0 +1,103 @@
+name: Unity WebGL
+
+# Unity + React hybrid frontend (apps/unity-webgl). Production is untouched by this workflow.
+# - core: engine-agnostic C# (dotnet test) + viewport manager (node --test) + i18n export freshness.
+#   No Unity licence needed; runs on every change.
+# - unity: EditMode tests + WebGL build through GameCI. Runs only when the licence secrets exist
+#   (UNITY_LICENSE + UNITY_EMAIL + UNITY_PASSWORD, or UNITY_SERIAL for Pro). Without them the job is
+#   skipped and reported as BLOCKED — never as passed.
+
+on:
+  push:
+    branches: ["unity/**"]
+    paths: ["apps/unity-webgl/**", "packages/shared/src/i18n/**", "packages/shared/src/games/**", ".github/workflows/unity.yml"]
+  pull_request:
+    paths: ["apps/unity-webgl/**", "packages/shared/src/i18n/**", "packages/shared/src/games/**", ".github/workflows/unity.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: unity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --filter "@casino/shared..."
+      - name: i18n export is up to date (Unity reads the same VI/EN as React)
+        run: packages/shared/node_modules/.bin/tsx apps/unity-webgl/tools/export-i18n.mts --check
+      - name: Core C# tests (same files Unity compiles)
+        run: dotnet test apps/unity-webgl/dotnet/KeyoGame.Core.Tests --logger "trx;LogFileName=core.trx"
+      - name: Viewport manager tests
+        run: node --test "apps/unity-webgl/web-tests/*.test.mjs"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: core-test-results
+          path: apps/unity-webgl/dotnet/KeyoGame.Core.Tests/TestResults/
+
+  licence:
+    runs-on: ubuntu-24.04
+    outputs:
+      available: ${{ steps.check.outputs.available }}
+    steps:
+      - id: check
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        run: |
+          if [ -n "$UNITY_LICENSE" ] || [ -n "$UNITY_SERIAL" ]; then echo "available=true" >> "$GITHUB_OUTPUT"
+          else echo "available=false" >> "$GITHUB_OUTPUT"; echo "::warning::Unity licence secrets not set — Unity tests and WebGL build are BLOCKED (not run)."; fi
+
+  unity:
+    needs: [core, licence]
+    if: needs.licence.outputs.available == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/cache@v4
+        with:
+          path: apps/unity-webgl/Library
+          key: unity-library-${{ hashFiles('apps/unity-webgl/Packages/manifest.json', 'apps/unity-webgl/ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: unity-library-
+      - name: EditMode tests
+        uses: game-ci/unity-test-runner@v4
+        with:
+          projectPath: apps/unity-webgl
+          testMode: editmode
+          artifactsPath: unity-test-results
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Unity EditMode results
+      - name: WebGL build
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: apps/unity-webgl
+          targetPlatform: WebGL
+          buildMethod: KeyoGame.EditorTools.KeyoBuild.BuildWebGL
+          buildsPath: build
+          allowDirtyBuild: true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-webgl-${{ github.sha }}
+          path: |
+            build/WebGL
+            unity-test-results
+          retention-days: 14

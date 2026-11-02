@@ -42,6 +42,9 @@ namespace KeyoGame.Localization
             return s;
         }
 
+        /// <summary>The current locale's string only (no fallback); null when missing. For coverage checks.</summary>
+        public string GetStrict(string key) => Lookup(Locale, key);
+
         private string Lookup(string locale, string key) => _byLocale.TryGetValue(locale, out var d) && d.TryGetValue(key, out var v) ? v : null;
 
         private static void Flatten(JToken t, string prefix, Dictionary<string, string> into)

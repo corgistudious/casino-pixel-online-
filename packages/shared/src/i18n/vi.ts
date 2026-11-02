@@ -1817,6 +1817,17 @@ export const vi: Translation = {
       reversed: 'Đã hủy',
     },
   },
+  unity: {
+    connecting: 'Đang kết nối máy chủ game…',
+    reconnecting: 'Mất kết nối — đang kết nối lại…',
+    sessionExpired: 'Phiên đăng nhập đã kết thúc. Vui lòng đăng nhập lại.',
+    outcomeUnknown: 'Mất kết nối trước khi máy chủ xác nhận — đang kiểm tra cược của bạn…',
+    notConnected: 'Chưa kết nối. Vui lòng chờ trong giây lát.',
+    loading: 'Đang tải bàn chơi…',
+    unsupported: 'Thiết bị này không chạy được bàn chơi HD. Phiên bản tiêu chuẩn vẫn hoạt động bình thường.',
+    clear: 'Xóa',
+    balance: 'Số dư: {{amount}}',
+  },
   errors: {
     bad_request: 'Yêu cầu không hợp lệ.',
     unauthorized: 'Vui lòng đăng nhập lại.',

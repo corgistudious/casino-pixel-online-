@@ -1,0 +1,14 @@
+{
+  "name": "KeyoGame.Editor",
+  "rootNamespace": "KeyoGame.EditorTools",
+  "references": ["KeyoGame.Core", "KeyoGame.Runtime"],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

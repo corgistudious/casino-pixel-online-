@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#05040b" />
+    <title>{{{ PRODUCT_NAME }}}</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #05040b; overscroll-behavior: none; }
+      #keyo-canvas { display: block; position: fixed; left: 0; top: 0; background: #05040b; touch-action: none; }
+      #keyo-loading { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: #f2c14e; font: 600 15px system-ui, sans-serif; }
+      #keyo-bar { width: min(60vw, 320px); height: 4px; border-radius: 4px; background: rgba(255,255,255,.12); overflow: hidden; }
+      #keyo-fill { width: 0; height: 100%; background: linear-gradient(90deg, #b9801c, #f2c14e); transition: width .2s; }
+      #keyo-safe { position: fixed; visibility: hidden; pointer-events: none; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+    </style>
+  </head>
+  <body>
+    <canvas id="keyo-canvas" tabindex="-1"></canvas>
+    <div id="keyo-loading"><div>KEYO GAME</div><div id="keyo-bar"><div id="keyo-fill"></div></div></div>
+    <div id="keyo-safe"></div>
+    <script type="module">
+      // Host page of the Unity WebGL build, opened by the React app in a same-origin iframe:
+      //   /unity/index.html?game=taixiu&table=<id>&lang=vi
+      // React keeps auth, chat, bank and admin; Unity draws the game. Removing the iframe frees the
+      // whole Unity heap (memory P0). The session token is never passed in the URL or postMessage:
+      // Unity reads it from the same-origin storage the React app already uses.
+      import { deviceTier, installViewportManager, renderSize, supportsUnity } from './keyoViewport.js';
+
+      const q = new URLSearchParams(location.search);
+      const toParent = (payload) => { try { parent !== window && parent.postMessage({ source: 'keyo-unity', payload }, location.origin); } catch (e) {} };
+
+      const gl2 = (() => { try { return !!document.createElement('canvas').getContext('webgl2'); } catch (e) { return false; } })();
+      const gl1 = (() => { try { return !!document.createElement('canvas').getContext('webgl'); } catch (e) { return false; } })();
+      let maxTex = 4096;
+      try { const g = document.createElement('canvas').getContext(gl2 ? 'webgl2' : 'webgl'); maxTex = g ? g.getParameter(g.MAX_TEXTURE_SIZE) : 0; } catch (e) {}
+      const caps = {
+        webgl2: gl2, webgl1: gl1, wasm: typeof WebAssembly === 'object',
+        deviceMemory: navigator.deviceMemory, cores: navigator.hardwareConcurrency, maxTextureSize: maxTex,
+        mobile: matchMedia('(pointer: coarse)').matches,
+      };
+      const support = supportsUnity(caps);
+      if (!support.ok) {
+        // React keeps the standard (non-Unity) table: no function is lost.
+        toParent({ type: 'unsupported', reason: support.reason });
+        document.getElementById('keyo-loading').textContent = '';
+      } else {
+        start();
+      }
+
+      function start() {
+        const canvas = document.getElementById('keyo-canvas');
+        const tier = deviceTier(caps);
+        let dprCap = tier === 'low' ? 1 : tier === 'medium' ? 1.5 : 2;
+        let unity = null;
+        let lastCss = null;
+
+        window.KeyoHost = {
+          context: {
+            wsUrl: (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws',
+            locale: q.get('lang') === 'en' ? 'en' : 'vi',
+            game: q.get('game') || 'taixiu',
+            tableId: q.get('table') || '',
+            tier,
+            ceiling: tier,
+          },
+          post: (json) => { try { toParent(JSON.parse(json)); } catch (e) {} },
+          setDprCap: (cap) => { dprCap = cap; if (lastCss) apply(lastCss); },
+        };
+
+        const safe = () => {
+          const cs = getComputedStyle(document.getElementById('keyo-safe'));
+          return { t: parseFloat(cs.paddingTop) || 0, r: parseFloat(cs.paddingRight) || 0, b: parseFloat(cs.paddingBottom) || 0, l: parseFloat(cs.paddingLeft) || 0 };
+        };
+        // Only verified, settled sizes reach the canvas and Unity (keyoViewport.js).
+        const apply = (css) => {
+          lastCss = css;
+          const r = renderSize(css, window.devicePixelRatio, dprCap);
+          canvas.style.width = css.w + 'px';
+          canvas.style.height = css.h + 'px';
+          if (unity) {
+            unity.Module.devicePixelRatio = r.ratio;
+            unity.SendMessage('KeyoApp', 'OnViewport', JSON.stringify({ w: css.w, h: css.h, ratio: r.ratio, safe: safe(), reason: css.reason }));
+          }
+        };
+        installViewportManager({ onCommit: apply });
+
+        addEventListener('message', (e) => {
+          if (e.origin !== location.origin || !e.data || e.data.source !== 'keyo-react' || !unity) return;
+          unity.SendMessage('KeyoApp', 'OnHostMessage', JSON.stringify(e.data.payload || {}));
+        });
+
+        const buildUrl = 'Build';
+        const config = {
+          dataUrl: buildUrl + '/{{{ DATA_FILENAME }}}',
+          frameworkUrl: buildUrl + '/{{{ FRAMEWORK_FILENAME }}}',
+          codeUrl: buildUrl + '/{{{ CODE_FILENAME }}}',
+          companyName: '{{{ COMPANY_NAME }}}',
+          productName: '{{{ PRODUCT_NAME }}}',
+          productVersion: '{{{ PRODUCT_VERSION }}}',
+          devicePixelRatio: Math.min(window.devicePixelRatio || 1, dprCap),
+          matchWebGLToCanvasSize: true,
+        };
+        const fill = document.getElementById('keyo-fill');
+        const s = document.createElement('script');
+        s.src = buildUrl + '/{{{ LOADER_FILENAME }}}';
+        s.onload = () => {
+          createUnityInstance(canvas, config, (p) => { fill.style.width = Math.round(p * 100) + '%'; })
+            .then((instance) => {
+              unity = instance;
+              document.getElementById('keyo-loading').remove();
+              if (lastCss) apply(lastCss);
+            })
+            .catch((err) => {
+              // Out of memory / unsupported at runtime: hand back to React (fallback), never loop.
+              toParent({ type: 'load-failed', message: String(err).slice(0, 200) });
+            });
+        };
+        s.onerror = () => toParent({ type: 'load-failed', message: 'loader' });
+        document.body.appendChild(s);
+      }
+    </script>
+  </body>
+</html>

@@ -1815,6 +1815,17 @@ export const en = {
       reversed: 'Reversed',
     },
   },
+  unity: {
+    connecting: 'Connecting to the game server…',
+    reconnecting: 'Connection lost — reconnecting…',
+    sessionExpired: 'Your session has ended. Please sign in again.',
+    outcomeUnknown: 'Connection lost before the server confirmed — checking your bets…',
+    notConnected: 'Not connected yet. Please wait a moment.',
+    loading: 'Loading the table…',
+    unsupported: 'This device cannot run the HD tables. The standard version keeps working.',
+    clear: 'Clear',
+    balance: 'Balance: {{amount}}',
+  },
   errors: {
     bad_request: 'Invalid request.',
     unauthorized: 'Please log in again.',
