@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { create } from 'zustand';
 import { useFullscreen, toggleFullscreen } from '../../lib/fullscreen';
+import { useStableSize } from '../../lib/viewport';
 import { DemoBanner } from '../AppShell';
 import { GameIconButton } from './GameButton';
 import { GameIcon, type GameIconName } from './GameIcons';
@@ -56,6 +57,11 @@ export function GameTableLayout({
   const navigate = useNavigate();
   const [openId, setOpenId] = useState<string | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  // The on-screen keyboard (in-game chat) must not re-layout the table: every HUD size is relative
+  // to this container, so it keeps its stable box (lib/viewport.ts) and its bottom is clipped behind
+  // the keyboard instead, exactly like the Phaser canvas. Rotation and window resizes apply at once.
+  const hostRef = useRef<HTMLDivElement>(null);
+  const box = useStableSize(hostRef);
   const chatOpen = useGameChat((s) => s.open);
   const open = tools.find((x) => x.id === openId) ?? null;
 
@@ -74,7 +80,8 @@ export function GameTableLayout({
   }, [open]);
 
   return (
-    <div className="game-shell" data-game-layout>
+    <div ref={hostRef} className="game-host">
+    <div className="game-shell" data-game-layout style={box ? { width: box.w, height: box.h } : undefined}>
       <div className="game-grid">
         <div className="gbanner">
           <DemoBanner />
@@ -137,6 +144,7 @@ export function GameTableLayout({
           </aside>
         </>
       )}
+    </div>
     </div>
   );
 }

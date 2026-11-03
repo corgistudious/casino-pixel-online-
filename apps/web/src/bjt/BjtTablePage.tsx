@@ -232,7 +232,7 @@ export function BjtTablePage() {
       status={<GameTimer label={banner} seconds={round && round.phase !== 'done' ? left : null} warn={myTurn && left !== null && left <= 5} />}
       tools={[roomTool]}
       stage={
-        <FitStage ratio={16 / 10} designWidth={720}>
+        <FitStage ratio={16 / 9} designWidth={720}>
           {(scale) => {
             const k = Math.min(1.6, Math.max(0.6, scale));
             return (
@@ -244,7 +244,7 @@ export function BjtTablePage() {
                     <TableSkinCanvas skinId={tableSkin} layout="arc" />
                   </div>
                   <div className="pointer-events-none absolute inset-6 rounded-[50%/40%] border border-gold-300/30" />
-                  <div className="pointer-events-none absolute left-1/2 top-[44%] -translate-x-1/2 whitespace-nowrap text-center text-[10px] uppercase tracking-[0.3em] text-gold-100/50">Blackjack pays 3 to 2 · Insurance pays 2 to 1</div>
+                  <div className="pointer-events-none absolute left-1/2 top-[44%] w-[70%] -translate-x-1/2 text-center text-[10px] uppercase tracking-[0.3em] text-gold-100/50">Blackjack pays 3 to 2 · Insurance pays 2 to 1</div>
                   {/* Dealer */}
                   <div className="absolute left-1/2 top-[6%] flex -translate-x-1/2 flex-col items-center gap-1">
                     <span className="rounded-full bg-black/40 px-3 py-0.5 text-xs font-label text-gold-100">
@@ -266,7 +266,7 @@ export function BjtTablePage() {
                         {p && <Hands p={p} active={turnSeat === seat} fmt={fmt} t={t} done={round?.phase === 'done'} k={k} />}
                         {s ? (
                           <PlayerTrigger uid={s.uid} label={s.displayName} context={`table:bj:${tableId}`} className="rounded-full">
-                            <SeatPlate s={s} turn={turnSeat === seat} me={seat === mySeat} t={t} />
+                            <SeatPlate s={s} turn={turnSeat === seat} me={seat === mySeat} t={t} compact={k < 0.85} />
                           </PlayerTrigger>
                         ) : mySeat === null ? (
                           <button type="button" aria-label={`${t('bjt.sit')} ${seat + 1}`} disabled={busy || tb.status !== 'open'} onClick={() => void send('bjt.sit', { seat })} className="min-h-8 rounded-full border border-dashed border-gold-300/60 bg-black/30 px-3 py-2 text-xs font-label text-gold-100 hover:bg-gold-300/15">
@@ -296,18 +296,18 @@ export function BjtTablePage() {
   );
 }
 
-function SeatPlate({ s, turn, me, t }: { s: BjtSeatView; turn: boolean; me: boolean; t: (k: string) => string }) {
+function SeatPlate({ s, turn, me, t, compact = false }: { s: BjtSeatView; turn: boolean; me: boolean; t: (k: string) => string; compact?: boolean }) {
   return (
     <div className={`flex items-center gap-2 rounded-full border px-2 py-1 backdrop-blur ${turn ? 'border-cyan-300 bg-cyan-500/20 shadow-[0_0_16px_rgba(90,216,255,0.7)]' : me ? 'border-gold-300/70 bg-black/50' : 'border-white/15 bg-black/45'}`}>
       <div className={s.online ? '' : 'opacity-50 grayscale'}>
-        <PlayerAvatar player={s} size={30} />
+        <PlayerAvatar player={s} size={compact ? 24 : 30} />
       </div>
       <div className="min-w-0 leading-tight">
-        <div className="flex max-w-28 items-center gap-1">
+        <div className={`flex items-center gap-1 ${compact ? 'max-w-20' : 'max-w-28'}`}>
           <span className="truncate text-xs font-strong text-white">{s.displayName}</span>
           <PlayerRankBadge rank={s.rank} size={13} />
         </div>
-        <div className="text-[9px] text-white/50">{s.leaving ? t('bjt.leaving') : !s.online ? t('bjt.offline') : `UID ${s.uid}`}</div>
+        {(!compact || s.leaving || !s.online) && <div className="text-[9px] text-white/50">{s.leaving ? t('bjt.leaving') : !s.online ? t('bjt.offline') : `UID ${s.uid}`}</div>}
       </div>
     </div>
   );

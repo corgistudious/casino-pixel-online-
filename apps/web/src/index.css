@@ -303,6 +303,8 @@
   --g-touch-min: 32px;
 }
 
+/* The host follows the app root; the shell inside keeps a stable size (see GameTableLayout). */
+.game-host { position: relative; width: 100%; height: 100%; overflow: hidden; }
 .game-shell {
   position: relative;
   height: 100%;
@@ -565,7 +567,9 @@
 .gbalance-short { display: none; }
 
 /* Short & wide (phones in landscape): HUD → two slim columns beside the table. */
-@container game (max-height: 560px) and (min-aspect-ratio: 16/10) {
+/* Side rails: short landscape screens (phones) and very wide windows (21:9), where a 16:9 table is
+   limited by height anyway — the HUD moves beside it and the table gets the full height. */
+@container game ((max-height: 560px) and (min-aspect-ratio: 16/10)) or (min-aspect-ratio: 19/10) {
   .game-grid {
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-rows: auto minmax(0, 1fr) auto;
