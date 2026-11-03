@@ -595,5 +595,5 @@
   .gbalance-full { display: none; }
   .gbalance-short { display: inline; }
   .ghud-left .gtimer { max-width: 76px; }
-  .gstage { padding: clamp(2px, 0.8cqh, 6px) 0; }
+  .gstage { padding: clamp(1px, 0.3cqh, 3px) 0; }
 }
