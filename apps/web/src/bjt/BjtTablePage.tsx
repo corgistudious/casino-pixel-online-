@@ -1,6 +1,6 @@
 import { cardValue, type BjtPlayerView, type BjtSeatView, type BjtTableView, type Card } from '@casino/shared';
 import { PlayerAvatar, PlayerRankBadge } from '../players/identity';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { sfx } from '../audio/sfx';
@@ -13,9 +13,10 @@ import { PlayerTrigger } from '../players/PlayerActions';
 import { RoomPasswordPrompt } from '../rooms/RoomForm';
 import { RoomPanel } from '../rooms/RoomPanel';
 import { useSession } from '../store/session';
-import { AppShell } from '../ui/AppShell';
-import { Avatar } from '../ui/Avatar';
-import { Button } from '../ui/Button';
+import { FitStage } from '../ui/game/FitStage';
+import { GameButton } from '../ui/game/GameButton';
+import { GameCard, GameStat, GameTimer } from '../ui/game/GameParts';
+import { GameTableLayout, type GameTool } from '../ui/game/GameTableLayout';
 import { toast } from '../ui/toast';
 import { CardDefs, CardSvg } from './CardSvg';
 import { TableSkinCanvas } from '../cosmetics/TableSkinCanvas';
@@ -112,8 +113,15 @@ export function BjtTablePage() {
 
   if (!view) {
     return (
-      <AppShell>
-        <p className="p-6 text-white/50">{t('app.loading')}</p>
+      <>
+        <GameTableLayout
+          backTo="/bjt"
+          title={t('games.blackjack.name')}
+          status={<GameTimer label={t('app.loading')} />}
+          tools={[]}
+          stage={<div className="gstage-canvas" />}
+          controls={<p className="gbar-note">{t('app.loading')}</p>}
+        />
         {locked && (
           <RoomPasswordPrompt
             roomId={`bj:${tableId}`}
@@ -124,7 +132,7 @@ export function BjtTablePage() {
             }}
           />
         )}
-      </AppShell>
+      </>
     );
   }
   const tb = view.table;
@@ -136,133 +144,155 @@ export function BjtTablePage() {
 
   let banner = '';
   if (!round) banner = t('bjt.nextRound');
-  else if (round.phase === 'betting') banner = left !== null ? t('bjt.bettingIn', { s: left }) : t('bjt.betting');
-  else if (round.phase === 'insurance') banner = `${t('bjt.insurance')} · ${left ?? ''}s`;
-  else if (round.phase === 'playing') banner = turnSeat === mySeat ? t('bjt.yourTurn', { s: left ?? 0 }) : t('bjt.turnOf', { name: turnName ?? '' });
+  else if (round.phase === 'betting') banner = t('bjt.betting');
+  else if (round.phase === 'insurance') banner = t('bjt.insurance');
+  else if (round.phase === 'playing') banner = turnSeat === mySeat ? t('bjt.yourTurn', { s: left ?? 0 }).replace(/\s*·.*$/, '') : t('bjt.turnOf', { name: turnName ?? '' });
   else banner = t('bjt.done');
+  const myTurn = round?.phase === 'playing' && turnSeat === mySeat;
+  const insuranceOpen = round?.phase === 'insurance' && !!mine && mine.insurance === null;
+  const lang = i18n.language;
+
+  const roomTool: GameTool = {
+    id: 'room',
+    label: t('gameUi.room'),
+    icon: 'room',
+    content: (
+      <>
+        <GameCard title={tb.name[lang === 'en' ? 'en' : 'vi']}>
+          <p className="text-xs text-white/60">{t('bjt.limits', { min: fmt(tb.minBet), max: fmt(tb.maxBet) })}</p>
+          <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-gold-100/60">Blackjack pays 3 to 2 · Insurance pays 2 to 1</p>
+        </GameCard>
+        <RoomPanel engine="bj" tableId={tableId} members={view.seats} />
+        <div className="flex flex-wrap gap-2">
+          {mySeat !== null && (
+            <GameButton size="sm" tone="ghost-danger" disabled={busy} onClick={() => void send('bjt.stand', {})}>
+              {t('bjt.stand')}
+            </GameButton>
+          )}
+          <GameButton size="sm" onClick={() => navigate('/bjt')}>
+            {t('bjt.leaveTable')}
+          </GameButton>
+        </div>
+        {round && <p className="break-all text-[10px] text-white/35">{t('bjt.fair', { hash: round.seedHash.slice(0, 16) })}…</p>}
+      </>
+    ),
+  };
+
+  let controls: ReactNode;
+  if (mySeat === null) controls = <p className="gbar-note">{t('bjt.sitToPlay')}</p>;
+  else if (round?.phase === 'betting' && !mine)
+    controls = (
+      <>
+        <div className="gbar-group">
+          {CHIPS.filter((c) => c <= tb.maxBet).map((c) => (
+            <GameButton key={c} size="sm" onClick={() => setBet((b) => Math.min(tb.maxBet, b + c))}>
+              +{fmt(c)}
+            </GameButton>
+          ))}
+        </div>
+        <div className="gbar-group">
+          <GameStat label={t('play.bet')} value={fmt(bet)} accent />
+          <GameButton size="sm" onClick={() => setBet(0)} disabled={!bet}>
+            {t('play.clear')}
+          </GameButton>
+          <GameButton tone="primary" loading={busy} disabled={bet < tb.minBet || bet > balance} onClick={() => void send('bjt.bet', { amount: bet }).then((ok) => ok && sfx.chip())}>
+            {t('bjt.placeBet', { amount: fmt(bet) })}
+          </GameButton>
+        </div>
+      </>
+    );
+  else if (round?.phase === 'betting' && mine) controls = <p className="gbar-note">✓ {t('bjt.betPlaced', { amount: fmt(mine.bet) })} — {t('bjt.waitingBets')}</p>;
+  else if (insuranceOpen) controls = <p className="gbar-note">{t('bjt.insurance')}</p>;
+  else if (round?.phase === 'insurance') controls = <p className="gbar-note">{t('blackjack.insurance.waiting')}</p>;
+  else if (hand)
+    controls = (
+      <div className="gbar-group">
+        <GameButton tone="primary" loading={busy} onClick={() => act('hit')}>
+          {t('play.hit')}
+        </GameButton>
+        <GameButton tone="positive" disabled={busy} onClick={() => act('stand')}>
+          {t('play.stand')}
+        </GameButton>
+        <GameButton tone="danger" disabled={busy || !canDouble} onClick={() => act('double')}>
+          {t('play.double')}
+        </GameButton>
+        <GameButton tone="neutral" disabled={busy || !canSplit} onClick={() => act('split')}>
+          {t('play.split')}
+        </GameButton>
+      </div>
+    );
+  else if (round && !mine && round.phase !== 'done') controls = <p className="gbar-note">{t('bjt.waitNext')}</p>;
+  else controls = <p className="gbar-note">{round?.phase === 'done' ? t('bjt.nextRound') : banner}</p>;
 
   return (
-    <AppShell>
-      <CardDefs />
-      <div className="flex flex-col gap-3 p-3 lg:flex-row lg:p-5">
-        <section className="relative isolate aspect-[16/10] w-full min-w-0 overflow-hidden rounded-[2.5rem] border-[10px] shadow-[inset_0_0_80px_rgba(0,0,0,0.6),0_20px_40px_-20px_rgba(0,0,0,0.9)] lg:flex-1" style={{ borderColor: railCss }}>
-          {/* The viewer's own table skin (personal): other players keep seeing theirs. */}
-          <div className="absolute inset-0 -z-10">
-            <TableSkinCanvas skinId={tableSkin} layout="arc" />
-          </div>
-          <div className="pointer-events-none absolute inset-6 rounded-[50%/40%] border border-gold-300/30" />
-          <div className="pointer-events-none absolute left-1/2 top-[44%] -translate-x-1/2 text-center text-[10px] uppercase tracking-[0.3em] text-gold-100/50">Blackjack pays 3 to 2 · Insurance pays 2 to 1</div>
-          {/* Dealer */}
-          <div className="absolute left-1/2 top-[6%] flex -translate-x-1/2 flex-col items-center gap-1">
-            <span className="rounded-full bg-black/40 px-3 py-0.5 text-xs font-label text-gold-100">
-              {t('bjt.dealer')}
-              {round?.dealerTotal !== null && round?.dealerTotal !== undefined ? ` · ${round.dealerTotal}` : ''}
-            </span>
-            <div className="flex -space-x-6">
-              {(round?.dealer ?? []).map((c, i) => (
-                <CardSvg key={`${round!.id}-d${i}-${c ?? 'x'}`} card={c} width={58} className="animate-[dealIn_.35s_ease-out]" />
-              ))}
-            </div>
-          </div>
-          {/* Phase banner */}
-          <div className="absolute left-1/2 top-[33%] -translate-x-1/2 rounded-full border border-gold-300/40 bg-black/50 px-4 py-1 text-sm font-strong text-gold-100 shadow-glow" role="status">
-            {banner}
-          </div>
-          {/* Seats */}
-          {SEAT_POS.slice(0, tb.seats).map((pos, seat) => {
-            const s = view.seats.find((x) => x.seat === seat);
-            const p = round?.players.find((x) => x.seat === seat);
+    <GameTableLayout
+      backTo="/bjt"
+      title={tb.name[lang === 'en' ? 'en' : 'vi']}
+      subtitle={t('bjt.limits', { min: fmt(tb.minBet), max: fmt(tb.maxBet) })}
+      status={<GameTimer label={banner} seconds={round && round.phase !== 'done' ? left : null} warn={myTurn && left !== null && left <= 5} />}
+      tools={[roomTool]}
+      stage={
+        <FitStage ratio={16 / 10} designWidth={720}>
+          {(scale) => {
+            const k = Math.min(1.6, Math.max(0.6, scale));
             return (
-              <div key={seat} className="absolute flex w-[18%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1" style={{ left: `${pos.left}%`, top: `${pos.top}%` }}>
-                {p && <Hands p={p} active={turnSeat === seat} fmt={fmt} t={t} done={round?.phase === 'done'} />}
-                {s ? (
-                  <PlayerTrigger uid={s.uid} label={s.displayName} context={`table:bj:${tableId}`} className="rounded-full">
-                    <SeatPlate s={s} turn={turnSeat === seat} me={seat === mySeat} t={t} />
-                  </PlayerTrigger>
-                ) : mySeat === null ? (
-                  <button type="button" aria-label={`${t('bjt.sit')} ${seat + 1}`} disabled={busy || tb.status !== 'open'} onClick={() => void send('bjt.sit', { seat })} className="rounded-full border border-dashed border-gold-300/60 bg-black/30 px-3 py-2 text-xs font-label text-gold-100 hover:bg-gold-300/15">
-                    {t('bjt.sit')}
-                  </button>
-                ) : (
-                  <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[10px] text-white/35">{t('bjt.emptySeat')}</span>
+              <>
+                <CardDefs />
+                <section className="relative isolate h-full w-full overflow-hidden rounded-[2.5rem] border-[10px] shadow-[inset_0_0_80px_rgba(0,0,0,0.6),0_20px_40px_-20px_rgba(0,0,0,0.9)]" style={{ borderColor: railCss }}>
+                  {/* The viewer's own table skin (personal): other players keep seeing theirs. */}
+                  <div className="absolute inset-0 -z-10">
+                    <TableSkinCanvas skinId={tableSkin} layout="arc" />
+                  </div>
+                  <div className="pointer-events-none absolute inset-6 rounded-[50%/40%] border border-gold-300/30" />
+                  <div className="pointer-events-none absolute left-1/2 top-[44%] -translate-x-1/2 whitespace-nowrap text-center text-[10px] uppercase tracking-[0.3em] text-gold-100/50">Blackjack pays 3 to 2 · Insurance pays 2 to 1</div>
+                  {/* Dealer */}
+                  <div className="absolute left-1/2 top-[6%] flex -translate-x-1/2 flex-col items-center gap-1">
+                    <span className="rounded-full bg-black/40 px-3 py-0.5 text-xs font-label text-gold-100">
+                      {t('bjt.dealer')}
+                      {round?.dealerTotal !== null && round?.dealerTotal !== undefined ? ` · ${round.dealerTotal}` : ''}
+                    </span>
+                    <div className="flex -space-x-6">
+                      {(round?.dealer ?? []).map((c, i) => (
+                        <CardSvg key={`${round!.id}-d${i}-${c ?? 'x'}`} card={c} width={Math.round(58 * k)} className="animate-[dealIn_.35s_ease-out]" />
+                      ))}
+                    </div>
+                  </div>
+                  {/* Seats */}
+                  {SEAT_POS.slice(0, tb.seats).map((pos, seat) => {
+                    const s = view.seats.find((x) => x.seat === seat);
+                    const p = round?.players.find((x) => x.seat === seat);
+                    return (
+                      <div key={seat} className="absolute flex w-[18%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1" style={{ left: `${pos.left}%`, top: `${pos.top}%` }}>
+                        {p && <Hands p={p} active={turnSeat === seat} fmt={fmt} t={t} done={round?.phase === 'done'} k={k} />}
+                        {s ? (
+                          <PlayerTrigger uid={s.uid} label={s.displayName} context={`table:bj:${tableId}`} className="rounded-full">
+                            <SeatPlate s={s} turn={turnSeat === seat} me={seat === mySeat} t={t} />
+                          </PlayerTrigger>
+                        ) : mySeat === null ? (
+                          <button type="button" aria-label={`${t('bjt.sit')} ${seat + 1}`} disabled={busy || tb.status !== 'open'} onClick={() => void send('bjt.sit', { seat })} className="min-h-8 rounded-full border border-dashed border-gold-300/60 bg-black/30 px-3 py-2 text-xs font-label text-gold-100 hover:bg-gold-300/15">
+                            {t('bjt.sit')}
+                          </button>
+                        ) : (
+                          <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-[10px] text-white/35">{t('bjt.emptySeat')}</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </section>
+                {insuranceOpen && (
+                  <div className="gstage-overlay">
+                    <div>
+                      <InsurancePrompt key={round!.id} max={Math.min(Math.floor(mine!.bet / 2), balance)} deadline={round!.deadline ?? undefined} busy={busy} onDecide={(n) => act('insurance', n)} />
+                    </div>
+                  </div>
                 )}
-              </div>
+              </>
             );
-          })}
-        </section>
-
-        <aside className="glass flex w-full flex-col gap-3 p-4 lg:w-80">
-          <div className="flex items-center justify-between">
-            <h1 className="font-display text-lg font-heading">{tb.name[i18n.language === 'en' ? 'en' : 'vi']}</h1>
-            <span className="text-xs text-white/50">{t('bjt.limits', { min: fmt(tb.minBet), max: fmt(tb.maxBet) })}</span>
-          </div>
-          <RoomPanel engine="bj" tableId={tableId} members={view.seats} />
-          {mySeat === null ? (
-            <p className="text-sm text-white/60">{t('bjt.sitToPlay')}</p>
-          ) : round?.phase === 'betting' && !mine ? (
-            <div className="flex flex-col gap-2">
-              <div className="grid grid-cols-3 gap-1.5">
-                {CHIPS.filter((c) => c <= tb.maxBet).map((c) => (
-                  <button key={c} type="button" onClick={() => setBet((b) => Math.min(tb.maxBet, b + c))} className="rounded-xl border border-gold-300/30 bg-black/30 py-1.5 text-xs font-strong text-gold-100 hover:bg-gold-300/15">
-                    +{fmt(c)}
-                  </button>
-                ))}
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-white/60">{t('play.bet')}</span>
-                <span className="font-heading tabular-nums text-white">{fmt(bet)}</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <Button size="sm" onClick={() => setBet(0)} disabled={!bet}>
-                  {t('play.clear')}
-                </Button>
-                <Button size="sm" variant="gold" disabled={busy || bet < tb.minBet || bet > balance} onClick={() => void send('bjt.bet', { amount: bet }).then((ok) => ok && sfx.chip())}>
-                  {t('bjt.placeBet', { amount: fmt(bet) })}
-                </Button>
-              </div>
-            </div>
-          ) : round?.phase === 'betting' && mine ? (
-            <p className="rounded-xl bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">✓ {t('bjt.betPlaced', { amount: fmt(mine.bet) })} — {t('bjt.waitingBets')}</p>
-          ) : round?.phase === 'insurance' && mine && mine.insurance === null ? (
-            <InsurancePrompt key={round.id} max={Math.min(Math.floor(mine.bet / 2), balance)} deadline={round.deadline ?? undefined} busy={busy} onDecide={(n) => act('insurance', n)} />
-          ) : round?.phase === 'insurance' ? (
-            <p className="text-sm text-white/60">{t('blackjack.insurance.waiting')}</p>
-          ) : hand ? (
-            <div className="flex flex-col gap-2">
-              <Button variant="gold" size="lg" disabled={busy} onClick={() => act('hit')}>
-                {t('play.hit')}
-              </Button>
-              <Button variant="emerald" size="lg" disabled={busy} onClick={() => act('stand')}>
-                {t('play.stand')}
-              </Button>
-              <div className="grid grid-cols-2 gap-2">
-                <Button variant="ruby" disabled={busy || !canDouble} onClick={() => act('double')}>
-                  {t('play.double')}
-                </Button>
-                <Button disabled={busy || !canSplit} onClick={() => act('split')}>
-                  {t('play.split')}
-                </Button>
-              </div>
-            </div>
-          ) : round && !mine && round.phase !== 'done' ? (
-            <p className="text-sm text-white/60">{t('bjt.waitNext')}</p>
-          ) : (
-            <p className="text-sm text-white/60">{round?.phase === 'done' ? t('bjt.nextRound') : banner}</p>
-          )}
-          <div className="mt-auto flex flex-col gap-2 border-t border-white/10 pt-3">
-            {mySeat !== null && (
-              <Button size="sm" disabled={busy} onClick={() => void send('bjt.stand', {})}>
-                {t('bjt.stand')}
-              </Button>
-            )}
-            <Button size="sm" onClick={() => navigate('/bjt')}>
-              {t('bjt.leaveTable')}
-            </Button>
-            {round && <p className="break-all text-[10px] text-white/30">{t('bjt.fair', { hash: round.seedHash.slice(0, 16) })}…</p>}
-          </div>
-        </aside>
-      </div>
-    </AppShell>
+          }}
+        </FitStage>
+      }
+      controls={controls}
+    />
   );
 }
 
@@ -283,7 +313,7 @@ function SeatPlate({ s, turn, me, t }: { s: BjtSeatView; turn: boolean; me: bool
   );
 }
 
-function Hands({ p, active, fmt, t, done }: { p: BjtPlayerView; active: boolean; fmt: (n: number) => string; t: (k: string, o?: Record<string, unknown>) => string; done: boolean }) {
+function Hands({ p, active, fmt, t, done, k = 1 }: { p: BjtPlayerView; active: boolean; fmt: (n: number) => string; t: (k: string, o?: Record<string, unknown>) => string; done: boolean; k?: number }) {
   return (
     <div className="flex flex-col items-center gap-1">
       <div className="flex gap-2">
@@ -291,7 +321,7 @@ function Hands({ p, active, fmt, t, done }: { p: BjtPlayerView; active: boolean;
           <div key={i} className={`flex flex-col items-center rounded-xl p-1 ${active && i === p.active && !done ? 'ring-2 ring-cyan-300' : ''}`}>
             <div className="flex -space-x-7">
               {h.cards.map((c, j) => (
-                <CardSvg key={`${i}-${j}-${c}`} card={c} width={p.hands.length > 2 ? 34 : 44} className="animate-[dealIn_.35s_ease-out]" />
+                <CardSvg key={`${i}-${j}-${c}`} card={c} width={Math.round((p.hands.length > 2 ? 34 : 44) * k)} className="animate-[dealIn_.35s_ease-out]" />
               ))}
             </div>
             <span className={`mt-0.5 rounded-full px-1.5 text-[10px] font-strong ${h.total > 21 ? 'bg-ruby-500/70 text-white' : 'bg-black/60 text-white'}`}>

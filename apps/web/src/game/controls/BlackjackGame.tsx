@@ -5,12 +5,12 @@ import { sfx } from '../../audio/sfx';
 import { CHIP_VALUES, formatChips } from '../../lib/format';
 import { socket } from '../../net/socket';
 import { useSession } from '../../store/session';
-import { Button } from '../../ui/Button';
-import { ChipSelector } from '../../ui/Chip';
 import { toast } from '../../ui/toast';
 import { PhaserView } from '../PhaserView';
 import { BlackjackScene } from '../scenes/BlackjackScene';
-import { GameLayout, Stat } from './GameLayout';
+import { GameTableLayout } from '../../ui/game/GameTableLayout';
+import { GameButton } from '../../ui/game/GameButton';
+import { GameCard, GameChipRack, GameStat, GameTimer } from '../../ui/game/GameParts';
 import { usePlay } from './usePlay';
 import { InsurancePrompt } from './InsurancePrompt';
 import { celebrateWin } from '../../cosmetics/VictoryEffect';
@@ -69,59 +69,99 @@ export function BlackjackGame() {
     }
   };
 
+  const lang = i18n.language;
+  const hands = round?.result.hands?.length ?? 1;
+  const status = insuring
+    ? t('bjt.insurance')
+    : inHand
+      ? hands > 1
+        ? t('blackjack.playingHand', { n: round!.result.active + 1, total: hands })
+        : t('play.bet') + ' ' + formatChips(round!.result.bet, lang)
+      : busy
+        ? t('play.busy')
+        : t('play.placeBets');
+
   return (
-    <GameLayout
+    <GameTableLayout
       title={t('games.blackjack.name')}
-      canvas={
-        <PhaserView
-          create={() => new BlackjackScene()}
-          onReady={async (s) => {
-            scene.current = s;
-            // Continue a hand left unfinished (refresh, disconnect, other device).
-            const resumed = await socket.request('blackjack.resume', {}).catch(() => null);
-            if (resumed) {
-              await s.show(resumed.result, tr);
-              setRound(resumed);
-            }
-          }}
-        />
+      status={<GameTimer label={status} />}
+      tools={[
+        {
+          id: 'info',
+          label: t('gameUi.info'),
+          icon: 'info',
+          content: (
+            <>
+              <GameCard>
+                <p className="text-xs leading-snug text-white/60">{t('blackjack.rules')}</p>
+              </GameCard>
+              <p className="text-[11px] leading-snug text-white/40">{t('app.disclaimer')}</p>
+            </>
+          ),
+        },
+      ]}
+      stage={
+        <div className="gstage-canvas">
+          <PhaserView
+            create={() => new BlackjackScene()}
+            onReady={async (s) => {
+              scene.current = s;
+              // Continue a hand left unfinished (refresh, disconnect, other device).
+              const resumed = await socket.request('blackjack.resume', {}).catch(() => null);
+              if (resumed) {
+                await s.show(resumed.result, tr);
+                setRound(resumed);
+              }
+            }}
+          />
+          {insuring && (
+            <div className="gstage-overlay">
+              <div>
+                <InsurancePrompt key={round!.roundId} max={Math.min(round!.result.insuranceMax ?? 0, balance)} busy={busy} onDecide={(n) => void act('insurance', n)} />
+              </div>
+            </div>
+          )}
+        </div>
       }
-      panel={
+      controls={
         insuring ? (
-          <>
-            <Stat label={t('play.bet')} value={formatChips(round!.result.bet, i18n.language)} accent />
-            <InsurancePrompt key={round!.roundId} max={Math.min(round!.result.insuranceMax ?? 0, balance)} busy={busy} onDecide={(n) => void act('insurance', n)} />
-          </>
+          <div className="gbar-group">
+            <GameStat label={t('play.bet')} value={formatChips(round!.result.bet, lang)} accent />
+          </div>
         ) : inHand ? (
           <>
-            <Stat label={t('play.bet')} value={formatChips(round!.result.bet, i18n.language)} accent />
-            {(round!.result.hands?.length ?? 1) > 1 && (
-              <p className="text-xs text-white/60">{t('blackjack.playingHand', { n: round!.result.active + 1, total: round!.result.hands.length })}</p>
-            )}
-            <Button variant="gold" size="lg" onClick={() => void act('hit')} disabled={busy}>
-              {t('play.hit')}
-            </Button>
-            <Button variant="emerald" size="lg" onClick={() => void act('stand')} disabled={busy}>
-              {t('play.stand')}
-            </Button>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="ruby" onClick={() => void act('double')} disabled={busy || !round!.result.canDouble || balance < handBet}>
+            <div className="gbar-group gbar-group--wide">
+              <GameStat label={t('play.bet')} value={formatChips(round!.result.bet, lang)} accent />
+            </div>
+            <div className="gbar-group">
+              <GameButton tone="primary" loading={busy} onClick={() => void act('hit')}>
+                {t('play.hit')}
+              </GameButton>
+              <GameButton tone="positive" onClick={() => void act('stand')} disabled={busy}>
+                {t('play.stand')}
+              </GameButton>
+              <GameButton tone="danger" onClick={() => void act('double')} disabled={busy || !round!.result.canDouble || balance < handBet}>
                 {t('play.double')}
-              </Button>
-              <Button onClick={() => void act('split')} disabled={busy || !round!.result.canSplit || balance < handBet}>
+              </GameButton>
+              <GameButton tone="neutral" onClick={() => void act('split')} disabled={busy || !round!.result.canSplit || balance < handBet}>
                 {t('play.split')}
-              </Button>
+              </GameButton>
             </div>
           </>
         ) : (
           <>
-            <ChipSelector values={CHIP_VALUES} value={chip} onChange={setChip} />
-            <Button size="sm" onClick={addChip} disabled={busy}>
-              + {formatChips(chip, i18n.language)}
-            </Button>
-            <Stat label={t('play.bet')} value={formatChips(bet, i18n.language)} accent />
-            <div className="grid grid-cols-2 gap-2">
-              <Button
+            <div className="gbar-group">
+              <GameChipRack values={CHIP_VALUES} value={chip} onChange={setChip} disabled={busy} />
+              <GameButton size="sm" onClick={addChip} disabled={busy}>
+                + {formatChips(chip, lang)}
+              </GameButton>
+            </div>
+            <div className="gbar-group gbar-group--wide">
+              <GameStat label={t('play.bet')} value={formatChips(bet, lang)} accent />
+              {round && round.result.outcome && <GameStat label={t('play.lastWin')} value={formatChips(round.result.payout, lang)} accent={round.result.payout > 0} />}
+            </div>
+            <div className="gbar-group">
+              <GameButton
                 size="sm"
                 onClick={() => {
                   setBet(0);
@@ -130,18 +170,15 @@ export function BlackjackGame() {
                 disabled={busy || bet === 0}
               >
                 {t('play.clear')}
-              </Button>
-              <Button size="sm" onClick={() => void deal(lastBet)} disabled={busy || lastBet === 0}>
+              </GameButton>
+              <GameButton size="sm" onClick={() => void deal(lastBet)} disabled={busy || lastBet === 0}>
                 {t('play.rebet')}
-              </Button>
+              </GameButton>
+              <GameButton tone="primary" loading={busy} onClick={() => void deal()} disabled={bet === 0}>
+                {busy ? t('play.busy') : t('play.deal')}
+                {!busy && bet > 0 && <span className="tabular-nums"> · {formatChips(bet, lang)}</span>}
+              </GameButton>
             </div>
-            <Button variant="gold" size="lg" onClick={() => void deal()} disabled={busy || bet === 0}>
-              {busy ? t('play.busy') : t('play.deal')}
-            </Button>
-            {round && round.result.outcome && (
-              <Stat label={t('play.lastWin')} value={formatChips(round.result.payout, i18n.language)} accent={round.result.payout > 0} />
-            )}
-            <p className="mt-auto text-[11px] leading-snug text-white/40">{t('blackjack.rules')}</p>
           </>
         )
       }

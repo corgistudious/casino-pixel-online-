@@ -1833,6 +1833,8 @@ export const en = {
     },
   },
   gameUi: {
+    waiting: 'Waiting',
+    turnOf: "{{name}}'s turn",
     fullscreen: 'Full screen',
     exitFullscreen: 'Exit full screen',
     chips: 'Chip value',

@@ -1835,6 +1835,8 @@ export const vi: Translation = {
     },
   },
   gameUi: {
+    waiting: 'Đang chờ',
+    turnOf: "Lượt của {{name}}",
     fullscreen: 'Toàn màn hình',
     exitFullscreen: 'Thoát toàn màn hình',
     chips: 'Mệnh giá chip',

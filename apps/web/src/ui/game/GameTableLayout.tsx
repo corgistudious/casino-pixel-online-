@@ -31,7 +31,8 @@ export interface GameTool {
  *   the table (space a 16:9 table leaves empty anyway), so the table keeps the full height above
  *   the control bar and stays at least as large as in the previous layout.
  * Everything the old right-hand sidebar showed is in `tools`: one floating panel (drawer in
- * landscape, bottom sheet in portrait), so no function is lost. No fullscreen, no stretching.
+ * landscape, bottom sheet in portrait), so no function is lost. The table is never stretched;
+ * full screen is only offered as a user-initiated toggle where the platform supports it (lib/fullscreen.ts).
  */
 export function GameTableLayout({
   title,
@@ -40,7 +41,9 @@ export function GameTableLayout({
   tools,
   stage,
   controls,
+  backTo = '/',
 }: {
+  backTo?: string;
   title: string;
   subtitle?: ReactNode;
   status?: ReactNode;
@@ -78,7 +81,7 @@ export function GameTableLayout({
         </div>
         <header className="ghud">
           <div className="ghud-left">
-            <GameIconButton label={t('nav.back')} onClick={() => navigate('/')}>
+            <GameIconButton label={t('nav.back')} onClick={() => navigate(backTo)}>
               <GameIcon name="back" />
             </GameIconButton>
             <div className="ghud-title">
