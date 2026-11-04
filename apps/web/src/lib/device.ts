@@ -78,8 +78,9 @@ export type FormFactor = 'phone' | 'tablet' | 'pc';
 export function classifyFormFactor(env: DeviceEnv & { screenShort: number }): FormFactor {
   if (classifyDevice(env) === 'pc') return 'pc';
   const ua = env.userAgent;
+  // iPad first: some browsers/webviews on iPad expose a "mobile" client hint.
+  if (/iPad/i.test(ua) || (/Macintosh/i.test(ua) && env.maxTouchPoints > 1 && !/iPhone|iPod/i.test(ua))) return 'tablet';
   if (env.uaData?.mobile === true || /iPhone|iPod/i.test(ua) || (/Android/i.test(ua) && /Mobile/i.test(ua))) return 'phone';
-  if (/iPad/i.test(ua) || (/Macintosh/i.test(ua) && env.maxTouchPoints > 1)) return 'tablet';
   if (/Android/i.test(ua) || env.uaData?.platform?.toLowerCase() === 'android') return 'tablet';
   return env.screenShort > 0 && env.screenShort < 600 ? 'phone' : 'tablet';
 }

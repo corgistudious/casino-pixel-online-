@@ -80,7 +80,7 @@ export class SicBoScene extends TableScene {
   override portraitRegions() {
     const tw = BW / 14;
     return [
-      { x: 16, y: 30, w: 192, h: 262, maxZoom: 0.92 },
+      { x: 16, y: 34, w: 192, h: 258, maxZoom: 0.74 },
       { x: BX - 4, y: 30, w: BW + 8, h: 98 },
       { x: BX - 2, y: 130, w: tw * 7 + 4, h: 58, maxZoom: 1.6, gap: 2 },
       { x: BX + tw * 7 - 2, y: 130, w: tw * 7 + 4, h: 58, maxZoom: 1.6 },

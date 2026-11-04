@@ -50,9 +50,9 @@ export class RouletteScene extends TableScene {
   override portraitRegions() {
     const split = BOARD_X + 24 + 6 * CW;
     return [
-      { x: 10, y: 84, w: 188, h: 210, maxZoom: 1 },
-      { x: BOARD_X - 4, y: 30, w: split - BOARD_X + 4, h: 154, maxZoom: 1.35, gap: 2 },
-      { x: split, y: 58, w: 6 * CW + 38, h: 126, maxZoom: 1.35 },
+      { x: 10, y: 84, w: 188, h: 210, maxZoom: 0.8 },
+      { x: BOARD_X - 4, y: 30, w: split - BOARD_X + 4, h: 154, maxZoom: 1.25, gap: 2 },
+      { x: split, y: 58, w: 6 * CW + 38, h: 126, maxZoom: 1.25 },
       { x: BOARD_X + 20, y: 180, w: 12 * CW + 8, h: 70, gap: 2 },
       { x: BOARD_X + 20, y: H - 50, w: 12 * CW + 8, h: 32 },
     ];

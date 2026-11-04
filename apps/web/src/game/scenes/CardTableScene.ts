@@ -21,15 +21,17 @@ const SLOTS: Record<string, { at: XY; cards: XY }> = {
   bottomRight: { at: { x: 556, y: 238 }, cards: { x: 474, y: 214 } },
 };
 /** Portrait (phones, V7.1): a standing oval in a 360×640 world; same slot names, viewer at the bottom. */
-const P_CENTER: XY = { x: 180, y: 318 };
-const P_DECK: XY = { x: 180, y: 296 };
+/** Portrait world height (a little shorter than 640 so the table keeps the full width on most phones). */
+const P_H = 588;
+const P_CENTER: XY = { x: 180, y: 293 };
+const P_DECK: XY = { x: 180, y: 272 };
 const P_SLOTS: Record<string, { at: XY; cards: XY }> = {
-  bottom: { at: { x: 180, y: 594 }, cards: { x: 180, y: 506 } },
-  bottomLeft: { at: { x: 46, y: 444 }, cards: { x: 132, y: 418 } },
-  topLeft: { at: { x: 46, y: 196 }, cards: { x: 132, y: 222 } },
-  top: { at: { x: 180, y: 44 }, cards: { x: 180, y: 124 } },
-  topRight: { at: { x: 314, y: 196 }, cards: { x: 228, y: 222 } },
-  bottomRight: { at: { x: 314, y: 444 }, cards: { x: 228, y: 418 } },
+  bottom: { at: { x: 180, y: 546 }, cards: { x: 180, y: 466 } },
+  bottomLeft: { at: { x: 46, y: 408 }, cards: { x: 132, y: 385 } },
+  topLeft: { at: { x: 46, y: 180 }, cards: { x: 132, y: 204 } },
+  top: { at: { x: 180, y: 40 }, cards: { x: 180, y: 114 } },
+  topRight: { at: { x: 314, y: 180 }, cards: { x: 228, y: 204 } },
+  bottomRight: { at: { x: 314, y: 408 }, cards: { x: 228, y: 385 } },
 };
 const LAYOUT: Record<number, (keyof typeof SLOTS)[]> = {
   2: ['bottom', 'top'],
@@ -80,6 +82,10 @@ export class CardTableScene extends BaseScene {
     return true;
   }
 
+  protected override portraitHeight() {
+    return P_H;
+  }
+
   private get C() {
     return this.vertical ? P_CENTER : CENTER;
   }
@@ -101,7 +107,7 @@ export class CardTableScene extends BaseScene {
   }
 
   protected override tableOval() {
-    return this.vertical ? { cx: P_CENTER.x, cy: P_CENTER.y, rx: 150, ry: 262 } : { cx: CENTER.x, cy: CENTER.y, rx: 285, ry: 140 };
+    return this.vertical ? { cx: P_CENTER.x, cy: P_CENTER.y, rx: 150, ry: 240 } : { cx: CENTER.x, cy: CENTER.y, rx: 285, ry: 140 };
   }
 
   /** Localised strings for in-canvas labels (fold, all-in, hand names…). */

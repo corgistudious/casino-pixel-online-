@@ -13,40 +13,8 @@ import { FONT_DISPLAY, FONT_UI, PORTRAIT_H, PORTRAIT_W, RES, WORLD_H, WORLD_W } 
 export const W = WORLD_W;
 export const H = WORLD_H;
 
-/** A slice of the landscape world shown in the portrait column (region scenes). */
-export interface Region {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  /** Upper bound for the slice's zoom (it otherwise fills the column width). */
-  maxZoom?: number;
-  /** Extra space under the slice, in column units. */
-  gap?: number;
-}
-
-export interface PlacedRegion {
-  region: Region;
-  zoom: number;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-/** Pure: stack slices top to bottom in a column `width` wide (each centred, zoomed to fit). */
-export function stackRegions(regions: Region[], width = PORTRAIT_W, pad = 4): { placed: PlacedRegion[]; height: number } {
-  let y = pad;
-  const placed = regions.map((region) => {
-    const zoom = Math.min(region.maxZoom ?? Infinity, (width - 2 * pad) / region.w);
-    const w = region.w * zoom;
-    const h = region.h * zoom;
-    const p = { region, zoom, x: (width - w) / 2, y, w, h };
-    y += h + (region.gap ?? pad);
-    return p;
-  });
-  return { placed, height: Math.ceil(y - (regions.at(-1)?.gap ?? pad) + pad) };
-}
+import { stackRegions, type Region } from '../regions';
+export { stackRegions, type Region, type PlacedRegion } from '../regions';
 
 export interface TextOpts {
   size?: number;
@@ -83,12 +51,17 @@ export abstract class BaseScene extends Phaser.Scene {
     return false;
   }
 
+  /** Height of the native portrait world (360 wide). */
+  protected portraitHeight(): number {
+    return PORTRAIT_H;
+  }
+
   /** World size the scene lays itself out in. */
   get sw() {
     return this.portrait && this.nativePortrait() ? PORTRAIT_W : WORLD_W;
   }
   get sh() {
-    return this.portrait && this.nativePortrait() ? PORTRAIT_H : WORLD_H;
+    return this.portrait && this.nativePortrait() ? this.portraitHeight() : WORLD_H;
   }
   /** True when the scene is drawing its own portrait layout. */
   get vertical() {
