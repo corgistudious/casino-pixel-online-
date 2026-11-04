@@ -76,6 +76,18 @@ export class SicBoScene extends TableScene {
     return 'SIC BO';
   }
 
+  /** Portrait (phones): bowl on top, then the board in slices — totals split into 4–10 and 11–17. */
+  override portraitRegions() {
+    const tw = BW / 14;
+    return [
+      { x: 16, y: 30, w: 192, h: 262, maxZoom: 0.92 },
+      { x: BX - 4, y: 30, w: BW + 8, h: 98 },
+      { x: BX - 2, y: 130, w: tw * 7 + 4, h: 58, maxZoom: 1.6, gap: 2 },
+      { x: BX + tw * 7 - 2, y: 130, w: tw * 7 + 4, h: 58, maxZoom: 1.6 },
+      { x: BX - 4, y: 204, w: BW + 8, h: 78 },
+    ];
+  }
+
   async roll(result: SicBoResult): Promise<void> {
     this.interactive = false;
     this.highlightSpots([]);

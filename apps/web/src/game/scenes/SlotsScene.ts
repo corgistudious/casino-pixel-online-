@@ -20,6 +20,11 @@ export class SlotsScene extends BaseScene {
     super(SlotsScene.KEY);
   }
 
+  /** Portrait (phones): the cabinet alone, as wide as the column. */
+  override portraitRegions() {
+    return [{ x: 140, y: 30, w: 360, h: 300 }];
+  }
+
   protected override background() {
     return 'lounge' as const;
   }

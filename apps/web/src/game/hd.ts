@@ -5,6 +5,10 @@
  */
 export const WORLD_W = 640;
 export const WORLD_H = 360;
+/** Portrait (phones, V7.1): native portrait scenes use a 360×640 world; region scenes stack slices of
+ *  the landscape world into a column this wide. */
+export const PORTRAIT_W = 360;
+export const PORTRAIT_H = 640;
 
 function pickResolution(): number {
   if (typeof window === 'undefined') return 3;

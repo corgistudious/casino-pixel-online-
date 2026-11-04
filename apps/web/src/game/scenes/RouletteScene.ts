@@ -46,6 +46,18 @@ export class RouletteScene extends TableScene {
     this.buildBoard();
   }
 
+  /** Portrait (phones): wheel on top, numbers in two halves (bigger cells), outside bets, history. */
+  override portraitRegions() {
+    const split = BOARD_X + 24 + 6 * CW;
+    return [
+      { x: 10, y: 84, w: 188, h: 210, maxZoom: 1 },
+      { x: BOARD_X - 4, y: 30, w: split - BOARD_X + 4, h: 154, maxZoom: 1.35, gap: 2 },
+      { x: split, y: 58, w: 6 * CW + 38, h: 126, maxZoom: 1.35 },
+      { x: BOARD_X + 20, y: 180, w: 12 * CW + 8, h: 70, gap: 2 },
+      { x: BOARD_X + 20, y: H - 50, w: 12 * CW + 8, h: 32 },
+    ];
+  }
+
   private buildBoard() {
     this.addSpot('straight:0', BOARD_X, BOARD_Y, 24, CH * 3, 0x0f7a45, '0', { display: true, size: 14 });
     for (let col = 0; col < 12; col++) {

@@ -20,6 +20,17 @@ const SLOTS: Record<string, { at: XY; cards: XY }> = {
   topRight: { at: { x: 540, y: 88 }, cards: { x: 458, y: 118 } },
   bottomRight: { at: { x: 556, y: 238 }, cards: { x: 474, y: 214 } },
 };
+/** Portrait (phones, V7.1): a standing oval in a 360×640 world; same slot names, viewer at the bottom. */
+const P_CENTER: XY = { x: 180, y: 318 };
+const P_DECK: XY = { x: 180, y: 296 };
+const P_SLOTS: Record<string, { at: XY; cards: XY }> = {
+  bottom: { at: { x: 180, y: 594 }, cards: { x: 180, y: 506 } },
+  bottomLeft: { at: { x: 46, y: 444 }, cards: { x: 132, y: 418 } },
+  topLeft: { at: { x: 46, y: 196 }, cards: { x: 132, y: 222 } },
+  top: { at: { x: 180, y: 44 }, cards: { x: 180, y: 124 } },
+  topRight: { at: { x: 314, y: 196 }, cards: { x: 228, y: 222 } },
+  bottomRight: { at: { x: 314, y: 444 }, cards: { x: 228, y: 418 } },
+};
 const LAYOUT: Record<number, (keyof typeof SLOTS)[]> = {
   2: ['bottom', 'top'],
   3: ['bottom', 'topLeft', 'topRight'],
@@ -65,11 +76,22 @@ export class CardTableScene extends BaseScene {
     super(CardTableScene.KEY);
   }
 
+  override nativePortrait() {
+    return true;
+  }
+
+  private get C() {
+    return this.vertical ? P_CENTER : CENTER;
+  }
+  private get D() {
+    return this.vertical ? P_DECK : DECK;
+  }
+
   protected build() {
     ensureChipTextures(this);
     ensureCardTexture(this, null);
     // Rail, felt and printed line come from the viewer's table skin (background); same geometry for everyone.
-    this.text(CENTER.x, CENTER.y + 62, 'KEYO', { size: 22, display: true, color: this.skin().lineCss }).setAlpha(0.18);
+    this.text(this.C.x, this.C.y + 62, 'KEYO', { size: 22, display: true, color: this.skin().lineCss }).setAlpha(0.18);
     this.layer = this.add.container(0, 0);
     this.timer = this.add.graphics().setDepth(30);
   }
@@ -79,7 +101,7 @@ export class CardTableScene extends BaseScene {
   }
 
   protected override tableOval() {
-    return { cx: CENTER.x, cy: CENTER.y, rx: 285, ry: 140 };
+    return this.vertical ? { cx: P_CENTER.x, cy: P_CENTER.y, rx: 150, ry: 262 } : { cx: CENTER.x, cy: CENTER.y, rx: 285, ry: 140 };
   }
 
   /** Localised strings for in-canvas labels (fold, all-in, hand names…). */
@@ -130,7 +152,7 @@ export class CardTableScene extends BaseScene {
     const layout = LAYOUT[n] ?? LAYOUT[6]!;
     const me = view.mySeat;
     const idx = me === null ? seat : (seat - me + n) % n;
-    return SLOTS[layout[idx % layout.length]!]!;
+    return (this.vertical ? P_SLOTS : SLOTS)[layout[idx % layout.length]!]!;
   }
 
   private card(x: number, y: number, card: Card | null, scale: number, back: CardBackLook | undefined, key: string) {
@@ -148,7 +170,7 @@ export class CardTableScene extends BaseScene {
     if (!this.dealt.has(key) && !this.reduceMotion) {
       this.dealt.add(key);
       const target = { x, y };
-      img.setPosition(DECK.x, DECK.y).setAlpha(0);
+      img.setPosition(this.D.x, this.D.y).setAlpha(0);
       this.tweens.add({ targets: img, ...target, alpha: 1, duration: 260, delay: this.dealt.size * 25, ease: 'Cubic.easeOut' });
       sfx.card();
     } else this.dealt.add(key);
@@ -219,7 +241,7 @@ export class CardTableScene extends BaseScene {
       const initial = this.text(slot.at.x, slot.at.y, (s.displayName[0] ?? '?').toUpperCase(), { size: 14, display: true, shadow: true });
       const photo = this.photo(s.customAvatar, slot.at.x, slot.at.y);
       if (photo) initial.setVisible(false);
-      const nameY = slot.at.y + (slot.at.y > CENTER.y ? -38 : 27); // clear of the turn-timer ring
+      const nameY = slot.at.y + (slot.at.y > this.C.y ? -38 : 27); // clear of the turn-timer ring
       const plate = this.add.rectangle(slot.at.x, nameY + 6, 84, 24, 0x05040b, 0.78).setStrokeStyle(1, 0xf2d38a, 0.4);
       const name = this.text(slot.at.x, nameY, s.displayName.slice(0, 12), { size: 8, weight: 700 });
       const stack = this.text(slot.at.x, nameY + 11, compactChips(p ? p.stack : s.stack), { size: 9, color: '#ffe08a', weight: 800 });
@@ -249,8 +271,8 @@ export class CardTableScene extends BaseScene {
         initial.setAlpha(0.5);
         photo?.setAlpha(0.5);
         const tag = p?.folded ? this.strings.fold : s.status === 'leaving' ? this.strings.leaving : this.strings.sittingOut;
-        if (tag) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > CENTER.y ? 27 : 46), tag, { size: 8, color: '#ff9fae', weight: 700, shadow: true }));
-      } else if (p?.allIn && !hand?.result) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > CENTER.y ? 27 : 46), this.strings.allIn ?? 'ALL-IN', { size: 9, color: '#ffe08a', weight: 800, shadow: true }));
+        if (tag) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > this.C.y ? 27 : 46), tag, { size: 8, color: '#ff9fae', weight: 700, shadow: true }));
+      } else if (p?.allIn && !hand?.result) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > this.C.y ? 27 : 46), this.strings.allIn ?? 'ALL-IN', { size: 9, color: '#ffe08a', weight: 800, shadow: true }));
       if (hand && hand.button === seat) {
         const bx = slot.at.x + 24;
         const by = slot.at.y - 14;
@@ -262,9 +284,9 @@ export class CardTableScene extends BaseScene {
         const mine = seat === view.mySeat;
         const shown = hand?.result?.shown[seat];
         const hidden = shown ? shown.cards.slice(0, p.hole.length) : p.hole;
-        const scale = mine ? 0.82 : 0.56;
+        const scale = (mine ? 0.82 : 0.56) * (this.vertical ? 1.12 : 1);
         const all: { c: Card | null; up: boolean }[] = [...hidden.map((c) => ({ c, up: false })), ...p.up.map((c) => ({ c, up: true }))];
-        const step = (mine ? 26 : 17) * (all.length > 3 ? 0.85 : 1);
+        const step = (mine ? 26 : 17) * (all.length > 3 ? 0.85 : 1) * (this.vertical ? 1.12 : 1);
         all.forEach(({ c, up }, i) => {
           const x = slot.cards.x + (i - (all.length - 1) / 2) * step;
           const img = this.card(x, slot.cards.y, c, scale, backs[seat], `${hand!.seq}:${seat}:${i}`);
@@ -274,33 +296,33 @@ export class CardTableScene extends BaseScene {
         if (shown) {
           const label = this.strings[`hand_${shown.category}`] ?? shown.category;
           // Centre seats put the label beside their cards so it covers neither the name plate nor the pot.
-          if (slot.cards.x === CENTER.x) this.layer.add(this.text(slot.cards.x + (all.length * step) / 2 + 22, slot.cards.y, label, { size: mine ? 9 : 8, color: '#fff1b8', weight: 800, shadow: true, originX: 0 }));
+          if (slot.cards.x === this.C.x) this.layer.add(this.text(slot.cards.x + (all.length * step) / 2 + 22, slot.cards.y, label, { size: mine ? 9 : 8, color: '#fff1b8', weight: 800, shadow: true, originX: 0 }));
           else this.layer.add(this.text(slot.cards.x, slot.cards.y + 26, label, { size: 8, color: '#fff1b8', weight: 800, shadow: true }));
         }
       }
       // Bet in front of the seat.
       if (p && p.streetBet > 0 && hand?.phase === 'betting') {
         // Centre seats bet to the left of their cards (the pot and board are straight ahead); others toward the centre.
-        const centred = slot.cards.x === CENTER.x;
-        const bx = centred ? slot.cards.x - 72 : slot.cards.x + (CENTER.x - slot.cards.x) * 0.42;
-        const by = centred ? slot.cards.y : slot.cards.y + (CENTER.y - slot.cards.y) * 0.42 + 4;
+        const centred = slot.cards.x === this.C.x;
+        const bx = centred ? slot.cards.x - 72 : slot.cards.x + (this.C.x - slot.cards.x) * 0.42;
+        const by = centred ? slot.cards.y : slot.cards.y + (this.C.y - slot.cards.y) * 0.42 + 4;
         const tex = `chip-${chipDenomFor(p.streetBet)}`;
         this.layer.add([this.add.image(bx - 10, by, tex).setScale(hdScale(tex, 0.45)), this.text(bx + 8, by, compactChips(p.streetBet), { size: 8, weight: 800, shadow: true, originX: 0 })]);
       }
       // Winnings.
       if (hand?.result && (hand.result.net[seat] ?? 0) !== 0) {
         const net = hand.result.net[seat]!;
-        const txt = this.text(slot.at.x, slot.at.y + (slot.at.y > CENTER.y ? 26 : -26), `${net > 0 ? '+' : ''}${compactChips(net)}`, { size: 12, color: net > 0 ? '#7ff0a8' : '#ff9fae', display: true, shadow: true });
+        const txt = this.text(slot.at.x, slot.at.y + (slot.at.y > this.C.y ? 26 : -26), `${net > 0 ? '+' : ''}${compactChips(net)}`, { size: 12, color: net > 0 ? '#7ff0a8' : '#ff9fae', display: true, shadow: true });
         this.layer.add(txt);
       }
     }
     if (!hand || hand.phase !== 'betting' || hand.toActSeat === null) this.timerAt = null;
     // Board and pot.
     if (hand) {
-      hand.board.forEach((c, i) => this.card(CENTER.x + (i - 2) * 34, CENTER.y, c, 0.64, undefined, `${hand.seq}:board:${i}`));
+      hand.board.forEach((c, i) => this.card(this.C.x + (i - 2) * 34, this.C.y, c, 0.64, undefined, `${hand.seq}:board:${i}`));
       if (hand.pot > 0) {
         const tex = `chip-${chipDenomFor(hand.pot)}`;
-        this.layer.add([this.add.image(CENTER.x - 30, CENTER.y - 44, tex).setScale(hdScale(tex, 0.55)), this.text(CENTER.x + 4, CENTER.y - 44, `${this.strings.pot ?? 'Pot'} ${compactChips(hand.pot)}`, { size: 11, color: '#fff1b8', weight: 800, shadow: true })]);
+        this.layer.add([this.add.image(this.C.x - 30, this.C.y - 44, tex).setScale(hdScale(tex, 0.55)), this.text(this.C.x + 4, this.C.y - 44, `${this.strings.pot ?? 'Pot'} ${compactChips(hand.pot)}`, { size: 11, color: '#fff1b8', weight: 800, shadow: true })]);
       }
       if (hand.result && this.lastResultSeq !== hand.seq) {
         this.lastResultSeq = hand.seq;
@@ -308,7 +330,7 @@ export class CardTableScene extends BaseScene {
         if (myNet > 0) {
           sfx.win();
           celebrateWin(`card:${hand.id}`, { big: myNet >= view.table.config.bigBlind * 50 });
-          this.celebrate(myNet, CENTER.x, CENTER.y + 40, myNet >= view.table.config.bigBlind * 50);
+          this.celebrate(myNet, this.C.x, this.C.y + 40, myNet >= view.table.config.bigBlind * 50);
         }
       }
     }

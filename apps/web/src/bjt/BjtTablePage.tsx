@@ -14,6 +14,7 @@ import { RoomPasswordPrompt } from '../rooms/RoomForm';
 import { RoomPanel } from '../rooms/RoomPanel';
 import { useSession } from '../store/session';
 import { FitStage } from '../ui/game/FitStage';
+import { formFactor } from '../lib/device';
 import { GameButton } from '../ui/game/GameButton';
 import { GameCard, GameStat, GameTimer } from '../ui/game/GameParts';
 import { GameTableLayout, type GameTool } from '../ui/game/GameTableLayout';
@@ -30,6 +31,14 @@ const SEAT_POS = [
   { left: 50, top: 75 },
   { left: 71, top: 70 },
   { left: 90, top: 56 },
+];
+/** Portrait felt (phones, V7.1): three seats across the middle, two below (left to right = seat order). */
+const SEAT_POS_PORTRAIT = [
+  { left: 17, top: 50 },
+  { left: 33, top: 81 },
+  { left: 50, top: 50 },
+  { left: 67, top: 81 },
+  { left: 83, top: 50 },
 ];
 const CHIPS = [100, 500, 1_000, 5_000, 10_000, 50_000];
 
@@ -49,6 +58,9 @@ export function BjtTablePage() {
   const balance = useSession((s) => s.balance);
   const fmt = (n: number) => formatChips(n, i18n.language);
   const lastRound = useRef<string | null>(null);
+  // Phones are portrait-only (V7.1); a tablet held upright also gets the portrait felt. Fixed per visit.
+  const [portrait] = useState(() => formFactor() === 'phone' || window.innerHeight > window.innerWidth);
+  const seatPos = portrait ? SEAT_POS_PORTRAIT : SEAT_POS;
 
   const fail = (err: unknown) => toast(errorText(t, err, i18n.language), 'error');
   const [locked, setLocked] = useState(false);
@@ -232,7 +244,7 @@ export function BjtTablePage() {
       status={<GameTimer label={banner} seconds={round && round.phase !== 'done' ? left : null} warn={myTurn && left !== null && left <= 5} />}
       tools={[roomTool]}
       stage={
-        <FitStage ratio={16 / 9} designWidth={720}>
+        <FitStage ratio={portrait ? 3 / 4 : 16 / 9} designWidth={portrait ? 360 : 720}>
           {(scale) => {
             const k = Math.min(1.6, Math.max(0.6, scale));
             return (
@@ -244,7 +256,7 @@ export function BjtTablePage() {
                     <TableSkinCanvas skinId={tableSkin} layout="arc" />
                   </div>
                   <div className="pointer-events-none absolute inset-6 rounded-[50%/40%] border border-gold-300/30" />
-                  <div className="pointer-events-none absolute left-1/2 top-[44%] w-[70%] -translate-x-1/2 text-center text-[10px] uppercase tracking-[0.3em] text-gold-100/50">Blackjack pays 3 to 2 · Insurance pays 2 to 1</div>
+                  <div className={`pointer-events-none absolute left-1/2 w-[70%] -translate-x-1/2 ${portrait ? 'top-[33%]' : 'top-[44%]'} text-center text-[10px] uppercase tracking-[0.3em] text-gold-100/50`}>Blackjack pays 3 to 2 · Insurance pays 2 to 1</div>
                   {/* Dealer */}
                   <div className="absolute left-1/2 top-[6%] flex -translate-x-1/2 flex-col items-center gap-1">
                     <span className="rounded-full bg-black/40 px-3 py-0.5 text-xs font-label text-gold-100">
@@ -258,11 +270,11 @@ export function BjtTablePage() {
                     </div>
                   </div>
                   {/* Seats */}
-                  {SEAT_POS.slice(0, tb.seats).map((pos, seat) => {
+                  {seatPos.slice(0, tb.seats).map((pos, seat) => {
                     const s = view.seats.find((x) => x.seat === seat);
                     const p = round?.players.find((x) => x.seat === seat);
                     return (
-                      <div key={seat} className="absolute flex w-[18%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1" style={{ left: `${pos.left}%`, top: `${pos.top}%` }}>
+                      <div key={seat} className={`absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 ${portrait ? 'w-[32%]' : 'w-[18%]'}`} style={{ left: `${pos.left}%`, top: `${pos.top}%` }}>
                         {p && <Hands p={p} active={turnSeat === seat} fmt={fmt} t={t} done={round?.phase === 'done'} k={k} />}
                         {s ? (
                           <PlayerTrigger uid={s.uid} label={s.displayName} context={`table:bj:${tableId}`} className="rounded-full">

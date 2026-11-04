@@ -3,15 +3,16 @@ import type { BlackjackView, Card } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
 import { compactChips } from '../../lib/format';
 import { cardKey, chipDenomFor, ensureCardTexture, ensureChipTextures, ensureShoeTexture, hdImage, hdScale } from '../art';
-import { BaseScene, H, W } from './BaseScene';
+import { BaseScene } from './BaseScene';
 
-const SHOE = { x: 566, y: 74 };
-const DEALER_Y = 112;
-const PLAYER_Y = 252;
 const SPACING = 30;
 const CARD_SCALE = 1;
-/** Room for the player's hands across the felt (split hands share it). */
-const HANDS_WIDTH = 520;
+
+/** Table geometry: landscape (640×360) and portrait for phones (360×640, V7.1). */
+const GEO = {
+  landscape: { cx: 320, shoe: { x: 566, y: 74 }, dealerY: 112, playerY: 252, handsWidth: 520, rulesY: 44, dealerLabel: { x: 170, y: 102 }, dealerTotal: { x: 170, y: 122 }, playerLabel: { x: 52, y: 242 }, playerTotal: { x: 52, y: 262 }, bannerY: 182, bannerSplitY: 166, betY: 318 },
+  portrait: { cx: 180, shoe: { x: 306, y: 96 }, dealerY: 196, playerY: 430, handsWidth: 330, rulesY: 40, dealerLabel: { x: 52, y: 120 }, dealerTotal: { x: 52, y: 142 }, playerLabel: { x: 52, y: 330 }, playerTotal: { x: 52, y: 352 }, bannerY: 302, bannerSplitY: 296, betY: 566 },
+} as const;
 
 interface Slot {
   img: Phaser.GameObjects.Image;
@@ -34,6 +35,14 @@ export class BlackjackScene extends BaseScene {
     super(BlackjackScene.KEY);
   }
 
+  override nativePortrait() {
+    return true;
+  }
+
+  private get G() {
+    return this.vertical ? GEO.portrait : GEO.landscape;
+  }
+
   protected override tableLayout() {
     return 'arc' as const;
   }
@@ -42,26 +51,28 @@ export class BlackjackScene extends BaseScene {
     ensureChipTextures(this);
     ensureCardTexture(this, null);
     ensureShoeTexture(this);
+    const G = this.G;
     // Printed arcs and the padded rail come from the viewer's table skin (background, 'arc' layout).
 
-    hdImage(this, SHOE.x, SHOE.y, 'card-shoe');
-    hdImage(this, SHOE.x - 4, SHOE.y - 4, 'card-back', 0.8).setAngle(-12);
+    hdImage(this, G.shoe.x, G.shoe.y, 'card-shoe');
+    hdImage(this, G.shoe.x - 4, G.shoe.y - 4, 'card-back', 0.8).setAngle(-12);
 
-    this.label(W / 2, 44, 'blackjack.rules', { size: 9, color: '#cdeedd', weight: 500 });
-    this.label(W / 2 - 150, DEALER_Y - 10, 'blackjack.dealer', { size: 13, display: true, color: '#f7e2a8' });
-    this.label(52, PLAYER_Y - 10, 'blackjack.player', { size: 13, display: true, color: '#f7e2a8' });
-    this.dealerTotal = this.text(W / 2 - 150, DEALER_Y + 10, '', { size: 16, weight: 800, shadow: true });
-    this.playerTotal = this.text(52, PLAYER_Y + 10, '', { size: 16, weight: 800, shadow: true });
+    const rules = this.label(G.cx, G.rulesY, 'blackjack.rules', { size: 9, color: '#cdeedd', weight: 500 });
+    if (this.vertical) rules.setWordWrapWidth(300).setAlign('center');
+    this.label(G.dealerLabel.x, G.dealerLabel.y, 'blackjack.dealer', { size: 13, display: true, color: '#f7e2a8' });
+    this.label(G.playerLabel.x, G.playerLabel.y, 'blackjack.player', { size: 13, display: true, color: '#f7e2a8' });
+    this.dealerTotal = this.text(G.dealerTotal.x, G.dealerTotal.y, '', { size: 16, weight: 800, shadow: true });
+    this.playerTotal = this.text(G.playerTotal.x, G.playerTotal.y, '', { size: 16, weight: 800, shadow: true });
     this.handLayer = this.add.container(0, 0).setDepth(30);
-    this.banner = this.text(W / 2, 182, '', { size: 30, display: true, color: '#ffe08a', shadow: true }).setDepth(50);
+    this.banner = this.text(G.cx, G.bannerY, '', { size: 30, display: true, color: '#ffe08a', shadow: true }).setDepth(50);
     this.banner.setStroke('#5a3a06', 3);
 
     // Betting circle, printed in the skin's line colour (same place for every skin).
     const g = this.add.graphics();
     const line = this.skin().line;
-    g.lineStyle(1.2, line, 0.9).strokeCircle(W / 2, 318, 17);
-    g.lineStyle(0.6, line, 0.5).strokeCircle(W / 2, 318, 20);
-    this.betStack = this.add.container(W / 2, 318);
+    g.lineStyle(1.2, line, 0.9).strokeCircle(G.cx, G.betY, 17);
+    g.lineStyle(0.6, line, 0.5).strokeCircle(G.cx, G.betY, 20);
+    this.betStack = this.add.container(G.cx, G.betY);
   }
 
   reset() {
@@ -84,15 +95,15 @@ export class BlackjackScene extends BaseScene {
   }
 
   private x(i: number, n: number) {
-    return W / 2 - ((n - 1) * SPACING) / 2 + i * SPACING;
+    return this.G.cx - ((n - 1) * SPACING) / 2 + i * SPACING;
   }
 
   /** Where card `index` of hand `hand` sits when `hands` hands are on the felt. */
   private spot(hand: number, hands: number, index: number, cards: number) {
-    const gap = hands > 1 ? Math.min(150, HANDS_WIDTH / hands) : 0;
-    const center = W / 2 + (hand - (hands - 1) / 2) * gap;
+    const gap = hands > 1 ? Math.min(150, this.G.handsWidth / hands) : 0;
+    const center = this.G.cx + (hand - (hands - 1) / 2) * gap;
     const step = hands > 2 ? 16 : hands > 1 ? 22 : SPACING;
-    return { x: center - ((cards - 1) * step) / 2 + index * step, y: PLAYER_Y, center, scale: hands > 2 ? 0.82 : CARD_SCALE };
+    return { x: center - ((cards - 1) * step) / 2 + index * step, y: this.G.playerY, center, scale: hands > 2 ? 0.82 : CARD_SCALE };
   }
 
   private async layout(row: Slot[], y: number) {
@@ -108,7 +119,7 @@ export class BlackjackScene extends BaseScene {
 
   private async deal(row: Slot[], card: Card | null, y: number) {
     ensureCardTexture(this, card);
-    const img = hdImage(this, SHOE.x, SHOE.y, cardKey(card), CARD_SCALE).setDepth(10 + row.length);
+    const img = hdImage(this, this.G.shoe.x, this.G.shoe.y, cardKey(card), CARD_SCALE).setDepth(10 + row.length);
     row.push({ img, card });
     sfx.card();
     if (this.reduceMotion) {
@@ -166,7 +177,7 @@ export class BlackjackScene extends BaseScene {
     for (const d of deals) {
       const p = target(d.hand, d.index);
       ensureCardTexture(this, d.card);
-      const img = hdImage(this, SHOE.x, SHOE.y, cardKey(d.card), p.scale).setDepth(10 + d.hand * 10 + d.index);
+      const img = hdImage(this, this.G.shoe.x, this.G.shoe.y, cardKey(d.card), p.scale).setDepth(10 + d.hand * 10 + d.index);
       this.player.push({ img, card: d.card, hand: d.hand, index: d.index });
       sfx.card();
       if (this.reduceMotion) img.setPosition(p.x, p.y);
@@ -188,17 +199,17 @@ export class BlackjackScene extends BaseScene {
       const active = view.phase === 'player' && i === view.active;
       if (active) {
         const glow = this.add.graphics();
-        glow.lineStyle(2, 0xffe08a, 0.95).strokeRoundedRect(center - 62, PLAYER_Y - 44, 124, 90, 10);
+        glow.lineStyle(2, 0xffe08a, 0.95).strokeRoundedRect(center - 62, this.G.playerY - 44, 124, 90, 10);
         this.handLayer.add(glow);
         if (!this.reduceMotion) this.tweens.add({ targets: glow, alpha: { from: 1, to: 0.45 }, duration: 700, yoyo: true, repeat: -1 });
       }
       const total = h.total > 21 ? `${h.total} ✕` : String(h.total);
-      this.handLayer.add(this.text(center, PLAYER_Y - 54, `${t('blackjack.hand').replace('{{n}}', String(i + 1))} · ${total}`, { size: 10, weight: 800, shadow: true, color: active ? '#ffe08a' : '#ffffff' }));
-      this.handLayer.add(this.text(center, PLAYER_Y + 52, `${compactChips(h.bet * (h.doubled ? 2 : 1))}${h.doubled ? ' ×2' : ''}`, { size: 9, weight: 700, shadow: true, color: '#cdeedd' }));
+      this.handLayer.add(this.text(center, this.G.playerY - 54, `${t('blackjack.hand').replace('{{n}}', String(i + 1))} · ${total}`, { size: 10, weight: 800, shadow: true, color: active ? '#ffe08a' : '#ffffff' }));
+      this.handLayer.add(this.text(center, this.G.playerY + 52, `${compactChips(h.bet * (h.doubled ? 2 : 1))}${h.doubled ? ' ×2' : ''}`, { size: 9, weight: 700, shadow: true, color: '#cdeedd' }));
       if (view.phase === 'finished' && h.outcome) {
         const won = h.payout > h.bet * (h.doubled ? 2 : 1);
         const color = won ? '#7ff0a8' : h.payout === 0 ? '#ff9fae' : '#fff1b8';
-        this.handLayer.add(this.text(center, PLAYER_Y + 66, t(`blackjack.outcomes.${h.outcome}`), { size: 11, display: true, shadow: true, color }));
+        this.handLayer.add(this.text(center, this.G.playerY + 66, t(`blackjack.outcomes.${h.outcome}`), { size: 11, display: true, shadow: true, color }));
       }
     });
   }
@@ -221,13 +232,13 @@ export class BlackjackScene extends BaseScene {
         if (first[i]) {
           const p = this.spot(0, 1, i, 2);
           ensureCardTexture(this, first[i]!);
-          const img = hdImage(this, SHOE.x, SHOE.y, cardKey(first[i]!), CARD_SCALE).setDepth(10 + i);
+          const img = hdImage(this, this.G.shoe.x, this.G.shoe.y, cardKey(first[i]!), CARD_SCALE).setDepth(10 + i);
           this.player.push({ img, card: first[i]!, hand: 0, index: i });
           sfx.card();
           if (this.reduceMotion) img.setPosition(p.x, p.y);
           else await this.tweenP({ targets: img, x: p.x, y: p.y, angle: { from: -20, to: 0 }, duration: 260, ease: 'Quad.easeOut' });
         }
-        if (i < view.dealer.length) await this.deal(this.dealer, i === 1 ? null : view.dealer[i]!, DEALER_Y);
+        if (i < view.dealer.length) await this.deal(this.dealer, i === 1 ? null : view.dealer[i]!, this.G.dealerY);
       }
     }
     await this.showPlayer(v);
@@ -238,19 +249,19 @@ export class BlackjackScene extends BaseScene {
       const slot = this.dealer[i];
       if (!slot) {
         if (!this.reduceMotion) await this.wait(220);
-        await this.deal(this.dealer, card, DEALER_Y);
+        await this.deal(this.dealer, card, this.G.dealerY);
       } else if (slot.card === null && card) await this.flip(slot, card);
     }
-    await this.layout(this.dealer, DEALER_Y);
+    await this.layout(this.dealer, this.G.dealerY);
     this.dealerTotal.setText(view.dealerTotal === null ? '?' : String(view.dealerTotal));
 
     if (view.phase === 'finished' && view.outcome) {
-      this.banner.setY(hands.length > 1 ? 166 : 182);
+      this.banner.setY(hands.length > 1 ? this.G.bannerSplitY : this.G.bannerY);
       this.banner.setText(t(`blackjack.outcomes.${view.outcome}`));
       if (!this.reduceMotion) this.tweens.add({ targets: this.banner, scale: { from: 0.5, to: 1 }, duration: 250, ease: 'Back.easeOut' });
       if (view.payout > view.bet) {
         view.outcome === 'blackjack' ? sfx.bigWin() : sfx.win();
-        this.celebrate(view.payout, W / 2, PLAYER_Y);
+        this.celebrate(view.payout, this.G.cx, this.G.playerY);
       } else if (view.payout === 0) sfx.lose();
     }
   }

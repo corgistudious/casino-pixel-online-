@@ -8,10 +8,45 @@ import { ensureFelt, ensureFxTextures, ensureLounge, ensureSkinBackground, hdIma
 
 /** The signed-in player's equipped table skin (or the classic table). */
 export const viewerTableSkin = () => useSession.getState().user?.tableSkin ?? DEFAULT_TABLE_SKIN;
-import { FONT_DISPLAY, FONT_UI, RES, WORLD_H, WORLD_W } from '../hd';
+import { FONT_DISPLAY, FONT_UI, PORTRAIT_H, PORTRAIT_W, RES, WORLD_H, WORLD_W } from '../hd';
 
 export const W = WORLD_W;
 export const H = WORLD_H;
+
+/** A slice of the landscape world shown in the portrait column (region scenes). */
+export interface Region {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  /** Upper bound for the slice's zoom (it otherwise fills the column width). */
+  maxZoom?: number;
+  /** Extra space under the slice, in column units. */
+  gap?: number;
+}
+
+export interface PlacedRegion {
+  region: Region;
+  zoom: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/** Pure: stack slices top to bottom in a column `width` wide (each centred, zoomed to fit). */
+export function stackRegions(regions: Region[], width = PORTRAIT_W, pad = 4): { placed: PlacedRegion[]; height: number } {
+  let y = pad;
+  const placed = regions.map((region) => {
+    const zoom = Math.min(region.maxZoom ?? Infinity, (width - 2 * pad) / region.w);
+    const w = region.w * zoom;
+    const h = region.h * zoom;
+    const p = { region, zoom, x: (width - w) / 2, y, w, h };
+    y += h + (region.gap ?? pad);
+    return p;
+  });
+  return { placed, height: Math.ceil(y - (regions.at(-1)?.gap ?? pad) + pad) };
+}
 
 export interface TextOpts {
   size?: number;
@@ -30,6 +65,46 @@ export abstract class BaseScene extends Phaser.Scene {
   private resolveReady!: () => void;
   private labels: { obj: Phaser.GameObjects.Text; key: string; vars?: Record<string, unknown> }[] = [];
 
+  /**
+   * Portrait mode (phones, V7.1), decided by PhaserView before the game boots:
+   *  - a scene with portraitRegions() keeps its landscape world and shows slices of it stacked in a
+   *    column (one camera per slice: same artwork, same tap targets, bigger betting spots);
+   *  - a scene with nativePortrait() = true lays itself out in a 360×640 world (card tables, Blackjack).
+   */
+  portrait = false;
+
+  /** Slices for the portrait column; null = no region layout. */
+  portraitRegions(): Region[] | null {
+    return null;
+  }
+
+  /** True when the scene draws its own portrait layout. */
+  nativePortrait(): boolean {
+    return false;
+  }
+
+  /** World size the scene lays itself out in. */
+  get sw() {
+    return this.portrait && this.nativePortrait() ? PORTRAIT_W : WORLD_W;
+  }
+  get sh() {
+    return this.portrait && this.nativePortrait() ? PORTRAIT_H : WORLD_H;
+  }
+  /** True when the scene is drawing its own portrait layout. */
+  get vertical() {
+    return this.portrait && this.nativePortrait();
+  }
+
+  /** Canvas size in world units (PhaserView multiplies by RES). */
+  canvasSize(): { w: number; h: number } {
+    const regions = this.portrait ? this.portraitRegions() : null;
+    if (regions) return { w: PORTRAIT_W, h: stackRegions(regions).height };
+    return { w: this.sw, h: this.sh };
+  }
+
+  /** Text is rasterised for the largest zoom it can be shown at (portrait slices zoom in). */
+  protected textRes = RES;
+
   constructor(key: string) {
     super(key);
     this.ready = new Promise((r) => (this.resolveReady = r));
@@ -40,24 +115,39 @@ export abstract class BaseScene extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.setZoom(RES).centerOn(W / 2, H / 2);
-    this.cameras.main.setBackgroundColor('#07060f');
+    const regions = this.portrait ? this.portraitRegions() : null;
+    if (regions) {
+      // One camera per slice, stacked in the portrait column; input works through every camera.
+      const { placed } = stackRegions(regions);
+      this.textRes = RES * Math.max(1, ...placed.map((p) => p.zoom));
+      placed.forEach((p, i) => {
+        const cam = i === 0 ? this.cameras.main : this.cameras.add();
+        cam.setViewport(Math.round(p.x * RES), Math.round(p.y * RES), Math.round(p.w * RES), Math.round(p.h * RES));
+        cam.setZoom(p.zoom * RES).centerOn(p.region.x + p.region.w / 2, p.region.y + p.region.h / 2);
+        cam.setBackgroundColor('#07060f');
+      });
+    } else {
+      this.cameras.main.setZoom(RES).centerOn(this.sw / 2, this.sh / 2);
+      this.cameras.main.setBackgroundColor('#07060f');
+    }
     ensureFxTextures(this);
     const bg = this.background();
     const layout = this.tableLayout();
+    const cx = this.sw / 2;
+    const cy = this.sh / 2;
     if (layout) {
       // The VIEWER's own table skin (personal cosmetic): never another player's, never room state.
-      hdImage(this, W / 2, H / 2, ensureSkinBackground(this, viewerTableSkin(), layout, this.tableOval())).setDepth(-100);
+      hdImage(this, cx, cy, ensureSkinBackground(this, viewerTableSkin(), layout, this.tableOval(), this.sw, this.sh)).setDepth(-100);
     } else {
       if (bg === 'felt') ensureFelt(this);
       else ensureLounge(this);
-      hdImage(this, W / 2, H / 2, bg === 'felt' ? 'bg-felt' : 'bg-lounge').setDepth(-100);
+      hdImage(this, cx, cy, bg === 'felt' ? 'bg-felt' : 'bg-lounge').setDepth(-100);
     }
     this.build();
     const onLang = () => this.labels.forEach((l) => l.obj.setText(i18n.t(l.key, l.vars)));
     i18n.on('languageChanged', onLang);
     this.events.once(Phaser.Scenes.Events.DESTROY, () => i18n.off('languageChanged', onLang));
-    if (!this.reduceMotion) this.cameras.main.fadeIn(350, 7, 6, 15);
+    if (!this.reduceMotion) this.cameras.cameras.forEach((c) => c.fadeIn(350, 7, 6, 15));
     this.resolveReady();
   }
 
@@ -91,7 +181,7 @@ export abstract class BaseScene extends Phaser.Scene {
       color: opts.color ?? '#ffffff',
       ...(opts.shadow ? { shadow: { offsetX: 0, offsetY: 1, color: 'rgba(0,0,0,0.7)', blur: 3, fill: true } } : {}),
     });
-    t.setResolution(RES);
+    t.setResolution(this.textRes);
     t.setOrigin(opts.originX ?? 0.5, opts.originY ?? 0.5);
     return t;
   }
@@ -114,7 +204,7 @@ export abstract class BaseScene extends Phaser.Scene {
   }
 
   /** Light burst, coin shower, sparkles and a floating win amount. */
-  celebrate(amount: number, x = W / 2, y = H / 2, big = false) {
+  celebrate(amount: number, x = this.sw / 2, y = this.sh / 2, big = false) {
     const label = this.text(x, y, `+${formatChips(amount, i18n.language)}`, {
       size: big ? 40 : 28,
       color: '#ffe08a',

@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 import { useEffect, useRef, useState } from 'react';
 import { useStableSize } from '../lib/viewport';
 import { useSettings } from '../store/settings';
-import { RES, WORLD_H, WORLD_W } from './hd';
+import { formFactor } from '../lib/device';
+import { RES } from './hd';
 import { viewerTableSkin, type BaseScene } from './scenes/BaseScene';
 
 /** Mounts a Phaser game running a single scene and hands the scene to React once it is ready. */
@@ -17,16 +18,24 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
   readyRef.current = onReady;
   // The viewer's own table skin, fixed for the scene's lifetime (exposed for QA, never sent anywhere).
   const [skin] = useState(viewerTableSkin);
+  const [orientation, setOrientation] = useState<'portrait' | 'landscape' | null>(null);
 
   useEffect(() => {
     if (!host.current) return;
     const scene = create();
     scene.reduceMotion = useSettings.getState().reduceMotion;
+    // Portrait layout on phones (always: a phone held sideways is covered by MobilePortraitGuard, so
+    // the scene never needs to switch) and in any taller-than-wide stage (tablet portrait). Chosen
+    // once per mount: a running round's animations are never torn down by a rotation.
+    const rect = frame.current?.getBoundingClientRect();
+    scene.portrait = formFactor() === 'phone' || (!!rect && rect.height > rect.width * 1.05);
+    const size = scene.canvasSize();
+    setOrientation(scene.portrait ? 'portrait' : 'landscape');
     const game = new Phaser.Game({
       type: Phaser.AUTO,
       parent: host.current,
-      width: WORLD_W * RES,
-      height: WORLD_H * RES,
+      width: Math.round(size.w * RES),
+      height: Math.round(size.h * RES),
       backgroundColor: '#07060f',
       antialias: true,
       pixelArt: false,
@@ -59,7 +68,7 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
   }, [box?.w, box?.h]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div ref={frame} data-table-skin={skin} className="h-full w-full overflow-hidden rounded-2xl">
+    <div ref={frame} data-table-skin={skin} data-table-orientation={orientation ?? undefined} className="h-full w-full overflow-hidden rounded-2xl">
       <div ref={host} style={box ? { width: box.w, height: box.h } : { width: '100%', height: '100%' }} />
     </div>
   );

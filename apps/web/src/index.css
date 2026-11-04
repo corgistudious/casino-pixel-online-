@@ -537,6 +537,18 @@
   box-shadow: -24px 0 48px -24px rgba(0, 0, 0, 0.9);
   animation: gslide-in var(--g-dur) var(--g-ease);
 }
+/* Narrow portrait (phones): the HUD takes two rows — back · title · timer, then tools · balance. */
+@container game (max-width: 640px) and (orientation: portrait) {
+  .ghud { flex-wrap: wrap; row-gap: 6px; padding-top: calc(var(--sa-t) + 6px); }
+  .ghud-left { flex: 1 1 100%; min-width: 0; }
+  .ghud-title { min-width: 0; flex: 1 1 auto; }
+  .ghud-title h1 { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ghud-sub { display: none; }
+  .ghud-tools { flex: 1 1 100%; justify-content: flex-end; }
+  .ghud-tools .gicon { --s: 40px; width: 40px; height: 40px; }
+  .ghud-balance { margin-right: auto; order: -1; }
+  .gbar { row-gap: 8px; padding-top: 8px; }
+}
 @container game (orientation: portrait) {
   .gpanel { top: auto; left: 0; width: auto; max-height: 72cqh; border-left: 0; border-top: var(--g-border) solid var(--g-line); border-radius: var(--g-radius-lg) var(--g-radius-lg) 0 0; animation-name: gsheet-in; padding-left: max(14px, var(--sa-l)); }
 }

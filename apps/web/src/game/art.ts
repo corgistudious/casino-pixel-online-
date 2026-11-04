@@ -968,9 +968,9 @@ export function ensureCardBackTexture(scene: Phaser.Scene, key: string, colors: 
 // ---------------------------------------------------------------- cosmetics (table skins, card backs)
 
 /** Background texture for the viewer's table skin and the scene's layout (one per skin + layout). */
-export function ensureSkinBackground(scene: Phaser.Scene, skinId: string, layout: TableLayout, oval?: OvalGeometry): string {
-  const key = `skin-bg:${skinId}:${layout}:${oval ? `${oval.cx},${oval.cy},${oval.rx},${oval.ry}` : ''}`;
-  hdTexture(scene, key, WORLD_W, WORLD_H, (ctx) => paintTable(ctx, WORLD_W, WORLD_H, skinId, layout, oval));
+export function ensureSkinBackground(scene: Phaser.Scene, skinId: string, layout: TableLayout, oval?: OvalGeometry, w = WORLD_W, h = WORLD_H): string {
+  const key = `skin-bg:${skinId}:${layout}:${w}x${h}:${oval ? `${oval.cx},${oval.cy},${oval.rx},${oval.ry}` : ''}`;
+  hdTexture(scene, key, w, h, (ctx) => paintTable(ctx, w, h, skinId, layout, oval));
   return key;
 }
 
