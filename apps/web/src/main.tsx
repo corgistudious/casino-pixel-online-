@@ -7,6 +7,7 @@ import '@fontsource/playfair-display/400.css';
 import '@fontsource/playfair-display/700.css';
 import '@fontsource/playfair-display/900.css';
 import './index.css';
+import './premium.css';
 import './i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

@@ -38,7 +38,7 @@ import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, LevelUpBanner, TestEnvBadge, Toasts } from './ui/Chrome';
-import { OrientationGuard } from './ui/OrientationGuard';
+import { MobilePortraitGuard } from './ui/MobilePortraitGuard';
 import { useGameChat } from './ui/game/GameTableLayout';
 import { StandaloneInsetHint } from './ui/StandaloneInsetHint';
 import { ViewportDiagnostics, viewportDiagEnabled } from './ui/ViewportDiagnostics';
@@ -231,7 +231,7 @@ export function App() {
     <HashRouter>
       <ConnectionBanner />
       <TestEnvBadge />
-      <OrientationGuard />
+      <MobilePortraitGuard />
       <StandaloneInsetHint />
       {viewportDiagEnabled() && <ViewportDiagnostics />}
       <Toasts />

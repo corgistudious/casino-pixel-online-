@@ -63,3 +63,41 @@ export function deviceClass(): DeviceClass {
   });
   return cached;
 }
+
+/**
+ * Form factor for the V7.1 layout: phones are portrait-only (MobilePortraitGuard asks them to turn
+ * back to portrait); tablets and PCs use whichever orientation they are in. Screen width alone never
+ * decides — a narrow PC window stays a PC, a small tablet stays a tablet.
+ *  - phone:  iPhone/iPod, Android with the "Mobile" UA token, UA-CH mobile=true, or an unknown
+ *            touch-only device whose shorter screen side is under 600 CSS px.
+ *  - tablet: iPad (also in desktop mode: a "Mac" with multi-touch), Android without "Mobile".
+ *  - pc:     everything classifyDevice() calls a PC.
+ */
+export type FormFactor = 'phone' | 'tablet' | 'pc';
+
+export function classifyFormFactor(env: DeviceEnv & { screenShort: number }): FormFactor {
+  if (classifyDevice(env) === 'pc') return 'pc';
+  const ua = env.userAgent;
+  if (env.uaData?.mobile === true || /iPhone|iPod/i.test(ua) || (/Android/i.test(ua) && /Mobile/i.test(ua))) return 'phone';
+  if (/iPad/i.test(ua) || (/Macintosh/i.test(ua) && env.maxTouchPoints > 1)) return 'tablet';
+  if (/Android/i.test(ua) || env.uaData?.platform?.toLowerCase() === 'android') return 'tablet';
+  return env.screenShort > 0 && env.screenShort < 600 ? 'phone' : 'tablet';
+}
+
+let cachedForm: FormFactor | null = null;
+
+/** The current browser's form factor (computed once per session). */
+export function formFactor(): FormFactor {
+  if (cachedForm) return cachedForm;
+  if (typeof navigator === 'undefined' || typeof window === 'undefined') return 'pc';
+  const mq = (q: string) => (typeof window.matchMedia === 'function' ? window.matchMedia(q).matches : false);
+  const nav = navigator as Navigator & { userAgentData?: { mobile?: boolean; platform?: string } };
+  cachedForm = classifyFormFactor({
+    userAgent: nav.userAgent ?? '',
+    uaData: nav.userAgentData ?? null,
+    maxTouchPoints: nav.maxTouchPoints ?? 0,
+    media: { coarse: mq('(pointer: coarse)'), noHover: mq('(hover: none)'), anyFine: mq('(any-pointer: fine)'), fineHover: mq('(pointer: fine) and (hover: hover)') },
+    screenShort: Math.min(window.screen?.width ?? 0, window.screen?.height ?? 0),
+  });
+  return cachedForm;
+}

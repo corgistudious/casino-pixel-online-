@@ -248,17 +248,37 @@
 .reduce-motion .kf-sheen { display: none; }
 .reduce-motion .kf-twinkle { animation: none; }
 
-/* Orientation guard: the phone icon turns toward the wanted orientation. */
-@keyframes orientation-turn-landscape { 0%, 25% { transform: rotate(0deg); } 60%, 100% { transform: rotate(-90deg); } }
-@keyframes orientation-turn-portrait { 0%, 25% { transform: rotate(-90deg); } 60%, 100% { transform: rotate(0deg); } }
-.orientation-turn-landscape { animation: orientation-turn-landscape 2.4s ease-in-out infinite alternate; }
-.orientation-turn-portrait { animation: orientation-turn-portrait 2.4s ease-in-out infinite alternate; }
-.reduce-motion .orientation-turn-landscape { animation: none; transform: rotate(-90deg); }
-.reduce-motion .orientation-turn-portrait { animation: none; }
-@media (prefers-reduced-motion: reduce) {
-  .orientation-turn-landscape { animation: none; transform: rotate(-90deg); }
-  .orientation-turn-portrait { animation: none; }
+/* MobilePortraitGuard (V7.1): opaque, full-screen, safe-area aware; the phone turns to portrait. */
+.portrait-guard {
+  position: fixed; inset: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 18%, rgba(242, 193, 78, 0.16), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 40%, #2a1a66 0%, #0b0822 62%, #05040f 100%);
+  color: #fff; overflow: hidden; touch-action: none; overscroll-behavior: none;
 }
+.portrait-guard-card {
+  position: relative; display: flex; align-items: center; gap: 22px;
+  max-width: min(560px, 100%); padding: 18px 26px; border-radius: 26px;
+  background: linear-gradient(160deg, rgba(40, 26, 92, 0.85), rgba(10, 8, 26, 0.92));
+  border: 1px solid rgba(242, 193, 78, 0.55);
+  box-shadow: 0 0 0 1px rgba(255, 241, 184, 0.08) inset, 0 18px 48px -12px rgba(0, 0, 0, 0.75), 0 0 48px -16px rgba(242, 193, 78, 0.6);
+}
+.portrait-guard-card::before { /* metallic rim highlight */
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: linear-gradient(120deg, #fff1b8, #f2c14e 30%, #6b4708 55%, #f7d77a 80%, #fff1b8);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.portrait-guard-art { display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
+.portrait-guard-text h2 { font-family: "Playfair Display", Georgia, serif; font-size: 20px; font-weight: 800; color: #ffe9a8; margin: 0 0 6px; }
+.portrait-guard-text p { margin: 0; font-size: 15px; line-height: 1.45; color: rgba(255, 255, 255, 0.88); }
+.portrait-guard-text .portrait-guard-hint { margin-top: 8px; font-size: 12px; color: rgba(255, 255, 255, 0.5); }
+@keyframes portrait-guard-turn { 0%, 20% { transform: rotate(-90deg); } 55%, 100% { transform: rotate(0deg); } }
+.portrait-guard-phone-body { transform-origin: 32px 30px; animation: portrait-guard-turn 2.6s cubic-bezier(.65,0,.35,1) infinite alternate; }
+.reduce-motion .portrait-guard-phone-body { animation: none; }
+@media (prefers-reduced-motion: reduce) { .portrait-guard-phone-body { animation: none; } }
+@media (max-height: 300px) { .portrait-guard-card { padding: 12px 18px; gap: 14px; } .portrait-guard-text h2 { font-size: 17px; } .portrait-guard-text p { font-size: 13px; } }
 
 /* PWA notice (ui/PwaBlockedScreen.tsx): a short, light entrance; none with reduced motion. */
 @keyframes pwa-in {
@@ -437,30 +457,9 @@
   min-width: calc(var(--h) * 1.7);
   padding: 0 clamp(12px, 2cqw, 22px);
   border-radius: calc(var(--h) / 2.4);
-  border: var(--g-border) solid transparent;
-  font-family: "Be Vietnam Pro", system-ui, sans-serif;
-  font-weight: 800;
   font-size: clamp(12px, 3.5cqh, 16px);
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  user-select: none;
-  touch-action: manipulation;
-  cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), var(--g-shadow);
-  transition: transform var(--g-dur-fast) var(--g-ease), filter var(--g-dur-fast) var(--g-ease), box-shadow var(--g-dur) var(--g-ease);
 }
 .gbtn--sm { --h: clamp(var(--g-touch-min), 8.4cqh, 42px); min-width: calc(var(--h) * 1.5); font-size: clamp(11px, 3.1cqh, 14px); }
-.gbtn--primary { background: linear-gradient(180deg, var(--g-gold-hi), var(--g-gold) 46%, var(--g-gold-lo)); color: #2a1a04; border-color: rgba(255, 241, 184, 0.85); }
-.gbtn--positive { background: linear-gradient(180deg, #52d293, var(--g-positive) 55%, #11683b); color: #fff; border-color: rgba(167, 240, 200, 0.5); }
-.gbtn--danger { background: linear-gradient(180deg, #e3566c, var(--g-danger) 55%, #7a1427); color: #fff; border-color: rgba(255, 170, 182, 0.45); }
-.gbtn--neutral { background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)); color: var(--g-text); border-color: rgba(255, 255, 255, 0.18); }
-.gbtn--ghost-danger { background: rgba(179, 35, 60, 0.14); color: #ffc2cb; border-color: rgba(255, 140, 156, 0.55); }
-@media (hover: hover) { .gbtn:hover:not(:disabled) { filter: brightness(1.08); } }
-.gbtn:active:not(:disabled) { transform: translateY(1px) scale(0.97); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 10px -6px rgba(0, 0, 0, 0.8); }
-.gbtn:focus-visible { outline: 2px solid var(--g-cyan); outline-offset: 2px; }
-.gbtn[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--g-gold), inset 0 1px 0 rgba(255, 255, 255, 0.32), var(--g-shadow); }
-.gbtn:disabled { cursor: not-allowed; opacity: 0.42; filter: saturate(0.35); box-shadow: none; }
-.gbtn[aria-busy="true"] { opacity: 0.85; cursor: progress; }
 .gbtn-spin {
   width: 0.95em; height: 0.95em; border-radius: 50%;
   border: 2px solid currentColor; border-right-color: transparent;

@@ -1,10 +1,14 @@
 import type { ButtonHTMLAttributes, ComponentPropsWithRef, ReactNode } from 'react';
 import { sfx } from '../../audio/sfx';
 
-export type GameTone = 'primary' | 'positive' | 'danger' | 'neutral' | 'ghost-danger';
+export type GameTone = 'primary' | 'positive' | 'danger' | 'neutral' | 'ghost-danger' | 'violet' | 'ice' | 'rose' | 'vip';
+
+/** Game tones → premium design-system tones (premium.css). */
+const TONE: Record<GameTone, string> = { primary: 'pt-gold', positive: 'pt-emerald', danger: 'pt-danger', neutral: 'pt-neutral', 'ghost-danger': 'pt-danger pbtn-ghost', violet: 'pt-violet', ice: 'pt-ice', rose: 'pt-rose', vip: 'pt-vip' };
 
 /**
- * The single action button of every table screen (styles: .gbtn in index.css).
+ * The single action button of every table screen: sizes from .gbtn (index.css), looks from the
+ * premium design system (.pbtn + tone, premium.css).
  * `loading` = waiting for the server: the button is disabled (no duplicate action) and shows a
  * spinner; `selected` sets aria-pressed for toggles.
  */
@@ -31,9 +35,9 @@ export function GameButton({
         sfx.click();
         onClick?.(e);
       }}
-      className={`gbtn gbtn--${tone}${size === 'sm' ? ' gbtn--sm' : ''} ${className}`}
+      className={`gbtn pbtn ${TONE[tone]}${size === 'sm' ? ' gbtn--sm' : ''} ${className}`}
     >
-      {loading ? <span className="gbtn-spin" aria-hidden /> : icon}
+      {loading ? <span className="pbtn-spin" aria-hidden /> : icon}
       <span>{children}</span>
     </button>
   );
@@ -42,7 +46,7 @@ export function GameButton({
 /** Round HUD tool button; the label is its accessible name and tooltip. */
 export function GameIconButton({ label, badge, expanded, children, onClick, ...rest }: ComponentPropsWithRef<'button'> & { label: string; badge?: number | string; expanded?: boolean; children: ReactNode }) {
   return (
-    <button type="button" {...rest} className="gicon" aria-label={label} title={label} aria-expanded={expanded} onClick={onClick}>
+    <button type="button" {...rest} className="gicon picon" aria-label={label} title={label} aria-expanded={expanded} onClick={onClick}>
       {children}
       {badge !== undefined && badge !== 0 && badge !== '' && <span className="gicon-badge">{badge}</span>}
     </button>

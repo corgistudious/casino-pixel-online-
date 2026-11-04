@@ -53,9 +53,10 @@ export function useOrientation(): Orientation {
   return o;
 }
 
-/** Sign-in, sign-up and password recovery are portrait; everything after sign-in is landscape. */
-export function requiredOrientation(opts: { signedIn: boolean; verified: boolean; pathname: string }): Orientation {
-  const linkPage = ['/verify-email', '/reset-password', '/activate', '/captain-setup'].includes(opts.pathname);
-  if (!opts.signedIn || !opts.verified || linkPage) return 'portrait';
-  return 'landscape';
+/**
+ * V7.1: phones are portrait-only everywhere (sign-in, lobby, rooms, games). Returns true when the
+ * rotate-to-portrait notice must cover the app. Tablets and PCs are never asked to rotate.
+ */
+export function phoneMustRotate(form: 'phone' | 'tablet' | 'pc', orientation: Orientation): boolean {
+  return form === 'phone' && orientation === 'landscape';
 }

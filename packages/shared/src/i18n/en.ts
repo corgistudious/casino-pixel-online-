@@ -6,11 +6,9 @@ export const en = {
     disclaimer:
       'Entertainment only. Silver and Gold Cxu are virtual, cannot be bought, have no cash value and cannot be exchanged, withdrawn or redeemed for real money or prizes.',
     orientation: {
-      landscapeTitle: 'Turn your device sideways',
-      landscapeBody: 'The lobby, game rooms and every feature after sign-in are built for landscape. Rotate your phone or tablet to continue — nothing you were doing is lost.',
-      portraitTitle: 'Hold your device upright',
-      portraitBody: 'Sign in, sign up and password recovery are laid out for portrait. Rotate your phone or tablet to continue — what you typed is kept.',
-      hint: 'The screen updates by itself once rotated.',
+      portraitTitle: 'Rotate to portrait',
+      portraitBody: 'Please rotate your phone to portrait mode to continue playing Keyo Game.',
+      hint: 'The game comes back as soon as you turn the phone upright — your round and everything you were doing is kept.',
     },
     offline: 'Connection lost. Reconnecting…',
     loadFailed: 'This screen could not be loaded. Check your connection and try again.',

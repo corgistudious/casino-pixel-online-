@@ -1,0 +1,180 @@
+/* ============================================================================================
+   Keyo Game V7.1 — Premium design system (tokens + components). One stylesheet, no per-button CSS.
+   Buttons: layered metal gradient, soft bright rim, a light band sweeping across the surface
+   (transform-only, GPU composited), reflection, deep shadow. Tones carry meaning:
+     gold   — play / bet (Hoàng Kim)          violet — chat / guild / friends (Huyền Tím)
+     ice    — bank / info (Băng Lam)           rose   — events / rewards (Hồng Ruby)
+     emerald— confirm (Xanh Ngọc)              danger — warning / fold (Đỏ Ruby)
+     vip    — VIP (gold → violet metal)         neutral— secondary (deep glass)
+   Animation never changes layout size; it stops with prefers-reduced-motion / the in-app setting.
+   ============================================================================================ */
+:root {
+  --p-radius-sm: 10px;
+  --p-radius: 14px;
+  --p-radius-lg: 20px;
+  --p-radius-xl: 26px;
+  --p-touch: 44px;
+  --p-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --p-dur-fast: 120ms;
+  --p-dur: 220ms;
+  --p-sheen-dur: 3.8s;
+  --p-surface: linear-gradient(165deg, rgba(36, 24, 84, 0.92), rgba(12, 10, 30, 0.94));
+  --p-surface-2: linear-gradient(165deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  --p-line: rgba(242, 193, 78, 0.28);
+  --p-line-soft: rgba(255, 255, 255, 0.10);
+  --p-text: #f6f2ff;
+  --p-muted: rgba(246, 242, 255, 0.62);
+  --p-shadow: 0 14px 34px -16px rgba(0, 0, 0, 0.9);
+  --p-focus: #5ad8ff;
+}
+
+/* ---------------------------------------------------------------- tones (CSS variables only) */
+.pbtn, .ptab, .pbadge, .picon {
+  --pt-a: #fff3c4; --pt-b: #f2c14e; --pt-c: #a86d12; --pt-d: #f7d77a;
+  --pt-text: #2a1a04; --pt-edge: rgba(255, 244, 200, 0.9); --pt-glow: rgba(242, 193, 78, 0.55); --pt-shine: rgba(255, 255, 255, 0.55);
+}
+.pt-gold    { --pt-a: #fff3c4; --pt-b: #f2c14e; --pt-c: #a86d12; --pt-d: #f7d77a; --pt-text: #2a1a04; --pt-edge: rgba(255, 244, 200, 0.9);  --pt-glow: rgba(242, 193, 78, 0.55); }
+.pt-violet  { --pt-a: #e7d4ff; --pt-b: #9b5cf6; --pt-c: #4b1d93; --pt-d: #c79bff; --pt-text: #fff;    --pt-edge: rgba(230, 210, 255, 0.75); --pt-glow: rgba(155, 92, 246, 0.55); }
+.pt-ice     { --pt-a: #dff7ff; --pt-b: #43b8f0; --pt-c: #12558f; --pt-d: #9fe3ff; --pt-text: #fff;    --pt-edge: rgba(210, 244, 255, 0.8);  --pt-glow: rgba(67, 184, 240, 0.5); }
+.pt-rose    { --pt-a: #ffd9ec; --pt-b: #f2509a; --pt-c: #8c1450; --pt-d: #ff9cc8; --pt-text: #fff;    --pt-edge: rgba(255, 214, 234, 0.8);  --pt-glow: rgba(242, 80, 154, 0.5); }
+.pt-emerald { --pt-a: #d6ffe9; --pt-b: #23b26d; --pt-c: #0b5a35; --pt-d: #8cf0bd; --pt-text: #fff;    --pt-edge: rgba(200, 255, 225, 0.7);  --pt-glow: rgba(35, 178, 109, 0.5); }
+.pt-danger  { --pt-a: #ffd2d9; --pt-b: #d63451; --pt-c: #6d0f22; --pt-d: #ff8ea0; --pt-text: #fff;    --pt-edge: rgba(255, 200, 210, 0.75); --pt-glow: rgba(214, 52, 81, 0.5); }
+.pt-vip     { --pt-a: #fff3c4; --pt-b: #e2a93a; --pt-c: #5b2aa3; --pt-d: #c79bff; --pt-text: #fff;    --pt-edge: rgba(255, 236, 190, 0.85); --pt-glow: rgba(199, 155, 255, 0.55); }
+.pt-neutral { --pt-a: rgba(255,255,255,0.20); --pt-b: rgba(255,255,255,0.09); --pt-c: rgba(255,255,255,0.03); --pt-d: rgba(255,255,255,0.12);
+              --pt-text: var(--p-text); --pt-edge: rgba(255, 255, 255, 0.22); --pt-glow: rgba(0, 0, 0, 0); --pt-shine: rgba(255, 255, 255, 0.22); }
+
+/* ---------------------------------------------------------------- button */
+.pbtn {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.45em;
+  border: 1px solid var(--pt-edge);
+  color: var(--pt-text);
+  font-family: "Be Vietnam Pro", system-ui, sans-serif; font-weight: 800; letter-spacing: 0.02em; white-space: nowrap;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.06) 46%, rgba(0,0,0,0) 54%, rgba(0,0,0,0.16) 100%),
+    linear-gradient(115deg, var(--pt-a) 0%, var(--pt-b) 28%, var(--pt-c) 52%, var(--pt-b) 74%, var(--pt-d) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -2px 0 rgba(0,0,0,0.22),
+    0 1px 0 rgba(0,0,0,0.35), 0 10px 22px -10px var(--pt-glow), var(--p-shadow);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.18);
+  user-select: none; -webkit-user-select: none; touch-action: manipulation; cursor: pointer;
+  transition: transform var(--p-dur-fast) var(--p-ease), box-shadow var(--p-dur) var(--p-ease), filter var(--p-dur) var(--p-ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.pbtn:not(.pt-gold):not(.pt-neutral) { text-shadow: 0 1px 1px rgba(0,0,0,0.35); }
+/* Sweeping light band (the reference video's moving reflection). transform-only = cheap. */
+.pbtn::before {
+  content: ""; position: absolute; z-index: -1; top: -20%; bottom: -20%; left: 0; width: 38%;
+  background: linear-gradient(100deg, transparent 0%, var(--pt-shine) 48%, rgba(255,255,255,0.08) 60%, transparent 100%);
+  transform: translateX(-160%) skewX(-18deg);
+  animation: p-sheen var(--p-sheen-dur) var(--p-ease) infinite;
+  pointer-events: none;
+}
+/* Top reflection. */
+.pbtn::after {
+  content: ""; position: absolute; z-index: -1; inset: 1px 1px 52% 1px; border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0));
+  pointer-events: none;
+}
+@keyframes p-sheen { 0% { transform: translateX(-160%) skewX(-18deg); } 55%, 100% { transform: translateX(330%) skewX(-18deg); } }
+.pbtn > * { position: relative; }
+
+/* Sizes (touch targets ≥ 44px on touch screens). */
+.pbtn-sm { min-height: 34px; padding: 0 14px; font-size: 12.5px; border-radius: var(--p-radius-sm); }
+.pbtn-md { min-height: 42px; padding: 0 18px; font-size: 14px; border-radius: var(--p-radius); }
+.pbtn-lg { min-height: 50px; padding: 0 26px; font-size: 16px; border-radius: var(--p-radius); }
+@media (pointer: coarse) { .pbtn-sm, .pbtn-md { min-height: var(--p-touch); } }
+.pbtn-sm::before { animation-duration: 5.2s; }
+
+/* States. */
+@media (hover: hover) {
+  .pbtn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.07) saturate(1.05);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -2px 0 rgba(0,0,0,0.22), 0 2px 0 rgba(0,0,0,0.35), 0 16px 30px -10px var(--pt-glow), var(--p-shadow); }
+}
+.pbtn:active:not(:disabled) { transform: translateY(1px) scale(0.97);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 4px 10px -6px rgba(0,0,0,0.8); filter: brightness(0.97); }
+.pbtn:focus-visible { outline: 2px solid var(--p-focus); outline-offset: 3px; }
+.pbtn[aria-pressed="true"], .pbtn[data-selected="true"] { box-shadow: 0 0 0 2px #fff1b8, 0 0 18px 2px var(--pt-glow), inset 0 1px 0 rgba(255,255,255,0.55); }
+.pbtn:disabled, .pbtn[aria-disabled="true"] { cursor: not-allowed; opacity: 0.45; filter: saturate(0.3); box-shadow: none; transform: none; }
+.pbtn:disabled::before, .pbtn[aria-busy="true"]::before { animation: none; opacity: 0; }
+.pbtn[aria-busy="true"] { cursor: progress; }
+.pbtn[data-state="success"] { box-shadow: 0 0 0 2px #8cf0bd, 0 0 22px 2px rgba(35, 178, 109, 0.6); }
+.pbtn[data-state="error"] { box-shadow: 0 0 0 2px #ff8ea0, 0 0 22px 2px rgba(214, 52, 81, 0.6); animation: p-shake 0.32s var(--p-ease); }
+@keyframes p-shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+.pbtn.pt-neutral::before { animation-duration: 7s; }
+.pbtn-spin { width: 1em; height: 1em; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: gspin 0.7s linear infinite; }
+
+/* ---------------------------------------------------------------- round icon button */
+.picon {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 50%; color: #f6e3b0;
+  background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.16), rgba(255,255,255,0.03) 70%), rgba(14, 10, 34, 0.75);
+  border: 1px solid rgba(242, 193, 78, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 6px 16px -8px rgba(0,0,0,0.85);
+  transition: transform var(--p-dur-fast) var(--p-ease), box-shadow var(--p-dur) var(--p-ease);
+  touch-action: manipulation;
+}
+@media (hover: hover) { .picon:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 0 14px -2px rgba(242,193,78,0.55); } }
+.picon:active { transform: scale(0.94); }
+.picon:focus-visible { outline: 2px solid var(--p-focus); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- tabs */
+.ptabs { display: flex; gap: 4px; padding: 4px; border-radius: var(--p-radius); background: rgba(0,0,0,0.32); border: 1px solid var(--p-line-soft); overflow-x: auto; scrollbar-width: none; }
+.ptabs::-webkit-scrollbar { display: none; }
+.ptab {
+  position: relative; overflow: hidden; flex-shrink: 0; min-height: 38px; padding: 0 16px; border-radius: calc(var(--p-radius) - 4px);
+  color: var(--p-muted); font-weight: 700; font-size: 13.5px; white-space: nowrap; cursor: pointer;
+  transition: color var(--p-dur) var(--p-ease), background var(--p-dur) var(--p-ease), transform var(--p-dur-fast) var(--p-ease);
+}
+@media (pointer: coarse) { .ptab { min-height: var(--p-touch); } }
+@media (hover: hover) { .ptab:hover:not([aria-selected="true"]) { color: #fff; background: rgba(255,255,255,0.06); } }
+.ptab:active { transform: scale(0.97); }
+.ptab:focus-visible { outline: 2px solid var(--p-focus); outline-offset: 1px; }
+.ptab[aria-selected="true"] {
+  color: var(--pt-text);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0) 55%),
+    linear-gradient(115deg, var(--pt-a), var(--pt-b) 35%, var(--pt-c) 70%, var(--pt-d));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 6px 14px -8px var(--pt-glow);
+}
+
+/* ---------------------------------------------------------------- surfaces */
+.pcard {
+  position: relative; border-radius: var(--p-radius-lg); background: var(--p-surface);
+  border: 1px solid var(--p-line); box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), var(--p-shadow);
+}
+.pcard-interactive { transition: transform var(--p-dur) var(--p-ease), box-shadow var(--p-dur) var(--p-ease), border-color var(--p-dur) var(--p-ease); }
+@media (hover: hover) { .pcard-interactive:hover { transform: translateY(-3px); border-color: rgba(242,193,78,0.6); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 26px -10px rgba(242,193,78,0.6), var(--p-shadow); } }
+.pcard-interactive:active { transform: translateY(0) scale(0.99); }
+.pbadge {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 20px; padding: 0 8px; border-radius: 999px;
+  font-size: 11px; font-weight: 800; color: var(--pt-text);
+  background: linear-gradient(115deg, var(--pt-a), var(--pt-b) 40%, var(--pt-c));
+  border: 1px solid var(--pt-edge); box-shadow: 0 2px 8px -4px var(--pt-glow);
+}
+.pinput {
+  width: 100%; min-height: 44px; padding: 0 14px; border-radius: var(--p-radius); color: var(--p-text);
+  background: rgba(0,0,0,0.35); border: 1px solid var(--p-line-soft); box-shadow: inset 0 2px 6px rgba(0,0,0,0.35);
+  transition: border-color var(--p-dur) var(--p-ease), box-shadow var(--p-dur) var(--p-ease);
+}
+.pinput:focus { outline: none; border-color: rgba(242,193,78,0.7); box-shadow: inset 0 2px 6px rgba(0,0,0,0.35), 0 0 0 3px rgba(242,193,78,0.18); }
+.pskeleton { border-radius: var(--p-radius-sm); background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.12), rgba(255,255,255,0.05)); background-size: 200% 100%; animation: p-skel 1.4s linear infinite; }
+@keyframes p-skel { to { background-position: -200% 0; } }
+
+/* ---------------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pbtn::before { animation: none; opacity: 0; }
+  .pbtn, .picon, .ptab, .pcard-interactive { transition: none; }
+  .pskeleton { animation: none; }
+}
+.reduce-motion .pbtn::before { animation: none; opacity: 0; }
+.reduce-motion .pskeleton { animation: none; }
+
+/* Outline variant (e.g. Fold): tinted glass with the tone's rim; same sheen. */
+.pbtn.pbtn-ghost {
+  color: var(--pt-a);
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02)), color-mix(in srgb, var(--pt-c) 32%, rgba(10, 8, 26, 0.85));
+  text-shadow: none;
+}
+/* Game bar buttons size from their container (index.css .gbtn); keep a 44px touch floor on phones. */
+@media (pointer: coarse) { .gbtn.pbtn { min-height: 44px; } }
