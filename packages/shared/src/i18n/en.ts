@@ -16,6 +16,11 @@ export const en = {
     online: '{{count}} online',
   },
   nav: {
+    tabHub: 'Lobby',
+    tabRooms: 'Tables',
+    tabMarket: 'Market',
+    tabFriends: 'Friends',
+    more: 'More',
     guild: 'Guild',
     support: 'Support',
     chat: 'Chat',

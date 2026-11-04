@@ -18,6 +18,11 @@ export const vi: Translation = {
     online: '{{count}} đang online',
   },
   nav: {
+    tabHub: 'Sảnh',
+    tabRooms: 'Phòng bài',
+    tabMarket: 'Chợ',
+    tabFriends: 'Bạn bè',
+    more: 'Thêm',
     guild: 'Bang Hội',
     support: 'Hỗ Trợ',
     chat: 'Trò chuyện',

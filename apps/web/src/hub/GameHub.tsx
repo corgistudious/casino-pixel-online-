@@ -9,7 +9,7 @@ import { CheckinPanel } from '../pages/CheckinPanel';
 import { WelcomeModal } from '../pages/WelcomeModal';
 import { useSession } from '../store/session';
 import { useSettings } from '../store/settings';
-import { DemoBanner, DemoTag } from '../ui/AppShell';
+import { DemoBanner, DemoTag, PlayerBar } from '../ui/AppShell';
 import { Avatar } from '../ui/Avatar';
 import { NavIcon, type NavIconName } from '../ui/NavIcons';
 import { CurrencyIcon, PlayerName } from '../ui/OfficialAssets';
@@ -18,6 +18,8 @@ import { VipEmblem } from '../ui/VipEmblem';
 import { BannerGiftArt, BannerRouletteArt, BlackjackArt, LiengArt, PokerArt, RouletteArt, SicBoArt, XiToArt } from './art/gameArt';
 import { LoungeBackground } from './LoungeBackground';
 import { Stage } from './Stage';
+import { BottomTabBar } from '../ui/BottomTabBar';
+import { usePortraitLayout } from '../lib/layout';
 
 type GameId = 'poker' | 'sicbo' | 'roulette' | 'lieng' | 'xito' | 'blackjack';
 
@@ -296,7 +298,7 @@ function VipEmblemFill({ level }: { level: number }) {
   );
 }
 
-function GameCard({ s, game, index, cardW }: { s: Sizes; game: (typeof GAMES)[number]; index: number; cardW: number }) {
+function GameCard({ s, game, index, cardW, cta = false }: { s: Sizes; game: (typeof GAMES)[number]; index: number; cardW: number; cta?: boolean }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
@@ -364,18 +366,23 @@ function GameCard({ s, game, index, cardW }: { s: Sizes; game: (typeof GAMES)[nu
               )}
             </div>
             <div
-              className="relative flex shrink-0 items-center border-t border-[#f2c14e]/40 bg-gradient-to-b from-[#1b1340] to-[#0a0720]"
-              style={{ height: s.plate, paddingInline: s.cardName * 0.6, gap: s.gap * 0.5 }}
+              className={`relative flex shrink-0 border-t border-[#f2c14e]/40 bg-gradient-to-b from-[#1b1340] to-[#0a0720] ${cta ? 'flex-col items-stretch justify-center py-2' : 'items-center'}`}
+              style={{ height: cta ? undefined : s.plate, paddingInline: s.cardName * 0.6, gap: s.gap * 0.5 }}
             >
               <div className="min-w-0 flex-1">
                 <div
-                  className="font-display font-bold leading-[1.1] text-white [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [overflow-wrap:anywhere]"
+                  className={`font-display font-bold leading-[1.1] text-white [display:-webkit-box] [-webkit-box-orient:vertical] [overflow-wrap:anywhere] ${cta ? '[-webkit-line-clamp:1]' : '[-webkit-line-clamp:2]'}`}
                   style={{ fontSize: Math.min(s.cardName, Math.max(s.cardSub * 1.15, cardW / 11.5)) }}
                 >
                   {name}
                 </div>
               </div>
-              {game.live && (
+              {game.live && cta && (
+                <span className="pbtn pbtn-sm pt-gold shrink-0" aria-hidden>
+                  {t('hub.playNow')}
+                </span>
+              )}
+              {game.live && !cta && (
                 <span
                   className="flex shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#fff1b8] via-[#f2c14e] to-[#b9801c] shadow-[0_6px_16px_rgba(185,128,28,0.5),inset_0_2px_0_rgba(255,255,255,0.7)] transition group-hover:scale-110"
                   style={{ width: s.play, height: s.play }}
@@ -446,10 +453,108 @@ function Dock({ s }: { s: Sizes }) {
   );
 }
 
+/** Portrait (phones / upright tablets, V7.1) design sizes, in CSS px (no stage scaling). */
+const PORTRAIT_SIZES: Sizes = { ...sizes(true), pad: 14, gap: 12, small: 11, title: 26, body: 13.5, cta: 15, cardName: 17, cardSub: 11, plate: 54, play: 36, label: 12 };
+
+/**
+ * Portrait lobby: player bar, event banner, quick actions, the six game cards in two columns with a
+ * clear "Play now", chat shortcut, bottom tab bar. Same destinations as the landscape lobby.
+ */
+function PortraitHub({ openCheckin }: { openCheckin: () => void }) {
+  const { t } = useTranslation();
+  const user = useSession((st) => st.user)!;
+  const s = PORTRAIT_SIZES;
+  const quick: { icon: NavIconName; label: string; to?: string; onClick?: () => void; dot?: boolean; tone: string }[] = [
+    { icon: 'gifts', label: t('checkin.claim'), onClick: openCheckin, dot: !user.checkin.claimedToday, tone: 'pt-rose' },
+    { icon: 'mail', label: t('nav.mail'), to: '/mail', dot: user.unreadMail > 0, tone: 'pt-ice' },
+    { icon: 'missions', label: t('nav.missions'), to: '/missions', tone: 'pt-rose' },
+    { icon: 'vip', label: t('nav.vip'), to: '/vip', tone: 'pt-vip' },
+  ];
+  return (
+    <div className="flex h-full flex-col bg-[#05040f]" data-hub-layout="portrait">
+      <DemoBanner />
+      <WelcomeModal />
+      <PlayerBar />
+      <div className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        <div className="pointer-events-none fixed inset-0 -z-0 opacity-70">
+          <LoungeBackground />
+        </div>
+        <div className="relative mx-auto flex w-full max-w-3xl flex-col gap-4 px-3 pb-4 pt-3 pl-[max(0.75rem,var(--sa-l))] pr-[max(0.75rem,var(--sa-r))]">
+          <div className="animate-rise" style={{ aspectRatio: '16 / 10' }}>
+            <Banner s={s} openCheckin={openCheckin} />
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {quick.map((q) => {
+              const inner = (
+                <>
+                  <span className={`picon relative ${q.tone}`}>
+                    <NavIcon name={q.icon} size={22} active />
+                    {q.dot && <span className="ptabbar-dot" />}
+                  </span>
+                  <span className="mt-1 line-clamp-2 text-center text-[11px] font-semibold leading-tight text-white/85">{q.label}</span>
+                </>
+              );
+              return q.to ? (
+                <Link key={q.label} to={q.to} className="flex flex-col items-center">
+                  {inner}
+                </Link>
+              ) : (
+                <button key={q.label} type="button" onClick={q.onClick} className="flex flex-col items-center">
+                  {inner}
+                </button>
+              );
+            })}
+          </div>
+          <section aria-labelledby="hub-games" className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <h2 id="hub-games" className="font-display text-xl font-bold text-gold">{t('hub.games')}</h2>
+              {user.permissions.includes('admin.access') && (
+                <Link to="/admin" className="pbtn pbtn-sm pt-vip">
+                  {t('nav.admin')}
+                </Link>
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {GAMES.map((g, i) => (
+                <div key={g.id} style={{ aspectRatio: '4 / 5' }}>
+                  <GameCard s={s} game={g} index={i} cardW={170} cta />
+                </div>
+              ))}
+            </div>
+          </section>
+          <Link to="/chat" className="pbtn pbtn-lg pt-violet w-full">
+            <NavIcon name="chat" size={20} active />
+            {t('nav.chat')}
+          </Link>
+        </div>
+      </div>
+      <BottomTabBar />
+    </div>
+  );
+}
+
 export function GameHub() {
   const { t } = useTranslation();
   const user = useSession((st) => st.user)!;
   const [checkinOpen, setCheckinOpen] = useState(false);
+  const portrait = usePortraitLayout();
+  const checkinModal = checkinOpen && (
+    <div className="overlay z-40 flex items-center justify-center bg-[#05040f]/80 backdrop-blur-sm" onClick={() => setCheckinOpen(false)} role="dialog" aria-modal="true">
+      <div className="w-full max-w-md animate-rise" onClick={(e) => e.stopPropagation()}>
+        <CheckinPanel />
+        <button onClick={() => setCheckinOpen(false)} className="mx-auto mt-3 block rounded-full border border-white/20 px-5 py-1.5 text-sm text-white/70 hover:text-white">
+          {t('nav.back')}
+        </button>
+      </div>
+    </div>
+  );
+  if (portrait)
+    return (
+      <>
+        <PortraitHub openCheckin={() => setCheckinOpen(true)} />
+        {checkinModal}
+      </>
+    );
 
   return (
     <div className="flex h-full flex-col bg-[#05040f]">
@@ -488,16 +593,7 @@ export function GameHub() {
         </Stage>
         </div>
       </div>
-      {checkinOpen && (
-        <div className="overlay z-40 flex items-center justify-center bg-[#05040f]/80 backdrop-blur-sm" onClick={() => setCheckinOpen(false)} role="dialog" aria-modal="true">
-          <div className="w-full max-w-md animate-rise" onClick={(e) => e.stopPropagation()}>
-            <CheckinPanel />
-            <button onClick={() => setCheckinOpen(false)} className="mx-auto mt-3 block rounded-full border border-white/20 px-5 py-1.5 text-sm text-white/70 hover:text-white">
-              {t('nav.back')}
-            </button>
-          </div>
-        </div>
-      )}
+      {checkinModal}
     </div>
   );
 }

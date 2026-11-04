@@ -12,6 +12,8 @@ import { NavIcon, type NavIconName } from './NavIcons';
 import { CurrencyIcon, PlayerName } from './OfficialAssets';
 import { VipEmblem } from './VipEmblem';
 import { ChatButton } from './ChatButton';
+import { BottomTabBar } from './BottomTabBar';
+import { usePortraitLayout } from '../lib/layout';
 
 export const NAV_ITEMS: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/', icon: 'hub', label: 'nav.hub' },
@@ -91,7 +93,7 @@ export function VipMeter({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function PlayerBar() {
+export function PlayerBar() {
   const { t, i18n } = useTranslation();
   const user = useSession((s) => s.user)!;
   const balance = useSession((s) => s.balance);
@@ -125,9 +127,9 @@ function PlayerBar() {
         </div>
         <ChatButton />
         {(['silver', 'gold'] as const).map((c) => (
-          <div key={c} className="gold-border flex items-center gap-1.5 rounded-full py-0.5 pl-0.5 pr-3" title={t(`currency.${c}`)}>
-            <CurrencyIcon currency={c} size={28} />
-            <span className={`text-sm font-bold tabular-nums ${c === 'gold' ? 'text-gold-100' : 'text-white'}`}>{fmt(c === 'gold' ? gold : balance)}</span>
+          <div key={c} className="gold-border flex items-center gap-1 rounded-full py-0.5 pl-0.5 pr-2 sm:gap-1.5 sm:pr-3" title={t(`currency.${c}`)}>
+            <CurrencyIcon currency={c} size={24} />
+            <span className={`text-xs font-bold tabular-nums sm:text-sm ${c === 'gold' ? 'text-gold-100' : 'text-white'}`}>{fmt(c === 'gold' ? gold : balance)}</span>
           </div>
         ))}
       </div>
@@ -178,16 +180,21 @@ export function DemoBanner() {
   );
 }
 
-/** Lobby-style screens: player bar on top, navigation rail on the left. */
+/**
+ * Lobby-style screens. Landscape (PC, tablets held sideways): player bar on top, navigation rail on
+ * the left. Portrait (phones, V7.1): player bar on top, content, bottom tab bar (+ "More" sheet).
+ */
 export function AppShell({ children }: { children: ReactNode }) {
+  const portrait = usePortraitLayout();
   return (
     <div className="flex h-full flex-col">
       <DemoBanner />
       <PlayerBar />
       <div className="flex min-h-0 flex-1">
-        <NavRail />
-        <main className="min-w-0 flex-1 overflow-y-auto pb-[var(--sa-b)] pr-[var(--sa-r)]">{children}</main>
+        {!portrait && <NavRail />}
+        <main className={`min-w-0 flex-1 overflow-y-auto pr-[var(--sa-r)] ${portrait ? 'pl-[var(--sa-l)]' : 'pb-[var(--sa-b)]'}`}>{children}</main>
       </div>
+      {portrait && <BottomTabBar />}
     </div>
   );
 }
