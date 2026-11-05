@@ -316,3 +316,8 @@
   .gicon { --s: 44px; width: 44px; height: 44px; }
   .gchips { gap: 2px; }
 }
+/* Short landscape screens: HUD rail icons never shrink below their touch size; gaps tighten instead. */
+@container game ((max-height: 560px) and (min-aspect-ratio: 16/10)) or (min-aspect-ratio: 19/10) {
+  .ghud-left .gicon, .ghud-tools .gicon { flex-shrink: 0; }
+  .ghud-left, .ghud-tools { gap: clamp(3px, 1cqh, 8px); }
+}
