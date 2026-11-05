@@ -285,3 +285,12 @@
   .paction-wrap > .praise { flex: 1.1 1 0; padding: 6px 10px; }
   .paction-wrap > .pactions { flex: 1 1 0; }
 }
+/* Phones (narrow portrait game): the raise control is a single row — − · slider · + · All-in. The
+   amount is already on the Raise button; the ½ · Pot · 2× shortcuts stay on tablets and PCs. */
+@container game (max-width: 640px) and (orientation: portrait) {
+  .praise { grid-template-columns: auto 1fr auto auto; padding: 6px 8px; gap: 6px; }
+  .praise-value { display: none; }
+  .praise-slider { grid-column: 2; grid-row: 1; }
+  .praise-slider .gbtn { display: none; }
+  .paction-wrap { gap: 6px; }
+}
