@@ -6,7 +6,7 @@ const all = ['pwa', 'orientation', 'controls', 'layout', 'pages'];
 const pick = process.argv.slice(2).length ? process.argv.slice(2) : all;
 let failed = 0;
 for (const n of pick) {
-  const r = spawnSync(process.execPath, [`${dir}${n}.spec.mjs`], { stdio: 'inherit', env: process.env });
+  const r = spawnSync(process.execPath, [`${dir}${n}.e2e.mjs`], { stdio: 'inherit', env: process.env });
   if (r.status !== 0) failed++;
 }
 console.log(failed ? `${failed} suite(s) failed` : 'all suites passed');

@@ -131,7 +131,6 @@ function fakePage(opts: { innerHeight: number; lvh: number; standalone: boolean 
   vi.stubGlobal('screen', { width: 440, height: 956, orientation: { type: 'landscape-primary' } });
   vi.stubGlobal('requestAnimationFrame', (fn: () => void) => { frames.push(fn); return frames.length; });
   vi.stubGlobal('cancelAnimationFrame', () => {});
-  vi.stubGlobal('performance', { now: () => 0 });
   vi.stubGlobal('HTMLElement', class {});
   return page;
 }
