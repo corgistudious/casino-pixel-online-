@@ -103,6 +103,15 @@ export abstract class TableScene extends BaseScene {
     for (const spot of this.spots.values()) spot.highlight.setStrokeStyle(1.5, 0xffe08a, keys.includes(spot.key) ? 1 : 0);
     const targets = keys.map((k) => this.spots.get(k)?.highlight).filter(Boolean);
     targets.forEach((h) => h!.setFillStyle(0xffe08a, 0.18));
+    // Winning stacks get a gold halo (V7.1 2.5D chip win state).
+    if (!this.reduceMotion) {
+      for (const k of keys) {
+        const stack = this.stacks.get(k);
+        if (!stack) continue;
+        const glow = this.add.image(stack.x, stack.y - 2, 'chip-glow').setScale(hdScale('chip-glow', 0.9)).setDepth(19).setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: glow, alpha: { from: 1, to: 0 }, scale: hdScale('chip-glow', 1.3), duration: 1300, onComplete: () => glow.destroy() });
+      }
+    }
     if (targets.length && !this.reduceMotion) this.tweens.add({ targets, alpha: { from: 1, to: 0.35 }, yoyo: true, repeat: 3, duration: 220 });
     if (!keys.length) for (const spot of this.spots.values()) spot.highlight.setFillStyle(0xffe08a, 0).setAlpha(1);
   }

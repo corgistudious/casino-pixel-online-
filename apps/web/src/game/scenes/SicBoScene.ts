@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { SICBO_ANY_TRIPLE_ODDS, SICBO_TOTAL_ODDS, sicBoReturn, type SicBoResult } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
 import { parseKey } from '../../lib/bets';
-import { ensureDiceTextures, hdImage, hdScale } from '../art';
+import { ensureDiceTextures, ensureSicBoProps, hdImage, hdScale } from '../art';
 import { TableScene } from './TableScene';
 
 export const BOWL_X = 112;
@@ -16,6 +16,8 @@ export class SicBoScene extends TableScene {
   static readonly KEY = 'sicbo';
   protected dice: Phaser.GameObjects.Image[] = [];
   protected resultText!: Phaser.GameObjects.Text;
+  /** Crystal shaker dome shown over the dice while they tumble (Sic Bo only; created on first roll). */
+  private dome: Phaser.GameObjects.Image | null = null;
 
   constructor() {
     super(SicBoScene.KEY);
@@ -23,14 +25,9 @@ export class SicBoScene extends TableScene {
 
   protected build() {
     ensureDiceTextures(this);
-    const g = this.add.graphics();
-    // Porcelain dice plate with a gold rim
-    g.fillStyle(0x000000, 0.45).fillCircle(BOWL_X + 3, BOWL_Y + 5, 74);
-    g.fillStyle(0x8a5a12, 1).fillCircle(BOWL_X, BOWL_Y, 72);
-    g.fillStyle(0xf2c14e, 1).fillCircle(BOWL_X, BOWL_Y, 70);
-    g.fillStyle(0xfbf7ee, 1).fillCircle(BOWL_X, BOWL_Y, 65);
-    g.fillStyle(0xe6dfd0, 1).fillCircle(BOWL_X + 3, BOWL_Y + 4, 57);
-    g.fillStyle(0xffffff, 0.6).fillEllipse(BOWL_X - 22, BOWL_Y - 30, 40, 14);
+    ensureSicBoProps(this);
+    // V7.1 2.5D porcelain dice plate with a bevelled gold rim (art.ts ensureSicBoProps).
+    hdImage(this, BOWL_X, BOWL_Y, 'sicbo-plate');
     [-26, 0, 26].forEach((dx, i) => {
       this.dice.push(hdImage(this, BOWL_X + dx, BOWL_Y + (i === 1 ? -16 : 12), `die-${i + 1}`, 0.95));
     });
@@ -94,10 +91,15 @@ export class SicBoScene extends TableScene {
     this.resultText.setText('');
     if (!this.reduceMotion) {
       const homes = this.dice.map((d) => ({ x: d.x, y: d.y }));
+      // The crystal dome drops over the plate, the dice tumble under it (motion-blur frames), then it lifts.
+      const dome = (this.dome ??= hdImage(this, BOWL_X, BOWL_Y, 'sicbo-dome').setDepth(9).setAlpha(0));
+      dome.setPosition(BOWL_X, BOWL_Y - 18).setAlpha(0);
+      this.tweens.add({ targets: dome, y: BOWL_Y, alpha: 1, duration: 140, ease: 'Quad.easeOut' });
       for (let i = 0; i < 14; i++) {
         sfx.dice();
+        dome.setPosition(BOWL_X + Phaser.Math.Between(-3, 3), BOWL_Y + Phaser.Math.Between(-2, 2));
         this.dice.forEach((d, j) => {
-          d.setTexture(`die-${Phaser.Math.Between(1, 6)}`);
+          d.setTexture(i < 10 && (i + j) % 2 === 0 ? 'die-blur' : `die-${Phaser.Math.Between(1, 6)}`);
           d.setPosition(homes[j]!.x + Phaser.Math.Between(-10, 10), homes[j]!.y + Phaser.Math.Between(-10, 10));
           d.setAngle(Phaser.Math.Between(-30, 30));
         });
@@ -107,6 +109,8 @@ export class SicBoScene extends TableScene {
         d.setPosition(homes[j]!.x, homes[j]!.y);
         d.setAngle(0);
       });
+      dome.setPosition(BOWL_X, BOWL_Y);
+      this.tweens.add({ targets: dome, y: BOWL_Y - 34, alpha: 0, duration: 260, ease: 'Quad.easeIn' });
     }
     this.dice.forEach((d, i) => d.setTexture(`die-${result.dice[i]}`));
     sfx.stop();

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { viewportEvents } from '../lib/viewport';
 import { launchKind, sampleViewport } from '../lib/viewportProbe';
 
 /**
@@ -10,14 +11,21 @@ import { launchKind, sampleViewport } from '../lib/viewportProbe';
  *   inside the web view (app layout); a band that stays black is outside the page (iOS);
  * - experiments (live, no reload, undone on "reset"): #root at 100lvh or at the screen side, and a
  *   viewport-fit toggle that makes WebKit re-evaluate the viewport;
- * - the first 4 s of the last 5 launches are kept, so the launch that showed the band can be copied
- *   after the fact.
+ * - the first 8 s of the last 5 launches AND the first 3 s of the last 5 resumes (the app coming back
+ *   from the background without a fresh launch) are kept, so the start that showed the band can be
+ *   compared with a good one after the fact. Bounded: fixed sample times plus event samples, at most
+ *   60 per launch / 30 per resume; sizes, flags and timings only (no token, no account data);
+ * - every sample carries `layer` (diagnoseLayers: webkit / dom / canvas / safe-area / none) and the
+ *   viewport controller's own decisions (lvh fill, nudges) are saved with each record.
  * Not part of a production build unless the flag is set.
  */
 type Sample = ReturnType<typeof sampleViewport> & { t: number; event: string };
-interface Launch { at: string; commit: string; startOrientation: string; kind: ReturnType<typeof launchKind> & { pageshowPersisted: boolean | null; standalone: boolean | null }; samples: Sample[] }
-const TIMES = [0, 12, 50, 100, 250, 500, 1000, 2000, 4000];
+interface Launch { at: string; commit: string; startOrientation: string; kind: ReturnType<typeof launchKind> & { pageshowPersisted: boolean | null; standalone: boolean | null }; samples: Sample[]; vpEvents?: typeof viewportEvents }
+interface Resume { at: string; commit: string; trigger: string; hiddenMs: number; samples: Sample[]; vpEvents: typeof viewportEvents }
+const TIMES = [0, 12, 50, 100, 250, 500, 1000, 2000, 4000, 6000, 8000];
+const RESUME_TIMES = [0, 50, 250, 1000, 3000];
 const LAUNCHES_KEY = 'keyo.vpdiag.launches';
+const RESUMES_KEY = 'keyo.vpdiag.resumes';
 const PAINT_ID = 'vpdiag-paint';
 const PAINT_CSS = 'html,body{background:#ff00ff !important}#root{outline:4px solid #00ff00;outline-offset:-4px}';
 
@@ -30,12 +38,21 @@ export function viewportDiagEnabled(): boolean {
   }
 }
 
-function readLaunches(): Launch[] {
+function readList<T>(key: string): T[] {
   try {
-    const v = JSON.parse(localStorage.getItem(LAUNCHES_KEY) ?? '[]') as unknown;
-    return Array.isArray(v) ? (v as Launch[]) : [];
+    const v = JSON.parse(localStorage.getItem(key) ?? '[]') as unknown;
+    return Array.isArray(v) ? (v as T[]) : [];
   } catch {
     return [];
+  }
+}
+const readLaunches = () => readList<Launch>(LAUNCHES_KEY);
+const readResumes = () => readList<Resume>(RESUMES_KEY);
+function pushList<T>(key: string, item: T) {
+  try {
+    localStorage.setItem(key, JSON.stringify([...readList<T>(key).slice(-4), item]));
+  } catch {
+    /* storage unavailable */
   }
 }
 
@@ -50,6 +67,7 @@ export function ViewportDiagnostics() {
   const [copied, setCopied] = useState('');
   const samplesRef = useRef<Sample[]>([]);
   const take = useRef<(event: string) => void>(() => {});
+  const startResumeRef = useRef<(trigger: string) => void>(() => {});
 
   useEffect(() => {
     const startOrientation = screen.orientation?.type ?? String((window as Window & { orientation?: number }).orientation ?? 'n/a');
@@ -57,6 +75,7 @@ export function ViewportDiagnostics() {
     const onPageShow = (e: PageTransitionEvent) => {
       pageshowPersisted = e.persisted;
       take.current(`pageshow persisted=${e.persisted}`);
+      if (e.persisted) startResumeRef.current('pageshow');
     };
     window.addEventListener('pageshow', onPageShow);
     take.current = (event: string) => {
@@ -65,27 +84,43 @@ export function ViewportDiagnostics() {
       setSamples(samplesRef.current);
     };
     const timers = TIMES.map((ms) => window.setTimeout(() => take.current(`+${ms}ms`), ms));
-    // Keep this launch's first 4 s for later (the band can be gone by the time the overlay is read).
+    // Keep this launch's first 8 s for later (the band can be gone by the time the overlay is read).
     timers.push(
       window.setTimeout(() => {
-        try {
-          const launch: Launch = {
-            at: new Date().toISOString(),
-            commit: __APP_COMMIT__,
-            startOrientation,
-            kind: { ...launchKind(), pageshowPersisted, standalone: (navigator as Navigator & { standalone?: boolean }).standalone ?? null },
-            samples: samplesRef.current.slice(0, 40),
-          };
-          localStorage.setItem(LAUNCHES_KEY, JSON.stringify([...readLaunches().slice(-4), launch]));
-        } catch {
-          /* storage unavailable */
-        }
-      }, 4200),
+        pushList<Launch>(LAUNCHES_KEY, {
+          at: new Date().toISOString(),
+          commit: __APP_COMMIT__,
+          startOrientation,
+          kind: { ...launchKind(), pageshowPersisted, standalone: (navigator as Navigator & { standalone?: boolean }).standalone ?? null },
+          samples: samplesRef.current.slice(0, 60),
+          vpEvents: viewportEvents.slice(),
+        });
+      }, 8200),
     );
+    // Resume from the background (iOS may keep the web view instead of launching afresh): sample its
+    // first 3 s as its own record. One resume record at a time; timers cleared on unmount.
+    let hiddenAt = 0;
+    let resumeTimers: number[] = [];
+    const startResume = (trigger: string) => {
+      resumeTimers.forEach((id) => window.clearTimeout(id));
+      const from = samplesRef.current.length;
+      const hiddenMs = hiddenAt ? Math.round(performance.now() - hiddenAt) : 0;
+      resumeTimers = RESUME_TIMES.map((ms) => window.setTimeout(() => take.current(`resume+${ms}ms`), ms));
+      resumeTimers.push(
+        window.setTimeout(() => {
+          pushList<Resume>(RESUMES_KEY, { at: new Date().toISOString(), commit: __APP_COMMIT__, trigger, hiddenMs, samples: samplesRef.current.slice(from, from + 30), vpEvents: viewportEvents.slice() });
+        }, 3200),
+      );
+    };
+    startResumeRef.current = startResume;
     const events = ['resize', 'orientationchange', 'pagehide', 'focus', 'blur'] as const;
     const handlers = events.map((e) => [e, () => take.current(e)] as const);
     handlers.forEach(([e, h]) => window.addEventListener(e, h));
-    const onVis = () => take.current(`visibility:${document.visibilityState}`);
+    const onVis = () => {
+      take.current(`visibility:${document.visibilityState}`);
+      if (document.visibilityState === 'hidden') hiddenAt = performance.now();
+      else if (hiddenAt) startResume('visibility');
+    };
     document.addEventListener('visibilitychange', onVis);
     const onFocus = (e: FocusEvent) => {
       // The overlay's own buttons are not part of the app being measured.
@@ -101,6 +136,7 @@ export function ViewportDiagnostics() {
     window.visualViewport?.addEventListener('scroll', onVvScroll);
     return () => {
       timers.forEach((id) => window.clearTimeout(id));
+      resumeTimers.forEach((id) => window.clearTimeout(id));
       window.removeEventListener('pageshow', onPageShow);
       handlers.forEach(([e, h]) => window.removeEventListener(e, h));
       document.removeEventListener('visibilitychange', onVis);
@@ -148,7 +184,7 @@ export function ViewportDiagnostics() {
   };
 
   const copy = async (what: 'now' | 'launches') => {
-    const data = what === 'now' ? { commit: __APP_COMMIT__, userAgent: navigator.userAgent, samples } : { commit: __APP_COMMIT__, userAgent: navigator.userAgent, launches: readLaunches() };
+    const data = what === 'now' ? { commit: __APP_COMMIT__, userAgent: navigator.userAgent, samples, vpEvents: viewportEvents } : { commit: __APP_COMMIT__, userAgent: navigator.userAgent, launches: readLaunches(), resumes: readResumes() };
     const text = JSON.stringify(data, null, 2);
     try {
       await navigator.clipboard.writeText(text);
@@ -175,7 +211,7 @@ export function ViewportDiagnostics() {
       )}
       <div data-testid="vpdiag" className="fixed bottom-1 right-4 z-[90] max-w-[min(30rem,calc(100vw-2rem))] rounded-lg border border-neon-cyan/50 bg-black/85 p-1.5 font-mono text-[10px] leading-tight text-neon-cyan">
         <button type="button" className="font-bold" onClick={() => setOpen(!open)}>
-          VP {last ? `${last.inner} vv ${last.visual} gap ${last.band.gap} ${last.band.verdict}` : '…'}
+          VP {last ? `${last.inner} vv ${last.visual} gap ${last.band.gap} ${last.band.verdict} ${last.layer.layer}` : '…'}
         </button>
         {open && (
           <div className="mt-1 flex flex-col gap-1">
@@ -198,7 +234,7 @@ export function ViewportDiagnostics() {
             <div className="h-32 overflow-auto text-white/70">
               {samples.map((s, i) => (
                 <div key={i}>
-                  {s.t}ms {s.event}: {s.inner} vv {s.visual} lvh {s.units.lvh} sc {s.scroll} {s.band.verdict}
+                  {s.t}ms {s.event}: {s.inner} vv {s.visual} lvh {s.units.lvh} sc {s.scroll} {s.band.verdict} · {s.layer.layer}{s.fillLvh ? ' fill' : ''}
                   {s.keyboard ? ` kb ${s.vars}` : ''}
                 </div>
               ))}

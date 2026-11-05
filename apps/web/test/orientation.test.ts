@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { classifyDevice, classifyFormFactor, type DeviceEnv } from '../src/lib/device';
-import { isAuthRoute, phoneMustRotate, readOrientation } from '../src/lib/orientation';
+import { isAuthRoute, isGameRoute, mustRotateToLandscape, phoneMustRotate, readOrientation, tablePortraitLayout } from '../src/lib/orientation';
 
 const touch = { coarse: true, noHover: true, anyFine: false, fineHover: false };
 const mouse = { coarse: false, noHover: false, anyFine: true, fineHover: true };
@@ -117,5 +117,40 @@ describe('isAuthRoute', () => {
     expect(isAuthRoute({ signedIn: true, verified: false, pathname: '/' })).toBe(true);
     expect(isAuthRoute({ signedIn: true, verified: true, pathname: '/reset-password' })).toBe(true);
     expect(isAuthRoute({ signedIn: true, verified: true, pathname: '/cards/poker-1' })).toBe(false);
+  });
+});
+
+describe('mustRotateToLandscape (V7.1: phones everywhere, tablets in game rooms)', () => {
+  it('phones: upright = rotate, except the sign-in pages', () => {
+    expect(mustRotateToLandscape('phone', 'portrait')).toBe(true);
+    expect(mustRotateToLandscape('phone', 'portrait', { authRoute: true })).toBe(false);
+    expect(mustRotateToLandscape('phone', 'landscape', { gameRoute: true })).toBe(false);
+  });
+  it('tablets: only inside a game room (the table never re-lays out mid-round)', () => {
+    expect(mustRotateToLandscape('tablet', 'portrait', { gameRoute: true })).toBe(true);
+    expect(mustRotateToLandscape('tablet', 'portrait', { gameRoute: false })).toBe(false);
+    expect(mustRotateToLandscape('tablet', 'landscape', { gameRoute: true })).toBe(false);
+  });
+  it('PCs: never', () => {
+    expect(mustRotateToLandscape('pc', 'portrait', { gameRoute: true })).toBe(false);
+  });
+});
+
+describe('isGameRoute', () => {
+  it('matches every game room and nothing else', () => {
+    for (const p of ['/play/sicbo', '/play/slots', '/tables/taixiu-1', '/tables/roulette-1', '/cards/poker-1', '/bjt/bj-1']) expect(isGameRoute(p)).toBe(true);
+    for (const p of ['/', '/bjt', '/rooms', '/bank', '/profile', '/settings', '/custom-rooms']) expect(isGameRoute(p)).toBe(false);
+  });
+});
+
+describe('tablePortraitLayout', () => {
+  it('phones and tablets always get the landscape table, whatever the box', () => {
+    expect(tablePortraitLayout('phone', { w: 390, h: 800 })).toBe(false);
+    expect(tablePortraitLayout('tablet', { w: 820, h: 1100 })).toBe(false);
+  });
+  it('a tall PC window gets the portrait table; a wide one landscape', () => {
+    expect(tablePortraitLayout('pc', { w: 520, h: 800 })).toBe(true);
+    expect(tablePortraitLayout('pc', { w: 1366, h: 700 })).toBe(false);
+    expect(tablePortraitLayout('pc', null)).toBe(false);
   });
 });

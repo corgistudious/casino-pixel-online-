@@ -44,6 +44,10 @@
     height: var(--vvh, 100%);
     overflow: hidden;
   }
+  /* iPhone home-screen app with a short layout viewport inside a full web view (lib/viewport.ts). */
+  :root.vp-fill-lvh:not(.keyboard-open) #root {
+    height: 100lvh;
+  }
   body {
     @apply bg-ink-950 bg-lounge font-sans text-white antialiased;
     font-weight: var(--fw-body);

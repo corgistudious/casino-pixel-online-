@@ -59,6 +59,32 @@ export function isAuthRoute(opts: { signedIn: boolean; verified: boolean; pathna
   return !opts.signedIn || !opts.verified || linkPage;
 }
 
+/** Game rooms (a Phaser scene or the Blackjack table is mounted): /play/*, /tables/*, /bjt/<id>, /cards/*. */
+export function isGameRoute(pathname: string): boolean {
+  return /^\/(play|tables|cards)\/[^/]+/.test(pathname) || /^\/bjt\/[^/]+/.test(pathname);
+}
+
+/**
+ * V7.1: who must turn the device sideways (the rotate notice covers the app, nothing unmounts).
+ * - Phones: always in portrait, except the sign-in / e-mail link pages (typing).
+ * - Tablets: only inside a game room. Game rooms are designed landscape-only on tablets, so turning a
+ *   tablet upright mid-round never switches the table to another layout: the scene, its timer, the
+ *   bets and the WebSocket keep running under the notice, and the table comes back exactly as it was.
+ *   Lobby and secondary pages stay usable upright (responsive portrait layout).
+ * - PCs: never (a window has no physical orientation).
+ */
+export function mustRotateToLandscape(form: 'phone' | 'tablet' | 'pc', orientation: Orientation, opts: { authRoute?: boolean; gameRoute?: boolean } = {}): boolean {
+  if (orientation !== 'portrait') return false;
+  if (form === 'phone') return !opts.authRoute;
+  if (form === 'tablet') return !!opts.gameRoute && !opts.authRoute;
+  return false;
+}
+
+/** Game tables use their landscape layout on phones and tablets; only a tall PC window gets portrait. */
+export function tablePortraitLayout(form: 'phone' | 'tablet' | 'pc', box: { w: number; h: number } | null): boolean {
+  return form === 'pc' && !!box && box.h > box.w * 1.05;
+}
+
 /**
  * V7.1 (final): phones play in LANDSCAPE. Returns true when the rotate-to-landscape notice must cover
  * the app: a phone held upright, outside the sign-in / link pages. Tablets and PCs are never asked.

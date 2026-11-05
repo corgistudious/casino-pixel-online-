@@ -38,6 +38,8 @@ function CardTable({ tableId }: { tableId: string }) {
   const scene = useRef<CardTableScene | null>(null);
   const [view, setView] = useState<CardTableView | null>(null);
   const [raise, setRaise] = useState(0);
+  // Short screens: the raise row shows either the slider (− · slider · +) or the quick bets (½ · Pot · 2× · All-in).
+  const [quickBets, setQuickBets] = useState(false);
   const [buyIn, setBuyIn] = useState(0);
   const [pickSeat, setPickSeat] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
@@ -286,7 +288,7 @@ const raiseStep = cfg?.bigBlind ?? 1;
           {legal ? (
             <div className="paction-wrap">
               {legal.canRaise && legal.minRaiseTo < legal.maxRaiseTo && (
-                <div className="praise">
+                <div className={`praise${quickBets ? ' praise--quick' : ''}`} id="praise-row">
                   <button type="button" className="praise-step" aria-label={`− ${fmt(raiseStep)}`} disabled={busy || raise <= legal.minRaiseTo} onClick={() => setRaise((r) => Math.max(legal.minRaiseTo, r - raiseStep))}>
                     −
                   </button>
@@ -294,7 +296,7 @@ const raiseStep = cfg?.bigBlind ?? 1;
                   <button type="button" className="praise-step" aria-label={`+ ${fmt(raiseStep)}`} disabled={busy || raise >= legal.maxRaiseTo} onClick={() => setRaise((r) => Math.min(legal.maxRaiseTo, r + raiseStep))}>
                     +
                   </button>
-                  <GameButton size="sm" tone="danger" loading={acting === 'allin'} disabled={busy} onClick={() => void send('allin')}>
+                  <GameButton size="sm" tone="danger" className="praise-allin" loading={acting === 'allin'} disabled={busy} onClick={() => void send('allin')}>
                     {t('gameUi.allIn')}
                   </GameButton>
                   <div className="praise-slider flex items-center gap-2">
@@ -314,11 +316,27 @@ const raiseStep = cfg?.bigBlind ?? 1;
                       [t('cards.potShort'), pot],
                       ['2×', (hand?.currentBet ?? 0) * 2],
                     ].map(([label, v]) => (
-                      <GameButton key={String(label)} size="sm" disabled={busy} onClick={() => setRaise(Math.min(legal.maxRaiseTo, Math.max(legal.minRaiseTo, Number(v))))}>
+                      <GameButton key={String(label)} size="sm" className="praise-preset" disabled={busy} selected={raise === Math.min(legal.maxRaiseTo, Math.max(legal.minRaiseTo, Number(v)))} onClick={() => setRaise(Math.min(legal.maxRaiseTo, Math.max(legal.minRaiseTo, Number(v))))}>
                         {label}
                       </GameButton>
                     ))}
                   </div>
+                  {/* Short screens only (CSS): swaps the slider row for the quick bets, in place — nothing pops over the table. */}
+                  <button
+                    type="button"
+                    className="praise-more"
+                    aria-controls="praise-row"
+                    aria-expanded={quickBets}
+                    aria-label={quickBets ? t('cards.raiseSlider') : t('cards.quickBets')}
+                    title={quickBets ? t('cards.raiseSlider') : t('cards.quickBets')}
+                    onClick={() => setQuickBets((q) => !q)}
+                  >
+                    {quickBets ? (
+                      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden><path d="M4 12h16" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /><circle cx="9" cy="12" r="3.6" fill="#f2c14e" stroke="#fff1b8" strokeWidth="1.4" /></svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden><path d="M13.5 2.5 5 13.5h6l-1.5 8 8.5-11h-6z" fill="#f2c14e" stroke="#fff1b8" strokeWidth="1.2" strokeLinejoin="round" /></svg>
+                    )}
+                  </button>
                 </div>
               )}
               <div className="pactions">

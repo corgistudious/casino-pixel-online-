@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useSession } from '../store/session';
 import { formFactor } from '../lib/device';
-import { isAuthRoute, phoneMustRotate, useOrientation } from '../lib/orientation';
+import { isAuthRoute, isGameRoute, mustRotateToLandscape, useOrientation } from '../lib/orientation';
 import { KeyoLogo } from './KeyoLogo';
 
 /**
@@ -14,7 +14,8 @@ import { KeyoLogo } from './KeyoLogo';
  * the session, the WebSocket and any running round keep going (the server stays the clock), and the
  * notice disappears by itself when the phone is turned sideways. Sign-in and e-mail link pages work in
  * either orientation. No orientation lock API, no CSS rotation.
- * Tablets and PCs never see it (lib/device.ts formFactor), even in a narrow window.
+ * Tablets see it only inside a game room (tables are landscape-only there, so a mid-round rotation
+ * never re-lays the table out); PCs never see it (lib/device.ts formFactor), even in a narrow window.
  */
 export function MobilePortraitGuard() {
   const { t } = useTranslation();
@@ -22,7 +23,9 @@ export function MobilePortraitGuard() {
   const { pathname } = useLocation();
   const user = useSession((s) => s.user);
   const auth = isAuthRoute({ signedIn: !!user, verified: user?.status !== 'pending_verification', pathname });
-  const show = phoneMustRotate(formFactor(), orientation, auth);
+  const form = formFactor();
+  const show = mustRotateToLandscape(form, orientation, { authRoute: auth, gameRoute: isGameRoute(pathname) });
+  const tablet = form === 'tablet';
 
   useEffect(() => {
     const root = document.getElementById('root');
@@ -40,15 +43,15 @@ export function MobilePortraitGuard() {
 
   if (!show) return null;
   return createPortal(
-    <div role="alertdialog" aria-modal="true" aria-labelledby="portrait-guard-title" aria-describedby="portrait-guard-body" data-portrait-guard data-orientation-guard="landscape" className="portrait-guard">
+    <div role="alertdialog" aria-modal="true" aria-labelledby="portrait-guard-title" aria-describedby="portrait-guard-body" data-portrait-guard data-orientation-guard="landscape" data-guard-form={form} className="portrait-guard">
       <div className="portrait-guard-card">
         <div className="portrait-guard-art">
           <KeyoLogo size={56} />
           <PhoneTurnIcon />
         </div>
         <div className="portrait-guard-text">
-          <h2 id="portrait-guard-title">{t('app.orientation.landscapeTitle')}</h2>
-          <p id="portrait-guard-body">{t('app.orientation.landscapeBody')}</p>
+          <h2 id="portrait-guard-title">{t(tablet ? 'app.orientation.landscapeTitleTablet' : 'app.orientation.landscapeTitle')}</h2>
+          <p id="portrait-guard-body">{t(tablet ? 'app.orientation.landscapeBodyTablet' : 'app.orientation.landscapeBody')}</p>
           <p className="portrait-guard-hint">{t('app.orientation.hint')}</p>
         </div>
       </div>

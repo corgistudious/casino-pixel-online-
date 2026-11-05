@@ -101,6 +101,8 @@ export function isLandscapeNow(): boolean {
 }
 
 export function currentStartupInset(): number {
+  // The root already fills the strip (lib/viewport.ts, 'layout-short'): nothing is missing.
+  if (document.documentElement.classList.contains('vp-fill-lvh')) return 0;
   return startupInset({
     standalone: isStandalone(),
     userAgent: navigator.userAgent,
@@ -159,9 +161,39 @@ export function sampleViewport() {
     vars: ['--vvt', '--vvh', '--kb'].map((v) => document.documentElement.style.getPropertyValue(v) || '-').join(' '),
     dpr: window.devicePixelRatio,
     startupInset: currentStartupInset(),
+    fillLvh: document.documentElement.classList.contains('vp-fill-lvh'),
+    layer: sampleLayer(units.lvh, landscape, safe.bottom),
     visibility: document.visibilityState,
     marks: bootMarks(),
   };
+}
+
+/** diagnoseLayers() on the live page. */
+function sampleLayer(lvh: number | null, landscape: boolean, safeBottom: string) {
+  const vv = window.visualViewport;
+  const box = (sel: string) => {
+    const el = document.querySelector(sel);
+    if (!el) return null;
+    const b = el.getBoundingClientRect();
+    return { w: b.width, h: b.height, bottom: b.bottom };
+  };
+  const band = classifyBand({ landscape, screenW: screen.width, screenH: screen.height, innerHeight: window.innerHeight, visualHeight: vv?.height ?? null, lvh }).verdict;
+  const filled = document.documentElement.classList.contains('vp-fill-lvh');
+  const root = box('#root');
+  const shell = box('.game-shell');
+  const controls = [...document.querySelectorAll('.gbar button, .ptabbar, .gbar')].map((el) => el.getBoundingClientRect().bottom);
+  const pageBottom = filled && lvh ? lvh : window.innerHeight;
+  return diagnoseLayers({
+    band,
+    pageBottom,
+    rootBottom: root?.bottom ?? 0,
+    shellBottom: shell?.bottom ?? null,
+    // The canvas fits its own frame (inside the stage's padding / rounded frame).
+    stage: box('[data-table-skin]'),
+    canvas: box('[data-table-skin] canvas'),
+    safeBottom: parseFloat(safeBottom) || 0,
+    controlsGap: controls.length ? Math.max(0, (root?.bottom ?? pageBottom) - Math.max(...controls)) : undefined,
+  });
 }
 
 /** Boot milestones (performance marks set by main.tsx, App and PhaserView), ms since navigation start. */
@@ -187,4 +219,62 @@ export function markBoot(name: string) {
   } catch {
     /* ignore */
   }
+}
+
+/**
+ * Pure: which LAYER a missing strip at the bottom belongs to (diagnostics + regression tests).
+ * - 'webkit'    the web view itself is short (classifyBand 'window-short'): iOS/WebKit owns the strip.
+ * - 'dom'       the page is taller than the app root / game shell (a layout bug, app-owned).
+ * - 'canvas'    the Phaser canvas did not re-fit its stage (neither side touches the stage).
+ * - 'safe-area' nothing is missing; the strip is the home-indicator inset the controls step around.
+ * - 'none'      every layer reaches the bottom.
+ * Px inputs are bottoms/heights in CSS px; null = layer not on screen.
+ */
+export type BandLayer = 'none' | 'webkit' | 'dom' | 'canvas' | 'safe-area';
+export interface LayerEnv {
+  band: BandVerdict;
+  /** Height the page can paint: innerHeight, or 100lvh when the root is filled to it (layout-short). */
+  pageBottom: number;
+  rootBottom: number;
+  shellBottom: number | null;
+  stage: { w: number; h: number } | null;
+  canvas: { w: number; h: number } | null;
+  safeBottom: number;
+  /** The strip a player reports (px), when known; otherwise the gap under the lowest control. */
+  controlsGap?: number;
+}
+export function diagnoseLayers(e: LayerEnv): { layer: BandLayer; px: number } {
+  if (e.band === 'window-short') return { layer: 'webkit', px: 0 };
+  if (e.rootBottom < e.pageBottom - 2) return { layer: 'dom', px: Math.round(e.pageBottom - e.rootBottom) };
+  if (e.shellBottom !== null && e.shellBottom < e.rootBottom - 2) return { layer: 'dom', px: Math.round(e.rootBottom - e.shellBottom) };
+  if (e.stage && e.canvas && e.canvas.w < e.stage.w - 2 && e.canvas.h < e.stage.h - 2) return { layer: 'canvas', px: Math.round(e.stage.h - e.canvas.h) };
+  if (e.controlsGap !== undefined && e.safeBottom > 0 && e.controlsGap > 2 && e.controlsGap <= e.safeBottom + 4) return { layer: 'safe-area', px: Math.round(e.controlsGap) };
+  return { layer: 'none', px: 0 };
+}
+
+/**
+ * Pure: should the app root be sized to 100lvh instead of the layout viewport? Only for the one case
+ * the page CAN fix: an iPhone home-screen app in landscape whose layout viewport (innerHeight) is short
+ * while WebKit's large viewport still spans the screen ('layout-short': the web view extends under the
+ * strip, which otherwise shows the bare page background as a dark band). Never while a keyboard is up,
+ * never in a Safari tab / iPad / Android / desktop, never for 'window-short' (outside the web view:
+ * sizing past it would hide the bottom controls).
+ */
+export function shouldFillLvh(e: BandEnv & { standalone: boolean; iphone: boolean; keyboardOpen: boolean }): boolean {
+  if (!e.standalone || !e.iphone || !e.landscape || e.keyboardOpen) return false;
+  return classifyBand(e).verdict === 'layout-short';
+}
+
+/** The height of 100lvh in px (one hidden probe element, reused). null where unsupported. */
+let lvhProbe: HTMLDivElement | null = null;
+export function measureLvh(): number | null {
+  if (typeof document === 'undefined' || !document.body) return null;
+  if (!lvhProbe || !lvhProbe.isConnected) {
+    lvhProbe = document.createElement('div');
+    lvhProbe.setAttribute('aria-hidden', 'true');
+    lvhProbe.style.cssText = 'position:fixed;top:0;left:-2px;width:1px;height:100lvh;visibility:hidden;pointer-events:none';
+    document.body.appendChild(lvhProbe);
+  }
+  const h = lvhProbe.getBoundingClientRect().height;
+  return h > 0 ? Math.round(h) : null;
 }

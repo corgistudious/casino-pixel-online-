@@ -285,13 +285,11 @@
   .paction-wrap > .praise { flex: 1.1 1 0; padding: 6px 10px; }
   .paction-wrap > .pactions { flex: 1 1 0; }
 }
-/* Phones (narrow portrait game): the raise control is a single row — − · slider · + · All-in. The
-   amount is already on the Raise button; the ½ · Pot · 2× shortcuts stay on tablets and PCs. */
+/* Quick-bet switch: only on short / narrow game screens (below). */
+.praise-more { display: none; }
+/* Narrow portrait game (tall PC window): the raise control is a single row (see the compact rules). */
 @container game (max-width: 640px) and (orientation: portrait) {
-  .praise { grid-template-columns: auto 1fr auto auto; padding: 6px 8px; gap: 6px; }
-  .praise-value { display: none; }
-  .praise-slider { grid-column: 2; grid-row: 1; }
-  .praise-slider .gbtn { display: none; }
+  .praise { padding: 6px 8px; gap: 6px; }
   .paction-wrap { gap: 6px; }
 }
 
@@ -299,10 +297,7 @@
    − · slider · + · All-in (its amount is on the Raise button); the 2.5D buttons get a compact height. */
 @container game ((max-height: 560px) and (min-aspect-ratio: 16/10)) or (min-aspect-ratio: 19/10) {
   .paction-wrap { flex-direction: row; align-items: stretch; max-width: none; gap: 8px; }
-  .paction-wrap > .praise { flex: 1 1 0; grid-template-columns: auto 1fr auto auto; padding: 4px 8px; gap: 6px; border-radius: 16px; }
-  .paction-wrap > .praise .praise-value { display: none; }
-  .paction-wrap > .praise .praise-slider { grid-column: 2; grid-row: 1; }
-  .paction-wrap > .praise .praise-slider .gbtn { display: none; }
+  .paction-wrap > .praise { flex: 1 1 0; padding: 4px 8px; gap: 6px; border-radius: 16px; }
   .paction-wrap > .pactions { flex: 1.15 1 0; gap: 8px; }
   .pbtn.pbtn-xl { min-height: 48px; padding: 4px 10px; border-radius: 14px; font-size: 15px; gap: 6px; }
   .pbtn-xl .pbtn-icon { width: 20px; height: 20px; }
@@ -320,4 +315,24 @@
 @container game ((max-height: 560px) and (min-aspect-ratio: 16/10)) or (min-aspect-ratio: 19/10) {
   .ghud-left .gicon, .ghud-tools .gicon { flex-shrink: 0; }
   .ghud-left, .ghud-tools { gap: clamp(3px, 1cqh, 8px); }
+}
+
+/* Compact raise row (short landscape phones, narrow portrait windows). Nothing is dropped: the row
+   shows EITHER − · slider · + OR ½ · Pot · 2× · All-in, swapped in place by the ⚡ switch (44px), so
+   no popover ever covers the table, the cards or the timer. The amount is on the Raise button. */
+@container game ((max-height: 560px) and (min-aspect-ratio: 16/10)) or (min-aspect-ratio: 19/10) or ((max-width: 640px) and (orientation: portrait)) {
+  .paction-wrap > .praise { display: flex; align-items: center; }
+  .praise .praise-value { display: none; }
+  .praise .praise-slider { flex: 1 1 auto; min-width: 0; gap: 6px; }
+  .praise .praise-slider .praise-preset { display: none; }
+  .praise .praise-allin { display: none; }
+  .praise .praise-more { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; border-radius: 50%;
+    color: #fff1b8; background: radial-gradient(circle at 50% 30%, #6b4bd0, #34197e 60%, #180b44); border: 1.5px solid rgba(242, 193, 78, 0.75);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 6px 14px -6px rgba(0,0,0,0.8); touch-action: manipulation; }
+  .praise .praise-more[aria-expanded="true"] { background: radial-gradient(circle at 50% 30%, #fff3c4, #f2c14e 45%, #8a5a12); color: #2a1600; }
+  .praise .praise-more:active { transform: scale(0.94); }
+  .praise--quick .praise-step, .praise--quick .praise-range { display: none; }
+  .praise--quick .praise-slider .praise-preset { display: inline-flex; flex: 1 1 0; min-width: 44px; min-height: 44px; padding-inline: 4px; }
+  .praise--quick .praise-allin { display: inline-flex; order: 2; flex: 0 0 auto; min-height: 44px; }
+  .praise--quick .praise-more { order: 3; }
 }

@@ -15,6 +15,7 @@ import { RoomPanel } from '../rooms/RoomPanel';
 import { useSession } from '../store/session';
 import { FitStage } from '../ui/game/FitStage';
 import { formFactor } from '../lib/device';
+import { tablePortraitLayout } from '../lib/orientation';
 import { GameButton } from '../ui/game/GameButton';
 import { ActionIcon } from '../ui/game/ActionIcons';
 import { GameCard, GameStat, GameTimer } from '../ui/game/GameParts';
@@ -60,7 +61,7 @@ export function BjtTablePage() {
   const fmt = (n: number) => formatChips(n, i18n.language);
   const lastRound = useRef<string | null>(null);
   // Phones play in landscape (V7.1); only a tablet / PC window taller than wide gets the portrait felt.
-  const [portrait] = useState(() => formFactor() !== 'phone' && window.innerHeight > window.innerWidth);
+  const [portrait] = useState(() => tablePortraitLayout(formFactor(), { w: window.innerWidth, h: window.innerHeight }));
   const seatPos = portrait ? SEAT_POS_PORTRAIT : SEAT_POS;
 
   const fail = (err: unknown) => toast(errorText(t, err, i18n.language), 'error');

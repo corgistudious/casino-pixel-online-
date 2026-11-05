@@ -14,9 +14,15 @@
  * Android with `interactive-widget=resizes-content` already shrinks the layout viewport, so the
  * visible height equals the layout height and nothing is applied there.
  *
- * iPhone home-screen app (PWA): the app always uses the window iOS gives it. When iOS opens the
- * app with a short window (see lib/viewportProbe.ts), sizing the root to the screen would push the
- * bottom of the UI out of sight, so it is never done; the condition is reported instead.
+ * iPhone home-screen app (PWA): the app uses the window iOS gives it. When iOS opens the app with a
+ * short window (see lib/viewportProbe.ts) there are two cases:
+ * - 'layout-short': WebKit's large viewport (100lvh) still spans the screen, i.e. the web view covers
+ *   the strip and only the layout viewport is short. The root is then sized to 100lvh (class
+ *   vp-fill-lvh, a CSS unit, no px lock) so the app paints the strip instead of the page background.
+ * - 'window-short': the web view itself is short. Nothing inside the page can paint there and sizing
+ *   past it would push the bottom controls out of sight, so it is never done. WebKit is asked to
+ *   re-read the viewport meta at most MAX_NUDGES times per launch / rotation / resume (a no-op flag
+ *   toggled; no reload, no polling), and the condition is reported (StandaloneInsetHint).
  *
  * Scale-based renderers (the lobby Stage, Phaser game rooms) must NOT follow the keyboard: the app
  * root fitting above the keyboard used to make them re-measure a shorter box and shrink the whole
@@ -28,6 +34,33 @@
  * Updates are coalesced to one per animation frame and only written when the value changes.
  */
 import { useLayoutEffect, useState, type RefObject } from 'react';
+import { classifyBand, isLandscapeNow, isStandalone, measureLvh, shouldFillLvh } from './viewportProbe';
+
+/**
+ * Bounded log of what the controller decided (lvh fill on/off, viewport nudges), for the diagnostics
+ * overlay. Never contains anything but sizes and timestamps.
+ */
+export interface ViewportEvent { t: number; what: string }
+const LOG_MAX = 24;
+export const viewportEvents: ViewportEvent[] = [];
+function logVp(what: string) {
+  viewportEvents.push({ t: Math.round(typeof performance !== 'undefined' ? performance.now() : 0), what });
+  if (viewportEvents.length > LOG_MAX) viewportEvents.splice(0, viewportEvents.length - LOG_MAX);
+}
+
+/** At most this many viewport re-evaluations (meta nudges) per launch / resume / rotation. */
+export const MAX_NUDGES = 2;
+const NUDGE_DELAY_MS = 350;
+const NUDGE_FLAG = 'shrink-to-fit=no';
+
+/** Pure: the viewport meta content with the harmless no-op flag toggled (forces WebKit to re-read it). */
+export function toggledViewportContent(content: string): string {
+  const parts = content.split(',').map((x) => x.trim()).filter(Boolean);
+  const i = parts.indexOf(NUDGE_FLAG);
+  if (i >= 0) parts.splice(i, 1);
+  else parts.push(NUDGE_FLAG);
+  return parts.join(', ');
+}
 const KEYBOARD_MIN_PX = 120;
 const TEXT_INPUTS = new Set(['text', 'search', 'email', 'password', 'tel', 'url', 'number', 'date', 'datetime-local', 'time', 'month', 'week']);
 
@@ -111,6 +144,49 @@ export function installViewport(): () => void {
   let lastFrame = '';
   let lastOpen = false;
   let revealed: Element | null = null;
+  let filled = false;
+  let nudges = 0;
+  let nudgeTimer = 0;
+  const iphone = /iPhone|iPod/.test(navigator.userAgent);
+
+  /**
+   * iPhone home-screen app, landscape, keyboard closed: when the window is short, either fill the
+   * root to 100lvh (the strip is inside the web view: 'layout-short') or, for a strip outside it
+   * ('window-short'), ask WebKit to re-read the viewport a bounded number of times. Both are cheap
+   * and do nothing on every other platform (the first check returns before any measurement).
+   */
+  const checkShortWindow = (open: boolean) => {
+    const standalone = iphone && isStandalone();
+    const landscape = standalone && isLandscapeNow();
+    const short = Math.min(screen.width, screen.height);
+    const candidate = landscape && !open && short > 0 && window.innerHeight < short - 20;
+    const lvh = candidate ? measureLvh() : null;
+    const env = { landscape, screenW: screen.width, screenH: screen.height, innerHeight: window.innerHeight, visualHeight: vv ? vv.height : null, lvh };
+    const fill = candidate && shouldFillLvh({ ...env, standalone, iphone, keyboardOpen: open });
+    if (fill !== filled) {
+      filled = fill;
+      root.classList.toggle('vp-fill-lvh', fill);
+      logVp(`fill-lvh ${fill ? 'on' : 'off'} inner ${window.innerHeight} lvh ${lvh ?? '-'}`);
+    }
+    if (candidate && !fill && classifyBand(env).verdict === 'window-short' && nudges < MAX_NUDGES && !nudgeTimer) {
+      nudgeTimer = window.setTimeout(() => {
+        nudgeTimer = 0;
+        if (window.innerHeight >= Math.min(screen.width, screen.height) - 20) return; // fixed itself
+        const meta = document.querySelector('meta[name="viewport"]');
+        const content = meta?.getAttribute('content');
+        if (!meta || !content) return;
+        nudges += 1;
+        meta.setAttribute('content', toggledViewportContent(content));
+        logVp(`nudge ${nudges} inner ${window.innerHeight}`);
+        schedule();
+      }, NUDGE_DELAY_MS);
+    }
+  };
+  /** A new launch phase (rotation, resume, bfcache restore) gets a fresh, still bounded, budget. */
+  const resetBudget = () => {
+    nudges = 0;
+    schedule();
+  };
 
   const reveal = (el: HTMLElement, top: number, visible: number) => {
     if (revealed === el) return;
@@ -155,6 +231,7 @@ export function installViewport(): () => void {
     // The document itself never scrolls in this app.
     if ((open || !focused) && (window.scrollX !== 0 || window.scrollY !== 0)) window.scrollTo(0, 0);
     if (frameNow && focused) reveal(active, frameNow.top, visible);
+    checkShortWindow(open);
   };
   const schedule = () => {
     if (!frame) frame = requestAnimationFrame(apply);
@@ -163,13 +240,13 @@ export function installViewport(): () => void {
     revealed = null;
     schedule();
   };
-  const onVisible = () => document.visibilityState === 'visible' && schedule();
+  const onVisible = () => document.visibilityState === 'visible' && resetBudget();
 
   vv?.addEventListener('resize', schedule);
   vv?.addEventListener('scroll', schedule);
   window.addEventListener('resize', schedule);
-  window.addEventListener('orientationchange', schedule);
-  window.addEventListener('pageshow', schedule);
+  window.addEventListener('orientationchange', resetBudget);
+  window.addEventListener('pageshow', resetBudget);
   window.addEventListener('scroll', schedule, { passive: true });
   document.addEventListener('focusin', schedule);
   document.addEventListener('focusout', onFocusOut);
@@ -178,16 +255,17 @@ export function installViewport(): () => void {
 
   return () => {
     if (frame) cancelAnimationFrame(frame);
+    if (nudgeTimer) window.clearTimeout(nudgeTimer);
     vv?.removeEventListener('resize', schedule);
     vv?.removeEventListener('scroll', schedule);
     window.removeEventListener('resize', schedule);
-    window.removeEventListener('orientationchange', schedule);
-    window.removeEventListener('pageshow', schedule);
+    window.removeEventListener('orientationchange', resetBudget);
+    window.removeEventListener('pageshow', resetBudget);
     window.removeEventListener('scroll', schedule);
     document.removeEventListener('focusin', schedule);
     document.removeEventListener('focusout', onFocusOut);
     document.removeEventListener('visibilitychange', onVisible);
-    root.classList.remove('keyboard-open');
+    root.classList.remove('keyboard-open', 'vp-fill-lvh');
     root.style.removeProperty('--vvh');
     root.style.removeProperty('--vvt');
     root.style.removeProperty('--kb');

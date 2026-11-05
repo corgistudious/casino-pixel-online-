@@ -32,11 +32,8 @@ export class RouletteScene extends TableScene {
 
   protected build() {
     ensureWheelTextures(this);
-    const g = this.add.graphics();
-    // Wooden bowl with soft shadow
-    g.fillStyle(0x000000, 0.45).fillCircle(WHEEL_X + 3, WHEEL_Y + 5, WHEEL_SIZE / 2 + 9);
-    g.fillStyle(0x2a1306, 1).fillCircle(WHEEL_X, WHEEL_Y, WHEEL_SIZE / 2 + 8);
-    g.lineStyle(1.5, 0xe8b64a, 1).strokeCircle(WHEEL_X, WHEEL_Y, WHEEL_SIZE / 2 + 7);
+    // V7.1 2.5D static mahogany bowl with diamond deflectors (the wheel spins inside it).
+    hdImage(this, WHEEL_X, WHEEL_Y, 'roulette-bowl');
     this.wheel = hdImage(this, WHEEL_X, WHEEL_Y, 'roulette-wheel');
     hdImage(this, WHEEL_X, WHEEL_Y, 'roulette-gloss').setDepth(6);
     this.ball = hdImage(this, WHEEL_X, WHEEL_Y - BALL_OUTER, 'roulette-ball').setDepth(5);

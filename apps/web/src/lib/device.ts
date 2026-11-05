@@ -65,8 +65,9 @@ export function deviceClass(): DeviceClass {
 }
 
 /**
- * Form factor for the V7.1 layout: phones are portrait-only (MobilePortraitGuard asks them to turn
- * back to portrait); tablets and PCs use whichever orientation they are in. Screen width alone never
+ * Form factor for the V7.1 layout: phones play in landscape (MobilePortraitGuard asks them to turn
+ * sideways); tablets play game rooms in landscape and use either orientation elsewhere; PCs use
+ * whatever window they have. Screen width alone never
  * decides — a narrow PC window stays a PC, a small tablet stays a tablet.
  *  - phone:  iPhone/iPod, Android with the "Mobile" UA token, UA-CH mobile=true, or an unknown
  *            touch-only device whose shorter screen side is under 600 CSS px.

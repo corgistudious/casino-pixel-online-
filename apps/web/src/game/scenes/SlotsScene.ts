@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { SLOT_PAYLINES, SLOT_ROWS, SLOT_SYMBOLS, type SlotSymbol, type SlotsResult } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
-import { ensureSlotCabinet, ensureSlotTextures, hdImage, hdScale } from '../art';
+import { ensureSlotCabinet, ensureSlotReelShade, ensureSlotTextures, hdImage, hdScale } from '../art';
 import { BaseScene, H, W } from './BaseScene';
 
 const CELL = 58;
@@ -62,10 +62,9 @@ export class SlotsScene extends BaseScene {
       this.reels.push(container);
       this.fillReel(r, column);
     }
-    // Glass shading over the reels.
-    const glass = this.add.graphics().setDepth(5);
-    glass.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.35, 0.35, 0, 0).fillRect(X0, Y0, REELS * CELL, 22);
-    glass.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0, 0, 0.35, 0.35).fillRect(X0, Y0 + SLOT_ROWS * CELL - 22, REELS * CELL, 22);
+    // V7.1 2.5D drum shading + chrome window frame over the reels.
+    ensureSlotReelShade(this, REELS * CELL, SLOT_ROWS * CELL);
+    hdImage(this, X0 + (REELS * CELL) / 2, Y0 + (SLOT_ROWS * CELL) / 2, 'slots-reelshade').setDepth(5);
     this.lineLayer = this.add.graphics().setDepth(10);
   }
 
@@ -150,6 +149,8 @@ export class SlotsScene extends BaseScene {
           .setDepth(4)
           .setAlpha(0.7);
         this.tweens.add({ targets: glow, alpha: 0, duration: 1400, onComplete: () => glow.destroy() });
+        const frame = hdImage(this, X0 + r * CELL + CELL / 2, Y0 + row * CELL + CELL / 2, 'slot-winframe', CELL / 46).setDepth(11);
+        this.tweens.add({ targets: frame, alpha: { from: 1, to: 0.35 }, yoyo: true, repeat: 3, duration: 180, onComplete: () => frame.destroy() });
       }
     }
     const big = result.totalMultiplier >= 100;
