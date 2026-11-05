@@ -59,8 +59,8 @@ export function BjtTablePage() {
   const balance = useSession((s) => s.balance);
   const fmt = (n: number) => formatChips(n, i18n.language);
   const lastRound = useRef<string | null>(null);
-  // Phones are portrait-only (V7.1); a tablet held upright also gets the portrait felt. Fixed per visit.
-  const [portrait] = useState(() => formFactor() === 'phone' || window.innerHeight > window.innerWidth);
+  // Phones play in landscape (V7.1); only a tablet / PC window taller than wide gets the portrait felt.
+  const [portrait] = useState(() => formFactor() !== 'phone' && window.innerHeight > window.innerWidth);
   const seatPos = portrait ? SEAT_POS_PORTRAIT : SEAT_POS;
 
   const fail = (err: unknown) => toast(errorText(t, err, i18n.language), 'error');

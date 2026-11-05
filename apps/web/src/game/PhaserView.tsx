@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useStableSize } from '../lib/viewport';
 import { useSettings } from '../store/settings';
 import { formFactor } from '../lib/device';
+import { markBoot } from '../lib/viewportProbe';
 import { RES } from './hd';
 import { viewerTableSkin, type BaseScene } from './scenes/BaseScene';
 
@@ -24,13 +25,14 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
     if (!host.current) return;
     const scene = create();
     scene.reduceMotion = useSettings.getState().reduceMotion;
-    // Portrait layout on phones (always: a phone held sideways is covered by MobilePortraitGuard, so
-    // the scene never needs to switch) and in any taller-than-wide stage (tablet portrait). Chosen
-    // once per mount: a running round's animations are never torn down by a rotation.
+    // Phones always play in landscape (a phone held upright is covered by the rotate guard, so the
+    // scene never needs to switch). Only a taller-than-wide stage on a tablet or a PC window gets the
+    // portrait layout. Chosen once per mount: a rotation never tears down a running round.
     const rect = frame.current?.getBoundingClientRect();
-    scene.portrait = formFactor() === 'phone' || (!!rect && rect.height > rect.width * 1.05);
+    scene.portrait = formFactor() !== 'phone' && !!rect && rect.height > rect.width * 1.05;
     const size = scene.canvasSize();
     setOrientation(scene.portrait ? 'portrait' : 'landscape');
+    markBoot('phaser-init');
     const game = new Phaser.Game({
       type: Phaser.AUTO,
       parent: host.current,

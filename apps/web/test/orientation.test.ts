@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { classifyDevice, classifyFormFactor, type DeviceEnv } from '../src/lib/device';
-import { phoneMustRotate, readOrientation } from '../src/lib/orientation';
+import { isAuthRoute, phoneMustRotate, readOrientation } from '../src/lib/orientation';
 
 const touch = { coarse: true, noHover: true, anyFine: false, fineHover: false };
 const mouse = { coarse: false, noHover: false, anyFine: true, fineHover: true };
@@ -99,13 +99,23 @@ describe('classifyFormFactor (V7.1: phones are portrait-only)', () => {
   });
 });
 
-describe('phoneMustRotate', () => {
-  it('only a phone held sideways is asked to rotate', () => {
-    expect(phoneMustRotate('phone', 'landscape')).toBe(true);
-    expect(phoneMustRotate('phone', 'portrait')).toBe(false);
-    expect(phoneMustRotate('tablet', 'landscape')).toBe(false);
+describe('phoneMustRotate (V7.1 final: phones play in landscape)', () => {
+  it('only a phone held upright is asked to rotate, outside the sign-in pages', () => {
+    expect(phoneMustRotate('phone', 'portrait')).toBe(true);
+    expect(phoneMustRotate('phone', 'landscape')).toBe(false);
+    expect(phoneMustRotate('phone', 'portrait', true)).toBe(false);
     expect(phoneMustRotate('tablet', 'portrait')).toBe(false);
-    expect(phoneMustRotate('pc', 'landscape')).toBe(false);
+    expect(phoneMustRotate('tablet', 'landscape')).toBe(false);
     expect(phoneMustRotate('pc', 'portrait')).toBe(false);
+    expect(phoneMustRotate('pc', 'landscape')).toBe(false);
+  });
+});
+
+describe('isAuthRoute', () => {
+  it('sign-in, unverified and e-mail link pages are free of the rotate guard', () => {
+    expect(isAuthRoute({ signedIn: false, verified: false, pathname: '/' })).toBe(true);
+    expect(isAuthRoute({ signedIn: true, verified: false, pathname: '/' })).toBe(true);
+    expect(isAuthRoute({ signedIn: true, verified: true, pathname: '/reset-password' })).toBe(true);
+    expect(isAuthRoute({ signedIn: true, verified: true, pathname: '/cards/poker-1' })).toBe(false);
   });
 });

@@ -248,7 +248,7 @@
 .reduce-motion .kf-sheen { display: none; }
 .reduce-motion .kf-twinkle { animation: none; }
 
-/* MobilePortraitGuard (V7.1): opaque, full-screen, safe-area aware; the phone turns to portrait. */
+/* Rotate guard (V7.1 final, ui/MobilePortraitGuard.tsx): opaque, full-screen, safe-area aware; the phone turns to landscape. */
 .portrait-guard {
   position: fixed; inset: 0; z-index: 300;
   display: flex; align-items: center; justify-content: center;
@@ -274,10 +274,11 @@
 .portrait-guard-text h2 { font-family: "Playfair Display", Georgia, serif; font-size: 20px; font-weight: 800; color: #ffe9a8; margin: 0 0 6px; }
 .portrait-guard-text p { margin: 0; font-size: 15px; line-height: 1.45; color: rgba(255, 255, 255, 0.88); }
 .portrait-guard-text .portrait-guard-hint { margin-top: 8px; font-size: 12px; color: rgba(255, 255, 255, 0.5); }
-@keyframes portrait-guard-turn { 0%, 20% { transform: rotate(-90deg); } 55%, 100% { transform: rotate(0deg); } }
+@keyframes portrait-guard-turn { 0%, 20% { transform: rotate(0deg); } 55%, 100% { transform: rotate(-90deg); } }
 .portrait-guard-phone-body { transform-origin: 32px 30px; animation: portrait-guard-turn 2.6s cubic-bezier(.65,0,.35,1) infinite alternate; }
-.reduce-motion .portrait-guard-phone-body { animation: none; }
-@media (prefers-reduced-motion: reduce) { .portrait-guard-phone-body { animation: none; } }
+.reduce-motion .portrait-guard-phone-body { animation: none; transform: rotate(-90deg); }
+@media (prefers-reduced-motion: reduce) { .portrait-guard-phone-body { animation: none; transform: rotate(-90deg); } }
+@media (max-width: 480px) { .portrait-guard-card { flex-direction: column; text-align: center; padding: 22px 20px; } }
 @media (max-height: 300px) { .portrait-guard-card { padding: 12px 18px; gap: 14px; } .portrait-guard-text h2 { font-size: 17px; } .portrait-guard-text p { font-size: 13px; } }
 
 /* PWA notice (ui/PwaBlockedScreen.tsx): a short, light entrance; none with reduced motion. */

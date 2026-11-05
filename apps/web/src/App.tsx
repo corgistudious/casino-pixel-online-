@@ -42,6 +42,7 @@ import { MobilePortraitGuard } from './ui/MobilePortraitGuard';
 import { useGameChat } from './ui/game/GameTableLayout';
 import { StandaloneInsetHint } from './ui/StandaloneInsetHint';
 import { ViewportDiagnostics, viewportDiagEnabled } from './ui/ViewportDiagnostics';
+import { markBoot } from './lib/viewportProbe';
 import { KeyoLogo } from './ui/KeyoLogo';
 
 // Heavy, rarely-first screens load on demand: the game rooms (Phaser) and the staff console.
@@ -203,6 +204,7 @@ export function App() {
   const boot = useSession((s) => s.boot);
   const reduceMotion = useSettings((s) => s.reduceMotion);
   const signedIn = useSession((s) => !!s.user);
+  useEffect(() => markBoot('react-mount'), []);
   useEffect(() => {
     if (signedIn) prefetchGames();
   }, [signedIn]);

@@ -1,5 +1,7 @@
 import { LOCALES, type PublicUser } from '@casino/shared';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from '../ui/toast';
 import { APP_VERSION } from '../config';
 import { api } from '../net/api';
 import { useSession } from '../store/session';
@@ -34,6 +36,7 @@ export function LanguageSwitch() {
 
 export function SettingsPage() {
   const { t } = useTranslation();
+  const diagTaps = useRef(0);
   const { volume, reduceMotion, victoryEffects, set } = useSettings();
   return (
     <AppShell>
@@ -75,7 +78,25 @@ export function SettingsPage() {
           </label>
           <div className="border-t border-white/10 pt-4 text-sm text-white/50">
             <p className="font-display text-base text-white/80">{t('settings.about')}</p>
-            <p>{t('settings.version', { version: APP_VERSION })}</p>
+            {/* Five taps on the version switch the read-only screen diagnostics (iPhone PWA black-band
+                investigation; nothing is sent anywhere). Takes effect on the next launch. */}
+            <p
+              onClick={() => {
+                diagTaps.current += 1;
+                if (diagTaps.current < 5) return;
+                diagTaps.current = 0;
+                try {
+                  const on = localStorage.getItem('keyo.vpdiag') === '1';
+                  if (on) localStorage.removeItem('keyo.vpdiag');
+                  else localStorage.setItem('keyo.vpdiag', '1');
+                  toast(on ? t('settings.diagOff') : t('settings.diagOn'), 'info');
+                } catch {
+                  /* storage unavailable */
+                }
+              }}
+            >
+              {t('settings.version', { version: APP_VERSION })}
+            </p>
             <p className="mt-2 text-xs">{t('app.disclaimer')}</p>
           </div>
         </div>

@@ -121,6 +121,11 @@ export function sampleViewport() {
   const safe = { top: cs.paddingTop, right: cs.paddingRight, bottom: cs.paddingBottom, left: cs.paddingLeft };
   probe.remove();
   const root = document.getElementById('root')?.getBoundingClientRect();
+  const rect = (el: Element | null) => {
+    if (!el) return 'n/a';
+    const b = el.getBoundingClientRect();
+    return `${Math.round(b.width)}x${Math.round(b.height)} @${Math.round(b.left)},${Math.round(b.top)}`;
+  };
   const html = document.documentElement.getBoundingClientRect();
   const body = document.body.getBoundingClientRect();
   const units = viewportUnits();
@@ -131,7 +136,11 @@ export function sampleViewport() {
     screen: `${screen.width}x${screen.height}`,
     inner: `${window.innerWidth}x${window.innerHeight}`,
     client: `${document.documentElement.clientWidth}x${document.documentElement.clientHeight}`,
-    visual: vv ? `${Math.round(vv.width)}x${Math.round(vv.height)} @${Math.round(vv.offsetTop)}` : 'n/a',
+    visual: vv ? `${Math.round(vv.width)}x${Math.round(vv.height)} @${Math.round(vv.offsetLeft)},${Math.round(vv.offsetTop)} x${vv.scale.toFixed(2)}` : 'n/a',
+    // Game layers: the shell (DOM), the stage and the Phaser canvas — tells a DOM band from a canvas band.
+    gameShell: rect(document.querySelector('.game-shell')),
+    stage: rect(document.querySelector('.gstage')),
+    canvas: rect(document.querySelector('[data-table-skin] canvas')),
     root: root ? `${Math.round(root.width)}x${Math.round(root.height)}` : 'n/a',
     orientation: screen.orientation?.type ?? String((window as Window & { orientation?: number }).orientation ?? 'n/a'),
     angle: screen.orientation?.angle ?? (window as Window & { orientation?: number }).orientation ?? null,
@@ -150,5 +159,32 @@ export function sampleViewport() {
     vars: ['--vvt', '--vvh', '--kb'].map((v) => document.documentElement.style.getPropertyValue(v) || '-').join(' '),
     dpr: window.devicePixelRatio,
     startupInset: currentStartupInset(),
+    visibility: document.visibilityState,
+    marks: bootMarks(),
   };
+}
+
+/** Boot milestones (performance marks set by main.tsx, App and PhaserView), ms since navigation start. */
+export function bootMarks(): Record<string, number> {
+  const out: Record<string, number> = {};
+  if (typeof performance === 'undefined' || typeof performance.getEntriesByType !== 'function') return out;
+  for (const m of performance.getEntriesByType('mark')) if (m.name.startsWith('keyo:')) out[m.name.slice(5)] = Math.round(m.startTime);
+  const dcl = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.domContentLoadedEventEnd;
+  if (dcl) out.domReady = Math.round(dcl);
+  return out;
+}
+
+/** How this page started: a fresh launch, a reload, or a page iOS restored (bfcache / discarded tab). */
+export function launchKind(): { navigation: string; wasDiscarded: boolean | null } {
+  const nav = (typeof performance !== 'undefined' && typeof performance.getEntriesByType === 'function' ? performance.getEntriesByType('navigation')[0] : undefined) as PerformanceNavigationTiming | undefined;
+  return { navigation: nav?.type ?? 'unknown', wasDiscarded: (document as Document & { wasDiscarded?: boolean }).wasDiscarded ?? null };
+}
+
+/** Records a boot milestone once (cheap; no-op where the Performance API is missing). */
+export function markBoot(name: string) {
+  try {
+    if (typeof performance !== 'undefined' && performance.getEntriesByName(`keyo:${name}`).length === 0) performance.mark(`keyo:${name}`);
+  } catch {
+    /* ignore */
+  }
 }

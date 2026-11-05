@@ -294,3 +294,25 @@
   .praise-slider .gbtn { display: none; }
   .paction-wrap { gap: 6px; }
 }
+
+/* Landscape phones (short game screen — side-rail HUD): one action row. The raise control keeps
+   − · slider · + · All-in (its amount is on the Raise button); the 2.5D buttons get a compact height. */
+@container game ((max-height: 560px) and (min-aspect-ratio: 16/10)) or (min-aspect-ratio: 19/10) {
+  .paction-wrap { flex-direction: row; align-items: stretch; max-width: none; gap: 8px; }
+  .paction-wrap > .praise { flex: 1 1 0; grid-template-columns: auto 1fr auto auto; padding: 4px 8px; gap: 6px; border-radius: 16px; }
+  .paction-wrap > .praise .praise-value { display: none; }
+  .paction-wrap > .praise .praise-slider { grid-column: 2; grid-row: 1; }
+  .paction-wrap > .praise .praise-slider .gbtn { display: none; }
+  .paction-wrap > .pactions { flex: 1.15 1 0; gap: 8px; }
+  .pbtn.pbtn-xl { min-height: 48px; padding: 4px 10px; border-radius: 14px; font-size: 15px; gap: 6px; }
+  .pbtn-xl .pbtn-icon { width: 20px; height: 20px; }
+  .pbtn-detail { font-size: 0.74em; margin-top: 0; }
+}
+@media (pointer: coarse) { .pbtn.pbtn-xl { min-height: 46px; } }
+
+/* Touch screens: every game chip and HUD tool keeps a 44px target, whatever the container height. */
+@media (pointer: coarse) {
+  .gchip { --c: 44px; }
+  .gicon { --s: 44px; width: 44px; height: 44px; }
+  .gchips { gap: 2px; }
+}

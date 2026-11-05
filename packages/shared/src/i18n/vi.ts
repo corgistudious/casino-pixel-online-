@@ -8,9 +8,9 @@ export const vi: Translation = {
     disclaimer:
       'Chỉ nhằm mục đích giải trí. Cxu Bạc và Cxu Vàng là tiền ảo, không thể mua, không có giá trị tiền mặt và không thể quy đổi, rút hay đổi thành tiền thật hoặc giải thưởng.',
     orientation: {
-      portraitTitle: 'Xoay dọc điện thoại',
-      portraitBody: 'Vui lòng xoay điện thoại về chiều dọc để tiếp tục trải nghiệm Keyo Game.',
-      hint: 'Màn hình tự trở lại ngay khi bạn xoay dọc — ván chơi và mọi thao tác vẫn được giữ nguyên.',
+      landscapeTitle: 'Xoay ngang điện thoại',
+      landscapeBody: 'Vui lòng xoay ngang điện thoại để tiếp tục chơi Keyo Game.',
+      hint: 'Màn hình tự trở lại ngay khi bạn xoay ngang — ván chơi và mọi thao tác vẫn được giữ nguyên.',
     },
     offline: 'Mất kết nối. Đang kết nối lại…',
     loadFailed: 'Không tải được màn hình này. Hãy kiểm tra kết nối rồi thử lại.',
@@ -755,6 +755,8 @@ export const vi: Translation = {
     chips: 'Cxu Bạc',
   },
   settings: {
+    diagOn: 'Đã bật chẩn đoán màn hình — mở lại ứng dụng để áp dụng.',
+    diagOff: 'Đã tắt chẩn đoán màn hình.',
     victoryEffects: 'Hiệu ứng thắng',
     victoryEffectsHint: 'Phát hiệu ứng bạn trang bị khi bạn thắng (chỉ bạn nhìn thấy).',
     title: 'Cài đặt',

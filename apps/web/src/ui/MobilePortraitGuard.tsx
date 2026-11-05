@@ -1,22 +1,28 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+import { useSession } from '../store/session';
 import { formFactor } from '../lib/device';
-import { phoneMustRotate, useOrientation } from '../lib/orientation';
+import { isAuthRoute, phoneMustRotate, useOrientation } from '../lib/orientation';
 import { KeyoLogo } from './KeyoLogo';
 
 /**
- * V7.1 — phones are portrait-only. When a PHONE is held sideways (browser or home-screen app), this
+ * V7.1 — phones play in LANDSCAPE. When a PHONE is held upright (browser or home-screen app), this
  * opaque notice covers the whole visible area and the app underneath is made inert (no taps, no
  * keyboard focus, hidden from screen readers). Nothing is unmounted, reloaded or navigated: the page,
  * the session, the WebSocket and any running round keep going (the server stays the clock), and the
- * notice disappears by itself when the phone is turned back. No orientation lock API, no CSS rotation.
+ * notice disappears by itself when the phone is turned sideways. Sign-in and e-mail link pages work in
+ * either orientation. No orientation lock API, no CSS rotation.
  * Tablets and PCs never see it (lib/device.ts formFactor), even in a narrow window.
  */
 export function MobilePortraitGuard() {
   const { t } = useTranslation();
   const orientation = useOrientation();
-  const show = phoneMustRotate(formFactor(), orientation);
+  const { pathname } = useLocation();
+  const user = useSession((s) => s.user);
+  const auth = isAuthRoute({ signedIn: !!user, verified: user?.status !== 'pending_verification', pathname });
+  const show = phoneMustRotate(formFactor(), orientation, auth);
 
   useEffect(() => {
     const root = document.getElementById('root');
@@ -34,15 +40,15 @@ export function MobilePortraitGuard() {
 
   if (!show) return null;
   return createPortal(
-    <div role="alertdialog" aria-modal="true" aria-labelledby="portrait-guard-title" aria-describedby="portrait-guard-body" data-portrait-guard className="portrait-guard">
+    <div role="alertdialog" aria-modal="true" aria-labelledby="portrait-guard-title" aria-describedby="portrait-guard-body" data-portrait-guard data-orientation-guard="landscape" className="portrait-guard">
       <div className="portrait-guard-card">
         <div className="portrait-guard-art">
           <KeyoLogo size={56} />
           <PhoneTurnIcon />
         </div>
         <div className="portrait-guard-text">
-          <h2 id="portrait-guard-title">{t('app.orientation.portraitTitle')}</h2>
-          <p id="portrait-guard-body">{t('app.orientation.portraitBody')}</p>
+          <h2 id="portrait-guard-title">{t('app.orientation.landscapeTitle')}</h2>
+          <p id="portrait-guard-body">{t('app.orientation.landscapeBody')}</p>
           <p className="portrait-guard-hint">{t('app.orientation.hint')}</p>
         </div>
       </div>
@@ -51,7 +57,7 @@ export function MobilePortraitGuard() {
   );
 }
 
-/** A phone outline turning from landscape to portrait (static when motion is reduced). */
+/** A phone outline turning from portrait to landscape (static when motion is reduced). */
 function PhoneTurnIcon() {
   return (
     <svg width="72" height="72" viewBox="0 0 64 64" fill="none" aria-hidden className="portrait-guard-phone">

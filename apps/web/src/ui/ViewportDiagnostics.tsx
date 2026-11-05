@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { sampleViewport } from '../lib/viewportProbe';
+import { launchKind, sampleViewport } from '../lib/viewportProbe';
 
 /**
  * Test build only (VITE_VIEWPORT_DIAG=1, or localStorage keyo.vpdiag=1). Measures what iOS hands the
@@ -15,7 +15,7 @@ import { sampleViewport } from '../lib/viewportProbe';
  * Not part of a production build unless the flag is set.
  */
 type Sample = ReturnType<typeof sampleViewport> & { t: number; event: string };
-interface Launch { at: string; commit: string; startOrientation: string; samples: Sample[] }
+interface Launch { at: string; commit: string; startOrientation: string; kind: ReturnType<typeof launchKind> & { pageshowPersisted: boolean | null; standalone: boolean | null }; samples: Sample[] }
 const TIMES = [0, 12, 50, 100, 250, 500, 1000, 2000, 4000];
 const LAUNCHES_KEY = 'keyo.vpdiag.launches';
 const PAINT_ID = 'vpdiag-paint';
@@ -53,6 +53,12 @@ export function ViewportDiagnostics() {
 
   useEffect(() => {
     const startOrientation = screen.orientation?.type ?? String((window as Window & { orientation?: number }).orientation ?? 'n/a');
+    let pageshowPersisted: boolean | null = null;
+    const onPageShow = (e: PageTransitionEvent) => {
+      pageshowPersisted = e.persisted;
+      take.current(`pageshow persisted=${e.persisted}`);
+    };
+    window.addEventListener('pageshow', onPageShow);
     take.current = (event: string) => {
       const s = { t: Math.round(performance.now()), event, ...sampleViewport() };
       samplesRef.current = [...samplesRef.current.slice(-120), s];
@@ -63,14 +69,20 @@ export function ViewportDiagnostics() {
     timers.push(
       window.setTimeout(() => {
         try {
-          const launch: Launch = { at: new Date().toISOString(), commit: __APP_COMMIT__, startOrientation, samples: samplesRef.current.slice(0, 40) };
+          const launch: Launch = {
+            at: new Date().toISOString(),
+            commit: __APP_COMMIT__,
+            startOrientation,
+            kind: { ...launchKind(), pageshowPersisted, standalone: (navigator as Navigator & { standalone?: boolean }).standalone ?? null },
+            samples: samplesRef.current.slice(0, 40),
+          };
           localStorage.setItem(LAUNCHES_KEY, JSON.stringify([...readLaunches().slice(-4), launch]));
         } catch {
           /* storage unavailable */
         }
       }, 4200),
     );
-    const events = ['resize', 'orientationchange', 'pageshow', 'pagehide', 'focus', 'blur'] as const;
+    const events = ['resize', 'orientationchange', 'pagehide', 'focus', 'blur'] as const;
     const handlers = events.map((e) => [e, () => take.current(e)] as const);
     handlers.forEach(([e, h]) => window.addEventListener(e, h));
     const onVis = () => take.current(`visibility:${document.visibilityState}`);
@@ -89,6 +101,7 @@ export function ViewportDiagnostics() {
     window.visualViewport?.addEventListener('scroll', onVvScroll);
     return () => {
       timers.forEach((id) => window.clearTimeout(id));
+      window.removeEventListener('pageshow', onPageShow);
       handlers.forEach(([e, h]) => window.removeEventListener(e, h));
       document.removeEventListener('visibilitychange', onVis);
       document.removeEventListener('focusin', onFocus);

@@ -6,9 +6,9 @@ export const en = {
     disclaimer:
       'Entertainment only. Silver and Gold Cxu are virtual, cannot be bought, have no cash value and cannot be exchanged, withdrawn or redeemed for real money or prizes.',
     orientation: {
-      portraitTitle: 'Rotate to portrait',
-      portraitBody: 'Please rotate your phone to portrait mode to continue playing Keyo Game.',
-      hint: 'The game comes back as soon as you turn the phone upright — your round and everything you were doing is kept.',
+      landscapeTitle: 'Rotate to landscape',
+      landscapeBody: 'Please turn your phone sideways (landscape) to keep playing Keyo Game.',
+      hint: 'The game comes back as soon as you turn the phone sideways — your round and everything you were doing is kept.',
     },
     offline: 'Connection lost. Reconnecting…',
     loadFailed: 'This screen could not be loaded. Check your connection and try again.',
@@ -753,6 +753,8 @@ export const en = {
     chips: 'Silver Cxu',
   },
   settings: {
+    diagOn: 'Screen diagnostics on — relaunch the app to apply.',
+    diagOff: 'Screen diagnostics off.',
     victoryEffects: 'Victory effects',
     victoryEffectsHint: 'Play your equipped effect when you win (only you see it).',
     title: 'Settings',

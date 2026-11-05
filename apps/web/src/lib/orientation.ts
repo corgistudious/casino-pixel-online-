@@ -53,10 +53,16 @@ export function useOrientation(): Orientation {
   return o;
 }
 
+/** Sign-in, sign-up, password recovery and e-mail link pages: usable in either orientation (typing). */
+export function isAuthRoute(opts: { signedIn: boolean; verified: boolean; pathname: string }): boolean {
+  const linkPage = ['/verify-email', '/reset-password', '/activate', '/captain-setup'].includes(opts.pathname);
+  return !opts.signedIn || !opts.verified || linkPage;
+}
+
 /**
- * V7.1: phones are portrait-only everywhere (sign-in, lobby, rooms, games). Returns true when the
- * rotate-to-portrait notice must cover the app. Tablets and PCs are never asked to rotate.
+ * V7.1 (final): phones play in LANDSCAPE. Returns true when the rotate-to-landscape notice must cover
+ * the app: a phone held upright, outside the sign-in / link pages. Tablets and PCs are never asked.
  */
-export function phoneMustRotate(form: 'phone' | 'tablet' | 'pc', orientation: Orientation): boolean {
-  return form === 'phone' && orientation === 'landscape';
+export function phoneMustRotate(form: 'phone' | 'tablet' | 'pc', orientation: Orientation, authRoute = false): boolean {
+  return form === 'phone' && orientation === 'portrait' && !authRoute;
 }

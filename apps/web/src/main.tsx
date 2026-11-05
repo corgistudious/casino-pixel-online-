@@ -18,6 +18,8 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { resolvePwaBlock } from './lib/pwaBlock';
 import { installViewport } from './lib/viewport';
+import { markBoot } from './lib/viewportProbe';
+markBoot('boot');
 import { PwaBlockedScreen } from './ui/PwaBlockedScreen';
 
 /** Canvas textures bake text in, so the fonts must be ready before any scene draws. */
