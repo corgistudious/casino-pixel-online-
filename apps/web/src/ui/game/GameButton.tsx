@@ -1,10 +1,10 @@
 import type { ButtonHTMLAttributes, ComponentPropsWithRef, ReactNode } from 'react';
 import { sfx } from '../../audio/sfx';
 
-export type GameTone = 'primary' | 'positive' | 'danger' | 'neutral' | 'ghost-danger' | 'violet' | 'ice' | 'rose' | 'vip';
+export type GameTone = 'primary' | 'positive' | 'danger' | 'neutral' | 'ghost-danger' | 'violet' | 'ice' | 'rose' | 'vip' | 'sapphire';
 
 /** Game tones → premium design-system tones (premium.css). */
-const TONE: Record<GameTone, string> = { primary: 'pt-gold', positive: 'pt-emerald', danger: 'pt-danger', neutral: 'pt-neutral', 'ghost-danger': 'pt-danger pbtn-ghost', violet: 'pt-violet', ice: 'pt-ice', rose: 'pt-rose', vip: 'pt-vip' };
+const TONE: Record<GameTone, string> = { primary: 'pt-gold', positive: 'pt-emerald', danger: 'pt-danger', neutral: 'pt-neutral', 'ghost-danger': 'pt-danger pbtn-ghost', violet: 'pt-violet', ice: 'pt-ice', rose: 'pt-rose', vip: 'pt-vip', sapphire: 'pt-sapphire' };
 
 /**
  * The single action button of every table screen: sizes from .gbtn (index.css), looks from the
@@ -18,12 +18,14 @@ export function GameButton({
   loading = false,
   selected,
   icon,
+  detail,
+  big = false,
   className = '',
   children,
   disabled,
   onClick,
   ...rest
-}: ButtonHTMLAttributes<HTMLButtonElement> & { tone?: GameTone; size?: 'md' | 'sm'; loading?: boolean; selected?: boolean; icon?: ReactNode; children: ReactNode }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { tone?: GameTone; size?: 'md' | 'sm'; loading?: boolean; selected?: boolean; icon?: ReactNode; detail?: ReactNode; big?: boolean; children: ReactNode }) {
   return (
     <button
       type="button"
@@ -35,10 +37,17 @@ export function GameButton({
         sfx.click();
         onClick?.(e);
       }}
-      className={`gbtn pbtn ${TONE[tone]}${size === 'sm' ? ' gbtn--sm' : ''} ${className}`}
+      className={`gbtn pbtn ${TONE[tone]}${size === 'sm' ? ' gbtn--sm' : ''}${big ? ' pbtn-xl' : ''} ${className}`}
     >
       {loading ? <span className="pbtn-spin" aria-hidden /> : icon}
-      <span>{children}</span>
+      {detail !== undefined ? (
+        <span className="pbtn-stack">
+          <span className="pbtn-title">{children}</span>
+          <span className="pbtn-detail">{detail}</span>
+        </span>
+      ) : (
+        <span>{children}</span>
+      )}
     </button>
   );
 }

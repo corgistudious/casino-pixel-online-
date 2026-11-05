@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice">
+  <!-- Keyo Game V7.1 lobby hall (original artwork): royal purple hall, gilded arches, light beams, polished floor. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1260"/>
+      <stop offset="0.45" stop-color="#170a3a"/>
+      <stop offset="1" stop-color="#07041a"/>
+    </linearGradient>
+    <radialGradient id="glowTop" cx="0.5" cy="0.08" r="0.6">
+      <stop offset="0" stop-color="#f2c14e" stop-opacity="0.35"/>
+      <stop offset="0.5" stop-color="#9b5cf6" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff3c4"/>
+      <stop offset="0.3" stop-color="#f2c14e"/>
+      <stop offset="0.55" stop-color="#8a5a12"/>
+      <stop offset="0.8" stop-color="#f7d77a"/>
+      <stop offset="1" stop-color="#b9801c"/>
+    </linearGradient>
+    <linearGradient id="archFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b1d7a" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#12082c" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff1b8" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#fff1b8" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1260" stop-opacity="0"/>
+      <stop offset="1" stop-color="#05030f" stop-opacity="0.95"/>
+    </linearGradient>
+    <pattern id="damask" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M30 6c6 8 6 14 0 24c-6-10-6-16 0-24zM30 54c6-8 6-14 0-24c-6 10-6 16 0 24zM6 30c8-6 14-6 24 0c-10 6-16 6-24 0zM54 30c-8-6-14-6-24 0c10 6 16 6 24 0z" fill="#c79bff" fill-opacity="0.05"/>
+    </pattern>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+  <rect width="1200" height="1600" fill="url(#damask)"/>
+  <rect width="1200" height="1600" fill="url(#glowTop)"/>
+  <!-- Arches -->
+  <g>
+    <path d="M60 1100V520a240 240 0 0 1 480 0v580z" fill="url(#archFill)"/>
+    <path d="M660 1100V520a240 240 0 0 1 480 0v580z" fill="url(#archFill)"/>
+    <path d="M60 1100V520a240 240 0 0 1 480 0v580" fill="none" stroke="url(#gold)" stroke-width="10"/>
+    <path d="M660 1100V520a240 240 0 0 1 480 0v580" fill="none" stroke="url(#gold)" stroke-width="10"/>
+    <path d="M88 1100V524a212 212 0 0 1 424 0v576" fill="none" stroke="#f2c14e" stroke-opacity="0.35" stroke-width="3"/>
+    <path d="M688 1100V524a212 212 0 0 1 424 0v576" fill="none" stroke="#f2c14e" stroke-opacity="0.35" stroke-width="3"/>
+    <!-- window lights inside arches -->
+    <g fill="#5ad8ff" fill-opacity="0.18">
+      <rect x="150" y="560" width="60" height="420" rx="30"/><rect x="270" y="520" width="60" height="460" rx="30"/><rect x="390" y="560" width="60" height="420" rx="30"/>
+      <rect x="750" y="560" width="60" height="420" rx="30"/><rect x="870" y="520" width="60" height="460" rx="30"/><rect x="990" y="560" width="60" height="420" rx="30"/>
+    </g>
+  </g>
+  <!-- Light beams -->
+  <g filter="url(#soft)">
+    <path d="M520 0h160l160 1200H360z" fill="url(#beam)"/>
+    <path d="M140 0h80l140 900H60z" fill="url(#beam)" opacity="0.6"/>
+    <path d="M980 0h80l80 900H840z" fill="url(#beam)" opacity="0.6"/>
+  </g>
+  <!-- Cornice -->
+  <rect x="0" y="236" width="1200" height="14" fill="url(#gold)" opacity="0.85"/>
+  <rect x="0" y="252" width="1200" height="3" fill="#000" opacity="0.4"/>
+  <!-- Floor -->
+  <rect x="0" y="1100" width="1200" height="500" fill="#12082c"/>
+  <g stroke="#f2c14e" stroke-opacity="0.12" stroke-width="2">
+    <path d="M600 1100L-200 1600M600 1100L200 1600M600 1100L600 1600M600 1100L1000 1600M600 1100L1400 1600"/>
+    <path d="M0 1180H1200M0 1300H1200M0 1450H1200"/>
+  </g>
+  <rect x="0" y="1092" width="1200" height="10" fill="url(#gold)" opacity="0.7"/>
+  <rect x="0" y="1100" width="1200" height="500" fill="url(#floor)"/>
+  <!-- Sparkles -->
+  <g fill="#fff1b8">
+    <circle cx="200" cy="340" r="2.4" opacity="0.8"/><circle cx="980" cy="300" r="2" opacity="0.7"/><circle cx="640" cy="420" r="1.8" opacity="0.6"/>
+    <circle cx="420" cy="180" r="1.6" opacity="0.5"/><circle cx="820" cy="160" r="2.2" opacity="0.6"/><circle cx="1100" cy="460" r="1.6" opacity="0.5"/>
+  </g>
+</svg>

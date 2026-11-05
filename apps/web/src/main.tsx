@@ -8,6 +8,10 @@ import '@fontsource/playfair-display/700.css';
 import '@fontsource/playfair-display/900.css';
 import './index.css';
 import './premium.css';
+import hallUrl from './assets/v71/hall.svg?url';
+
+// V7.1 lobby hall artwork, shared by the lobby, the app shell and the game screens (premium.css).
+document.documentElement.style.setProperty('--v71-hall', `url("${hallUrl}")`);
 import './i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

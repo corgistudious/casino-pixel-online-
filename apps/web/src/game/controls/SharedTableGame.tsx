@@ -23,6 +23,7 @@ import { TaiXiuScene } from '../scenes/TaiXiuScene';
 import { PlayerIdentityCompact } from '../../players/identity';
 import { celebrateWin } from '../../cosmetics/VictoryEffect';
 import { GameButton } from '../../ui/game/GameButton';
+import { ActionIcon } from '../../ui/game/ActionIcons';
 import { GameCard, GameChipRack, GameStat, GameTimer } from '../../ui/game/GameParts';
 import { GameTableLayout, type GameTool } from '../../ui/game/GameTableLayout';
 
@@ -294,13 +295,13 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
             {lastWin !== null && <GameStat label={t('play.lastWin')} value={formatChips(lastWin, lang)} accent={lastWin > 0} />}
           </div>
           <div className="gbar-group">
-            <GameButton size="sm" onClick={() => setPending({})} disabled={placing || pendingTotal === 0}>
+            <GameButton size="sm" icon={<ActionIcon name="clear" size={18} />} onClick={() => setPending({})} disabled={placing || pendingTotal === 0}>
               {t('play.clear')}
             </GameButton>
-            <GameButton size="sm" onClick={rebet} disabled={!canBet || placing || totalOf(lastBets) === 0}>
+            <GameButton size="sm" icon={<ActionIcon name="rebet" size={18} />} onClick={rebet} disabled={!canBet || placing || totalOf(lastBets) === 0}>
               {t('play.rebet')}
             </GameButton>
-            <GameButton tone="primary" loading={placing} onClick={() => void confirm()} disabled={!canBet || pendingTotal === 0}>
+            <GameButton tone="primary" icon={<ActionIcon name="confirm" />} loading={placing} onClick={() => void confirm()} disabled={!canBet || pendingTotal === 0}>
               {placing ? t('tables.placing') : t('tables.confirm')}
               {!placing && pendingTotal > 0 && <span className="tabular-nums"> · {formatChips(pendingTotal, lang)}</span>}
             </GameButton>

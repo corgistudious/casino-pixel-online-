@@ -10,6 +10,7 @@ import { PhaserView } from '../PhaserView';
 import { BlackjackScene } from '../scenes/BlackjackScene';
 import { GameTableLayout } from '../../ui/game/GameTableLayout';
 import { GameButton } from '../../ui/game/GameButton';
+import { ActionIcon } from '../../ui/game/ActionIcons';
 import { GameCard, GameChipRack, GameStat, GameTimer } from '../../ui/game/GameParts';
 import { usePlay } from './usePlay';
 import { InsurancePrompt } from './InsurancePrompt';
@@ -134,18 +135,22 @@ export function BlackjackGame() {
               <GameStat label={t('play.bet')} value={formatChips(round!.result.bet, lang)} accent />
             </div>
             <div className="gbar-group">
-              <GameButton tone="primary" loading={busy} onClick={() => void act('hit')}>
+              <GameButton big tone="primary" icon={<ActionIcon name="hit" />} loading={busy} onClick={() => void act('hit')}>
                 {t('play.hit')}
               </GameButton>
-              <GameButton tone="positive" onClick={() => void act('stand')} disabled={busy}>
+              <GameButton big tone="sapphire" icon={<ActionIcon name="stand" />} onClick={() => void act('stand')} disabled={busy}>
                 {t('play.stand')}
               </GameButton>
-              <GameButton tone="danger" onClick={() => void act('double')} disabled={busy || !round!.result.canDouble || balance < handBet}>
-                {t('play.double')}
-              </GameButton>
-              <GameButton tone="neutral" onClick={() => void act('split')} disabled={busy || !round!.result.canSplit || balance < handBet}>
-                {t('play.split')}
-              </GameButton>
+              {round!.result.canDouble && (
+                <GameButton big tone="danger" icon={<ActionIcon name="double" />} onClick={() => void act('double')} disabled={busy || balance < handBet}>
+                  {t('play.double')}
+                </GameButton>
+              )}
+              {round!.result.canSplit && (
+                <GameButton big tone="violet" icon={<ActionIcon name="split" />} onClick={() => void act('split')} disabled={busy || balance < handBet}>
+                  {t('play.split')}
+                </GameButton>
+              )}
             </div>
           </>
         ) : (
@@ -174,7 +179,7 @@ export function BlackjackGame() {
               <GameButton size="sm" onClick={() => void deal(lastBet)} disabled={busy || lastBet === 0}>
                 {t('play.rebet')}
               </GameButton>
-              <GameButton tone="primary" loading={busy} onClick={() => void deal()} disabled={bet === 0}>
+              <GameButton tone="primary" icon={<ActionIcon name="deal" />} loading={busy} onClick={() => void deal()} disabled={bet === 0}>
                 {busy ? t('play.busy') : t('play.deal')}
                 {!busy && bet > 0 && <span className="tabular-nums"> · {formatChips(bet, lang)}</span>}
               </GameButton>

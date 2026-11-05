@@ -11,6 +11,7 @@ export function RouletteGame() {
     <BetBoardGame
       title={t('games.roulette.name')}
       actionLabel={t('play.spin')}
+      icon="spin"
       create={() => new RouletteScene()}
       request={(bets) => socket.request('roulette.spin', { bets: toBetList<RouletteBetKind>(bets) })}
       animate={(scene, env) => scene.spin(env.result as RouletteResult)}

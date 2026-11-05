@@ -10,6 +10,7 @@ import { PhaserView } from '../PhaserView';
 import type { TableScene } from '../scenes/TableScene';
 import { GameTableLayout } from '../../ui/game/GameTableLayout';
 import { GameButton } from '../../ui/game/GameButton';
+import { ActionIcon } from '../../ui/game/ActionIcons';
 import { GameCard, GameChipRack, GameStat, GameTimer } from '../../ui/game/GameParts';
 import { usePlay } from './usePlay';
 import { celebrateWin } from '../../cosmetics/VictoryEffect';
@@ -20,6 +21,7 @@ interface Props<S extends TableScene, T extends { balance: number; roundId?: str
   create: () => S;
   request: (bets: Record<string, number>) => Promise<T>;
   animate: (scene: S, env: T) => Promise<void>;
+  icon?: 'spin' | 'roll';
 }
 
 /** Shared flow for roulette & sic bo: place chips on the table, then spin/roll. */
@@ -115,13 +117,13 @@ export function BetBoardGame<S extends TableScene, T extends { balance: number; 
             <GameStat label={t('play.lastWin')} value={formatChips(lastWin, i18n.language)} accent={lastWin > 0} />
           </div>
           <div className="gbar-group">
-            <GameButton size="sm" onClick={() => setBets({})} disabled={busy || total === 0}>
+            <GameButton size="sm" icon={<ActionIcon name="clear" size={18} />} onClick={() => setBets({})} disabled={busy || total === 0}>
               {t('play.clear')}
             </GameButton>
             <GameButton size="sm" onClick={() => totalOf(lastBets) <= useSession.getState().balance && setBets(lastBets)} disabled={busy || totalOf(lastBets) === 0}>
               {t('play.rebet')}
             </GameButton>
-            <GameButton tone="primary" loading={busy} onClick={() => void play()} disabled={total === 0}>
+            <GameButton tone="primary" icon={<ActionIcon name={props.icon ?? 'confirm'} />} loading={busy} onClick={() => void play()} disabled={total === 0}>
               {busy ? t('play.busy') : props.actionLabel}
               {!busy && total > 0 && <span className="tabular-nums"> · {formatChips(total, i18n.language)}</span>}
             </GameButton>

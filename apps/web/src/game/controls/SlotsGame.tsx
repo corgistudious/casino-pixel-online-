@@ -8,6 +8,7 @@ import { PhaserView } from '../PhaserView';
 import { SlotsScene } from '../scenes/SlotsScene';
 import { GameTableLayout } from '../../ui/game/GameTableLayout';
 import { GameButton } from '../../ui/game/GameButton';
+import { ActionIcon } from '../../ui/game/ActionIcons';
 import { GameCard, GameStat, GameTimer } from '../../ui/game/GameParts';
 import { usePlay } from './usePlay';
 
@@ -116,7 +117,7 @@ export function SlotsGame() {
             <GameButton tone={auto ? 'danger' : 'positive'} selected={auto} onClick={() => setAuto((a) => !a)}>
               {auto ? t('play.stop') : t('play.auto')}
             </GameButton>
-            <GameButton tone="primary" loading={busy && !auto} onClick={() => void spin()} disabled={busy || auto}>
+            <GameButton big tone="primary" icon={<ActionIcon name="spin" />} loading={busy && !auto} onClick={() => void spin()} disabled={busy || auto}>
               {busy ? t('play.busy') : t('play.spin')}
             </GameButton>
           </div>

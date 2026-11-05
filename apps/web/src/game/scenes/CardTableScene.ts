@@ -5,6 +5,7 @@ import { compactChips } from '../../lib/format';
 import { cardKey, chipDenomFor, ensureCardBackTexture, ensureCardTexture, ensureLibraryCardBack, ensureChipTextures, hdImage, hdScale } from '../art';
 import { assetSrc } from '../../store/catalog';
 import { BaseScene } from './BaseScene';
+import { ensureHudKit } from '../hudArt';
 import { celebrateWin } from '../../cosmetics/VictoryEffect';
 
 type XY = { x: number; y: number };
@@ -96,6 +97,7 @@ export class CardTableScene extends BaseScene {
   protected build() {
     ensureChipTextures(this);
     ensureCardTexture(this, null);
+    ensureHudKit(this);
     // Rail, felt and printed line come from the viewer's table skin (background); same geometry for everyone.
     this.text(this.C.x, this.C.y + 62, 'KEYO', { size: 22, display: true, color: this.skin().lineCss }).setAlpha(0.18);
     this.layer = this.add.container(0, 0);
@@ -242,17 +244,20 @@ export class CardTableScene extends BaseScene {
       const color = AVATAR_COLORS[s.uid % AVATAR_COLORS.length]!;
       const isTurn = hand?.toActSeat === seat && hand.phase === 'betting';
       const won = hand?.result && (hand.result.payouts[seat] ?? 0) > 0 && (hand.result.net[seat] ?? 0) > 0;
-      const halo = this.add.circle(slot.at.x, slot.at.y, 20, won ? 0xffe08a : isTurn ? 0x5ad8ff : 0x000000, won || isTurn ? 0.35 : 0);
-      const av = this.add.circle(slot.at.x, slot.at.y, 16, color).setStrokeStyle(2, s.uid === -1 ? 0xffffff : 0xf2d38a);
+      // V7.1 2.5D seat: metallic ring (turn = cyan glow, winner = gold glow, VIP = violet gems), glass plate.
+      const ringKey = won ? 'ring-win' : isTurn ? 'ring-turn' : s.vipLevel > 1 ? 'ring-vip' : 'ring-gold';
+      const halo = hdImage(this, slot.at.x, slot.at.y, ringKey).setDepth(1);
+      const av = this.add.circle(slot.at.x, slot.at.y, 16.5, color);
       const initial = this.text(slot.at.x, slot.at.y, (s.displayName[0] ?? '?').toUpperCase(), { size: 14, display: true, shadow: true });
       const photo = this.photo(s.customAvatar, slot.at.x, slot.at.y);
       if (photo) initial.setVisible(false);
       const nameY = slot.at.y + (slot.at.y > this.C.y ? -38 : 27); // clear of the turn-timer ring
-      const plate = this.add.rectangle(slot.at.x, nameY + 6, 84, 24, 0x05040b, 0.78).setStrokeStyle(1, 0xf2d38a, 0.4);
+      const plate = hdImage(this, slot.at.x, nameY + 6, seat === view.mySeat ? 'plate-me' : 'plate', 0.9);
       const name = this.text(slot.at.x, nameY, s.displayName.slice(0, 12), { size: 8, weight: 700 });
       const stack = this.text(slot.at.x, nameY + 11, compactChips(p ? p.stack : s.stack), { size: 9, color: '#ffe08a', weight: 800 });
-      this.layer.add([halo, av, initial, plate, name, stack]);
+      this.layer.add([av, initial, plate, name, stack]);
       if (photo) this.layer.add(photo);
+      this.layer.add(halo);
       // VIP tag on the avatar's lower-right rim (away from the face, the cards and the chips).
       if (s.vipLevel > 1) {
         const tier = vipTierOf(s.vipLevel);
@@ -282,7 +287,7 @@ export class CardTableScene extends BaseScene {
       if (hand && hand.button === seat) {
         const bx = slot.at.x + 24;
         const by = slot.at.y - 14;
-        this.layer.add([this.add.circle(bx, by, 7, 0xffffff).setStrokeStyle(1, 0x8a5a12), this.text(bx, by, 'D', { size: 8, color: '#1b1636', weight: 800 })]);
+        this.layer.add(hdImage(this, bx, by, 'dealer-btn'));
       }
       if (isTurn && hand?.deadline) this.timerAt = { pos: slot.at, deadline: hand.deadline, total: view.table.config.turnMs };
       // Cards.
@@ -328,7 +333,12 @@ export class CardTableScene extends BaseScene {
       hand.board.forEach((c, i) => this.card(this.C.x + (i - 2) * 34, this.C.y, c, 0.64, undefined, `${hand.seq}:board:${i}`));
       if (hand.pot > 0) {
         const tex = `chip-${chipDenomFor(hand.pot)}`;
-        this.layer.add([this.add.image(this.C.x - 30, this.C.y - 44, tex).setScale(hdScale(tex, 0.55)), this.text(this.C.x + 4, this.C.y - 44, `${this.strings.pot ?? 'Pot'} ${compactChips(hand.pot)}`, { size: 11, color: '#fff1b8', weight: 800, shadow: true })]);
+        const py = this.C.y - 44;
+        this.layer.add([
+          hdImage(this, this.C.x, py, 'pot-plate', 0.85),
+          this.add.image(this.C.x - 44, py - 1, tex).setScale(hdScale(tex, 0.62)),
+          this.text(this.C.x + 6, py, `${(this.strings.pot ?? 'Pot').toUpperCase()}  ${compactChips(hand.pot)}`, { size: 11, color: '#ffe08a', weight: 800, shadow: true }),
+        ]);
       }
       if (hand.result && this.lastResultSeq !== hand.seq) {
         this.lastResultSeq = hand.seq;

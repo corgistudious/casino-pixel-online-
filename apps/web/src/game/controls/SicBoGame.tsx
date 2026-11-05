@@ -11,6 +11,7 @@ export function SicBoGame() {
     <BetBoardGame
       title={t('games.sicbo.name')}
       actionLabel={t('play.roll')}
+      icon="roll"
       create={() => new SicBoScene()}
       request={(bets) => socket.request('sicbo.roll', { bets: toBetList<SicBoBetKind>(bets) })}
       animate={(scene, env) => scene.roll(env.result as SicBoResult)}

@@ -1838,6 +1838,8 @@ export const vi: Translation = {
     },
   },
   gameUi: {
+    call: 'Theo',
+    allIn: 'Tất tay',
     waiting: 'Đang chờ',
     turnOf: "Lượt của {{name}}",
     fullscreen: 'Toàn màn hình',

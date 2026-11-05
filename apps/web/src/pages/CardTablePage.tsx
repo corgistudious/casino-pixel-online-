@@ -17,6 +17,7 @@ import { useCatalog } from '../store/catalog';
 import { useSession } from '../store/session';
 import { toast } from '../ui/toast';
 import { GameButton } from '../ui/game/GameButton';
+import { ActionIcon } from '../ui/game/ActionIcons';
 import { GameCard, GameStat, GameTimer } from '../ui/game/GameParts';
 import { GameTableLayout, type GameTool } from '../ui/game/GameTableLayout';
 
@@ -255,6 +256,7 @@ function CardTable({ tableId }: { tableId: string }) {
     },
   ];
   const raiseLabel = hand && hand.currentBet > 0 ? t('cards.raiseTo') : t('cards.bet');
+const raiseStep = cfg?.bigBlind ?? 1;
   return (
     <GameTableLayout
       title={view ? view.table.name[i18n.language === 'en' ? 'en' : 'vi'] : t('cards.lobby')}
@@ -282,48 +284,67 @@ function CardTable({ tableId }: { tableId: string }) {
             {mySeat && <GameStat label={ranked ? t('cards.matchChips') : t('cards.myStack')} value={fmt(myStack)} />}
           </div>
           {legal ? (
-            <>
-              <div className="gbar-group">
-                <GameButton tone="ghost-danger" loading={acting === 'fold'} disabled={busy} onClick={() => void send('fold')}>
+            <div className="paction-wrap">
+              {legal.canRaise && legal.minRaiseTo < legal.maxRaiseTo && (
+                <div className="praise">
+                  <button type="button" className="praise-step" aria-label={`− ${fmt(raiseStep)}`} disabled={busy || raise <= legal.minRaiseTo} onClick={() => setRaise((r) => Math.max(legal.minRaiseTo, r - raiseStep))}>
+                    −
+                  </button>
+                  <div className="praise-value" aria-live="polite">{fmt(raise)}</div>
+                  <button type="button" className="praise-step" aria-label={`+ ${fmt(raiseStep)}`} disabled={busy || raise >= legal.maxRaiseTo} onClick={() => setRaise((r) => Math.min(legal.maxRaiseTo, r + raiseStep))}>
+                    +
+                  </button>
+                  <GameButton size="sm" tone="danger" loading={acting === 'allin'} disabled={busy} onClick={() => void send('allin')}>
+                    {t('gameUi.allIn')}
+                  </GameButton>
+                  <div className="praise-slider flex items-center gap-2">
+                    <input
+                      type="range"
+                      className="praise-range"
+                      min={legal.minRaiseTo}
+                      max={legal.maxRaiseTo}
+                      step={cfg?.bigBlind ?? 1}
+                      value={raise}
+                      onChange={(e) => setRaise(Number(e.target.value))}
+                      aria-label={t('cards.raiseTo')}
+                      style={{ '--p': `${((raise - legal.minRaiseTo) / Math.max(1, legal.maxRaiseTo - legal.minRaiseTo)) * 100}%` } as React.CSSProperties}
+                    />
+                    {[
+                      ['½', Math.floor(pot / 2)],
+                      [t('cards.potShort'), pot],
+                      ['2×', (hand?.currentBet ?? 0) * 2],
+                    ].map(([label, v]) => (
+                      <GameButton key={String(label)} size="sm" disabled={busy} onClick={() => setRaise(Math.min(legal.maxRaiseTo, Math.max(legal.minRaiseTo, Number(v))))}>
+                        {label}
+                      </GameButton>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="pactions">
+                <GameButton big tone="danger" icon={<ActionIcon name="fold" />} loading={acting === 'fold'} disabled={busy} onClick={() => void send('fold')}>
                   {t('cards.fold')}
                 </GameButton>
                 {legal.canCheck ? (
-                  <GameButton tone="positive" loading={acting === 'check'} disabled={busy} onClick={() => void send('check')}>
+                  <GameButton big tone="sapphire" icon={<ActionIcon name="check" />} loading={acting === 'check'} disabled={busy} onClick={() => void send('check')}>
                     {t('cards.check')}
                   </GameButton>
                 ) : (
-                  <GameButton tone="positive" loading={acting === 'call'} disabled={busy} onClick={() => void send('call')}>
-                    {t('cards.call', { n: fmt(legal.toCall) })}
+                  <GameButton big tone="sapphire" icon={<ActionIcon name="call" />} detail={fmt(legal.toCall)} loading={acting === 'call'} disabled={busy} onClick={() => void send('call')}>
+                    {t('gameUi.call')}
+                  </GameButton>
+                )}
+                {legal.canRaise && legal.minRaiseTo < legal.maxRaiseTo ? (
+                  <GameButton big tone="primary" icon={<ActionIcon name="raise" />} detail={fmt(raise)} loading={acting === 'raise' || acting === 'bet'} disabled={busy} onClick={() => void send(hand!.currentBet > 0 ? 'raise' : 'bet', raise)}>
+                    {raiseLabel}
+                  </GameButton>
+                ) : (
+                  <GameButton big tone="vip" icon={<ActionIcon name="allin" />} loading={acting === 'allin'} disabled={busy} onClick={() => void send('allin')}>
+                    {t('gameUi.allIn')}
                   </GameButton>
                 )}
               </div>
-              {legal.canRaise && legal.minRaiseTo < legal.maxRaiseTo && (
-                <>
-                <div className="gbar-group gbar-group--wide">
-                  {[
-                    ['½', Math.floor(pot / 2)],
-                    [t('cards.potShort'), pot],
-                    ['2×', (hand?.currentBet ?? 0) * 2],
-                  ].map(([label, v]) => (
-                    <GameButton key={String(label)} size="sm" disabled={busy} onClick={() => setRaise(Math.min(legal.maxRaiseTo, Math.max(legal.minRaiseTo, Number(v))))}>
-                      {label}
-                    </GameButton>
-                  ))}
-                </div>
-                <div className="gbar-group">
-                  <input type="range" className="grange" min={legal.minRaiseTo} max={legal.maxRaiseTo} step={cfg?.bigBlind ?? 1} value={raise} onChange={(e) => setRaise(Number(e.target.value))} aria-label={t('cards.raiseTo')} />
-                  <GameButton tone="primary" loading={acting === 'raise' || acting === 'bet'} disabled={busy} onClick={() => void send(hand!.currentBet > 0 ? 'raise' : 'bet', raise)}>
-                    {raiseLabel} {fmt(raise)}
-                  </GameButton>
-                </div>
-                </>
-              )}
-              <div className="gbar-group">
-                <GameButton tone="danger" loading={acting === 'allin'} disabled={busy} onClick={() => void send('allin')}>
-                  {t('cards.allInBtn')}
-                </GameButton>
-              </div>
-            </>
+            </div>
           ) : mySeat ? (
             <div className="gbar-group">
               <p className="gbar-note">{hand?.phase === 'betting' ? t('cards.waitTurn') : t('cards.nextHand')}</p>

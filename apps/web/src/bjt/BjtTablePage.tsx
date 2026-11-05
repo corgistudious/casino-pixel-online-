@@ -16,6 +16,7 @@ import { useSession } from '../store/session';
 import { FitStage } from '../ui/game/FitStage';
 import { formFactor } from '../lib/device';
 import { GameButton } from '../ui/game/GameButton';
+import { ActionIcon } from '../ui/game/ActionIcons';
 import { GameCard, GameStat, GameTimer } from '../ui/game/GameParts';
 import { GameTableLayout, type GameTool } from '../ui/game/GameTableLayout';
 import { toast } from '../ui/toast';
@@ -219,18 +220,22 @@ export function BjtTablePage() {
   else if (hand)
     controls = (
       <div className="gbar-group">
-        <GameButton tone="primary" loading={busy} onClick={() => act('hit')}>
+        <GameButton big tone="primary" icon={<ActionIcon name="hit" />} loading={busy} onClick={() => act('hit')}>
           {t('play.hit')}
         </GameButton>
-        <GameButton tone="positive" disabled={busy} onClick={() => act('stand')}>
+        <GameButton big tone="sapphire" icon={<ActionIcon name="stand" />} disabled={busy} onClick={() => act('stand')}>
           {t('play.stand')}
         </GameButton>
-        <GameButton tone="danger" disabled={busy || !canDouble} onClick={() => act('double')}>
-          {t('play.double')}
-        </GameButton>
-        <GameButton tone="neutral" disabled={busy || !canSplit} onClick={() => act('split')}>
-          {t('play.split')}
-        </GameButton>
+        {canDouble && (
+          <GameButton big tone="danger" icon={<ActionIcon name="double" />} disabled={busy} onClick={() => act('double')}>
+            {t('play.double')}
+          </GameButton>
+        )}
+        {canSplit && (
+          <GameButton big tone="violet" icon={<ActionIcon name="split" />} disabled={busy} onClick={() => act('split')}>
+            {t('play.split')}
+          </GameButton>
+        )}
       </div>
     );
   else if (round && !mine && round.phase !== 'done') controls = <p className="gbar-note">{t('bjt.waitNext')}</p>;
@@ -310,8 +315,8 @@ export function BjtTablePage() {
 
 function SeatPlate({ s, turn, me, t, compact = false }: { s: BjtSeatView; turn: boolean; me: boolean; t: (k: string) => string; compact?: boolean }) {
   return (
-    <div className={`flex items-center gap-2 rounded-full border px-2 py-1 backdrop-blur ${turn ? 'border-cyan-300 bg-cyan-500/20 shadow-[0_0_16px_rgba(90,216,255,0.7)]' : me ? 'border-gold-300/70 bg-black/50' : 'border-white/15 bg-black/45'}`}>
-      <div className={s.online ? '' : 'opacity-50 grayscale'}>
+    <div className={`v71-plate flex items-center gap-2 rounded-full px-1.5 py-1 ${turn ? 'v71-plate--turn' : me ? 'v71-plate--me' : ''}`}>
+      <div className={`v71-ring ${turn ? 'v71-ring--turn' : ''} ${s.online ? '' : 'opacity-50 grayscale'}`}>
         <PlayerAvatar player={s} size={compact ? 24 : 30} />
       </div>
       <div className="min-w-0 leading-tight">

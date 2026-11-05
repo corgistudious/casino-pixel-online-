@@ -1836,6 +1836,8 @@ export const en = {
     },
   },
   gameUi: {
+    call: 'Call',
+    allIn: 'All-in',
     waiting: 'Waiting',
     turnOf: "{{name}}'s turn",
     fullscreen: 'Full screen',

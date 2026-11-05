@@ -476,9 +476,7 @@ function PortraitHub({ openCheckin }: { openCheckin: () => void }) {
       <WelcomeModal />
       <PlayerBar />
       <div className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain">
-        <div className="pointer-events-none fixed inset-0 -z-0 opacity-70">
-          <LoungeBackground />
-        </div>
+        <div className="v71-hall pointer-events-none fixed inset-0 -z-0" aria-hidden />
         <div className="relative mx-auto flex w-full max-w-3xl flex-col gap-4 px-3 pb-4 pt-3 pl-[max(0.75rem,var(--sa-l))] pr-[max(0.75rem,var(--sa-r))]">
           <div className="animate-rise" style={{ aspectRatio: '16 / 10' }}>
             <Banner s={s} openCheckin={openCheckin} />

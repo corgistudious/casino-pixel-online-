@@ -20,7 +20,7 @@ export function preloadOverrides(scene: Phaser.Scene) {
   for (const [key, url] of Object.entries(ASSET_OVERRIDES)) if (!scene.textures.exists(key)) scene.load.image(key, url);
 }
 
-function hdTexture(scene: Phaser.Scene, key: string, w: number, h: number, draw: (ctx: Ctx) => void) {
+export function hdTexture(scene: Phaser.Scene, key: string, w: number, h: number, draw: (ctx: Ctx) => void) {
   if (scene.textures.exists(key)) return;
   const tex = scene.textures.createCanvas(key, Math.ceil(w * RES), Math.ceil(h * RES));
   if (!tex) return;
@@ -43,7 +43,7 @@ export function hdImage(scene: Phaser.Scene, x: number, y: number, key: string, 
 
 export const hdScale = (key: string, scale = 1) => scale / (key in ASSET_OVERRIDES ? 3 : RES);
 
-function roundRect(ctx: Ctx, x: number, y: number, w: number, h: number, r: number) {
+export function roundRect(ctx: Ctx, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
   ctx.arcTo(x + w, y, x + w, y + h, r);
@@ -53,13 +53,13 @@ function roundRect(ctx: Ctx, x: number, y: number, w: number, h: number, r: numb
   ctx.closePath();
 }
 
-function linear(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [number, string][]) {
+export function linear(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [number, string][]) {
   const g = ctx.createLinearGradient(x0, y0, x1, y1);
   stops.forEach(([o, c]) => g.addColorStop(o, c));
   return g;
 }
 
-function radial(ctx: Ctx, x: number, y: number, r0: number, r1: number, stops: [number, string][], fx = x, fy = y) {
+export function radial(ctx: Ctx, x: number, y: number, r0: number, r1: number, stops: [number, string][], fx = x, fy = y) {
   const g = ctx.createRadialGradient(fx, fy, r0, x, y, r1);
   stops.forEach(([o, c]) => g.addColorStop(o, c));
   return g;
@@ -199,18 +199,20 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
     const W = CARD_W;
     const H = CARD_H;
     if (!card) {
-      roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4);
+      // V7.1 Game Center back: royal purple, gold lattice, metallic frame and a Keyo spade crest.
+      roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4.5);
       ctx.fillStyle = linear(ctx, 0, 0, W, H, [
-        [0, '#7a1630'],
-        [1, '#3e0816'],
+        [0, '#5b2aa3'],
+        [0.55, '#2c1260'],
+        [1, '#160830'],
       ]);
       ctx.fill();
       ctx.save();
-      roundRect(ctx, 4, 4, W - 8, H - 8, 2.5);
+      roundRect(ctx, 3.5, 3.5, W - 7, H - 7, 3);
       ctx.clip();
-      ctx.strokeStyle = 'rgba(247,215,122,0.35)';
-      ctx.lineWidth = 0.5;
-      for (let i = -H; i < W + H; i += 4) {
+      ctx.strokeStyle = 'rgba(247,215,122,0.28)';
+      ctx.lineWidth = 0.45;
+      for (let i = -H; i < W + H; i += 3.4) {
         ctx.beginPath();
         ctx.moveTo(i, 0);
         ctx.lineTo(i + H, H);
@@ -218,13 +220,41 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
         ctx.lineTo(i, H);
         ctx.stroke();
       }
+      ctx.fillStyle = radial(ctx, W / 2, H / 2, 0, W * 0.6, [
+        [0, 'rgba(199,155,255,0.35)'],
+        [1, 'rgba(199,155,255,0)'],
+      ]);
+      ctx.fillRect(0, 0, W, H);
       ctx.restore();
       ctx.strokeStyle = linear(ctx, 0, 0, W, H, GOLD);
-      ctx.lineWidth = 1;
-      roundRect(ctx, 4, 4, W - 8, H - 8, 2.5);
+      ctx.lineWidth = 1.2;
+      roundRect(ctx, 3.5, 3.5, W - 7, H - 7, 3);
       ctx.stroke();
-      ctx.fillStyle = linear(ctx, W / 2 - 8, H / 2 - 8, W / 2 + 8, H / 2 + 8, GOLD);
-      diamondSuit(ctx, W / 2, H / 2, 18);
+      ctx.lineWidth = 0.5;
+      roundRect(ctx, 5.5, 5.5, W - 11, H - 11, 2);
+      ctx.stroke();
+      // Crest: gold medallion with a spade.
+      ctx.fillStyle = radial(ctx, W / 2 - 3, H / 2 - 4, 1, 13, [
+        [0, '#fff1b8'],
+        [0.5, '#f2c14e'],
+        [1, '#8a5a12'],
+      ]);
+      ctx.beginPath();
+      ctx.arc(W / 2, H / 2, 11, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#2c1260';
+      ctx.beginPath();
+      ctx.arc(W / 2, H / 2, 8.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = linear(ctx, W / 2 - 6, H / 2 - 6, W / 2 + 6, H / 2 + 6, GOLD);
+      spade(ctx, W / 2, H / 2 + 0.5, 11);
+      // Gloss
+      ctx.fillStyle = linear(ctx, 0, 0, 0, H * 0.5, [
+        [0, 'rgba(255,255,255,0.18)'],
+        [1, 'rgba(255,255,255,0)'],
+      ]);
+      roundRect(ctx, 1, 1, W - 2, H * 0.45, 4);
+      ctx.fill();
       return;
     }
     const rank = card.slice(0, -1);
@@ -232,14 +262,20 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
     const red = suit === 'H' || suit === 'D';
     const ink = red ? '#c8102e' : '#16142b';
 
-    roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4);
-    ctx.fillStyle = linear(ctx, 0, 0, W, H, [
+    // V7.1 2.5D face: warm white with a soft top light, bevelled edge and large readable indices.
+    roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4.5);
+    ctx.fillStyle = linear(ctx, 0, 0, 0, H, [
       [0, '#ffffff'],
-      [1, '#efe9dc'],
+      [0.7, '#f7f4ee'],
+      [1, '#e6dfd0'],
     ]);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
-    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = 'rgba(40,30,60,0.35)';
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+    ctx.lineWidth = 0.6;
+    roundRect(ctx, 1.4, 1.4, W - 2.8, H - 2.8, 3.6);
     ctx.stroke();
 
     const corner = (flip: boolean) => {
@@ -249,11 +285,16 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
         ctx.rotate(Math.PI);
       }
       ctx.fillStyle = ink;
-      ctx.font = `700 ${rank === '10' ? 10 : 11}px ${FONT_DISPLAY}`;
+      ctx.font = `800 ${rank === '10' ? 12 : 14}px ${FONT_DISPLAY}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.fillText(rank, 7.5, 3);
-      drawSuit(ctx, suit, 7.5, 18.5, 7);
+      if (rank === '10') {
+        ctx.save();
+        ctx.scale(0.86, 1);
+        ctx.fillText(rank, 8.5 / 0.86, 2.5);
+        ctx.restore();
+      } else ctx.fillText(rank, 8.5, 2.5);
+      drawSuit(ctx, suit, 8.5, 22, 8.5);
       ctx.restore();
     };
     corner(false);

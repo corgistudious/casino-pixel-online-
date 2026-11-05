@@ -210,3 +210,78 @@
 .psheet-item { display: flex; flex-direction: column; align-items: center; padding: 8px 2px; border-radius: 14px; min-height: 76px; }
 .psheet-item.active { background: rgba(242, 193, 78, 0.12); }
 @media (prefers-reduced-motion: reduce) { .psheet, .psheet-scrim { animation: none; } }
+
+/* Sapphire (call / check — the blue of the reference action bar). */
+.pt-sapphire { --pt-a: #d8ecff; --pt-b: #2f7bf0; --pt-c: #0f2f8a; --pt-d: #8cc4ff; --pt-text: #fff; --pt-edge: rgba(205, 230, 255, 0.85); --pt-glow: rgba(47, 123, 240, 0.55); }
+
+/* Big 2.5D action buttons (card tables, Blackjack, bet confirm): icon + title + amount line,
+   a thicker metal rim and a deeper drop, like the reference action bar. */
+.pbtn.pbtn-xl {
+  min-height: 60px; height: auto; padding: 8px 18px; border-radius: 18px; gap: 10px; font-size: 18px;
+  border-width: 2px;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.6), inset 0 -4px 0 rgba(0,0,0,0.28),
+    0 0 0 2px rgba(20, 10, 40, 0.65), 0 0 0 3.5px color-mix(in srgb, var(--pt-a) 60%, transparent),
+    0 14px 26px -10px var(--pt-glow), 0 8px 18px -6px rgba(0,0,0,0.75);
+}
+.pbtn-xl .pbtn-icon { width: 26px; height: 26px; filter: drop-shadow(0 1px 0 rgba(0,0,0,0.35)); flex-shrink: 0; }
+.pbtn-stack { display: flex; flex-direction: column; align-items: center; line-height: 1.05; }
+.pbtn-title { font-size: 1em; font-weight: 900; letter-spacing: 0.01em; }
+.pbtn-detail { margin-top: 2px; font-size: 0.78em; font-weight: 800; font-variant-numeric: tabular-nums; opacity: 0.95; }
+.pbtn-icon { flex-shrink: 0; }
+@media (max-width: 420px) { .pbtn.pbtn-xl { min-height: 56px; padding: 6px 10px; font-size: 16px; gap: 6px; } .pbtn-xl .pbtn-icon { width: 22px; height: 22px; } }
+
+/* Raise control: − amount + stepper, slider with a gold spade thumb, All-in pill. */
+.praise { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 8px; width: 100%;
+  padding: 8px 10px 10px; border-radius: 20px; background: linear-gradient(180deg, rgba(40, 24, 84, 0.92), rgba(14, 9, 34, 0.94));
+  border: 1px solid rgba(242, 193, 78, 0.35); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 10px 24px -14px rgba(0,0,0,0.9); }
+.praise-step { width: 44px; height: 44px; border-radius: 50%; font-size: 24px; font-weight: 900; line-height: 1; color: #fff;
+  background: radial-gradient(circle at 50% 30%, #8b6cf0, #4b2aa3 60%, #24125a); border: 1.5px solid rgba(220, 200, 255, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 6px 14px -6px rgba(0,0,0,0.8); touch-action: manipulation; }
+.praise-step:active:not(:disabled) { transform: scale(0.94); }
+.praise-step:disabled { opacity: 0.4; }
+.praise-value { min-width: 0; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 14px;
+  background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.12); box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+  font-size: 20px; font-weight: 900; font-variant-numeric: tabular-nums; color: #fff; letter-spacing: 0.02em; }
+.praise-slider { grid-column: 1 / -1; }
+.praise-range { -webkit-appearance: none; appearance: none; width: 100%; height: 30px; background: transparent; touch-action: none; }
+.praise-range::-webkit-slider-runnable-track { height: 8px; border-radius: 4px; background: linear-gradient(90deg, #ff4fd8 0%, #9b5cf6 var(--p, 0%), rgba(255,255,255,0.12) var(--p, 0%)); box-shadow: inset 0 1px 2px rgba(0,0,0,0.6); }
+.praise-range::-moz-range-track { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.12); }
+.praise-range::-moz-range-progress { height: 8px; border-radius: 4px; background: linear-gradient(90deg, #ff4fd8, #9b5cf6); }
+.praise-range::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; margin-top: -11px; border-radius: 50%; border: 2px solid #fff1b8;
+  background: radial-gradient(circle at 40% 30%, #fff7d6, #f2c14e 45%, #8a5a12) ; box-shadow: 0 0 0 3px rgba(91, 42, 163, 0.9), 0 4px 10px rgba(0,0,0,0.6); }
+.praise-range::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff1b8; background: radial-gradient(circle at 40% 30%, #fff7d6, #f2c14e 45%, #8a5a12); }
+.praise-range:focus-visible { outline: 2px solid var(--p-focus); outline-offset: 2px; border-radius: 8px; }
+.pactions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.pactions > .pbtn { width: 100%; min-width: 0; }
+.paction-wrap { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 640px; }
+
+/* ---------------------------------------------------------------- V7.1 hall artwork backgrounds */
+.v71-hall { background: linear-gradient(180deg, rgba(7,4,26,0.15), rgba(7,4,26,0.55)), var(--v71-hall, none) center top / cover no-repeat, #0b0620; }
+.v71-shell { background: linear-gradient(180deg, rgba(7,4,26,0.72), rgba(7,4,26,0.86)), var(--v71-hall, none) center top / cover no-repeat, #0b0620; }
+.game-shell {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 45%, rgba(28, 18, 56, 0.35), rgba(7, 5, 18, 0.88) 80%),
+    var(--v71-hall, none) center top / cover no-repeat,
+    #0b0620;
+}
+
+/* ---------------------------------------------------------------- 2.5D seat (HTML tables) */
+.v71-ring { position: relative; border-radius: 50%; padding: 2.5px; background: linear-gradient(135deg, #fff3c4, #f2c14e 30%, #8a5a12 55%, #f7d77a 80%, #b9801c); box-shadow: 0 3px 8px rgba(0,0,0,0.6), 0 0 0 1px rgba(40,20,0,0.6); }
+.v71-ring--turn { box-shadow: 0 0 14px 3px rgba(90, 216, 255, 0.75), 0 0 0 1px rgba(40,20,0,0.6); }
+.v71-plate { background: linear-gradient(180deg, #3a2468, #1b1036 55%, #0c0720); border: 1.2px solid transparent;
+  background-clip: padding-box; box-shadow: 0 0 0 1.2px rgba(242, 193, 78, 0.75), inset 0 1px 0 rgba(255,255,255,0.18), 0 6px 14px -6px rgba(0,0,0,0.85); }
+.v71-plate--me { box-shadow: 0 0 0 1.6px #ffd86b, 0 0 12px -2px rgba(255, 216, 107, 0.6), inset 0 1px 0 rgba(255,255,255,0.2); }
+.v71-plate--turn { box-shadow: 0 0 0 1.6px #5ad8ff, 0 0 16px -2px rgba(90, 216, 255, 0.7), inset 0 1px 0 rgba(255,255,255,0.2); }
+
+/* Floating panels / sheets: plum glass with a gold bevel. */
+.gpanel { background: linear-gradient(180deg, rgba(40, 24, 84, 0.97), rgba(10, 7, 28, 0.98)) !important; box-shadow: inset 1px 0 0 rgba(242,193,78,0.45), -18px 0 50px -12px rgba(0,0,0,0.85) !important; }
+.gpanel-head h2 { color: #ffe9a8; text-shadow: 0 1px 0 rgba(0,0,0,0.5); }
+.gcard { background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.25)); border-color: rgba(242, 193, 78, 0.28); box-shadow: inset 0 1px 0 rgba(255,255,255,0.06); }
+.gpanel-tabs button[aria-selected="true"] { background: linear-gradient(115deg, #fff3c4, #f2c14e 40%, #a86d12); border-color: #fff1b8; box-shadow: 0 4px 12px -6px rgba(242,193,78,0.8); }
+/* Wide screens: raise control and the three actions side by side (keeps the table tall). */
+@container game (min-width: 900px) {
+  .paction-wrap { flex-direction: row; align-items: stretch; max-width: 1180px; }
+  .paction-wrap > .praise { flex: 1.1 1 0; padding: 6px 10px; }
+  .paction-wrap > .pactions { flex: 1 1 0; }
+}

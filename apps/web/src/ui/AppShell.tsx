@@ -187,7 +187,7 @@ export function DemoBanner() {
 export function AppShell({ children }: { children: ReactNode }) {
   const portrait = usePortraitLayout();
   return (
-    <div className="flex h-full flex-col">
+    <div className="v71-shell flex h-full flex-col">
       <DemoBanner />
       <PlayerBar />
       <div className="flex min-h-0 flex-1">
