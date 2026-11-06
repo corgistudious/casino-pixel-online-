@@ -79,8 +79,12 @@ for (const [w, h] of VIEWPORTS) {
       s.events.on('spot', (k) => window.__hits.push(k));
       return true;
     });
-    for (const s of m.spots) await p.mouse.click((s.x + s.r) / 2, (s.y + s.b) / 2);
-    await p.waitForTimeout(200);
+    // One tap at a time: Phaser reads input once per frame and headless Chromium renders at ~5 FPS, so
+    // taps closer together than a frame would be merged by the test itself (not by players).
+    for (const [i, s] of m.spots.entries()) {
+      await p.mouse.click((s.x + s.r) / 2, (s.y + s.b) / 2);
+      for (let k = 0; k < 20 && (await p.evaluate(() => window.__hits.length)) <= i; k++) await p.waitForTimeout(60);
+    }
     const got = await p.evaluate(() => window.__hits);
     const miss = m.spots.filter((s, i) => got[i] !== s.key).map((s) => s.key);
     t.ok(`${tag}: every tap lands on the spot drawn there`, hits && got.length === m.spots.length && miss.length === 0, `${got.length}/${m.spots.length} ${miss.slice(0, 3)}`);

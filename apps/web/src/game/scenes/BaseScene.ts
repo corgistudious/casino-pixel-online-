@@ -62,6 +62,8 @@ export abstract class BaseScene extends Phaser.Scene {
    * themselves out in a world as wide as the stage instead of leaving side bands (Sic Bo / Tài Xỉu).
    */
   stageAspect: number | null = null;
+  /** CSS px size of that stage (null = unknown), for scenes that adapt to small screens. */
+  stageSize: { w: number; h: number } | null = null;
 
   /** Width of the landscape world; 640 unless a scene adapts it to the stage (layouts/diceBoard.ts). */
   protected landscapeWidth(): number {

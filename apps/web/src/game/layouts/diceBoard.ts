@@ -38,6 +38,10 @@ export interface Rect { x: number; y: number; w: number; h: number }
 export interface DiceBoardLayout {
   w: number;
   h: number;
+  /** Small screens: smaller dice plate, wider and taller betting spots. */
+  compact: boolean;
+  /** Scale of the plate / dice / cover artwork (1 = 72-unit plate radius). */
+  plateScale: number;
   /** Printable felt inside the rail and padding. */
   content: Rect;
   bowl: { x: number; y: number; r: number };
@@ -54,15 +58,26 @@ export interface DiceBoardLayout {
   centre: { x: number; y: number };
 }
 
-/** Pure: the whole table for a world of w × h. */
-export function diceBoardLayout(w = WORLD_W, h = WORLD_H): DiceBoardLayout {
+/**
+ * Pure: compact mode when the world would be shown at less than 0.85 CSS px per unit (e.g. a
+ * 568×320 landscape phone): the board then needs the room more than the plate does.
+ */
+export function isCompactStage(stage: { w: number; h: number } | null | undefined, worldW: number, worldH = WORLD_H): boolean {
+  if (!stage || stage.w <= 0 || stage.h <= 0) return false;
+  return Math.min(stage.w / worldW, stage.h / worldH) < 0.85;
+}
+
+/** Pure: the whole table for a world of w × h (compact: small screens, see isCompactStage). */
+export function diceBoardLayout(w = WORLD_W, h = WORLD_H, compact = false): DiceBoardLayout {
+  const plateScale = compact ? 0.66 : 1;
+  const plateR = Math.round(PLATE_R * plateScale);
   const inset = BOARD_RAIL + FELT_PAD;
   const content = { x: inset, y: inset, w: w - inset * 2, h: h - inset * 2 };
   // Vertical rhythm of the board (title, three rows, two captions) inside the content box.
   const titleY = content.y + 16;
-  const r1h = 64;
-  const r2h = 58;
-  const r3h = 64;
+  const r1h = compact ? 70 : 64;
+  const r2h = compact ? 66 : 58;
+  const r3h = compact ? 70 : 64;
   const gap = 8;
   const captionH = 14;
   const y1 = content.y + 34;
@@ -70,16 +85,18 @@ export function diceBoardLayout(w = WORLD_W, h = WORLD_H): DiceBoardLayout {
   const y3 = y2 + r2h + captionH + gap;
   const boardBottom = y3 + r3h + captionH;
   // Dice plate: left column, vertically centred on the board, never past the felt.
-  const bowlX = content.x + PLATE_R + 4;
+  const bowlX = content.x + plateR + 4;
   const bowlY = Math.round((y1 + y3 + r3h) / 2);
-  const plateRight = bowlX + PLATE_R + PLATE_SHADOW;
-  const boardX = Math.round(plateRight + 16);
+  const plateRight = bowlX + plateR + Math.round(PLATE_SHADOW * plateScale);
+  const boardX = Math.round(plateRight + (compact ? 10 : 16));
   const boardW = Math.floor(content.x + content.w - boardX);
   return {
     w,
     h,
+    compact,
+    plateScale,
     content,
-    bowl: { x: bowlX, y: bowlY, r: PLATE_R },
+    bowl: { x: bowlX, y: bowlY, r: plateR },
     board: { x: boardX, w: boardW },
     title: { x: boardX, y: titleY },
     row1: { x: boardX, y: y1, w: boardW, h: r1h },
@@ -87,7 +104,7 @@ export function diceBoardLayout(w = WORLD_W, h = WORLD_H): DiceBoardLayout {
     row3: { x: boardX, y: y3, w: boardW, h: r3h },
     totalLabelY: y2 + r2h + captionH / 2 + 1,
     singleLabelY: Math.min(boardBottom - captionH / 2 + 1, content.y + content.h - 4),
-    result: { x: bowlX, y: Math.min(bowlY + PLATE_R + 22, content.y + content.h - 8) },
+    result: { x: bowlX, y: Math.min(bowlY + plateR + 22, content.y + content.h - 8) },
     centre: { x: boardX + boardW / 2, y: (y1 + y3 + r3h) / 2 },
   };
 }

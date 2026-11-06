@@ -5,7 +5,7 @@ import { parseKey } from '../../lib/bets';
 import { ensureDiceTextures, ensureSicBoProps, hdImage, hdScale } from '../art';
 import { TableScene } from './TableScene';
 
-import { adaptiveWorldWidth, diceBoardLayout, topRowSpots, type DiceBoardLayout } from '../layouts/diceBoard';
+import { adaptiveWorldWidth, diceBoardLayout, isCompactStage, topRowSpots, type DiceBoardLayout } from '../layouts/diceBoard';
 
 const FELT: number | null = null;
 const DARK = 0x0a3d26;
@@ -40,7 +40,7 @@ export class SicBoScene extends TableScene {
   }
 
   private geo(): DiceBoardLayout {
-    return (this.layout ??= diceBoardLayout(this.sw, this.sh));
+    return (this.layout ??= diceBoardLayout(this.sw, this.sh, !this.portrait && isCompactStage(this.stageSize, this.sw, this.sh)));
   }
 
   protected build() {
@@ -48,9 +48,10 @@ export class SicBoScene extends TableScene {
     ensureDiceTextures(this);
     ensureSicBoProps(this);
     // V7.1 2.5D porcelain dice plate with a bevelled gold rim (art.ts ensureSicBoProps).
-    hdImage(this, L.bowl.x, L.bowl.y, 'sicbo-plate');
+    const k = L.plateScale;
+    hdImage(this, L.bowl.x, L.bowl.y, 'sicbo-plate', k);
     [-26, 0, 26].forEach((dx, i) => {
-      this.dice.push(hdImage(this, L.bowl.x + dx, L.bowl.y + (i === 1 ? -16 : 12), `die-${i + 1}`, 0.95));
+      this.dice.push(hdImage(this, L.bowl.x + dx * k, L.bowl.y + (i === 1 ? -16 : 12) * k, `die-${i + 1}`, 0.95 * k));
     });
     this.resultText = this.text(L.result.x, L.result.y, '', { size: 15, display: true, shadow: true });
     this.text(L.title.x, L.title.y, this.title(), { size: 20, display: true, color: '#ffe08a', originX: 0, shadow: true });
@@ -112,7 +113,8 @@ export class SicBoScene extends TableScene {
       const { x: BOWL_X, y: BOWL_Y } = this.geo().bowl;
       const homes = this.dice.map((d) => ({ x: d.x, y: d.y }));
       // The crystal dome drops over the plate, the dice tumble under it (motion-blur frames), then it lifts.
-      const dome = (this.dome ??= hdImage(this, BOWL_X, BOWL_Y, 'sicbo-dome').setDepth(9).setAlpha(0));
+      const k = this.geo().plateScale;
+      const dome = (this.dome ??= hdImage(this, BOWL_X, BOWL_Y, 'sicbo-dome', k).setDepth(9).setAlpha(0));
       dome.setPosition(BOWL_X, BOWL_Y - 18).setAlpha(0);
       this.tweens.add({ targets: dome, y: BOWL_Y, alpha: 1, duration: 140, ease: 'Quad.easeOut' });
       for (let i = 0; i < 14; i++) {
@@ -120,7 +122,7 @@ export class SicBoScene extends TableScene {
         dome.setPosition(BOWL_X + Phaser.Math.Between(-3, 3), BOWL_Y + Phaser.Math.Between(-2, 2));
         this.dice.forEach((d, j) => {
           d.setTexture(i < 10 && (i + j) % 2 === 0 ? 'die-blur' : `die-${Phaser.Math.Between(1, 6)}`);
-          d.setPosition(homes[j]!.x + Phaser.Math.Between(-10, 10), homes[j]!.y + Phaser.Math.Between(-10, 10));
+          d.setPosition(homes[j]!.x + Phaser.Math.Between(-10, 10) * k, homes[j]!.y + Phaser.Math.Between(-10, 10) * k);
           d.setAngle(Phaser.Math.Between(-30, 30));
         });
         await this.wait(70 + i * 6);
@@ -134,7 +136,7 @@ export class SicBoScene extends TableScene {
     }
     this.dice.forEach((d, i) => d.setTexture(`die-${result.dice[i]}`));
     sfx.stop();
-    if (!this.reduceMotion) await this.tweenP({ targets: this.dice, scale: hdScale('die-1', 1.15), yoyo: true, duration: 140 });
+    if (!this.reduceMotion) await this.tweenP({ targets: this.dice, scale: hdScale('die-1', 1.15 * 0.95 * this.geo().plateScale), yoyo: true, duration: 140 });
 
     this.resultText.setText(this.t('sicbo.result', { dice: result.dice.join('-'), total: result.total }));
     const winning = [...this.spots.keys()].filter((key) => sicBoReturn(parseKey(key), result.dice) > 0);

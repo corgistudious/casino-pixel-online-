@@ -32,7 +32,7 @@ export class TaiXiuScene extends SicBoScene {
     super.build();
     ensureBowlTexture(this);
     // Seen from above, the cover sits centred on the dice plate (layouts/diceBoard.ts).
-    this.bowl = hdImage(this, this.layout.bowl.x, this.layout.bowl.y, 'taixiu-bowl').setDepth(8);
+    this.bowl = hdImage(this, this.layout.bowl.x, this.layout.bowl.y, 'taixiu-bowl', this.layout.plateScale).setDepth(8);
     this.dice.forEach((d) => d.setVisible(false));
   }
 
@@ -92,7 +92,7 @@ export class TaiXiuScene extends SicBoScene {
   }
 
   private cover() {
-    this.bowl.setPosition(this.layout.bowl.x, this.layout.bowl.y).setAngle(0).setAlpha(1).setScale(hdScale('taixiu-bowl'));
+    this.bowl.setPosition(this.layout.bowl.x, this.layout.bowl.y).setAngle(0).setAlpha(1).setScale(hdScale('taixiu-bowl', this.layout.plateScale));
     this.dice.forEach((d) => d.setVisible(false));
     this.resultText.setText('');
     this.highlightSpots([]);
@@ -104,9 +104,9 @@ export class TaiXiuScene extends SicBoScene {
 
   private placeBowl(lift: number, wobble: number) {
     // Lifted towards the viewer: it grows slightly while it slides off the plate.
-    this.bowl.setPosition(this.layout.bowl.x + lift * LIFT_X, this.layout.bowl.y - lift * LIFT_Y);
+    this.bowl.setPosition(this.layout.bowl.x + lift * LIFT_X * this.layout.plateScale, this.layout.bowl.y - lift * LIFT_Y * this.layout.plateScale);
     this.bowl.setAngle(-lift * 18 + wobble);
-    this.bowl.setScale(hdScale('taixiu-bowl', 1 + lift * 0.05));
+    this.bowl.setScale(hdScale('taixiu-bowl', this.layout.plateScale * (1 + lift * 0.05)));
     this.bowl.setAlpha(1 - lift * 0.12);
   }
 
@@ -116,6 +116,6 @@ export class TaiXiuScene extends SicBoScene {
     this.resultText.setText(`${o.dice.join('-')} = ${o.total} · ${side}`);
     this.resultText.setColor(o.side === 'tai' ? '#ffd27a' : o.side === 'xiu' ? '#9fd8ff' : '#e6a8ff');
     this.highlightSpots([...this.spots.keys()].filter((key) => sicBoReturn(parseKey(key), o.dice) > 0));
-    if (!this.reduceMotion) this.tweens.add({ targets: this.dice, scale: hdScale('die-1', 1.15), yoyo: true, duration: 160 });
+    if (!this.reduceMotion) this.tweens.add({ targets: this.dice, scale: hdScale('die-1', 1.15 * 0.95 * this.layout.plateScale), yoyo: true, duration: 160 });
   }
 }

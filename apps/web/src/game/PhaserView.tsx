@@ -33,6 +33,7 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
     scene.portrait = tablePortraitLayout(formFactor(), rect ? { w: rect.width, h: rect.height } : null);
     // Adaptive scenes size their landscape world to the stage (both sides measured, never the UA).
     scene.stageAspect = rect && rect.width > 0 && rect.height > 0 ? rect.width / rect.height : null;
+    scene.stageSize = rect && rect.width > 0 && rect.height > 0 ? { w: rect.width, h: rect.height } : null;
     const size = scene.canvasSize();
     setOrientation(scene.portrait ? 'portrait' : 'landscape');
     markBoot('phaser-init');
