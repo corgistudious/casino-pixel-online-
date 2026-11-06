@@ -31,6 +31,8 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
     // layout. Chosen once per mount: a rotation / resize never tears down a running round.
     const rect = frame.current?.getBoundingClientRect();
     scene.portrait = tablePortraitLayout(formFactor(), rect ? { w: rect.width, h: rect.height } : null);
+    // Adaptive scenes size their landscape world to the stage (both sides measured, never the UA).
+    scene.stageAspect = rect && rect.width > 0 && rect.height > 0 ? rect.width / rect.height : null;
     const size = scene.canvasSize();
     setOrientation(scene.portrait ? 'portrait' : 'landscape');
     markBoot('phaser-init');
@@ -71,12 +73,17 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
       scene,
     });
     gameRef.current = game;
+    // QA hook (UI-preview / dev builds only): lets the responsive regression suite read the scene's
+    // spot rectangles and camera transform. Never present in a production build.
+    if (import.meta.env.DEV || import.meta.env.VITE_DEMO === '1') (window as Window & { __keyoScene?: unknown }).__keyoScene = scene;
     let alive = true;
     void scene.ready.then(() => alive && readyRef.current(scene));
     return () => {
       alive = false;
       gameRef.current = null;
       game.destroy(true);
+      const w = window as Window & { __keyoScene?: unknown };
+      if (w.__keyoScene === scene) delete w.__keyoScene;
       for (const [type, fn] of captured) document.removeEventListener(type, fn);
       if (onBlur && window.onblur === onBlur) window.onblur = null;
       if (onFocus && window.onfocus === onFocus) window.onfocus = null;

@@ -3,13 +3,11 @@ import { sicBoReturn, type TableRoundView, type TaiXiuOutcome } from '@casino/sh
 import { sfx } from '../../audio/sfx';
 import { parseKey } from '../../lib/bets';
 import { ensureBowlTexture, hdImage, hdScale } from '../art';
-import { BOWL_X, BOWL_Y, SicBoScene } from './SicBoScene';
+import { SicBoScene } from './SicBoScene';
 
 type Round = TableRoundView['round'];
 type Stage = 'shake' | 'bet' | 'reveal' | 'result' | 'void';
 
-/** Seen from above, the cover sits centred on the dice plate. */
-const BOWL_HOME_Y = BOWL_Y;
 /** Lifted away up and slightly left, clear of the betting spots, the dice and the result line. */
 const LIFT_X = -16;
 const LIFT_Y = 132;
@@ -33,7 +31,8 @@ export class TaiXiuScene extends SicBoScene {
   protected override build() {
     super.build();
     ensureBowlTexture(this);
-    this.bowl = hdImage(this, BOWL_X, BOWL_HOME_Y, 'taixiu-bowl').setDepth(8);
+    // Seen from above, the cover sits centred on the dice plate (layouts/diceBoard.ts).
+    this.bowl = hdImage(this, this.layout.bowl.x, this.layout.bowl.y, 'taixiu-bowl').setDepth(8);
     this.dice.forEach((d) => d.setVisible(false));
   }
 
@@ -57,7 +56,7 @@ export class TaiXiuScene extends SicBoScene {
       this.enter('shake', r, () => this.cover());
       if (this.reduceMotion) return;
       // Seen from above, a shake slides the cover around on the plate and turns it a little.
-      this.bowl.setPosition(BOWL_X + Math.sin(now / 38) * 5, BOWL_HOME_Y + Math.cos(now / 53) * 4);
+      this.bowl.setPosition(this.layout.bowl.x + Math.sin(now / 38) * 5, this.layout.bowl.y + Math.cos(now / 53) * 4);
       this.bowl.setAngle(Math.sin(now / 47) * 9);
       if (now - this.lastRattle > 170) {
         this.lastRattle = now;
@@ -93,7 +92,7 @@ export class TaiXiuScene extends SicBoScene {
   }
 
   private cover() {
-    this.bowl.setPosition(BOWL_X, BOWL_HOME_Y).setAngle(0).setAlpha(1).setScale(hdScale('taixiu-bowl'));
+    this.bowl.setPosition(this.layout.bowl.x, this.layout.bowl.y).setAngle(0).setAlpha(1).setScale(hdScale('taixiu-bowl'));
     this.dice.forEach((d) => d.setVisible(false));
     this.resultText.setText('');
     this.highlightSpots([]);
@@ -105,7 +104,7 @@ export class TaiXiuScene extends SicBoScene {
 
   private placeBowl(lift: number, wobble: number) {
     // Lifted towards the viewer: it grows slightly while it slides off the plate.
-    this.bowl.setPosition(BOWL_X + lift * LIFT_X, BOWL_HOME_Y - lift * LIFT_Y);
+    this.bowl.setPosition(this.layout.bowl.x + lift * LIFT_X, this.layout.bowl.y - lift * LIFT_Y);
     this.bowl.setAngle(-lift * 18 + wobble);
     this.bowl.setScale(hdScale('taixiu-bowl', 1 + lift * 0.05));
     this.bowl.setAlpha(1 - lift * 0.12);

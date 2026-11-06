@@ -56,9 +56,21 @@ export abstract class BaseScene extends Phaser.Scene {
     return PORTRAIT_H;
   }
 
+  /**
+   * Aspect ratio (width / height) of the stage the canvas is fitted into, measured by PhaserView
+   * before the game boots (null = unknown). Scenes that override landscapeWidth() use it to lay
+   * themselves out in a world as wide as the stage instead of leaving side bands (Sic Bo / Tài Xỉu).
+   */
+  stageAspect: number | null = null;
+
+  /** Width of the landscape world; 640 unless a scene adapts it to the stage (layouts/diceBoard.ts). */
+  protected landscapeWidth(): number {
+    return WORLD_W;
+  }
+
   /** World size the scene lays itself out in. */
   get sw() {
-    return this.portrait && this.nativePortrait() ? PORTRAIT_W : WORLD_W;
+    return this.portrait && this.nativePortrait() ? PORTRAIT_W : this.landscapeWidth();
   }
   get sh() {
     return this.portrait && this.nativePortrait() ? this.portraitHeight() : WORLD_H;

@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const dir = fileURLToPath(new URL('.', import.meta.url));
-const all = ['pwa', 'orientation', 'controls', 'layout', 'pages'];
+const all = ['pwa', 'orientation', 'controls', 'dicetable', 'layout', 'pages'];
 const pick = process.argv.slice(2).length ? process.argv.slice(2) : all;
 let failed = 0;
 for (const n of pick) {

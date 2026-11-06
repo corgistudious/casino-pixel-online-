@@ -5,83 +5,102 @@ import { parseKey } from '../../lib/bets';
 import { ensureDiceTextures, ensureSicBoProps, hdImage, hdScale } from '../art';
 import { TableScene } from './TableScene';
 
-export const BOWL_X = 112;
-export const BOWL_Y = 176;
-const BX = 226;
-const BW = 404;
+import { adaptiveWorldWidth, diceBoardLayout, topRowSpots, type DiceBoardLayout } from '../layouts/diceBoard';
+
 const FELT: number | null = null;
 const DARK = 0x0a3d26;
+const TOP_STYLE: Record<string, { fill: number | null; label: string; size: number; display?: boolean; sub: string }> = {
+  small: { fill: DARK, label: 'sicbo.small', size: 18, display: true, sub: '4–10 · 1:1' },
+  odd: { fill: FELT, label: 'sicbo.odd', size: 14, sub: '1:1' },
+  anyTriple: { fill: 0x4e1a85, label: 'sicbo.anyTriple', size: 11, sub: `${SICBO_ANY_TRIPLE_ODDS}:1` },
+  even: { fill: FELT, label: 'sicbo.even', size: 14, sub: '1:1' },
+  big: { fill: DARK, label: 'sicbo.big', size: 18, display: true, sub: '11–17 · 1:1' },
+};
 
+/**
+ * Sic Bo table (Tài Xỉu extends it). Positions come from layouts/diceBoard.ts: dice plate on the
+ * left, betting board on the right, both inside the felt; the world is as wide as the stage allows.
+ */
 export class SicBoScene extends TableScene {
   static readonly KEY = 'sicbo';
   protected dice: Phaser.GameObjects.Image[] = [];
   protected resultText!: Phaser.GameObjects.Text;
   /** Crystal shaker dome shown over the dice while they tumble (Sic Bo only; created on first roll). */
   private dome: Phaser.GameObjects.Image | null = null;
+  /** Table geometry for this mount (fixed for the scene's lifetime: a resize only re-fits the canvas). */
+  layout!: DiceBoardLayout;
 
-  constructor() {
-    super(SicBoScene.KEY);
+  constructor(key: string = SicBoScene.KEY) {
+    super(key);
+  }
+
+  /** Landscape world as wide as the stage (16:9 … ~2.3:1); portrait slices keep the 640 world. */
+  protected override landscapeWidth() {
+    return this.portrait ? 640 : adaptiveWorldWidth(this.stageAspect);
+  }
+
+  private geo(): DiceBoardLayout {
+    return (this.layout ??= diceBoardLayout(this.sw, this.sh));
   }
 
   protected build() {
+    const L = this.geo();
     ensureDiceTextures(this);
     ensureSicBoProps(this);
     // V7.1 2.5D porcelain dice plate with a bevelled gold rim (art.ts ensureSicBoProps).
-    hdImage(this, BOWL_X, BOWL_Y, 'sicbo-plate');
+    hdImage(this, L.bowl.x, L.bowl.y, 'sicbo-plate');
     [-26, 0, 26].forEach((dx, i) => {
-      this.dice.push(hdImage(this, BOWL_X + dx, BOWL_Y + (i === 1 ? -16 : 12), `die-${i + 1}`, 0.95));
+      this.dice.push(hdImage(this, L.bowl.x + dx, L.bowl.y + (i === 1 ? -16 : 12), `die-${i + 1}`, 0.95));
     });
-    this.resultText = this.text(BOWL_X, BOWL_Y + 96, '', { size: 15, display: true, shadow: true });
-    this.text(BX, 44, this.title(), { size: 20, display: true, color: '#ffe08a', originX: 0, shadow: true });
+    this.resultText = this.text(L.result.x, L.result.y, '', { size: 15, display: true, shadow: true });
+    this.text(L.title.x, L.title.y, this.title(), { size: 20, display: true, color: '#ffe08a', originX: 0, shadow: true });
 
     // Row 1: small · odd · any triple · even · big
-    const y1 = 64;
-    this.addSpot('small', BX, y1, 84, 60, DARK, 'sicbo.small', { translate: true, size: 18, display: true, sub: '4–10 · 1:1' });
-    this.addSpot('odd', BX + 84, y1, 72, 60, FELT, 'sicbo.odd', { translate: true, size: 14, sub: '1:1' });
-    this.addSpot('anyTriple', BX + 156, y1, 92, 60, 0x4e1a85, 'sicbo.anyTriple', {
-      translate: true,
-      size: 11,
-      sub: `${SICBO_ANY_TRIPLE_ODDS}:1`,
-    });
-    this.addSpot('even', BX + 248, y1, 72, 60, FELT, 'sicbo.even', { translate: true, size: 14, sub: '1:1' });
-    this.addSpot('big', BX + 320, y1, 84, 60, DARK, 'sicbo.big', { translate: true, size: 18, display: true, sub: '11–17 · 1:1' });
+    for (const spot of topRowSpots(L)) {
+      const st = TOP_STYLE[spot.key]!;
+      this.addSpot(spot.key, spot.x, L.row1.y, spot.w, L.row1.h, st.fill, st.label, { translate: true, size: st.size, display: st.display, sub: st.sub });
+    }
 
     // Row 2: totals 4..17
-    const y2 = y1 + 68;
-    const tw = BW / 14;
+    const tw = L.row2.w / 14;
     for (let total = 4; total <= 17; total++) {
-      this.addSpot(`total:${total}`, BX + (total - 4) * tw, y2, tw, 54, (total % 2 ? FELT : DARK), String(total), {
+      this.addSpot(`total:${total}`, L.row2.x + (total - 4) * tw, L.row2.y, tw, L.row2.h, total % 2 ? FELT : DARK, String(total), {
         size: 15,
         display: true,
         sub: `${SICBO_TOTAL_ODDS[total]}:1`,
       });
     }
-    this.label(BX + BW / 2, y2 + 62, 'sicbo.total', { size: 9, color: '#f7e2a8' });
+    this.label(L.board.x + L.board.w / 2, L.totalLabelY, 'sicbo.total', { size: 9, color: '#f7e2a8' });
 
     // Row 3: singles 1..6
-    const y3 = y2 + 74;
-    const sw = BW / 6;
+    const sw = L.row3.w / 6;
     for (let face = 1; face <= 6; face++) {
-      const x = BX + (face - 1) * sw;
-      this.addSpot(`single:${face}`, x, y3, sw, 60, face % 2 ? DARK : FELT, '', { sub: '1:1 2:1 3:1' });
-      hdImage(this, x + sw / 2, y3 + 24, `die-${face}`, 0.7);
+      const x = L.row3.x + (face - 1) * sw;
+      this.addSpot(`single:${face}`, x, L.row3.y, sw, L.row3.h, face % 2 ? DARK : FELT, '', { sub: '1:1 2:1 3:1' });
+      hdImage(this, x + sw / 2, L.row3.y + L.row3.h * 0.4, `die-${face}`, 0.7);
     }
-    this.label(BX + BW / 2, y3 + 70, 'sicbo.single', { size: 9, color: '#f7e2a8' });
+    this.label(L.board.x + L.board.w / 2, L.singleLabelY, 'sicbo.single', { size: 9, color: '#f7e2a8' });
+  }
+
+  /** Spot rectangles in world units (QA / regression tests read them through the cameras). */
+  spotRects(): { key: string; x: number; y: number; w: number; h: number }[] {
+    return [...this.spots.values()].map((s) => ({ key: s.key, x: s.x, y: s.y, w: s.w, h: s.h }));
   }
 
   protected title() {
     return 'SIC BO';
   }
 
-  /** Portrait (phones): bowl on top, then the board in slices — totals split into 4–10 and 11–17. */
+  /** Tall PC window: plate on top, then the board in slices — totals split into 4–10 and 11–17. */
   override portraitRegions() {
-    const tw = BW / 14;
+    const L = this.geo();
+    const tw = L.row2.w / 14;
     return [
-      { x: 16, y: 34, w: 192, h: 258, maxZoom: 0.74 },
-      { x: BX - 4, y: 30, w: BW + 8, h: 98 },
-      { x: BX - 2, y: 130, w: tw * 7 + 4, h: 58, maxZoom: 1.6, gap: 2 },
-      { x: BX + tw * 7 - 2, y: 130, w: tw * 7 + 4, h: 58, maxZoom: 1.6 },
-      { x: BX - 4, y: 204, w: BW + 8, h: 78 },
+      { x: L.content.x - 8, y: L.bowl.y - 92, w: L.bowl.r * 2 + 48, h: 200, maxZoom: 0.74 },
+      { x: L.board.x - 4, y: L.title.y - 14, w: L.board.w + 8, h: L.row1.y + L.row1.h - L.title.y + 18 },
+      { x: L.row2.x - 2, y: L.row2.y - 2, w: tw * 7 + 4, h: L.row2.h + 4, maxZoom: 1.6, gap: 2 },
+      { x: L.row2.x + tw * 7 - 2, y: L.row2.y - 2, w: tw * 7 + 4, h: L.row2.h + 4, maxZoom: 1.6 },
+      { x: L.board.x - 4, y: L.row3.y - 4, w: L.board.w + 8, h: L.singleLabelY - L.row3.y + 12 },
     ];
   }
 
@@ -90,6 +109,7 @@ export class SicBoScene extends TableScene {
     this.highlightSpots([]);
     this.resultText.setText('');
     if (!this.reduceMotion) {
+      const { x: BOWL_X, y: BOWL_Y } = this.geo().bowl;
       const homes = this.dice.map((d) => ({ x: d.x, y: d.y }));
       // The crystal dome drops over the plate, the dice tumble under it (motion-blur frames), then it lifts.
       const dome = (this.dome ??= hdImage(this, BOWL_X, BOWL_Y, 'sicbo-dome').setDepth(9).setAlpha(0));
@@ -122,7 +142,7 @@ export class SicBoScene extends TableScene {
     if (result.payout > 0) {
       const big = result.payout >= result.bets.reduce((s, b) => s + b.amount, 0) * 10;
       big ? sfx.bigWin() : sfx.win();
-      this.celebrate(result.payout, 428, 180, big);
+      this.celebrate(result.payout, this.geo().centre.x, this.geo().centre.y, big);
     } else sfx.lose();
     await this.wait(this.reduceMotion ? 200 : 600);
     this.interactive = true;
