@@ -1,10 +1,480 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 0,
-  "spentActualUsd": 0,
-  "images": 0,
+  "spentEstimatedUsd": 5.85,
+  "spentActualUsd": 0.95678,
+  "images": 18,
   "executedRequests": [
-    "2026-11-06-01-probe-dry-run"
+    "2026-11-06-01-probe-dry-run",
+    "2026-11-06-02-sample-1-generate"
   ],
-  "entries": []
+  "entries": [
+    {
+      "at": "2026-11-06T23:47:08.042Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "bank.vault-premium",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05504,
+      "usage": {
+        "input_tokens": 472,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 472
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2228
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-06T23:47:31.167Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "bubble.gold",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.45,
+      "actualUsd": 0.04368,
+      "usage": {
+        "input_tokens": 504,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 504
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1876
+      },
+      "seconds": 23
+    },
+    {
+      "at": "2026-11-06T23:48:01.607Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "cardback.royal-gold",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1536",
+      "ok": true,
+      "estimatedUsd": 0.45,
+      "actualUsd": 0.04359,
+      "usage": {
+        "input_tokens": 486,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 486
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1858
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-06T23:48:27.370Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "cardback.royal-purple",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1536",
+      "ok": true,
+      "estimatedUsd": 0.45,
+      "actualUsd": 0.04359,
+      "usage": {
+        "input_tokens": 486,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 486
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1858
+      },
+      "seconds": 26
+    },
+    {
+      "at": "2026-11-06T23:49:02.231Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "chest.legendary",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.054985,
+      "usage": {
+        "input_tokens": 461,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 461
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2217
+      },
+      "seconds": 35
+    },
+    {
+      "at": "2026-11-06T23:49:34.436Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "collectible.watch.luxury",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05502,
+      "usage": {
+        "input_tokens": 468,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 468
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2224
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-06T23:50:09.200Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "frame.seasonal.lunar-new-year",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05516,
+      "usage": {
+        "input_tokens": 496,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 496
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2252
+      },
+      "seconds": 35
+    },
+    {
+      "at": "2026-11-06T23:50:38.904Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "frame.special.kol",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05513,
+      "usage": {
+        "input_tokens": 490,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 490
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2246
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-06T23:51:10.168Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "frame.vip.vip-15",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.055245,
+      "usage": {
+        "input_tokens": 513,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 513
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2269
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-06T23:51:39.147Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "game.blackjack.card-shoe",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.054975,
+      "usage": {
+        "input_tokens": 459,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 459
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2215
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-06T23:52:05.888Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "game.poker.dealer-button",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.055,
+      "usage": {
+        "input_tokens": 464,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 464
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2220
+      },
+      "seconds": 27
+    },
+    {
+      "at": "2026-11-06T23:52:38.089Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "game.roulette.wheel-head",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.055155,
+      "usage": {
+        "input_tokens": 495,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 495
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2251
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-06T23:53:09.548Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "game.slots.symbol-crown",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05491,
+      "usage": {
+        "input_tokens": 446,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 446
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2202
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-06T23:53:40.761Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "game.taixiu.bowl-cover",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05518,
+      "usage": {
+        "input_tokens": 500,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 500
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2256
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-06T23:54:11.064Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "tournament.trophy-champion",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05502,
+      "usage": {
+        "input_tokens": 468,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 468
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2224
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-06T23:54:40.764Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "vip.badge.vip-01",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05499,
+      "usage": {
+        "input_tokens": 462,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 462
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2218
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-06T23:55:11.139Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "vip.badge.vip-08",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.055005,
+      "usage": {
+        "input_tokens": 465,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 465
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2221
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-06T23:55:43.100Z",
+      "requestId": "2026-11-06-02-sample-1-generate",
+      "assetId": "vip.badge.vip-15",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.055105,
+      "usage": {
+        "input_tokens": 485,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 485
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2241
+      },
+      "seconds": 32
+    }
+  ]
 }
