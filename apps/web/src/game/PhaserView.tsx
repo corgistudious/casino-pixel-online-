@@ -93,6 +93,22 @@ export function PhaserView<S extends BaseScene>({ create, onReady }: { create: (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Hitboxes = drawn boxes: Phaser maps taps with canvas bounds it caches at refresh(), so a canvas
+  // that MOVES without resizing (the control bar above/below changes height, the stage re-centres it)
+  // would get taps offset by that shift. Re-read the bounds at the start of every press, in the
+  // capture phase on the frame (runs before Phaser's own canvas listeners). One getBoundingClientRect
+  // per press: no polling, no resize loop.
+  useEffect(() => {
+    const el = frame.current;
+    if (!el) return;
+    const sync = () => gameRef.current?.scale.updateBounds();
+    const opts = { capture: true, passive: true } as const;
+    for (const type of ['pointerdown', 'mousedown', 'touchstart'] as const) el.addEventListener(type, sync, opts);
+    return () => {
+      for (const type of ['pointerdown', 'mousedown', 'touchstart'] as const) el.removeEventListener(type, sync, opts);
+    };
+  }, []);
+
   // Phaser only re-fits on window resize; the layout around the table can change without one
   // (fonts loading, the HUD or control bar changing height): re-fit whenever the stable box changes.
   useEffect(() => {

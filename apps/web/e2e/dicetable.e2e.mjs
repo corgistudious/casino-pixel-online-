@@ -136,5 +136,43 @@ for (const [game, path] of [['sicbo', '/play/sicbo'], ['taixiu', '/tables/taixiu
   }
   await ctx.close();
 }
+// Canvas that MOVES without resizing (a bar above it changes height): taps must still land right.
+for (const [game, path] of [['sicbo', '/play/sicbo'], ['taixiu', '/tables/taixiu-1']]) {
+  const ctx = await context(b, { w: 844, h: 390, ua: UA.android });
+  const p = await ctx.newPage();
+  t.watch(p, `${game} shift`);
+  await p.goto(`${URL}/#${path}`);
+  await p.waitForTimeout(2600);
+  await settle(p);
+  await p.evaluate(`window.__readScene = ${readScene.toString()}`);
+  await p.evaluate(() => {
+    window.__hits = [];
+    window.__keyoScene.events.on('spot', (k) => window.__hits.push(k));
+    // Shift the canvas frame by (23, 31) px without changing its size (no ResizeObserver, no refresh).
+  });
+  const keys = ['small', 'total:4', 'total:10', 'total:17', 'single:3', 'big'];
+  const got = [];
+  for (const k of keys) {
+    let key = null;
+    for (let attempt = 0; attempt < 2 && key === null; attempt++) {
+      // Move the canvas frame by a new (x, y) offset without changing its size, then tap at once
+      // (Phaser's own bounds poll runs only every ~500 ms).
+      const s = await p.evaluate(([kk, n]) => {
+        Object.assign(document.querySelector('[data-table-skin]').style, { position: 'relative', left: `${(n % 2 ? 23 : -17)}px`, top: `${(n % 2 ? 31 : -9)}px` });
+        window.__keyoScene.interactive = true;
+        return window.__readScene().spots.find((q) => q.key === kk);
+      }, [k, got.length + attempt]);
+      const n0 = await p.evaluate(() => window.__hits.length);
+      await p.mouse.click((s.x + s.r) / 2, (s.y + s.b) / 2);
+      for (let i = 0; i < 25 && key === null; i++) {
+        await p.waitForTimeout(60);
+        key = await p.evaluate((n) => (window.__hits.length > n ? window.__hits[window.__hits.length - 1] : null), n0);
+      }
+    }
+    got.push(key);
+  }
+  t.ok(`${game}: after the canvas moves (no resize), taps still hit the spot drawn there`, keys.every((k, i) => got[i] === k), got.join(','));
+  await ctx.close();
+}
 await b.close();
 process.exit(t.done() ? 0 : 1);
