@@ -608,14 +608,16 @@
   }
   .ghud-left { grid-area: lrail; }
   .ghud-tools { grid-area: rrail; }
-  /* Equal rails keep the table centred whichever side holds more. */
-  .ghud-left, .ghud-tools { min-width: clamp(56px, 9cqw, 92px); }
+  /* Equal rails keep the table centred whichever side holds more. Their width is FIXED for the
+     container (not content-sized): the round timer's text changes every phase ("Mời đặt cược 10s" →
+     a shorter label), and a content-sized rail made the table shrink and grow with it. */
+  .ghud-left, .ghud-tools { box-sizing: border-box; width: clamp(76px, 13cqw, 96px); min-width: 0; flex-shrink: 0; }
   .ghud-title { display: none; }
   .ghud-left .gtimer { flex-direction: column; height: auto; gap: 0; padding: 6px 8px; border-radius: 14px; font-size: clamp(10px, 2.6cqh, 12px); text-align: center; white-space: normal; max-width: 92px; line-height: 1.15; }
   .ghud-balance { order: -1; }
   .gbalance { flex-direction: column; align-items: flex-start; gap: 2px; padding: 5px 7px; border-radius: 12px; font-size: clamp(10px, 2.8cqh, 12px); }
   .gbalance-full { display: none; }
   .gbalance-short { display: inline; }
-  .ghud-left .gtimer { max-width: 76px; }
+  .ghud-left .gtimer { max-width: 100%; box-sizing: border-box; }
   .gstage { padding: clamp(1px, 0.3cqh, 3px) 0; }
 }
