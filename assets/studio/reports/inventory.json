@@ -1,0 +1,184 @@
+{
+  "at": "2026-11-06T23:37:35.291Z",
+  "images": [
+    {
+      "file": "apps/web/public/assets/official/Logo Keyo Game.png",
+      "bytes": 2026184,
+      "width": 1254,
+      "height": 1254,
+      "alpha": true,
+      "referencedIn": 0
+    },
+    {
+      "file": "apps/web/public/assets/official/badge-partner.png",
+      "bytes": 104881,
+      "width": 256,
+      "height": 256,
+      "alpha": true,
+      "referencedIn": 1
+    },
+    {
+      "file": "apps/web/public/assets/official/badge-verified.png",
+      "bytes": 99941,
+      "width": 256,
+      "height": 256,
+      "alpha": true,
+      "referencedIn": 1
+    },
+    {
+      "file": "apps/web/public/assets/official/cxu-bac.png",
+      "bytes": 120227,
+      "width": 256,
+      "height": 256,
+      "alpha": true,
+      "referencedIn": 2
+    },
+    {
+      "file": "apps/web/public/assets/official/cxu-vang.png",
+      "bytes": 31429,
+      "width": 128,
+      "height": 128,
+      "alpha": true,
+      "referencedIn": 3
+    },
+    {
+      "file": "apps/web/public/assets/official/keyo-game-logo.png",
+      "bytes": 2237252,
+      "width": 1431,
+      "height": 1099,
+      "alpha": true,
+      "referencedIn": 4
+    },
+    {
+      "file": "apps/web/public/assets/official/rename-card.png",
+      "bytes": 2013354,
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "referencedIn": 2
+    },
+    {
+      "file": "apps/web/public/favicon.svg",
+      "bytes": 741,
+      "width": 64,
+      "height": 64,
+      "alpha": true,
+      "referencedIn": 0
+    },
+    {
+      "file": "apps/web/src/assets/v71/hall.svg",
+      "bytes": 4592,
+      "width": 1200,
+      "height": 1600,
+      "alpha": true,
+      "referencedIn": 1
+    },
+    {
+      "file": "assets/official/badge-partner.png",
+      "bytes": 1800350,
+      "width": 1283,
+      "height": 1226,
+      "alpha": true,
+      "referencedIn": 1
+    },
+    {
+      "file": "assets/official/badge-verified.png",
+      "bytes": 1635152,
+      "width": 1254,
+      "height": 1254,
+      "alpha": true,
+      "referencedIn": 1
+    },
+    {
+      "file": "assets/official/cxu-bac.png",
+      "bytes": 2068028,
+      "width": 1263,
+      "height": 1245,
+      "alpha": true,
+      "referencedIn": 2
+    },
+    {
+      "file": "assets/official/cxu-vang.png",
+      "bytes": 31429,
+      "width": 128,
+      "height": 128,
+      "alpha": true,
+      "referencedIn": 3
+    }
+  ],
+  "games": {
+    "officialModes": [
+      "Tài Xỉu (shared table)",
+      "Sic Bo (solo)",
+      "Roulette (shared table)",
+      "Roulette (solo)",
+      "Texas Hold'em Poker",
+      "Liêng",
+      "Xì Tố",
+      "Blackjack (multiplayer table)",
+      "Blackjack (solo)",
+      "Slots"
+    ],
+    "routes": [
+      "/play/:game",
+      "/tables/:tableId",
+      "/bjt/:tableId",
+      "/cards/:tableId"
+    ],
+    "lobbyCards": [
+      "poker",
+      "sicbo",
+      "roulette",
+      "lieng",
+      "xito",
+      "blackjack"
+    ],
+    "note": "Hub shows 6 game cards; Sic Bo/Tài Xỉu, Roulette solo/table and Blackjack solo/table share a card. Slots is reached at /play/slots (not a hub card).",
+    "slotSymbols": [
+      "cherry",
+      "lemon",
+      "bell",
+      "clover",
+      "diamond",
+      "seven",
+      "wild"
+    ]
+  },
+  "vipLevels": 15,
+  "seededCosmetics": {
+    "avatar": 7,
+    "frame": 81,
+    "card_back": 12,
+    "chat_bubble": 16,
+    "title": 11,
+    "table_skin": 13,
+    "victory_effect": 14
+  },
+  "seasonThemes": [
+    "halloween",
+    "christmas",
+    "new_year",
+    "lunar_new_year",
+    "valentine",
+    "summer",
+    "mid_autumn",
+    "anniversary"
+  ],
+  "giftCatalog": [
+    "rose",
+    "candy",
+    "coffee",
+    "clover",
+    "teddy",
+    "chocolate",
+    "bouquet",
+    "silver_ring",
+    "gold_watch",
+    "sports_car",
+    "yacht",
+    "fireworks",
+    "crown",
+    "diamond"
+  ],
+  "rendering": "Game visuals are procedural (Phaser canvas, apps/web/src/game/art.ts); cosmetics are SVG/CSS drawn (apps/web/src/cosmetics). Uploaded cosmetic art is limited to PNG/WebP/GIF ≤1024 px and ≤1 MB (packages/shared/src/cosmetics.ts)."
+}

@@ -1,0 +1,22 @@
+{
+  "verified": false,
+  "note": "Pessimistic assumptions pending confirmation against https://developers.openai.com/api/docs/pricing",
+  "perImageUsd": {
+    "high": {
+      "1024x1024": 0.4,
+      "1536x1024": 0.6,
+      "1024x1536": 0.6
+    },
+    "medium": {
+      "1024x1024": 0.15,
+      "1536x1024": 0.22,
+      "1024x1536": 0.22
+    },
+    "low": {
+      "1024x1024": 0.05,
+      "1536x1024": 0.08,
+      "1024x1536": 0.08
+    }
+  },
+  "tokens": null
+}

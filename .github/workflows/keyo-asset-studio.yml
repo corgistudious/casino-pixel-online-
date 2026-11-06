@@ -1,0 +1,117 @@
+name: Keyo Asset Studio
+
+# Production asset pipeline (tools/asset-studio). Two ways to run, never automatic mass generation:
+#  - workflow_dispatch: manual run from the Actions tab (needs this file on the default branch to
+#    appear there; until then use a request file).
+#  - a request file committed to assets/studio/requests/*.json on feat/hd-game-ui. Each request
+#    runs ONCE (its id is recorded in assets/studio/budget-ledger.json).
+# Every run: free model probe + manifest validation + contact sheets. Paid generation only when the
+# request/mode says "generate", within the request budget AND the remaining approved budget
+# (ledger persisted in the repo, never reset between runs). No paid retries (SDK maxRetries: 0).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: dry_run (free) or generate (paid)
+        type: choice
+        options: [dry_run, generate]
+        default: dry_run
+      batch:
+        description: Catalog batch (e.g. sample-1); empty = any
+        default: ''
+      category:
+        description: Category filter (game, vip, frame, bubble, cardback, collectible, chest, tournament, ...)
+        default: ''
+      assets:
+        description: Comma-separated asset ids (optional)
+        default: ''
+      batch_size:
+        description: Max assets in this run
+        default: '10'
+      budget_limit:
+        description: Max USD this run may spend (also capped by the remaining approved budget)
+        default: '0'
+      model:
+        description: Image model id or auto (first available of the verified preference list)
+        default: auto
+      quality:
+        type: choice
+        options: [high, medium, low]
+        default: high
+  push:
+    branches: [feat/hd-game-ui]
+    paths: ['assets/studio/requests/**']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: keyo-asset-studio
+  cancel-in-progress: false
+
+jobs:
+  studio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install studio tool
+        working-directory: tools/asset-studio
+        run: npm ci --no-audit --no-fund
+
+      - name: Tool self-test
+        working-directory: tools/asset-studio
+        run: npm test
+
+      - name: Run studio
+        working-directory: tools/asset-studio
+        env:
+          # Only this step sees the key; the tool never prints or writes it.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          IN_MODE: ${{ inputs.mode }}
+          IN_BATCH: ${{ inputs.batch }}
+          IN_CATEGORY: ${{ inputs.category }}
+          IN_ASSETS: ${{ inputs.assets }}
+          IN_BATCH_SIZE: ${{ inputs.batch_size }}
+          IN_BUDGET_LIMIT: ${{ inputs.budget_limit }}
+          IN_MODEL: ${{ inputs.model }}
+          IN_QUALITY: ${{ inputs.quality }}
+        run: node src/cli.mjs ci
+
+      - name: Upload previews and outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: keyo-asset-studio-${{ github.run_id }}
+          path: |
+            assets/studio/previews/
+            assets/studio/reports/
+            assets/studio/generated/
+            assets/studio/manifest.json
+            assets/studio/budget-ledger.json
+            docs/asset-studio/
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Commit manifest, ledger, outputs and reports
+        # Always: the ledger must be saved even if a later step failed, so spend is never lost.
+        if: always()
+        run: |
+          git config user.name "keyo-asset-studio[bot]"
+          git config user.email "keyo-asset-studio@users.noreply.github.com"
+          git add assets/studio docs/asset-studio
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "chore(asset-studio): run ${{ github.run_id }} — manifest, ledger, previews, reports"
+          for i in 1 2 3; do
+            git pull --rebase origin "${{ github.ref_name }}" && git push origin "HEAD:${{ github.ref_name }}" && exit 0
+            sleep $((i * 5))
+          done
+          echo "push failed — outputs are still in the run artifact"; exit 1

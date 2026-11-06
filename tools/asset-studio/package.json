@@ -1,0 +1,23 @@
+{
+  "name": "keyo-asset-studio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Keyo Asset Studio: manifest, OpenAI image generation with a persistent budget ledger, technical validation, WebP optimisation and contact sheets.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "audit": "node src/cli.mjs audit",
+    "manifest": "node src/cli.mjs manifest",
+    "estimate": "node src/cli.mjs estimate",
+    "dry-run": "node src/cli.mjs run --dry-run",
+    "validate": "node src/cli.mjs validate",
+    "sheets": "node src/cli.mjs sheets",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "openai": "^7.53.0",
+    "sharp": "^0.34.2"
+  }
+}
