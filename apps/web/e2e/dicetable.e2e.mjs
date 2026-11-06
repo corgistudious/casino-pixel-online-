@@ -102,6 +102,24 @@ for (const [w, h] of VIEWPORTS) {
     }
     const miss = m.spots.filter((s, i) => got[i] !== s.key).map((s, i) => `${s.key}→${got[m.spots.indexOf(s)]}`);
     t.ok(`${tag}: every tap lands on the spot drawn there`, hits && miss.length === 0, miss.slice(0, 3).join(' '));
+    // Bet markers (the taps above placed a bet on every spot): never over the spot's number / name,
+    // and inside their spot. World units, read from the live scene.
+    await p.waitForTimeout(400);
+    const marks = await p.evaluate(() => {
+      const s = window.__keyoScene;
+      // A bet on every spot, with long amounts (worst case for the badge width), through the scene's
+      // own rendering path (the shared Tài Xỉu table only accepts taps while bets are open).
+      s.setBets(Object.fromEntries(s.spotRects().map((q, i) => [q.key, [10, 500, 1500, 25000, 999999][i % 5]])));
+      const spots = new Map(s.spotRects().map((q) => [q.key, q]));
+      return s.markerRects().map((m) => ({ ...m, spot: spots.get(m.key) }));
+    });
+    const hitR = (a, b) => a && b && a.x < b.x + b.w - 0.5 && a.x + a.w > b.x + 0.5 && a.y < b.y + b.h - 0.5 && a.y + a.h > b.y + 0.5;
+    const narrow = marks.filter((m) => m.spot && m.spot.w <= 50);
+    const covering = narrow.filter((m) => hitR(m.marker, m.label)).map((m) => m.key);
+    const outside = narrow.filter((m) => m.marker.x < m.spot.x - 0.5 || m.marker.x + m.marker.w > m.spot.x + m.spot.w + 0.5 || m.marker.y < m.spot.y - 0.5).map((m) => m.key);
+    t.ok(`${tag}: bet markers on the totals never cover their number`, narrow.length >= 14 && covering.length === 0, `${narrow.length} markers, covering ${covering.slice(0, 4)}`);
+    t.ok(`${tag}: bet markers stay inside their spot`, outside.length === 0, outside.slice(0, 4).join(','));
+    if (process.env.E2E_SHOTS) await p.screenshot({ path: `${process.env.E2E_SHOTS}/${game}_${w}x${h}_bets.png` });
     const ui = await p.evaluate(() => ({ sw: document.documentElement.scrollWidth, sh: document.documentElement.scrollHeight, vw: innerWidth, vh: innerHeight, btns: [...document.querySelectorAll('.gbar button, .ghud button')].map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0).map((r) => ({ x: r.left, r: r.right, y: r.top, b: r.bottom, h: r.height })) }));
     t.ok(`${tag}: no page overflow / scrollbar`, ui.sw <= ui.vw + 1 && ui.sh <= ui.vh + 1);
     const touch = kind !== 'pc';
@@ -172,6 +190,27 @@ for (const [game, path] of [['sicbo', '/play/sicbo'], ['taixiu', '/tables/taixiu
     got.push(key);
   }
   t.ok(`${game}: after the canvas moves (no resize), taps still hit the spot drawn there`, keys.every((k, i) => got[i] === k), got.join(','));
+  await ctx.close();
+}
+// Roulette shares the narrow-spot bet badge (straight numbers): markers never cover the numbers.
+for (const [path, w, h] of [['/play/roulette', 844, 390], ['/tables/roulette-1', 1366, 768]]) {
+  const ctx = await context(b, { w, h, ua: w < 1000 ? UA.android : '' });
+  const p = await ctx.newPage();
+  t.watch(p, `roulette ${path}`);
+  await p.goto(`${URL}/#${path}`);
+  await p.waitForTimeout(2600);
+  const r = await p.evaluate(() => {
+    const s = window.__keyoScene;
+    if (!s || typeof s.markerRects !== 'function') return null;
+    const keys = [...s.spots.keys()].filter((k) => k.startsWith('straight:'));
+    s.setBets(Object.fromEntries(keys.map((k, i) => [k, [10, 500, 1500, 25000][i % 4]])));
+    const spots = new Map([...s.spots.values()].map((q) => [q.key, q]));
+    const hit = (a, b) => a && b && a.x < b.x + b.w - 0.5 && a.x + a.w > b.x + 0.5 && a.y < b.y + b.h - 0.5 && a.y + a.h > b.y + 0.5;
+    const m = s.markerRects();
+    return { n: m.length, covering: m.filter((x) => hit(x.marker, x.label)).map((x) => x.key), outside: m.filter((x) => { const q = spots.get(x.key); return x.marker.x < q.x - 0.5 || x.marker.x + x.marker.w > q.x + q.w + 0.5 || x.marker.y < q.y - 0.5; }).map((x) => x.key) };
+  });
+  t.ok(`roulette ${path}: bet markers never cover the numbers and stay in their cell`, r && r.n === 37 && r.covering.length === 0 && r.outside.length === 0, JSON.stringify(r && { n: r.n, c: r.covering.slice(0, 3), o: r.outside.slice(0, 3) }));
+  if (process.env.E2E_SHOTS) await p.screenshot({ path: `${process.env.E2E_SHOTS}/roulette_${w}x${h}_bets.png` });
   await ctx.close();
 }
 await b.close();
