@@ -79,15 +79,24 @@ for (const [w, h] of VIEWPORTS) {
       s.events.on('spot', (k) => window.__hits.push(k));
       return true;
     });
-    // One tap at a time: Phaser reads input once per frame and headless Chromium renders at ~5 FPS, so
-    // taps closer together than a frame would be merged by the test itself (not by players).
-    for (const [i, s] of m.spots.entries()) {
-      await p.mouse.click((s.x + s.r) / 2, (s.y + s.b) / 2);
-      for (let k = 0; k < 20 && (await p.evaluate(() => window.__hits.length)) <= i; k++) await p.waitForTimeout(60);
+    // One tap at a time, each paired with the event it produced. Phaser reads input once per frame and
+    // headless Chromium renders at ~5 FPS, so a tap that produced NO event (merged into the previous
+    // frame by the test driver) is repeated once; a tap that hits a DIFFERENT spot is a failure.
+    const got = [];
+    for (const s of m.spots) {
+      let key = null;
+      for (let attempt = 0; attempt < 2 && key === null; attempt++) {
+        const n0 = await p.evaluate(() => window.__hits.length);
+        await p.mouse.click((s.x + s.r) / 2, (s.y + s.b) / 2);
+        for (let k = 0; k < 25 && key === null; k++) {
+          await p.waitForTimeout(60);
+          key = await p.evaluate((n) => (window.__hits.length > n ? window.__hits[window.__hits.length - 1] : null), n0);
+        }
+      }
+      got.push(key);
     }
-    const got = await p.evaluate(() => window.__hits);
-    const miss = m.spots.filter((s, i) => got[i] !== s.key).map((s) => s.key);
-    t.ok(`${tag}: every tap lands on the spot drawn there`, hits && got.length === m.spots.length && miss.length === 0, `${got.length}/${m.spots.length} ${miss.slice(0, 3)}`);
+    const miss = m.spots.filter((s, i) => got[i] !== s.key).map((s, i) => `${s.key}→${got[m.spots.indexOf(s)]}`);
+    t.ok(`${tag}: every tap lands on the spot drawn there`, hits && miss.length === 0, miss.slice(0, 3).join(' '));
     const ui = await p.evaluate(() => ({ sw: document.documentElement.scrollWidth, sh: document.documentElement.scrollHeight, vw: innerWidth, vh: innerHeight, btns: [...document.querySelectorAll('.gbar button, .ghud button')].map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0).map((r) => ({ x: r.left, r: r.right, y: r.top, b: r.bottom, h: r.height })) }));
     t.ok(`${tag}: no page overflow / scrollbar`, ui.sw <= ui.vw + 1 && ui.sh <= ui.vh + 1);
     const touch = kind !== 'pc';
