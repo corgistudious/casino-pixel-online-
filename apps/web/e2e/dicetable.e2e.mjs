@@ -55,6 +55,7 @@ for (const [w, h] of VIEWPORTS) {
     await p.goto(`${URL}/#${path}`);
     await p.waitForTimeout(2600);
     await settle(p);
+    await p.evaluate(`window.__readScene = ${readScene.toString()}`);
     const m = await p.evaluate(readScene);
     if (!m) { t.ok(`${tag}: scene readable`, false); continue; }
     t.ok(`${tag}: canvas not stretched`, Math.abs(m.canvas.w / m.canvas.h - m.canvas.ratio) < 0.02);
@@ -82,12 +83,16 @@ for (const [w, h] of VIEWPORTS) {
     // One tap at a time, each paired with the event it produced. Phaser reads input once per frame and
     // headless Chromium renders at ~5 FPS, so a tap that produced NO event (merged into the previous
     // frame by the test driver) is repeated once; a tap that hits a DIFFERENT spot is a failure.
+    // Each tap re-reads the spot's CURRENT screen box (the Tài Xỉu bar changes height with the round
+    // phase and the canvas re-fits) and keeps the scene accepting taps (the round phase toggles it;
+    // this checks the hitbox, not the betting window).
     const got = [];
     for (const s of m.spots) {
       let key = null;
       for (let attempt = 0; attempt < 2 && key === null; attempt++) {
+        const now = await p.evaluate((k) => { window.__keyoScene.interactive = true; return (window.__readScene().spots.find((q) => q.key === k)); }, s.key);
         const n0 = await p.evaluate(() => window.__hits.length);
-        await p.mouse.click((s.x + s.r) / 2, (s.y + s.b) / 2);
+        await p.mouse.click((now.x + now.r) / 2, (now.y + now.b) / 2);
         for (let k = 0; k < 25 && key === null; k++) {
           await p.waitForTimeout(60);
           key = await p.evaluate((n) => (window.__hits.length > n ? window.__hits[window.__hits.length - 1] : null), n0);
