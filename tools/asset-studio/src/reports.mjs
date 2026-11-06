@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { PATHS } from './config.mjs';
 import { loadManifest, summarize } from './manifest.mjs';
-import { loadLedger, loadPricing, remainingUsd } from './budget.mjs';
+import { loadLedger, loadPricing, remainingUsd, spentUsd } from './budget.mjs';
 
 const md = (rows) => rows.map((r) => `| ${r.map((c) => String(c ?? '').replace(/\|/g, '\\|')).join(' | ')} |`).join('\n');
 
@@ -26,7 +26,7 @@ export function writeReports() {
 
   // Budget.
   const ok = ledger.entries.filter((e) => e.ok);
-  let b = `# Budget Tracking (generated)\n\n- Ngân sách đã duyệt: **$${ledger.approvedTotalUsd}**\n- Đã dùng (ước tính, đơn giá ${pricing.verified ? 'đã xác minh' : '**giả định bi quan, chưa xác minh**'}): **$${ledger.spentEstimatedUsd.toFixed(2)}**\n- Đã dùng (theo token usage, chỉ khi có bảng giá token đã xác minh): ${ledger.spentActualUsd ? `$${ledger.spentActualUsd.toFixed(2)}` : 'chưa tính được'}\n- Còn lại theo bộ đếm nội bộ: **$${remainingUsd(ledger).toFixed(2)}**\n- Ảnh đã tạo: ${ledger.images}; yêu cầu đã chạy: ${ledger.executedRequests.join(', ') || '—'}\n\n`;
+  let b = `# Budget Tracking (generated)\n\n- Ngân sách đã duyệt: **$${ledger.approvedTotalUsd}**\n- Đã tính vào ngân sách: **$${spentUsd(ledger).toFixed(4)}** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)\n- Chi phí thật theo token usage × bảng giá ${pricing.verified ? 'đã xác minh' : 'CHƯA xác minh'}: ${ledger.spentActualUsd ? `$${ledger.spentActualUsd.toFixed(4)}` : 'chưa có'}; tổng ước tính trần: $${ledger.spentEstimatedUsd.toFixed(2)}\n- Còn lại theo bộ đếm nội bộ: **$${remainingUsd(ledger).toFixed(2)}**\n- Ảnh đã tạo: ${ledger.images}; yêu cầu đã chạy: ${ledger.executedRequests.join(', ') || '—'}\n\n`;
   b += '> Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.\n\n';
   b += `| Thời gian | Request | Asset | Model | Quality | Size | OK | Ước tính | Token usage |\n|---|---|---|---|---|---|---|---|---|\n${md(ledger.entries.map((e) => [e.at, e.requestId, e.assetId, e.model, e.quality, e.size, e.ok ? 'yes' : `no (${e.error})`, `$${(e.estimatedUsd ?? 0).toFixed(2)}`, e.usage ? `in ${e.usage.input_tokens ?? '?'} / out ${e.usage.output_tokens ?? '?'}` : '—']))}\n`;
   const planned = m.assets.filter((a) => a.status === 'PLANNED');

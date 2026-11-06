@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { DEFAULT_QUALITY, PATHS, REPO } from './config.mjs';
-import { estimateUsd, actualUsd, loadLedger, loadPricing, remainingUsd, saveLedger } from './budget.mjs';
+import { estimateUsd, actualUsd, entryUsd, loadLedger, loadPricing, remainingUsd, saveLedger, spentUsd } from './budget.mjs';
 import { loadManifest, saveManifest } from './manifest.mjs';
 import { optimize, validateImage } from './validate.mjs';
 
@@ -44,7 +44,21 @@ export async function runBatch({ client = null, dryRun = true, model, quality = 
   if (dryRun || !client) return finish(report, ledger, log);
 
   const hashes = manifest.assets.filter((x) => x.validation?.metrics?.dhash).map((x) => ({ id: x.id, hash: x.validation.metrics.dhash }));
-  for (const p of report.planned) {
+  // Live budget: the plan above uses upper-bound estimates; while generating, completed images count
+  // at their real cost (usage) when known, so the run continues through `picked` only while
+  // (spent in this run + the next image's upper-bound estimate) stays within the cap.
+  const startEntries = ledger.entries.length;
+  const spentThisRun = () => ledger.entries.slice(startEntries).reduce((t, e) => t + entryUsd(e), 0);
+  report.planned = [];
+  report.skippedBudget = [];
+  for (const cand of picked) {
+    const est = estimateUsd(pricing, quality, cand.resolution);
+    if (spentThisRun() + est > runCap + 1e-9) {
+      report.skippedBudget.push({ id: cand.id, estimateUsd: est });
+      continue;
+    }
+    const p = { id: cand.id, size: cand.resolution, transparent: cand.transparency, estimateUsd: est };
+    report.planned.push(p);
     const a = manifest.assets.find((x) => x.id === p.id);
     a.status = 'GENERATING';
     saveManifest(manifest);
@@ -84,9 +98,9 @@ export async function runBatch({ client = null, dryRun = true, model, quality = 
     }
     const src = path.join(dir, 'source.png');
     fs.writeFileSync(src, Buffer.from(b64, 'base64'));
-    const act = actualUsd(pricing, res.usage);
+    const act = actualUsd(pricing, res.usage, model);
     ledger.spentEstimatedUsd = +(ledger.spentEstimatedUsd + p.estimateUsd).toFixed(4);
-    if (act !== null) ledger.spentActualUsd = +((ledger.spentActualUsd ?? 0) + act).toFixed(4);
+    if (act !== null) ledger.spentActualUsd = +((ledger.spentActualUsd ?? 0) + act).toFixed(6);
     ledger.images += 1;
     ledger.entries.push({ at: new Date().toISOString(), requestId, assetId: a.id, version, model, quality, size: a.resolution, ok: true, estimatedUsd: p.estimateUsd, actualUsd: act, usage: res.usage ?? null, seconds: Math.round((Date.now() - t0) / 1000) });
     saveLedger(ledger);
@@ -109,9 +123,9 @@ export async function runBatch({ client = null, dryRun = true, model, quality = 
 
 function finish(report, ledger, log) {
   report.finishedAt = new Date().toISOString();
-  report.ledger = { approvedTotalUsd: ledger.approvedTotalUsd, spentEstimatedUsd: ledger.spentEstimatedUsd, spentActualUsd: ledger.spentActualUsd, remainingUsd: +remainingUsd(ledger).toFixed(4), images: ledger.images };
+  report.ledger = { approvedTotalUsd: ledger.approvedTotalUsd, spentUsd: spentUsd(ledger), spentEstimatedUsd: ledger.spentEstimatedUsd, spentActualUsd: ledger.spentActualUsd, remainingUsd: +remainingUsd(ledger).toFixed(4), images: ledger.images };
   fs.mkdirSync(PATHS.reports, { recursive: true });
   fs.writeFileSync(path.join(PATHS.reports, `run-${report.requestId}.json`), `${JSON.stringify(report, null, 2)}\n`);
-  log(`[ledger] spent (estimate) $${ledger.spentEstimatedUsd.toFixed(2)} of $${ledger.approvedTotalUsd}; remaining $${report.ledger.remainingUsd.toFixed(2)}`);
+  log(`[ledger] counted spend $${spentUsd(ledger).toFixed(4)} of $${ledger.approvedTotalUsd} (real cost where usage was returned, estimate otherwise); remaining $${report.ledger.remainingUsd.toFixed(2)}`);
   return report;
 }

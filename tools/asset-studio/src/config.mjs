@@ -3,8 +3,10 @@ import path from 'node:path';
 
 /** Repository paths (the tool lives in tools/asset-studio). */
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
-export const STUDIO = path.join(REPO, 'assets/studio');
+/** Studio data directory (KEYO_STUDIO_DIR overrides it for isolated tests). */
+export const STUDIO = process.env.KEYO_STUDIO_DIR ?? path.join(REPO, 'assets/studio');
 export const PATHS = {
+  repo: REPO,
   manifest: path.join(STUDIO, 'manifest.json'),
   ledger: path.join(STUDIO, 'budget-ledger.json'),
   pricing: path.join(STUDIO, 'pricing.json'),

@@ -35,14 +35,16 @@ export function estimateUsd(pricing, quality, size) {
 }
 
 /** Actual cost from the API's usage object when token prices are known (else null). */
-export function actualUsd(pricing, usage) {
-  if (!pricing.tokens || !usage) return null;
-  const t = pricing.tokens;
+export function actualUsd(pricing, usage, model) {
+  const t = pricing.tokens?.[model];
+  if (!t || !usage || typeof usage.output_tokens !== 'number') return null;
   const inText = usage.input_tokens_details?.text_tokens ?? usage.input_tokens ?? 0;
   const inImage = usage.input_tokens_details?.image_tokens ?? 0;
-  const out = usage.output_tokens ?? 0;
-  return (inText * (t.textInput ?? 0) + inImage * (t.imageInput ?? 0) + out * (t.imageOutput ?? 0)) / 1e6;
+  return +((inText * t.textInput + inImage * t.imageInput + usage.output_tokens * t.imageOutput) / 1e6).toFixed(6);
 }
+
+/** Spend of one ledger entry: the real cost when known, otherwise the (upper-bound) estimate. */
+export const entryUsd = (e) => (typeof e.actualUsd === 'number' ? e.actualUsd : (e.estimatedUsd ?? 0));
 
 const EMPTY = { approvedTotalUsd: APPROVED_TOTAL_USD, spentEstimatedUsd: 0, spentActualUsd: 0, images: 0, executedRequests: [], entries: [] };
 
@@ -57,6 +59,10 @@ export function loadLedger() {
 export function saveLedger(l) {
   fs.writeFileSync(PATHS.ledger, `${JSON.stringify(l, null, 2)}\n`);
 }
+/** Total spend counted against the budget (actual where known, estimate otherwise). */
+export function spentUsd(l) {
+  return +l.entries.reduce((t, e) => t + entryUsd(e), 0).toFixed(6);
+}
 export function remainingUsd(l) {
-  return Math.max(0, l.approvedTotalUsd - Math.max(l.spentEstimatedUsd, l.spentActualUsd || 0));
+  return Math.max(0, l.approvedTotalUsd - spentUsd(l));
 }
