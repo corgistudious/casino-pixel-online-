@@ -3,6 +3,8 @@
   "spentEstimatedUsd": 0,
   "spentActualUsd": 0,
   "images": 0,
-  "executedRequests": [],
+  "executedRequests": [
+    "2026-11-06-01-probe-dry-run"
+  ],
   "entries": []
 }

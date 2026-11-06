@@ -4,7 +4,7 @@
 - Đã dùng (ước tính, đơn giá **giả định bi quan, chưa xác minh**): **$0.00**
 - Đã dùng (theo token usage, chỉ khi có bảng giá token đã xác minh): chưa tính được
 - Còn lại theo bộ đếm nội bộ: **$10.00**
-- Ảnh đã tạo: 0; yêu cầu đã chạy: —
+- Ảnh đã tạo: 0; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 

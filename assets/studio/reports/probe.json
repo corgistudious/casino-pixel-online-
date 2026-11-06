@@ -1,0 +1,51 @@
+{
+  "at": "2026-11-06T23:41:21.590Z",
+  "imageModels": [
+    "chatgpt-image-latest",
+    "gpt-image-1-mini",
+    "gpt-image-1.5",
+    "gpt-image-2",
+    "gpt-image-2-2026-04-21",
+    "gpt-image-2.5-flare",
+    "gpt-image-2.5-flare-2026-09-08",
+    "gpt-image-2.5-sunburst",
+    "gpt-image-2.5-sunburst-2026-09-08",
+    "gpt-image-2.6-flare",
+    "gpt-image-2.6-sunburst"
+  ],
+  "preferred": "gpt-image-2.5-sunburst",
+  "pricing": [
+    {
+      "url": "https://developers.openai.com/api/docs/pricing",
+      "status": 200,
+      "excerpts": [
+        "e generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2.6-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.6-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 All models Batch For image generation cost estimates, use the calculator in the image generation g",
+        "tion guide. Model Modality Input Output Cached input gpt-image-2.6-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.6-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 All models Batch For image generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4",
+        ".6-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.6-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 All models Batch For image generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Imag",
+        ".6-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 All models Batch For image generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-flare Image ",
+        "e generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-flare Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 All models Transcription models Prices per 1M tokens unless noted. Model Use case Input Output Estimated cost gpt-realtime-translate Live translation - - $0.034 / minute ",
+        "age generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-flare Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 All models Transcription models Prices per 1M tokens unless noted. Model Use case Input Output Estimated cost gpt-realtime-translate Live translation - - $0.034 / minute gpt-live-transcribe Live transcription - - $0.017 / minut",
+        "mage-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-flare Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 All models Transcription models Prices per 1M tokens unless noted. Model Use case Input Output Estimated cost gpt-realtime-translate Live translation - - $0.034 / minute gpt-live-transcribe Live transcription - - $0.017 / minute gpt-realtime-whisper Live transcription - - $0.017 / minute gpt-tr"
+      ]
+    },
+    {
+      "url": "https://openai.com/api/pricing/",
+      "status": 403,
+      "excerpts": []
+    },
+    {
+      "url": "https://platform.openai.com/docs/pricing",
+      "status": 200,
+      "excerpts": [
+        "e generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2.6-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.6-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 All models Batch For image generation cost estimates, use the calculator in the image generation g",
+        "tion guide. Model Modality Input Output Cached input gpt-image-2.6-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.6-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 All models Batch For image generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4",
+        ".6-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.6-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 All models Batch For image generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Imag",
+        ".6-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-sunburst Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 gpt-image-2.5-flare Image $8.00 $30.00 $2.00 Text $5.00 - $1.25 All models Batch For image generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-flare Image ",
+        "e generation cost estimates, use the calculator in the image generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-flare Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 All models Transcription models Prices per 1M tokens unless noted. Model Use case Input Output Estimated cost gpt-realtime-translate Live translation - - $0.034 / minute ",
+        "age generation guide. Model Modality Input Output Cached input gpt-image-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-flare Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 All models Transcription models Prices per 1M tokens unless noted. Model Use case Input Output Estimated cost gpt-realtime-translate Live translation - - $0.034 / minute gpt-live-transcribe Live transcription - - $0.017 / minut",
+        "mage-2 Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-sunburst Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 gpt-image-2.5-flare Image $4.00 $15.00 $1.00 Text $2.50 - $0.625 All models Transcription models Prices per 1M tokens unless noted. Model Use case Input Output Estimated cost gpt-realtime-translate Live translation - - $0.034 / minute gpt-live-transcribe Live transcription - - $0.017 / minute gpt-realtime-whisper Live transcription - - $0.017 / minute gpt-tr"
+      ]
+    }
+  ],
+  "retiredSeen": []
+}
