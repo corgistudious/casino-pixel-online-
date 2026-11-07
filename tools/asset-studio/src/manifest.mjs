@@ -57,7 +57,8 @@ export function buildManifest() {
       usage: old?.usage ?? null,
       ...(old?.lastError ? { lastError: old.lastError } : {}),
       createdDate: old?.createdDate ?? today,
-      provenance: c.existing ? 'Existing project asset (in repository before Asset Studio).' : 'Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).',
+      provenance: c.existing ? 'Existing project asset (in repository before Asset Studio).' : (old?.provenance ?? 'Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).'),
+      ...(old?.method ? { method: old.method } : {}),
     };
     if (!STATUSES.includes(base.status)) base.status = 'PLANNED';
     if (old && old.prompt && old.prompt !== prompt && old.status === 'PLANNED') base.promptChanged = true;

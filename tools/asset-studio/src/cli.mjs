@@ -99,6 +99,34 @@ async function main() {
       console.log(`${id} → ${a.status}`);
       break;
     }
+    case 'compose': {
+      // Post-processing for assets an image model cannot produce exactly (no paid call).
+      const [, what] = args;
+      if (what !== 'roulette') throw new Error('compose: supported target is "roulette"');
+      const { composeRoulette } = await import('./compose/roulette.mjs');
+      const { optimize } = await import('./validate.mjs');
+      const m = loadManifest();
+      const a = m.assets.find((x) => x.id === 'game.roulette.wheel-head');
+      const base = (a.versions ?? []).filter((v) => v.method !== 'composite').at(-1);
+      if (!base) throw new Error('no generated roulette wheel to take the centre from');
+      const version = (a.version ?? 0) + 1;
+      const dir = path.join(PATHS.generated, a.id, `v${version}`);
+      fs.mkdirSync(dir, { recursive: true });
+      const src = path.join(dir, 'source.png');
+      await composeRoulette(path.join(REPO, base.sourceFile), src);
+      const webp = path.join(dir, 'optimized.webp');
+      const opt = await optimize(src, webp);
+      const others = m.assets.filter((x) => x.id !== a.id && x.validation?.metrics?.dhash).map((x) => ({ id: x.id, hash: x.validation.metrics.dhash }));
+      Object.assign(a, { version, sourceFile: path.relative(REPO, src), optimizedFile: path.relative(REPO, webp), actualCostUsd: 0, method: 'composite' });
+      a.validation = { ...(await validateImage(src, a, others)), optimized: opt };
+      a.status = a.validation.ok ? 'NEEDS_REVIEW' : 'NEEDS_REVISION';
+      a.provenance = `Composite: centre (cone + turret) from the AI image ${base.sourceFile}; the 37-pocket ring, colours and numbers drawn by code in the game's European order (tools/asset-studio/src/compose/roulette.mjs). Numbers use the UI font stack (Be Vietnam Pro, fallback DejaVu Sans/Arial).`;
+      a.versions = [...(a.versions ?? []), { version, sourceFile: a.sourceFile, optimizedFile: a.optimizedFile, method: 'composite', from: base.sourceFile, createdAt: new Date().toISOString(), validationOk: a.validation.ok }];
+      delete a.review;
+      saveManifest(m);
+      console.log(`${a.id} v${version} → ${a.status}${a.validation.errors.length ? ` (${a.validation.errors.join('; ')})` : ''}`);
+      break;
+    }
     case 'ci':
       await ci();
       break;

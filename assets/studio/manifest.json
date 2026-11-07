@@ -602,10 +602,10 @@
       "priority": "P1",
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
-      "actualCostUsd": 0.055555,
+      "actualCostUsd": 0,
       "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 2,
+      "version": 3,
       "versions": [
         {
           "version": 1,
@@ -624,10 +624,19 @@
           "quality": "high",
           "createdAt": "2026-11-07T00:05:16.190Z",
           "validationOk": true
+        },
+        {
+          "version": 3,
+          "sourceFile": "assets/studio/generated/game.roulette.wheel-head/v3/source.png",
+          "optimizedFile": "assets/studio/generated/game.roulette.wheel-head/v3/optimized.webp",
+          "method": "composite",
+          "from": "assets/studio/generated/game.roulette.wheel-head/v2/source.png",
+          "createdAt": "2026-11-07T00:13:55.515Z",
+          "validationOk": true
         }
       ],
-      "sourceFile": "assets/studio/generated/game.roulette.wheel-head/v2/source.png",
-      "optimizedFile": "assets/studio/generated/game.roulette.wheel-head/v2/optimized.webp",
+      "sourceFile": "assets/studio/generated/game.roulette.wheel-head/v3/source.png",
+      "optimizedFile": "assets/studio/generated/game.roulette.wheel-head/v3/optimized.webp",
       "validation": {
         "ok": true,
         "errors": [],
@@ -636,36 +645,31 @@
           "width": 1024,
           "height": 1024,
           "hasAlpha": true,
-          "coverage": 0.663,
+          "coverage": 0.667,
           "borderAlpha": 0,
-          "lumStd": 56.1,
+          "lumStd": 61.3,
           "bbox": {
             "x": 0.0390625,
-            "y": 0.03515625,
+            "y": 0.0390625,
             "w": 0.921875,
-            "h": 0.9140625
+            "h": 0.921875
           },
-          "sharpness": 1249.4,
-          "dhash": "33f098cccce4e0b2"
+          "sharpness": 1228.1,
+          "dhash": "2f79d8cccce47133"
         },
-        "checkedAt": "2026-11-07T00:05:16.190Z",
+        "checkedAt": "2026-11-07T00:13:55.515Z",
         "optimized": {
           "quality": 90,
-          "bytes": 195738
+          "bytes": 145638
         }
       },
-      "review": {
-        "decision": "revise",
-        "note": "Owner: redo — one ring of 37 pockets, no bowl",
-        "at": "2026-11-07T00:03:21.626Z",
-        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
-      },
+      "review": null,
       "qa": {
-        "verdict": "recommend-hybrid",
-        "note": "v2 fixes the structure (one ring, no bowl) but has about 56 pockets (28 red / 27 black / 1 green, counted by colour sampling), not 37. The game places the ball on 37 code-computed positions, so a generated wheel face cannot be used as the spinning wheel. Recommendation: keep the procedural 37-pocket ring (exact, numbered) and generate only the cone + turret centrepiece (and use the approved style for the rim); do not spend more on full-wheel retries.",
+        "verdict": "recommend-approve",
+        "note": "v3 composite: exactly 37 pockets in ROULETTE_WHEEL order (0 green at the top, 18 red / 18 black alternating), numbers correct and readable, pocket i centred at i*360/37 deg clockwise from the top like the game; centre from the approved-style AI v2. Cost /bin/bash (no API call).",
         "by": "Claude (QA — not an approval)",
         "at": "2026-11-07",
-        "version": 2
+        "version": 3
       },
       "usage": {
         "input_tokens": 575,
@@ -681,7 +685,8 @@
         "total_tokens": 2331
       },
       "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
+      "provenance": "Composite: centre (cone + turret) from the AI image assets/studio/generated/game.roulette.wheel-head/v2/source.png; the 37-pocket ring, colours and numbers drawn by code in the game's European order (tools/asset-studio/src/compose/roulette.mjs). Numbers use the UI font stack (Be Vietnam Pro, fallback DejaVu Sans/Arial).",
+      "method": "composite"
     },
     {
       "id": "game.roulette.wheel-rim",
@@ -2050,7 +2055,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.45,
       "actualCostUsd": 0.04359,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2092,7 +2097,12 @@
           "bytes": 211232
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner: 180° symmetry not needed — keep this back as is",
+        "at": "2026-11-07T00:12:11.878Z",
+        "by": "owner (chat 2026-11-07)"
+      },
       "qa": {
         "verdict": "user-decision",
         "note": "Mirror-symmetric left/right; not 180° symmetric (upright crown). Fine for a flip animation; decide whether card backs must read the same upside down.",
@@ -2133,7 +2143,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.45,
       "actualCostUsd": 0.04359,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2175,7 +2185,12 @@
           "bytes": 157932
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner: 180° symmetry not needed — keep this back as is",
+        "at": "2026-11-07T00:12:12.113Z",
+        "by": "owner (chat 2026-11-07)"
+      },
       "qa": {
         "verdict": "user-decision",
         "note": "Same as royal-gold (upright fleur-de-lis). Otherwise clean, thin even border.",
@@ -2433,7 +2448,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05525,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -2485,10 +2500,10 @@
         }
       },
       "review": {
-        "decision": "revise",
-        "note": "Owner: redo — simplest entry-level badge",
-        "at": "2026-11-07T00:03:21.834Z",
-        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+        "decision": "approve",
+        "note": "Owner approved v2",
+        "at": "2026-11-07T00:12:11.317Z",
+        "by": "owner (chat 2026-11-07)"
       },
       "qa": {
         "verdict": "recommend-approve",
@@ -3354,7 +3369,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05551,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -3407,10 +3422,10 @@
         }
       },
       "review": {
-        "decision": "revise",
-        "note": "Owner: redo — keep dragon/lanterns inside the canvas",
-        "at": "2026-11-07T00:03:22.047Z",
-        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+        "decision": "approve",
+        "note": "Owner approved v2",
+        "at": "2026-11-07T00:12:11.669Z",
+        "by": "owner (chat 2026-11-07)"
       },
       "qa": {
         "verdict": "recommend-approve",
@@ -9700,5 +9715,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T00:08:12.324Z"
+  "updatedAt": "2026-11-07T00:14:10.425Z"
 }

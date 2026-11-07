@@ -7,9 +7,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | Trạng thái | Số |
 |---|---|
 | EXISTING_APPROVED | 9 |
-| USER_APPROVED | 13 |
+| USER_APPROVED | 17 |
 | PLANNED | 252 |
-| NEEDS_REVIEW | 5 |
+| NEEDS_REVIEW | 1 |
 
 ## Theo nhóm
 
@@ -105,8 +105,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | cardback.classic | Card back: classic | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.45 |
-| cardback.royal-gold | Card back: royal-gold | Card games | 1024x1536 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.45 |
-| cardback.royal-purple | Card back: royal-purple | Card games | 1024x1536 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.45 |
+| cardback.royal-gold | Card back: royal-gold | Card games | 1024x1536 | yes | P1 | sample-1 | USER_APPROVED | 0.45 |
+| cardback.royal-purple | Card back: royal-purple | Card games | 1024x1536 | yes | P1 | sample-1 | USER_APPROVED | 0.45 |
 | cardback.diamond | Card back: diamond | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.45 |
 | cardback.vip | Card back: vip | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.45 |
 | cardback.tournament | Card back: tournament | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.45 |
@@ -119,7 +119,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| vip.badge.vip-01 | VIP 1 badge | VIP | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| vip.badge.vip-01 | VIP 1 badge | VIP | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | vip.badge.vip-02 | VIP 2 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-03 | VIP 3 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-04 | VIP 4 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
@@ -146,7 +146,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | frame.seasonal.halloween | halloween frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.seasonal.christmas | christmas frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.seasonal.new-year | new-year frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| frame.seasonal.lunar-new-year | lunar-new-year frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| frame.seasonal.lunar-new-year | lunar-new-year frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | frame.seasonal.valentine | valentine frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.seasonal.easter | easter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.seasonal.summer | summer frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
