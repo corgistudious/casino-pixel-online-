@@ -5,73 +5,144 @@
   "quality": "high",
   "pricingVerified": true,
   "budgetLimitUsd": 1,
-  "remainingBeforeUsd": 0.0808,
-  "runCapUsd": 0.0808,
-  "planned": [],
-  "generated": [],
-  "skippedBudget": [
+  "remainingBeforeUsd": 5.8512,
+  "runCapUsd": 1,
+  "planned": [
     {
       "id": "spin.ticket",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "spin.wheel",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "ui.announcement",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "ui.calendar",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "ui.claim-panel",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "ui.leaderboard",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "ui.mailbox",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "ui.notification",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "ui.progress-panel",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "ui.quest",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     }
   ],
+  "generated": [
+    {
+      "id": "spin.ticket",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "spin.wheel",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.announcement",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.calendar",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.claim-panel",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.leaderboard",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.mailbox",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.notification",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.progress-panel",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.quest",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
   "errors": [],
-  "startedAt": "2026-11-07T01:55:42.615Z",
-  "plannedEstimateUsd": 0,
-  "finishedAt": "2026-11-07T01:55:42.616Z",
-  "budgetExhausted": true,
+  "startedAt": "2026-11-07T03:40:10.281Z",
+  "plannedEstimateUsd": 1,
+  "finishedAt": "2026-11-07T03:45:26.833Z",
+  "budgetExhausted": false,
   "ledger": {
-    "approvedTotalUsd": 10,
-    "spentUsd": 9.919155,
-    "spentEstimatedUsd": 23.15,
-    "spentActualUsd": 9.919155,
-    "remainingUsd": 0.0808,
-    "images": 185
+    "approvedTotalUsd": 20,
+    "spentUsd": 14.674565,
+    "spentEstimatedUsd": 32.55,
+    "spentActualUsd": 14.674565,
+    "remainingUsd": 5.3254,
+    "images": 279
   }
 }
