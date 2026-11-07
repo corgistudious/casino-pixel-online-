@@ -5,7 +5,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | Asset | Trạng thái | Kết quả | Lỗi | Cảnh báo | Coverage | Edge alpha | Sharpness | WebP |
 |---|---|---|---|---|---|---|---|---|
 | game.taixiu.bowl-cover | USER_APPROVED | OK |  |  | 0.681 | 0 | 1319.1 | 168 KB |
+| game.sicbo.dice-plate | NEEDS_REVIEW | OK |  |  | 0.614 | 0 | 963 | 130 KB |
+| game.sicbo.dice-set | NEEDS_REVIEW | OK |  |  | 0.635 | 0 | 767.9 | 110 KB |
 | game.sicbo.crystal-dome | NEEDS_REVIEW | OK |  |  | 0.575 | 0 | 1094.9 | 186 KB |
+| game.sicbo.icon-big | NEEDS_REVIEW | OK |  |  | 0.461 | 0.004 | 1089.9 | 167 KB |
+| game.sicbo.icon-small | NEEDS_REVIEW | OK |  |  | 0.432 | 0 | 858.6 | 131 KB |
+| game.sicbo.icon-triple | NEEDS_REVIEW | OK |  |  | 0.472 | 0 | 820.2 | 128 KB |
 | game.roulette.wheel-head | USER_APPROVED | OK |  |  | 0.667 | 0 | 1228.1 | 142 KB |
 | game.roulette.wheel-rim | NEEDS_REVIEW | OK |  |  | 0.37 | 0 | 892.7 | 144 KB |
 | game.roulette.ball | NEEDS_REVIEW | OK |  |  | 0.34 | 0 | 34.1 | 32 KB |

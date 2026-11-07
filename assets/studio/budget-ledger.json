@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 9.85,
-  "spentActualUsd": 2.71227,
-  "images": 52,
+  "spentEstimatedUsd": 10.35,
+  "spentActualUsd": 2.97585,
+  "images": 57,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -1362,6 +1362,136 @@
         "total_tokens": 2222
       },
       "seconds": 32
+    },
+    {
+      "at": "2026-11-07T00:43:10.403Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.sicbo.dice-plate",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055035,
+      "usage": {
+        "input_tokens": 471,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 471
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2227
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T00:43:35.575Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.sicbo.dice-set",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043635,
+      "usage": {
+        "input_tokens": 495,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 495
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1867
+      },
+      "seconds": 25
+    },
+    {
+      "at": "2026-11-07T00:44:06.990Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.sicbo.icon-big",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05497,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T00:44:37.244Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.sicbo.icon-small",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05497,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:45:07.989Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.sicbo.icon-triple",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05497,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
+      "seconds": 31
     }
   ]
 }
