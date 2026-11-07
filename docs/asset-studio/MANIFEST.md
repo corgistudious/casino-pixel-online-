@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 224 |
-| NEEDS_REVISION | 5 |
-| PLANNED | 23 |
+| NEEDS_REVIEW | 226 |
+| NEEDS_REVISION | 6 |
+| PLANNED | 20 |
 
 ## Theo nhóm
 
@@ -211,17 +211,17 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | title.champion | Title plate: champion | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| title.tournament-winner | Title plate: tournament-winner | Profile | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
+| title.tournament-winner | Title plate: tournament-winner | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.high-roller | Title plate: high-roller | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.collector | Title plate: collector | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | title.lucky-player | Title plate: lucky-player | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.jackpot-winner | Title plate: jackpot-winner | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| title.vip-elite | Title plate: vip-elite | Profile | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
+| title.vip-elite | Title plate: vip-elite | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.founder | Title plate: founder | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.kol | Title plate: kol | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | title.creator | Title plate: creator | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.limited | Title plate: limited | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| title.seasonal | Title plate: seasonal | Profile | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
+| title.seasonal | Title plate: seasonal | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | title.event-winner | Title plate: event-winner | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.grand-champion | Title plate: grand-champion | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 

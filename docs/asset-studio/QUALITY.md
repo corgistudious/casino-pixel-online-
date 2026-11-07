@@ -131,14 +131,17 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | bubble.lunar-new-year | NEEDS_REVIEW | OK |  |  | 0.447 | 0.024 | 338.9 | 46 KB |
 | bubble.anniversary | NEEDS_REVIEW | OK |  |  | 0.427 | 0.018 | 496.9 | 56 KB |
 | title.champion | NEEDS_REVIEW | OK |  |  | 0.3 | 0.028 | 883.2 | 91 KB |
+| title.tournament-winner | NEEDS_REVIEW | OK |  |  | 0.327 | 0.059 | 1120.2 | 111 KB |
 | title.high-roller | NEEDS_REVIEW | OK |  |  | 0.314 | 0.02 | 943.1 | 88 KB |
 | title.collector | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 8%) — opaque backdrop or fake checkerboard; object touches the canvas edge (possibly cut off) |  | 0.315 | 0.076 | 801.4 | 83 KB |
 | title.lucky-player | NEEDS_REVIEW | OK |  |  | 0.292 | 0.021 | 825.3 | 75 KB |
 | title.jackpot-winner | NEEDS_REVIEW | OK |  |  | 0.321 | 0.039 | 775.8 | 95 KB |
+| title.vip-elite | NEEDS_REVIEW | OK |  |  | 0.31 | 0.06 | 902.3 | 84 KB |
 | title.founder | NEEDS_REVIEW | OK |  |  | 0.268 | 0.027 | 761.1 | 70 KB |
 | title.kol | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.314 | 0.028 | 765.9 | 87 KB |
 | title.creator | NEEDS_REVIEW | OK |  |  | 0.306 | 0.011 | 804 | 80 KB |
 | title.limited | NEEDS_REVIEW | OK |  |  | 0.255 | 0.008 | 632 | 65 KB |
+| title.seasonal | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard; object touches the canvas edge (possibly cut off) |  | 0.327 | 0.074 | 797.3 | 94 KB |
 | title.event-winner | NEEDS_REVIEW | OK |  |  | 0.268 | 0.001 | 753 | 72 KB |
 | title.grand-champion | NEEDS_REVIEW | OK |  |  | 0.319 | 0.018 | 889.7 | 98 KB |
 | profile.nameplate | NEEDS_REVIEW | OK |  |  | 0.173 | 0 | 361.3 | 64 KB |

@@ -5,88 +5,188 @@
   "quality": "high",
   "pricingVerified": true,
   "budgetLimitUsd": 1.3,
-  "remainingBeforeUsd": 0.0808,
-  "runCapUsd": 0.0808,
-  "planned": [],
-  "generated": [],
-  "skippedBudget": [
+  "remainingBeforeUsd": 6.9656,
+  "runCapUsd": 1.3,
+  "planned": [
     {
       "id": "title.collector",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.creator",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.event-winner",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.founder",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.grand-champion",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.high-roller",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.jackpot-winner",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.kol",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.limited",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.lucky-player",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.seasonal",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.tournament-winner",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.vip-elite",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     }
   ],
+  "generated": [
+    {
+      "id": "title.collector",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "background not transparent at the edges (edge alpha 8%) — opaque backdrop or fake checkerboard",
+        "object touches the canvas edge (possibly cut off)"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "title.creator",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.event-winner",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.founder",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.grand-champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.high-roller",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.jackpot-winner",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.kol",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "object touches the canvas edge (possibly cut off)"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "title.limited",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.lucky-player",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.seasonal",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard",
+        "object touches the canvas edge (possibly cut off)"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "title.tournament-winner",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.vip-elite",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
   "errors": [],
-  "startedAt": "2026-11-07T01:55:22.463Z",
-  "plannedEstimateUsd": 0,
-  "finishedAt": "2026-11-07T01:55:22.463Z",
-  "budgetExhausted": true,
+  "startedAt": "2026-11-07T03:27:25.635Z",
+  "plannedEstimateUsd": 1.3,
+  "finishedAt": "2026-11-07T03:34:10.256Z",
+  "budgetExhausted": false,
   "ledger": {
-    "approvedTotalUsd": 10,
-    "spentUsd": 9.919155,
-    "spentEstimatedUsd": 23.15,
-    "spentActualUsd": 9.919155,
-    "remainingUsd": 0.0808,
-    "images": 185
+    "approvedTotalUsd": 20,
+    "spentUsd": 13.599605,
+    "spentEstimatedUsd": 30.55,
+    "spentActualUsd": 13.599605,
+    "remainingUsd": 6.4004,
+    "images": 259
   }
 }
