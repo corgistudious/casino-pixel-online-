@@ -155,7 +155,7 @@ export class SlotsScene extends BaseScene {
     }
     const big = result.totalMultiplier >= 100;
     big ? sfx.bigWin() : sfx.win();
-    this.celebrate(result.payout, W / 2, H / 2, big);
+    this.celebrate(result.payout, W / 2, H / 2, big, result.totalMultiplier >= 500 ? 'jackpot' : result.totalMultiplier >= 100 ? 'mega-win' : result.totalMultiplier >= 20 ? 'big-win' : 'normal-win');
     await this.wait(this.reduceMotion ? 300 : 1000);
   }
 

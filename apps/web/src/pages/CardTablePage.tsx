@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PhaserView } from '../game/PhaserView';
 import { CardTableScene, type CardBackLook } from '../game/scenes/CardTableScene';
+import { itemArt } from '../assets/keyo/bindings';
 import { libraryCardBack } from '../cosmetics/cardBackArt';
 import { RoomPasswordPrompt } from '../rooms/RoomForm';
 import { RoomPanel } from '../rooms/RoomPanel';
@@ -100,6 +101,10 @@ function CardTable({ tableId }: { tableId: string }) {
       const art = libraryCardBack(item?.style?.art ?? s.cardBack);
       if (art) out[s.seat] = { key: `cardback-lib-${s.cardBack}`, colors: [], royal: false, art };
       else if (item?.style) out[s.seat] = { key: `cardback-${item.id}`, colors: item.style.colors, royal: item.style.art === 'vuong_gia' };
+      // Studio artwork for this card back (assets/keyo/bindings.ts); the drawn back above stays the fallback.
+      const studio = itemArt(s.cardBack, item?.style?.art);
+      if (studio && out[s.seat]) out[s.seat] = { ...out[s.seat]!, studio };
+      else if (studio) out[s.seat] = { key: `cardback-${s.cardBack}`, colors: ['#7d1222', '#d42a44', '#f7d77a'], royal: false, studio };
     }
     return out;
   }, [view?.seats, catalog]);

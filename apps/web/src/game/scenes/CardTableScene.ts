@@ -2,7 +2,10 @@ import Phaser from 'phaser';
 import { vipTierOf, type Card, type CardBackArt, type CardTableView } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
 import { compactChips } from '../../lib/format';
-import { cardKey, chipDenomFor, ensureCardBackTexture, ensureCardTexture, ensureLibraryCardBack, ensureChipTextures, hdImage, hdScale } from '../art';
+import { CARD_W, cardKey, chipDenomFor, ensureCardBackTexture, ensureCardTexture, ensureLibraryCardBack, ensureChipTextures, hasStudioTexture, hdImage, hdScale, lazyStudioTexture } from '../art';
+import { blindSeats } from '../blinds';
+import { KEYO_ASSETS, type KeyoAssetId } from '../../assets/keyo';
+import { vipBadgeId } from '../../assets/keyo/bindings';
 import { assetSrc } from '../../store/catalog';
 import { BaseScene } from './BaseScene';
 import { ensureHudKit } from '../hudArt';
@@ -50,6 +53,8 @@ export interface CardBackLook {
   royal: boolean;
   /** Seasonal library artwork (drawn instead of the gradient back). */
   art?: CardBackArt;
+  /** Asset Studio card back (used once its file has loaded; the drawn back shows meanwhile). */
+  studio?: KeyoAssetId;
 }
 
 /**
@@ -72,6 +77,8 @@ export class CardTableScene extends BaseScene {
   /** Tap/click on an occupied seat (avatar or name plate): the page opens the player menu at that point. */
   private onSeat?: (uid: number, at: { x: number; y: number }) => void;
   private backs: Record<number, CardBackLook | undefined> = {};
+  /** Fold / all-in effects already shown this hand ("seat:kind"). */
+  private actionFx = new Set<string>();
   /** Uploaded profile photos being fetched (texture key → URL); the seats redraw once one arrives. */
   private loadingPhotos = new Set<string>();
 
@@ -165,13 +172,20 @@ export class CardTableScene extends BaseScene {
 
   private card(x: number, y: number, card: Card | null, scale: number, back: CardBackLook | undefined, key: string) {
     let tex = cardKey(card);
+    const studioKey = back?.studio ? `cb-studio-${back.studio}` : null;
     if (card) ensureCardTexture(this, card);
+    else if (studioKey && hasStudioTexture(this, studioKey)) tex = studioKey;
     else if (back?.art) {
       ensureLibraryCardBack(this, back.key, back.art);
       tex = back.key;
     } else if (back) {
       ensureCardBackTexture(this, back.key, back.colors, back.royal);
       tex = back.key;
+    }
+    if (!card && back?.studio && studioKey && tex !== studioKey) {
+      // Card width 48 world units = the art's visible width.
+      const a = KEYO_ASSETS[back.studio];
+      lazyStudioTexture(this, studioKey, back.studio, (CARD_W * a.w) / ((a.box[2] / 1000) * a.w), () => this.view && this.render(this.view, this.backs));
     }
     const img = hdImage(this, x, y, tex, scale);
     this.layer.add(img);
@@ -225,9 +239,11 @@ export class CardTableScene extends BaseScene {
     this.backs = backs;
     this.layer.removeAll(true);
     const hand = view.hand;
+    const freshHand = !!hand && hand.seq !== this.handSeq;
     if (hand && hand.seq !== this.handSeq) {
       this.handSeq = hand.seq;
       this.dealt.clear();
+      this.actionFx.clear();
     }
     const n = view.table.config.seats;
     const hp = new Map((hand?.players ?? []).map((p) => [p.seat, p]));
@@ -263,10 +279,17 @@ export class CardTableScene extends BaseScene {
         const tier = vipTierOf(s.vipLevel);
         const vx = slot.at.x + 13;
         const vy = slot.at.y + 12;
-        this.layer.add([
-          this.add.circle(vx, vy, 7, VIP_COLORS[tier]).setStrokeStyle(1, 0x05040b),
-          this.text(vx, vy, String(s.vipLevel), { size: s.vipLevel >= 10 ? 6 : 7, color: '#1b1636', weight: 800 }),
-        ]);
+        const badge = `vip-badge-${Math.min(15, s.vipLevel)}`;
+        if (hasStudioTexture(this, badge)) {
+          // Studio VIP badge (same art as Profile / VIP Hub) with the level number under it.
+          this.layer.add([hdImage(this, vx, vy - 1, badge), this.text(vx, vy + 6, String(s.vipLevel), { size: 6, color: '#fff6d6', weight: 800, shadow: true })]);
+        } else {
+          this.layer.add([
+            this.add.circle(vx, vy, 7, VIP_COLORS[tier]).setStrokeStyle(1, 0x05040b),
+            this.text(vx, vy, String(s.vipLevel), { size: s.vipLevel >= 10 ? 6 : 7, color: '#1b1636', weight: 800 }),
+          ]);
+          lazyStudioTexture(this, badge, vipBadgeId(s.vipLevel), 19, () => this.view && this.render(this.view, this.backs));
+        }
       }
       for (const hit of [av, plate]) {
         hit.setInteractive({ useHandCursor: true }).on('pointerup', (ptr: Phaser.Input.Pointer) => {
@@ -283,12 +306,24 @@ export class CardTableScene extends BaseScene {
         photo?.setAlpha(0.5);
         const tag = p?.folded ? this.strings.fold : s.status === 'leaving' ? this.strings.leaving : this.strings.sittingOut;
         if (tag) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > this.C.y ? 27 : 46), tag, { size: 8, color: '#ff9fae', weight: 700, shadow: true }));
-      } else if (p?.allIn && !hand?.result) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > this.C.y ? 27 : 46), this.strings.allIn ?? 'ALL-IN', { size: 9, color: '#ffe08a', weight: 800, shadow: true }));
+      }
+      // Fold / all-in effect when it happens (not for states already there when the hand was first seen).
+      const act = p?.folded ? 'fold' : p?.allIn && !hand?.result ? 'all-in' : null;
+      if (act && hand && !this.actionFx.has(`${seat}:${act}`)) {
+        this.actionFx.add(`${seat}:${act}`);
+        if (!freshHand) this.resultFx(act, slot.at.x, slot.at.y, 0.42);
+      }
+      if (!p?.folded && s.status === 'active' && p?.allIn && !hand?.result) this.layer.add(this.text(slot.at.x, slot.at.y + (slot.at.y > this.C.y ? 27 : 46), this.strings.allIn ?? 'ALL-IN', { size: 9, color: '#ffe08a', weight: 800, shadow: true }));
       if (hand && hand.button === seat) {
         const bx = slot.at.x + 24;
         const by = slot.at.y - 14;
-        this.layer.add(hdImage(this, bx, by, 'dealer-btn'));
+        // Xì Tố has its own dealer marker (studio art); Poker / Liêng use the dealer button.
+        this.layer.add(hdImage(this, bx, by, hand.game === 'xito' && hasStudioTexture(this, 'xito-dealer') ? 'xito-dealer' : 'dealer-btn'));
       }
+      // Hold'em blind markers (display only; the blinds themselves are posted by the server).
+      const blinds = hand && hand.phase === 'betting' ? blindSeats(hand) : null;
+      const blindTex = blinds?.sb === seat ? 'poker-sb' : blinds?.bb === seat ? 'poker-bb' : null;
+      if (blindTex && hasStudioTexture(this, blindTex)) this.layer.add(hdImage(this, slot.at.x - 24, slot.at.y - 14, blindTex));
       if (isTurn && hand?.deadline) this.timerAt = { pos: slot.at, deadline: hand.deadline, total: view.table.config.turnMs };
       // Cards.
       if (p && !p.folded) {
@@ -306,6 +341,8 @@ export class CardTableScene extends BaseScene {
         });
         if (shown) {
           const label = this.strings[`hand_${shown.category}`] ?? shown.category;
+          // Liêng reveal: the studio card-fan emblem above the shown hand.
+          if (hand!.game === 'lieng' && hasStudioTexture(this, 'lieng-fan')) this.layer.add(hdImage(this, slot.cards.x, slot.cards.y - 30 * scale - 6, 'lieng-fan').setDepth(3));
           // Centre seats put the label beside their cards so it covers neither the name plate nor the pot.
           if (slot.cards.x === this.C.x) this.layer.add(this.text(slot.cards.x + (all.length * step) / 2 + 22, slot.cards.y, label, { size: mine ? 9 : 8, color: '#fff1b8', weight: 800, shadow: true, originX: 0 }));
           else this.layer.add(this.text(slot.cards.x, slot.cards.y + 26, label, { size: 8, color: '#fff1b8', weight: 800, shadow: true }));
@@ -317,8 +354,9 @@ export class CardTableScene extends BaseScene {
         const centred = slot.cards.x === this.C.x;
         const bx = centred ? slot.cards.x - 72 : slot.cards.x + (this.C.x - slot.cards.x) * 0.42;
         const by = centred ? slot.cards.y : slot.cards.y + (this.C.y - slot.cards.y) * 0.42 + 4;
-        const tex = `chip-${chipDenomFor(p.streetBet)}`;
-        this.layer.add([this.add.image(bx - 10, by, tex).setScale(hdScale(tex, 0.45)), this.text(bx + 8, by, compactChips(p.streetBet), { size: 8, weight: 800, shadow: true, originX: 0 })]);
+        const stackArt = hasStudioTexture(this, 'chip-stack');
+        const tex = stackArt ? 'chip-stack' : `chip-${chipDenomFor(p.streetBet)}`;
+        this.layer.add([this.add.image(bx - 10, by - (stackArt ? 2 : 0), tex).setScale(hdScale(tex, stackArt ? 1 : 0.45)), this.text(bx + 8, by, compactChips(p.streetBet), { size: 8, weight: 800, shadow: true, originX: 0 })]);
       }
       // Winnings.
       if (hand?.result && (hand.result.net[seat] ?? 0) !== 0) {
@@ -332,11 +370,12 @@ export class CardTableScene extends BaseScene {
     if (hand) {
       hand.board.forEach((c, i) => this.card(this.C.x + (i - 2) * 34, this.C.y, c, 0.64, undefined, `${hand.seq}:board:${i}`));
       if (hand.pot > 0) {
-        const tex = `chip-${chipDenomFor(hand.pot)}`;
+        const potArt = hasStudioTexture(this, 'poker-pot');
+        const tex = potArt ? 'poker-pot' : `chip-${chipDenomFor(hand.pot)}`;
         const py = this.C.y - 44;
         this.layer.add([
           hdImage(this, this.C.x, py, 'pot-plate', 0.85),
-          this.add.image(this.C.x - 44, py - 1, tex).setScale(hdScale(tex, 0.62)),
+          this.add.image(this.C.x - 44, py - (potArt ? 3 : 1), tex).setScale(hdScale(tex, potArt ? 0.8 : 0.62)),
           this.text(this.C.x + 6, py, `${(this.strings.pot ?? 'Pot').toUpperCase()}  ${compactChips(hand.pot)}`, { size: 11, color: '#ffe08a', weight: 800, shadow: true }),
         ]);
       }

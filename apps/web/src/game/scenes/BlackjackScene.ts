@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import type { BlackjackView, Card } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
 import { compactChips } from '../../lib/format';
-import { cardKey, chipDenomFor, ensureCardTexture, ensureChipTextures, ensureShoeTexture, hdImage, hdScale } from '../art';
+import { cardKey, chipDenomFor, ensureCardTexture, ensureChipTextures, ensureShoeTexture, hasStudioTexture, hdImage, hdScale } from '../art';
 import { BaseScene } from './BaseScene';
 
 const SPACING = 30;
@@ -27,6 +27,8 @@ export class BlackjackScene extends BaseScene {
   private dealerTotal!: Phaser.GameObjects.Text;
   private playerTotal!: Phaser.GameObjects.Text;
   private banner!: Phaser.GameObjects.Text;
+  /** Studio result emblem shown beside the outcome banner (only when its file loaded). */
+  private emblem: Phaser.GameObjects.Image | null = null;
   private betStack!: Phaser.GameObjects.Container;
   /** Per-hand totals, results and the active-hand marker (rebuilt on every update). */
   private handLayer!: Phaser.GameObjects.Container;
@@ -66,6 +68,7 @@ export class BlackjackScene extends BaseScene {
     this.handLayer = this.add.container(0, 0).setDepth(30);
     this.banner = this.text(G.cx, G.bannerY, '', { size: 30, display: true, color: '#ffe08a', shadow: true }).setDepth(50);
     this.banner.setStroke('#5a3a06', 3);
+    if (hasStudioTexture(this, 'bj-emblem')) this.emblem = hdImage(this, G.cx, G.bannerY, 'bj-emblem').setDepth(49).setVisible(false);
 
     // Betting circle, printed in the skin's line colour (same place for every skin).
     const g = this.add.graphics();
@@ -82,6 +85,7 @@ export class BlackjackScene extends BaseScene {
     this.dealerTotal.setText('');
     this.playerTotal.setText('');
     this.banner.setText('');
+    this.emblem?.setVisible(false);
     this.handLayer.removeAll(true);
   }
 
@@ -223,6 +227,7 @@ export class BlackjackScene extends BaseScene {
     if (wanted < shown || (shown > 0 && this.player.every((s) => !hands.some((h) => h.cards.includes(s.card!))))) this.reset();
     this.setBet(view.bet);
     this.banner.setText('');
+    this.emblem?.setVisible(false);
 
     const fresh = this.player.length === 0 && this.dealer.length === 0;
     if (fresh && hands.length === 1) {
@@ -258,11 +263,15 @@ export class BlackjackScene extends BaseScene {
     if (view.phase === 'finished' && view.outcome) {
       this.banner.setY(hands.length > 1 ? this.G.bannerSplitY : this.G.bannerY);
       this.banner.setText(t(`blackjack.outcomes.${view.outcome}`));
+      this.emblem?.setPosition(this.G.cx - this.banner.displayWidth / 2 - 22, this.banner.y).setVisible(true);
       if (!this.reduceMotion) this.tweens.add({ targets: this.banner, scale: { from: 0.5, to: 1 }, duration: 250, ease: 'Back.easeOut' });
       if (view.payout > view.bet) {
         view.outcome === 'blackjack' ? sfx.bigWin() : sfx.win();
-        this.celebrate(view.payout, this.G.cx, this.G.playerY);
-      } else if (view.payout === 0) sfx.lose();
+        this.celebrate(view.payout, this.G.cx, this.G.playerY, false, view.outcome === 'blackjack' ? 'perfect-win' : 'normal-win');
+      } else if (view.payout === 0) {
+        sfx.lose();
+        this.resultFx(view.outcome === 'bust' ? 'bust' : 'normal-lose', this.G.cx, this.G.playerY - 20, 0.8);
+      } else if (view.payout === view.bet) this.resultFx('push', this.G.cx, this.G.playerY - 20, 0.8);
     }
   }
 }

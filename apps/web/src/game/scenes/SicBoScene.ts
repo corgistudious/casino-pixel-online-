@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { SICBO_ANY_TRIPLE_ODDS, SICBO_TOTAL_ODDS, sicBoReturn, type SicBoResult } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
 import { parseKey } from '../../lib/bets';
-import { ensureDiceTextures, ensureSicBoProps, hdImage, hdScale } from '../art';
+import { ensureDiceTextures, ensureSicBoProps, hasStudioTexture, hdImage, hdScale } from '../art';
 import { TableScene } from './TableScene';
 
 import { adaptiveWorldWidth, diceBoardLayout, isCompactStage, topRowSpots, type DiceBoardLayout } from '../layouts/diceBoard';
@@ -60,6 +60,7 @@ export class SicBoScene extends TableScene {
     for (const spot of topRowSpots(L)) {
       const st = TOP_STYLE[spot.key]!;
       this.addSpot(spot.key, spot.x, L.row1.y, spot.w, L.row1.h, st.fill, st.label, { translate: true, size: st.size, display: st.display, sub: st.sub });
+      this.spotIcon(spot.key, spot.x, spot.w, L.row1.y, L.row1.h);
     }
 
     // Row 2: totals 4..17
@@ -81,6 +82,17 @@ export class SicBoScene extends TableScene {
       hdImage(this, x + sw / 2, L.row3.y + L.row3.h * 0.4, `die-${face}`, 0.7);
     }
     this.label(L.board.x + L.board.w / 2, L.singleLabelY, 'sicbo.single', { size: 9, color: '#f7e2a8' });
+  }
+
+  /** Studio emblem beside the Small / Big / Any Triple label, only where it fits without touching the text. */
+  private spotIcon(key: string, x: number, w: number, y: number, h: number) {
+    const tex = ({ small: 'sicbo-icon-small', big: 'sicbo-icon-big', anyTriple: 'sicbo-icon-triple' } as Record<string, string>)[key];
+    if (!tex || !hasStudioTexture(this, tex)) return;
+    const labelW = this.spots.get(key)?.labelObj?.displayWidth ?? w;
+    const room = (w - labelW) / 2 - 4;
+    const size = Math.min(22, room, h * 0.6);
+    if (size < 12) return;
+    hdImage(this, x + 2 + size / 2, y + h / 2 - 2, tex, size / 22);
   }
 
   /** Spot rectangles in world units (QA / regression tests read them through the cameras). */
@@ -145,7 +157,10 @@ export class SicBoScene extends TableScene {
       const big = result.payout >= result.bets.reduce((s, b) => s + b.amount, 0) * 10;
       big ? sfx.bigWin() : sfx.win();
       this.celebrate(result.payout, this.geo().centre.x, this.geo().centre.y, big);
-    } else sfx.lose();
+    } else {
+      sfx.lose();
+      this.resultFx('normal-lose', this.geo().centre.x, this.geo().centre.y, 0.8);
+    }
     await this.wait(this.reduceMotion ? 200 : 600);
     this.interactive = true;
   }

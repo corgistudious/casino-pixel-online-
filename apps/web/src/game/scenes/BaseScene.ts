@@ -4,7 +4,9 @@ import { formatChips } from '../../lib/format';
 import { DEFAULT_TABLE_SKIN } from '@casino/shared';
 import { skinColors, type OvalGeometry, type TableLayout } from '../../cosmetics/tableArt';
 import { useSession } from '../../store/session';
-import { ensureFelt, ensureFxTextures, ensureLounge, ensureSkinBackground, hdImage, preloadOverrides } from '../art';
+import { ensureFelt, ensureFxTextures, ensureLounge, ensureSkinBackground, hasStudioTexture, hdImage, lazyStudioTexture, preloadOverrides } from '../art';
+import { RESULT_FX, RESULT_FX_WIDTH, resolveCanvasW, type ResultFx } from '../assetTextures';
+import { FELT_BAND_TARGET, studioFelt } from '../../assets/keyo/bindings';
 
 /** The signed-in player's equipped table skin (or the classic table). */
 export const viewerTableSkin = () => useSession.getState().user?.tableSkin ?? DEFAULT_TABLE_SKIN;
@@ -98,7 +100,33 @@ export abstract class BaseScene extends Phaser.Scene {
   }
 
   preload() {
-    preloadOverrides(this);
+    // This scene's studio textures only (game/assetTextures.ts), plus the studio felt of the viewer's
+    // skin when that skin has one; the drawn versions remain the fallback.
+    const felt = this.studioFeltSpec();
+    preloadOverrides(this, felt ? [{ key: `felt-${felt.id}`, id: felt.id, canvasW: Math.max(this.sw, this.sh) }] : []);
+  }
+
+  private studioFeltSpec() {
+    const layout = this.tableLayout();
+    return layout ? studioFelt(viewerTableSkin(), layout, this.portrait && this.nativePortrait()) : null;
+  }
+
+  /** Studio felt image (cover, or its painted oval lined up with the table oval); false if not loaded. */
+  private drawStudioFelt(): boolean {
+    const felt = this.studioFeltSpec();
+    const key = felt ? `felt-${felt.id}` : '';
+    if (!felt || !hasStudioTexture(this, key)) return false;
+    const img = this.add.image(this.sw / 2, this.sh / 2, key).setDepth(-100);
+    const o = this.tableOval();
+    if (felt.oval && o) {
+      img.setScale((2 * o.rx) / (2 * felt.oval.rx * img.width), (2 * o.ry) / (2 * felt.oval.ry * img.height));
+      img.setPosition(o.cx + (0.5 - felt.oval.cx) * img.displayWidth, o.cy + (0.5 - felt.oval.cy) * img.displayHeight);
+    } else if (felt.band) {
+      const k = ((FELT_BAND_TARGET.bottom - FELT_BAND_TARGET.top) * this.sh) / ((felt.band.bottom - felt.band.top) * img.height);
+      img.setScale(Math.max(k, this.sw / img.width)).setOrigin(0.5, 0);
+      img.setY(FELT_BAND_TARGET.top * this.sh - felt.band.top * img.displayHeight);
+    } else img.setScale(Math.max(this.sw / img.width, this.sh / img.height));
+    return true;
   }
 
   create() {
@@ -122,7 +150,9 @@ export abstract class BaseScene extends Phaser.Scene {
     const layout = this.tableLayout();
     const cx = this.sw / 2;
     const cy = this.sh / 2;
-    if (layout) {
+    if (layout && this.drawStudioFelt()) {
+      // Studio felt for the viewer's skin (see assets/keyo/bindings.ts studioFelt).
+    } else if (layout) {
       // The VIEWER's own table skin (personal cosmetic): never another player's, never room state.
       hdImage(this, cx, cy, ensureSkinBackground(this, viewerTableSkin(), layout, this.tableOval(), this.sw, this.sh)).setDepth(-100);
     } else {
@@ -191,7 +221,32 @@ export abstract class BaseScene extends Phaser.Scene {
   }
 
   /** Light burst, coin shower, sparkles and a floating win amount. */
-  celebrate(amount: number, x = this.sw / 2, y = this.sh / 2, big = false) {
+  /**
+   * Studio result effect (fx.*) behind the result text: pops in and fades (reduced motion: a short
+   * static fade). Rare effects load on first use; if a file is missing nothing is shown.
+   */
+  resultFx(kind: ResultFx, x = this.sw / 2, y = this.sh / 2, scale = 1) {
+    const key = `fx-${kind}`;
+    const show = () => {
+      if (!this.sys.isActive()) return;
+      const img = hdImage(this, x, y, key, scale).setDepth(97).setAlpha(0);
+      const base = img.scale;
+      if (this.reduceMotion) {
+        this.tweens.add({ targets: img, alpha: { from: 0.95, to: 0 }, delay: 900, duration: 300, onStart: () => img.setAlpha(0.95), onComplete: () => img.destroy() });
+        return;
+      }
+      this.tweens.add({ targets: img, alpha: 1, scale: { from: base * 0.55, to: base }, duration: 320, ease: 'Back.easeOut' });
+      this.tweens.add({ targets: img, alpha: 0, scale: base * 1.12, delay: 1200, duration: 450, onComplete: () => img.destroy() });
+    };
+    if (hasStudioTexture(this, key)) return show();
+    const spec = { key, id: RESULT_FX[kind], scenes: [], contentW: RESULT_FX_WIDTH };
+    const requested = Date.now();
+    // Not loaded yet: fetch it now and show it only if it arrives while the result is still on screen.
+    lazyStudioTexture(this, key, spec.id, resolveCanvasW(spec), () => Date.now() - requested < 700 && show());
+  }
+
+  celebrate(amount: number, x = this.sw / 2, y = this.sh / 2, big = false, fx: ResultFx = big ? 'big-win' : 'normal-win') {
+    this.resultFx(fx, x, y - 6, big ? 1.2 : 1);
     const label = this.text(x, y, `+${formatChips(amount, i18n.language)}`, {
       size: big ? 40 : 28,
       color: '#ffe08a',

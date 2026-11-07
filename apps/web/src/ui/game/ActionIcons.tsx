@@ -1,3 +1,5 @@
+import { KeyoImg, type KeyoAssetId } from '../../assets/keyo';
+
 /**
  * V7.1 action icons (own artwork, 2.5D: filled shapes with a light top and a dark rim so they read
  * on the metallic buttons). currentColor = the button's text colour; the rim is a translucent dark.
@@ -15,7 +17,23 @@ function Defs({ id }: { id: string }) {
   );
 }
 
-export function ActionIcon({ name, size = 24 }: { name: ActionIconName; size?: number }) {
+/** Approved Asset Studio art for an action (the drawn SVG below stays as the fallback). */
+const STUDIO_ACTION: Partial<Record<ActionIconName, KeyoAssetId>> = {
+  fold: 'game.cards.action-fold',
+  call: 'game.cards.action-call',
+  raise: 'game.cards.action-raise',
+  allin: 'game.cards.action-allin',
+  hit: 'game.blackjack.action-hit',
+  stand: 'game.blackjack.action-stand',
+  double: 'game.blackjack.action-double',
+  split: 'game.blackjack.action-split',
+  spin: 'game.slots.spin-button',
+};
+
+export function ActionIcon({ name, size = 24, drawn = false }: { name: ActionIconName; size?: number; drawn?: boolean }) {
+  const studio = drawn ? undefined : STUDIO_ACTION[name];
+  // Slightly larger than the SVG: the artwork has its own soft margin. The button keeps its label.
+  if (studio) return <KeyoImg id={studio} size={Math.round(size * 1.25)} alt="" decorative eager className="-my-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" fallback={<ActionIcon name={name} size={size} drawn />} />;
   const g = `ai-${name}`;
   const rim = { stroke: 'rgba(20,10,30,0.45)', strokeWidth: 1.2, strokeLinejoin: 'round' as const };
   const body = (() => {

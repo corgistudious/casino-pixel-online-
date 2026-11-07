@@ -4,21 +4,71 @@ import { paintCardBack } from '../cosmetics/cardBackArt';
 import { paintTable, type OvalGeometry, type TableLayout } from '../cosmetics/tableArt';
 import { ROULETTE_WHEEL, rouletteColor, type Card, type SlotSymbol } from '@casino/shared';
 import { FONT_DISPLAY, FONT_UI, RES, WORLD_H, WORLD_W } from './hd';
+import { keyoUrlPx, type KeyoAssetId } from '../assets/keyo';
+import { texturesForScene } from './assetTextures';
 
 /**
  * Procedural HD vector art. Every asset is drawn with canvas paths, gradients and
  * shadows at RES× resolution — original artwork with no third-party licences.
- * Raster replacements can be dropped in through ASSET_OVERRIDES (see docs/ART_PIPELINE.md).
+ * Approved Asset Studio art replaces some textures (game/assetTextures.ts); this art stays the fallback.
  */
 
 type Ctx = CanvasRenderingContext2D;
 
-/** Optional raster files that replace a procedural texture of the same key. Filled in when final art is delivered. */
-export const ASSET_OVERRIDES: Record<string, string> = {};
+/**
+ * Asset Studio art that replaces a procedural texture of the same key (game/assetTextures.ts lists
+ * them per scene). Loaded in the scene's preload; if a file fails, the procedural texture is drawn
+ * instead because `hdTexture` only skips keys that already exist. Scale: world units per source pixel
+ * of the loaded file, recorded when it loads (the file's size depends on the screen's variant).
+ */
+const overrideScale = new Map<string, number>();
 
-export function preloadOverrides(scene: Phaser.Scene) {
-  for (const [key, url] of Object.entries(ASSET_OVERRIDES)) if (!scene.textures.exists(key)) scene.load.image(key, url);
+export function preloadOverrides(scene: Phaser.Scene, extra: readonly { key: string; id: KeyoAssetId; canvasW: number }[] = []) {
+  const specs = [...texturesForScene(scene.scene.key), ...extra];
+  if (!specs.length) return;
+  const pending = new Map<string, number>();
+  for (const s of specs) {
+    if (scene.textures.exists(s.key)) continue;
+    pending.set(s.key, s.canvasW);
+    scene.load.image(s.key, keyoUrlPx(s.id, s.canvasW * RES * 1.25));
+  }
+  if (!pending.size) return;
+  scene.load.on(Phaser.Loader.Events.FILE_COMPLETE, (key: string) => {
+    const w = pending.get(key);
+    const src = w !== undefined ? scene.textures.get(key).getSourceImage() : null;
+    if (w !== undefined && src) overrideScale.set(key, w / src.width);
+  });
+  scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
+    overrideScale.delete(file.key);
+    console.warn(`[keyo-assets] ${file.key} failed to load; using the drawn texture`);
+  });
 }
+
+/**
+ * Loads a studio texture after the scene has started (for art that depends on live data, e.g. the
+ * VIP badge of whoever sits down) and calls `onReady` once it is usable. Each key loads once.
+ */
+const lazyRequested = new Set<string>();
+export function lazyStudioTexture(scene: Phaser.Scene, key: string, id: KeyoAssetId, worldW: number, onReady: () => void) {
+  if (scene.textures.exists(key) || lazyRequested.has(key)) return;
+  lazyRequested.add(key);
+  scene.load.image(key, keyoUrlPx(id, worldW * RES * 1.25));
+  scene.load.once(`filecomplete-image-${key}`, () => {
+    const src = scene.textures.get(key).getSourceImage();
+    overrideScale.set(key, worldW / src.width);
+    lazyRequested.delete(key);
+    if (scene.sys.isActive()) onReady();
+  });
+  scene.load.once(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
+    if (file.key === key) console.warn(`[keyo-assets] ${key} failed to load`);
+  });
+  if (!scene.load.isLoading()) scene.load.start();
+}
+
+/** Scale factor from texture pixels to world units for `key` (Asset Studio file or HD canvas). */
+const pxToWorld = (key: string) => overrideScale.get(key) ?? 1 / RES;
+/** True once a studio file for `key` has loaded (keys with no procedural fallback check this). */
+export const hasStudioTexture = (scene: Phaser.Scene, key: string) => overrideScale.has(key) && scene.textures.exists(key);
 
 export function hdTexture(scene: Phaser.Scene, key: string, w: number, h: number, draw: (ctx: Ctx) => void) {
   if (scene.textures.exists(key)) return;
@@ -35,13 +85,11 @@ export function hdTexture(scene: Phaser.Scene, key: string, w: number, h: number
 /** Adds an image of an HD texture at its natural world size (times `scale`). */
 export function hdImage(scene: Phaser.Scene, x: number, y: number, key: string, scale = 1) {
   const img = scene.add.image(x, y, key);
-  const fromOverride = key in ASSET_OVERRIDES;
-  // Overrides are authored at 3× world size.
-  img.setScale((scale / (fromOverride ? 3 : RES)));
+  img.setScale(scale * pxToWorld(key));
   return img;
 }
 
-export const hdScale = (key: string, scale = 1) => scale / (key in ASSET_OVERRIDES ? 3 : RES);
+export const hdScale = (key: string, scale = 1) => scale * pxToWorld(key);
 
 export function roundRect(ctx: Ctx, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath();

@@ -125,6 +125,7 @@ export class RouletteTableScene extends RouletteScene {
   private clearResult() {
     this.announced = '';
     this.resultText.setText('');
+    this.showResultArt(null);
     this.highlightSpots([]);
   }
 
@@ -133,6 +134,7 @@ export class RouletteTableScene extends RouletteScene {
     const color = rouletteColor(o.number);
     this.resultText.setText(this.t('roulette.result', { number: o.number }));
     this.resultText.setColor(color === 'red' ? '#ff7a8a' : color === 'green' ? '#6ff0a8' : '#ffffff');
+    this.showResultArt(o.number);
     this.pushHistory(o.number);
     this.highlightSpots([...this.spots.keys()].filter((key) => rouletteReturn(parseKey(key), o.number) > 0));
   }
