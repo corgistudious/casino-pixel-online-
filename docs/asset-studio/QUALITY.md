@@ -9,8 +9,13 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.poker.dealer-button | USER_APPROVED | OK |  |  | 0.461 | 0 | 684.1 | 99 KB |
 | game.blackjack.card-shoe | USER_APPROVED | OK |  |  | 0.441 | 0 | 907.1 | 129 KB |
 | game.slots.symbol-crown | USER_APPROVED | OK |  |  | 0.546 | 0 | 1369.2 | 178 KB |
+| cardback.classic | NEEDS_REVIEW | OK |  |  | 0.743 | 0 | 3417.5 | 166 KB |
 | cardback.royal-gold | USER_APPROVED | OK |  |  | 0.765 | 0 | 3005 | 206 KB |
 | cardback.royal-purple | USER_APPROVED | OK |  |  | 0.692 | 0 | 2166.4 | 154 KB |
+| cardback.diamond | NEEDS_REVIEW | OK |  |  | 0.752 | 0 | 3328.6 | 214 KB |
+| cardback.halloween | NEEDS_REVIEW | OK |  |  | 0.794 | 0 | 2310.3 | 150 KB |
+| cardback.christmas | NEEDS_REVIEW | OK |  |  | 0.729 | 0 | 2921.3 | 159 KB |
+| cardback.limited | NEEDS_REVIEW | OK |  |  | 0.745 | 0 | 2518.7 | 183 KB |
 | vip.badge.vip-01 | USER_APPROVED | OK |  |  | 0.386 | 0 | 345.4 | 67 KB |
 | vip.badge.vip-08 | USER_APPROVED | OK |  |  | 0.462 | 0 | 1251.1 | 188 KB |
 | vip.badge.vip-15 | USER_APPROVED | OK |  |  | 0.568 | 0.013 | 1693.1 | 228 KB |

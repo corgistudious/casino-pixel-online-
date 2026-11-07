@@ -8,7 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| PLANNED | 252 |
+| PLANNED | 247 |
+| NEEDS_REVIEW | 5 |
 
 ## Theo nhóm
 
@@ -103,16 +104,16 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| cardback.classic | Card back: classic | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
+| cardback.classic | Card back: classic | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | cardback.royal-gold | Card back: royal-gold | Card games | 1024x1536 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | cardback.royal-purple | Card back: royal-purple | Card games | 1024x1536 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
-| cardback.diamond | Card back: diamond | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
+| cardback.diamond | Card back: diamond | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | cardback.vip | Card back: vip | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
 | cardback.tournament | Card back: tournament | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
-| cardback.halloween | Card back: halloween | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
-| cardback.christmas | Card back: christmas | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
+| cardback.halloween | Card back: halloween | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| cardback.christmas | Card back: christmas | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | cardback.lunar-new-year | Card back: lunar-new-year | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
-| cardback.limited | Card back: limited | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
+| cardback.limited | Card back: limited | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## vip
 

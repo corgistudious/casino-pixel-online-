@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 6.75,
-  "spentActualUsd": 1.123095,
-  "images": 21,
+  "spentEstimatedUsd": 7.25,
+  "spentActualUsd": 1.340965,
+  "images": 26,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -554,6 +554,136 @@
         "total_tokens": 2270
       },
       "seconds": 28
+    },
+    {
+      "at": "2026-11-07T00:27:17.793Z",
+      "requestId": "2026-11-07-lib-01-1-games-1",
+      "assetId": "cardback.christmas",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1536",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.04356,
+      "usage": {
+        "input_tokens": 480,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 480
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1852
+      },
+      "seconds": 27
+    },
+    {
+      "at": "2026-11-07T00:27:42.932Z",
+      "requestId": "2026-11-07-lib-01-1-games-1",
+      "assetId": "cardback.classic",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1536",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043585,
+      "usage": {
+        "input_tokens": 485,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 485
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1857
+      },
+      "seconds": 25
+    },
+    {
+      "at": "2026-11-07T00:28:10.307Z",
+      "requestId": "2026-11-07-lib-01-1-games-1",
+      "assetId": "cardback.diamond",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1536",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043585,
+      "usage": {
+        "input_tokens": 485,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 485
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1857
+      },
+      "seconds": 27
+    },
+    {
+      "at": "2026-11-07T00:28:37.857Z",
+      "requestId": "2026-11-07-lib-01-1-games-1",
+      "assetId": "cardback.halloween",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1536",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043565,
+      "usage": {
+        "input_tokens": 481,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 481
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1853
+      },
+      "seconds": 27
+    },
+    {
+      "at": "2026-11-07T00:29:03.788Z",
+      "requestId": "2026-11-07-lib-01-1-games-1",
+      "assetId": "cardback.limited",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1536",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043575,
+      "usage": {
+        "input_tokens": 483,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 483
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1855
+      },
+      "seconds": 26
     }
   ]
 }
