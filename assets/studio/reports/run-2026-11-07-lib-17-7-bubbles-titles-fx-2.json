@@ -5,98 +5,204 @@
   "quality": "high",
   "pricingVerified": true,
   "budgetLimitUsd": 1.5,
-  "remainingBeforeUsd": 0.0808,
-  "runCapUsd": 0.0808,
-  "planned": [],
-  "generated": [],
-  "skippedBudget": [
+  "remainingBeforeUsd": 7.7789,
+  "runCapUsd": 1.5,
+  "planned": [
     {
       "id": "fx.big-win",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.bust",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.champion-victory",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.chest-opening",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.fold",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.jackpot",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.mega-win",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.normal-lose",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.normal-win",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.perfect-win",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.push",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.reward-reveal",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.tournament-victory",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.vip-victory",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "title.champion",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     }
   ],
+  "generated": [
+    {
+      "id": "fx.big-win",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.bust",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.champion-victory",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.chest-opening",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.fold",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.jackpot",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.mega-win",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.normal-lose",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.normal-win",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.perfect-win",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.push",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.reward-reveal",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.tournament-victory",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.vip-victory",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "title.champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
   "errors": [],
-  "startedAt": "2026-11-07T01:55:12.528Z",
-  "plannedEstimateUsd": 0,
-  "finishedAt": "2026-11-07T01:55:12.528Z",
-  "budgetExhausted": true,
+  "startedAt": "2026-11-07T03:18:25.554Z",
+  "plannedEstimateUsd": 1.5,
+  "finishedAt": "2026-11-07T03:27:13.327Z",
+  "budgetExhausted": false,
   "ledger": {
-    "approvedTotalUsd": 10,
-    "spentUsd": 9.919155,
-    "spentEstimatedUsd": 23.15,
-    "spentActualUsd": 9.919155,
-    "remainingUsd": 0.0808,
-    "images": 185
+    "approvedTotalUsd": 20,
+    "spentUsd": 13.03437,
+    "spentEstimatedUsd": 29.25,
+    "spentActualUsd": 13.03437,
+    "remainingUsd": 6.9656,
+    "images": 246
   }
 }
