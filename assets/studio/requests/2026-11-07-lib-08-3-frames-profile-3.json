@@ -1,0 +1,26 @@
+{
+  "id": "2026-11-07-lib-08-3-frames-profile-3",
+  "mode": "generate",
+  "assets": [
+    "frame.tournament.participant",
+    "frame.tournament.runner-up",
+    "frame.tournament.seasonal-champion",
+    "frame.tournament.top-10",
+    "frame.tournament.top-100",
+    "frame.tournament.top-3",
+    "profile.accent-kol",
+    "profile.accent-limited",
+    "profile.accent-vip",
+    "profile.achievement-showcase",
+    "profile.background",
+    "profile.header",
+    "profile.nameplate",
+    "profile.prestige-effect"
+  ],
+  "batchSize": 14,
+  "budgetLimitUsd": 1.4,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 8/20 (3-frames-profile 3/3)."
+}

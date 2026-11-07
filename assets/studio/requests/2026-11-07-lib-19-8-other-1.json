@@ -1,0 +1,22 @@
+{
+  "id": "2026-11-07-lib-19-8-other-1",
+  "mode": "generate",
+  "assets": [
+    "reward.daily-gift",
+    "reward.login-chest",
+    "reward.milestone",
+    "reward.mystery-gift",
+    "reward.premium-gift",
+    "reward.streak",
+    "reward.vip-daily",
+    "reward.weekly-gift",
+    "spin.button",
+    "spin.pointer"
+  ],
+  "batchSize": 10,
+  "budgetLimitUsd": 1,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 19/20 (8-other 1/2)."
+}

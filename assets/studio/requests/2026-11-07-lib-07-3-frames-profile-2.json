@@ -1,0 +1,26 @@
+{
+  "id": "2026-11-07-lib-07-3-frames-profile-2",
+  "mode": "generate",
+  "assets": [
+    "frame.seasonal.new-year",
+    "frame.seasonal.summer",
+    "frame.seasonal.thanksgiving",
+    "frame.seasonal.valentine",
+    "frame.special.anniversary-exclusive",
+    "frame.special.collector",
+    "frame.special.creator",
+    "frame.special.early-supporter",
+    "frame.special.event-exclusive",
+    "frame.special.founder",
+    "frame.special.limited-edition",
+    "frame.special.reviewer",
+    "frame.tournament.champion",
+    "frame.tournament.grand-champion"
+  ],
+  "batchSize": 14,
+  "budgetLimitUsd": 1.4,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 7/20 (3-frames-profile 2/3)."
+}

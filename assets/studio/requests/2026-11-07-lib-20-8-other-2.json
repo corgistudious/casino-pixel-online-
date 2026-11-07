@@ -1,0 +1,22 @@
+{
+  "id": "2026-11-07-lib-20-8-other-2",
+  "mode": "generate",
+  "assets": [
+    "spin.ticket",
+    "spin.wheel",
+    "ui.announcement",
+    "ui.calendar",
+    "ui.claim-panel",
+    "ui.leaderboard",
+    "ui.mailbox",
+    "ui.notification",
+    "ui.progress-panel",
+    "ui.quest"
+  ],
+  "batchSize": 10,
+  "budgetLimitUsd": 1,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 20/20 (8-other 2/2)."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "2026-11-07-lib-15-6-events-tournament-achievements-4",
+  "mode": "generate",
+  "assets": [
+    "event.thanksgiving.decoration",
+    "event.thanksgiving.icon",
+    "event.valentine.badge",
+    "event.valentine.banner",
+    "event.valentine.chest",
+    "event.valentine.decoration",
+    "event.valentine.icon",
+    "tournament.badge",
+    "tournament.banner",
+    "tournament.medal",
+    "tournament.ticket",
+    "tournament.trophy"
+  ],
+  "batchSize": 12,
+  "budgetLimitUsd": 1.2,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 15/20 (6-events-tournament-achievements 4/4)."
+}
