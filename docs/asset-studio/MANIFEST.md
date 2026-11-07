@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 100 |
+| NEEDS_REVIEW | 105 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 146 |
+| PLANNED | 141 |
 
 ## Theo nhóm
 
@@ -287,11 +287,11 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | collectible.watch.gold | watch: gold | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.watch.diamond | watch: diamond | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.watch.limited | watch: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.car.sports | car: sports | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.car.supercar | car: supercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.car.hypercar | car: hypercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.car.luxury | car: luxury | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.car.limited | car: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| collectible.car.sports | car: sports | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| collectible.car.supercar | car: supercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| collectible.car.hypercar | car: hypercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| collectible.car.luxury | car: luxury | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| collectible.car.limited | car: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.yacht.small | yacht: small | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.yacht.luxury | yacht: luxury | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.yacht.super | yacht: super | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |

@@ -127,4 +127,9 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | bank.vault-premium | USER_APPROVED | OK |  |  | 0.609 | 0 | 1358.7 | 181 KB |
 | chest.legendary | USER_APPROVED | OK |  |  | 0.571 | 0 | 1395.4 | 193 KB |
 | collectible.watch.luxury | USER_APPROVED | OK |  |  | 0.496 | 0 | 1402.1 | 172 KB |
+| collectible.car.sports | NEEDS_REVIEW | OK |  |  | 0.381 | 0.001 | 1106.8 | 139 KB |
+| collectible.car.supercar | NEEDS_REVIEW | OK |  |  | 0.386 | 0.001 | 1270.7 | 150 KB |
+| collectible.car.hypercar | NEEDS_REVIEW | OK |  |  | 0.367 | 0.002 | 1187.5 | 149 KB |
+| collectible.car.luxury | NEEDS_REVIEW | OK |  |  | 0.391 | 0.011 | 1642.1 | 151 KB |
+| collectible.car.limited | NEEDS_REVIEW | OK |  |  | 0.401 | 0.005 | 1375.1 | 147 KB |
 | tournament.trophy-champion | USER_APPROVED | OK |  |  | 0.318 | 0.014 | 1139 | 171 KB |
