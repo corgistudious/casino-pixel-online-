@@ -7,12 +7,17 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.taixiu.bowl-cover | USER_APPROVED | OK |  |  | 0.681 | 0 | 1319.1 | 168 KB |
 | game.roulette.wheel-head | USER_APPROVED | OK |  |  | 0.667 | 0 | 1228.1 | 142 KB |
 | game.poker.dealer-button | USER_APPROVED | OK |  |  | 0.461 | 0 | 684.1 | 99 KB |
+| game.cards.action-fold | NEEDS_REVIEW | OK |  |  | 0.456 | 0 | 778.9 | 134 KB |
+| game.cards.action-call | NEEDS_REVIEW | OK |  |  | 0.404 | 0 | 951.8 | 160 KB |
+| game.cards.action-allin | NEEDS_REVIEW | OK |  |  | 0.372 | 0 | 942.6 | 136 KB |
 | game.blackjack.card-shoe | USER_APPROVED | OK |  |  | 0.441 | 0 | 907.1 | 129 KB |
+| game.blackjack.result-emblem | NEEDS_REVIEW | OK |  |  | 0.472 | 0 | 733.9 | 125 KB |
 | game.blackjack.action-hit | NEEDS_REVIEW | OK |  |  | 0.426 | 0 | 719.7 | 120 KB |
 | game.blackjack.action-stand | NEEDS_REVIEW | OK |  |  | 0.484 | 0 | 831.8 | 128 KB |
 | game.blackjack.action-double | NEEDS_REVIEW | OK |  |  | 0.483 | 0 | 931.4 | 130 KB |
 | game.blackjack.action-split | NEEDS_REVIEW | OK |  |  | 0.423 | 0 | 704.6 | 113 KB |
 | game.blackjack.action-insurance | NEEDS_REVIEW | OK |  |  | 0.451 | 0 | 643.1 | 110 KB |
+| game.blackjack.table-felt | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1328.7 | 118 KB |
 | game.slots.symbol-crown | USER_APPROVED | OK |  |  | 0.546 | 0 | 1369.2 | 178 KB |
 | cardback.classic | NEEDS_REVIEW | OK |  |  | 0.743 | 0 | 3417.5 | 166 KB |
 | cardback.royal-gold | USER_APPROVED | OK |  |  | 0.765 | 0 | 3005 | 206 KB |

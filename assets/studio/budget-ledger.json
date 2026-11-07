@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 8.05,
-  "spentActualUsd": 1.7465,
-  "images": 34,
+  "spentEstimatedUsd": 8.55,
+  "spentActualUsd": 2.00963,
+  "images": 39,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -893,6 +893,136 @@
         "total_tokens": 2213
       },
       "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:34:08.174Z",
+      "requestId": "2026-11-07-lib-02-1-games-2",
+      "assetId": "game.blackjack.result-emblem",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05506,
+      "usage": {
+        "input_tokens": 476,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 476
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2232
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T00:34:29.989Z",
+      "requestId": "2026-11-07-lib-02-1-games-2",
+      "assetId": "game.blackjack.table-felt",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043425,
+      "usage": {
+        "input_tokens": 453,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 453
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1825
+      },
+      "seconds": 22
+    },
+    {
+      "at": "2026-11-07T00:35:02.270Z",
+      "requestId": "2026-11-07-lib-02-1-games-2",
+      "assetId": "game.cards.action-allin",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054885,
+      "usage": {
+        "input_tokens": 441,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 441
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2197
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T00:35:35.204Z",
+      "requestId": "2026-11-07-lib-02-1-games-2",
+      "assetId": "game.cards.action-call",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05488,
+      "usage": {
+        "input_tokens": 440,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 440
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2196
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-07T00:36:03.895Z",
+      "requestId": "2026-11-07-lib-02-1-games-2",
+      "assetId": "game.cards.action-fold",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05488,
+      "usage": {
+        "input_tokens": 440,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 440
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2196
+      },
+      "seconds": 28
     }
   ]
 }

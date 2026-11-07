@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| PLANNED | 239 |
-| NEEDS_REVIEW | 13 |
+| PLANNED | 234 |
+| NEEDS_REVIEW | 18 |
 
 ## Theo nhóm
 
@@ -73,20 +73,20 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.poker.pot-pile | Pot chip pile | Texas Hold'em Poker | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.poker.table-felt-royal | Royal oval table (opaque) | Texas Hold'em Poker | 1536x1024 | no | P2 |  | PLANNED | 0.10 |
 | game.cards.chip-stack | Chip stack | Card games | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.cards.action-fold | Fold icon | Card games | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.cards.action-call | Call icon | Card games | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.cards.action-fold | Fold icon | Card games | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| game.cards.action-call | Call icon | Card games | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.cards.action-raise | Raise icon | Card games | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.cards.action-allin | All-in icon | Card games | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.cards.action-allin | All-in icon | Card games | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.lieng.reveal-fan | Three-card reveal fan | Liêng | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.xito.dealer-marker | Xì Tố dealer marker | Xì Tố | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.blackjack.card-shoe | Card shoe | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
-| game.blackjack.result-emblem | Blackjack result emblem (no text) | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.blackjack.result-emblem | Blackjack result emblem (no text) | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-hit | Hit icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-stand | Stand icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-double | Double icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-split | Split icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-insurance | Insurance icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| game.blackjack.table-felt | Blackjack arc table (opaque) | Blackjack (Multiplayer & Solo) | 1536x1024 | no | P2 |  | PLANNED | 0.10 |
+| game.blackjack.table-felt | Blackjack arc table (opaque) | Blackjack (Multiplayer & Solo) | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-seven | Slot symbol: seven | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.slots.symbol-diamond | Slot symbol: diamond | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.slots.symbol-bell | Slot symbol: bell | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
