@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 17.85,
-  "spentActualUsd": 7.05336,
-  "images": 132,
+  "spentEstimatedUsd": 18.35,
+  "spentActualUsd": 7.328225,
+  "images": 137,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -3448,6 +3448,136 @@
         "total_tokens": 2216
       },
       "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:25:21.933Z",
+      "requestId": "2026-11-07-lib-09-4-collectibles-1",
+      "assetId": "collectible.phone.gold",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05497,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
+      "seconds": 27
+    },
+    {
+      "at": "2026-11-07T01:25:50.498Z",
+      "requestId": "2026-11-07-lib-09-4-collectibles-1",
+      "assetId": "collectible.phone.limited",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054975,
+      "usage": {
+        "input_tokens": 459,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 459
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2215
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T01:26:20.402Z",
+      "requestId": "2026-11-07-lib-09-4-collectibles-1",
+      "assetId": "collectible.phone.luxury",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054985,
+      "usage": {
+        "input_tokens": 461,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 461
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2217
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:26:49.265Z",
+      "requestId": "2026-11-07-lib-09-4-collectibles-1",
+      "assetId": "collectible.phone.premium",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05497,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:27:18.715Z",
+      "requestId": "2026-11-07-lib-09-4-collectibles-1",
+      "assetId": "collectible.phone.standard",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054965,
+      "usage": {
+        "input_tokens": 457,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 457
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2213
+      },
+      "seconds": 29
     }
   ]
 }
