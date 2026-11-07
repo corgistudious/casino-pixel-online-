@@ -115,10 +115,15 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | avatar.kol | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 625.9 | 117 KB |
 | avatar.collector | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 840.2 | 128 KB |
 | avatar.fantasy-dealer | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 739.6 | 116 KB |
+| bubble.default | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 6%) — opaque backdrop or fake checkerboard |  | 0.429 | 0.061 | 391.6 | 45 KB |
 | bubble.classic | NEEDS_REVIEW | OK |  |  | 0.46 | 0 | 373.8 | 40 KB |
 | bubble.gold | USER_APPROVED | OK |  |  | 0.441 | 0.001 | 478.1 | 39 KB |
+| bubble.diamond | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 421.4 | 51 KB |
+| bubble.limited | NEEDS_REVIEW | OK |  |  | 0.438 | 0 | 281.8 | 47 KB |
 | bubble.champion | NEEDS_REVIEW | OK |  |  | 0.477 | 0.055 | 579 | 52 KB |
+| bubble.kol | NEEDS_REVIEW | OK |  |  | 0.465 | 0.027 | 396.6 | 56 KB |
 | bubble.creator | NEEDS_REVIEW | OK |  |  | 0.471 | 0.038 | 426.2 | 55 KB |
+| bubble.halloween | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 461.6 | 54 KB |
 | bubble.christmas | NEEDS_REVIEW | OK |  |  | 0.371 | 0.031 | 470.9 | 57 KB |
 | bubble.anniversary | NEEDS_REVIEW | OK |  |  | 0.427 | 0.018 | 496.9 | 56 KB |
 | profile.nameplate | NEEDS_REVIEW | OK |  |  | 0.173 | 0 | 361.3 | 64 KB |
