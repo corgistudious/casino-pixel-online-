@@ -6995,7 +6995,7 @@
       "name": "Tournament participant frame",
       "description": "Tournament participant frame avatar frame.",
       "prompt": "Asset: Tournament participant frame for KEYO GAME (Profile / Avatar frames). Purpose: Tournament participant frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; simple bronze ring with a small banner; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -7004,17 +7004,65 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05508,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.tournament.participant/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.tournament.participant/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:15:47.152Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.tournament.participant/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.tournament.participant/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.235,
+          "borderAlpha": 0.003,
+          "lumStd": 63.9,
+          "bbox": {
+            "x": 0.02734375,
+            "y": 0.015625,
+            "w": 0.9453125,
+            "h": 0.9296875
+          },
+          "centerAlpha": 0,
+          "sharpness": 930.9,
+          "dhash": "9e3349c4842969f0"
+        },
+        "checkedAt": "2026-11-07T01:15:47.152Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 144906
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 480,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 480
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2236
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7026,7 +7074,7 @@
       "name": "Tournament top-100 frame",
       "description": "Tournament top-100 frame avatar frame.",
       "prompt": "Asset: Tournament top-100 frame for KEYO GAME (Profile / Avatar frames). Purpose: Tournament top-100 frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; silver ring with laurel; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -7035,17 +7083,65 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05509,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.tournament.top-100/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.tournament.top-100/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:17:45.330Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.tournament.top-100/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.tournament.top-100/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.292,
+          "borderAlpha": 0.004,
+          "lumStd": 57.8,
+          "bbox": {
+            "x": 0.03515625,
+            "y": 0.0078125,
+            "w": 0.9296875,
+            "h": 0.97265625
+          },
+          "centerAlpha": 0,
+          "sharpness": 1107,
+          "dhash": "9e3369d4c46917cc"
+        },
+        "checkedAt": "2026-11-07T01:17:45.330Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 176242
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 482,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 482
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2238
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7057,7 +7153,7 @@
       "name": "Tournament top-10 frame",
       "description": "Tournament top-10 frame avatar frame.",
       "prompt": "Asset: Tournament top-10 frame for KEYO GAME (Profile / Avatar frames). Purpose: Tournament top-10 frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; gold ring with laurel and a star; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -7066,17 +7162,65 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.055105,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.tournament.top-10/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.tournament.top-10/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:17:15.939Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.tournament.top-10/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.tournament.top-10/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.277,
+          "borderAlpha": 0.005,
+          "lumStd": 58.6,
+          "bbox": {
+            "x": 0.0234375,
+            "y": 0.0078125,
+            "w": 0.953125,
+            "h": 0.97265625
+          },
+          "centerAlpha": 0,
+          "sharpness": 988,
+          "dhash": "963369d455695116"
+        },
+        "checkedAt": "2026-11-07T01:17:15.939Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 162534
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 485,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 485
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2241
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7119,7 +7263,7 @@
       "name": "Tournament runner-up frame",
       "description": "Tournament runner-up frame avatar frame.",
       "prompt": "Asset: Tournament runner-up frame for KEYO GAME (Profile / Avatar frames). Purpose: Tournament runner-up frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; silver-gold ring with a silver medal; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -7128,17 +7272,65 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.055095,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.tournament.runner-up/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.tournament.runner-up/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:16:15.598Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.tournament.runner-up/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.tournament.runner-up/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.287,
+          "borderAlpha": 0.014,
+          "lumStd": 55.6,
+          "bbox": {
+            "x": 0.015625,
+            "y": 0.01171875,
+            "w": 0.96875,
+            "h": 0.95703125
+          },
+          "centerAlpha": 0.053,
+          "sharpness": 1085.2,
+          "dhash": "9e3369d4d4491baa"
+        },
+        "checkedAt": "2026-11-07T01:16:15.598Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 170656
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 483,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 483
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2239
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7229,7 +7421,7 @@
       "name": "Tournament seasonal-champion frame",
       "description": "Tournament seasonal-champion frame avatar frame.",
       "prompt": "Asset: Tournament seasonal-champion frame for KEYO GAME (Profile / Avatar frames). Purpose: Tournament seasonal-champion frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; gold and ruby ring with a trophy and seasonal ribbon; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -7238,17 +7430,67 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.055115,
+      "status": "NEEDS_REVISION",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.tournament.seasonal-champion/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.tournament.seasonal-champion/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:16:47.073Z",
+          "validationOk": false
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.tournament.seasonal-champion/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.tournament.seasonal-champion/v1/optimized.webp",
+      "validation": {
+        "ok": false,
+        "errors": [
+          "object touches the canvas edge (possibly cut off)"
+        ],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.29,
+          "borderAlpha": 0.007,
+          "lumStd": 62.8,
+          "bbox": {
+            "x": 0.04296875,
+            "y": 0,
+            "w": 0.9140625,
+            "h": 0.96484375
+          },
+          "centerAlpha": 0.012,
+          "sharpness": 957.2,
+          "dhash": "8e6971c4d4498ecc"
+        },
+        "checkedAt": "2026-11-07T01:16:47.073Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 173270
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 487,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 487
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2243
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -13997,5 +14239,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T01:15:08.030Z"
+  "updatedAt": "2026-11-07T01:17:45.330Z"
 }

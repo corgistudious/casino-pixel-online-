@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 15.95,
-  "spentActualUsd": 6.032125,
-  "images": 113,
+  "spentEstimatedUsd": 16.45,
+  "spentActualUsd": 6.30761,
+  "images": 118,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -2953,6 +2953,136 @@
         "total_tokens": 2245
       },
       "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:15:46.906Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "frame.tournament.participant",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05508,
+      "usage": {
+        "input_tokens": 480,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 480
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2236
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:16:15.357Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "frame.tournament.runner-up",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055095,
+      "usage": {
+        "input_tokens": 483,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 483
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2239
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T01:16:46.832Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "frame.tournament.seasonal-champion",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055115,
+      "usage": {
+        "input_tokens": 487,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 487
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2243
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:17:15.701Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "frame.tournament.top-10",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055105,
+      "usage": {
+        "input_tokens": 485,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 485
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2241
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:17:45.092Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "frame.tournament.top-100",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05509,
+      "usage": {
+        "input_tokens": 482,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 482
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2238
+      },
+      "seconds": 29
     }
   ]
 }

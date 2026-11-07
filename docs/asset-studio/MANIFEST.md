@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 87 |
-| PLANNED | 160 |
-| NEEDS_REVISION | 5 |
+| NEEDS_REVIEW | 91 |
+| PLANNED | 155 |
+| NEEDS_REVISION | 6 |
 
 ## Theo nhóm
 
@@ -153,13 +153,13 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | frame.seasonal.summer | summer frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.seasonal.thanksgiving | thanksgiving frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.seasonal.anniversary | anniversary frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| frame.tournament.participant | Tournament participant frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.tournament.top-100 | Tournament top-100 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.tournament.top-10 | Tournament top-10 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.tournament.participant | Tournament participant frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| frame.tournament.top-100 | Tournament top-100 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| frame.tournament.top-10 | Tournament top-10 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.top-3 | Tournament top-3 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.tournament.runner-up | Tournament runner-up frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.tournament.runner-up | Tournament runner-up frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.champion | Tournament champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| frame.tournament.seasonal-champion | Tournament seasonal-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.tournament.seasonal-champion | Tournament seasonal-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | frame.tournament.grand-champion | Tournament grand-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | frame.special.founder | founder frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.early-supporter | early-supporter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |

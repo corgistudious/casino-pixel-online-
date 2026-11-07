@@ -88,7 +88,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.seasonal.summer | NEEDS_REVIEW | OK |  |  | 0.266 | 0.003 | 914.1 | 167 KB |
 | frame.seasonal.thanksgiving | NEEDS_REVIEW | OK |  |  | 0.294 | 0.001 | 807.2 | 189 KB |
 | frame.seasonal.anniversary | NEEDS_REVIEW | OK |  |  | 0.289 | 0.007 | 889.2 | 166 KB |
+| frame.tournament.participant | NEEDS_REVIEW | OK |  |  | 0.235 | 0.003 | 930.9 | 142 KB |
+| frame.tournament.top-100 | NEEDS_REVIEW | OK |  |  | 0.292 | 0.004 | 1107 | 172 KB |
+| frame.tournament.top-10 | NEEDS_REVIEW | OK |  |  | 0.277 | 0.005 | 988 | 159 KB |
+| frame.tournament.runner-up | NEEDS_REVIEW | OK |  |  | 0.287 | 0.014 | 1085.2 | 167 KB |
 | frame.tournament.champion | NEEDS_REVIEW | OK |  |  | 0.267 | 0 | 1176.6 | 174 KB |
+| frame.tournament.seasonal-champion | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.29 | 0.007 | 957.2 | 169 KB |
 | frame.tournament.grand-champion | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.34 | 0.009 | 1347 | 211 KB |
 | frame.special.founder | NEEDS_REVIEW | OK |  |  | 0.222 | 0.001 | 913.8 | 143 KB |
 | frame.special.early-supporter | NEEDS_REVISION | FAIL | near-duplicate of frame.vip.vip-05 |  | 0.244 | 0 | 897.4 | 157 KB |
