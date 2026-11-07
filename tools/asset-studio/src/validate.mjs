@@ -60,6 +60,22 @@ export async function validateImage(file, asset, otherHashes = []) {
     metrics.centerAlpha = +(c / cn / 255).toFixed(3);
     if (metrics.centerAlpha > 0.08) errors.push(`frame centre not transparent (${(metrics.centerAlpha * 100).toFixed(0)}% opaque)`);
   }
+  if (!asset.transparency) {
+    // Opaque art must be painted edge to edge: a light grey/white low-saturation border means the
+    // model drew a fake checkerboard or an empty studio backdrop around the subject.
+    let greyEdge = 0, edgeN = 0;
+    const e = Math.round(N * 0.035);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      if (x >= e && y >= e && x < N - e && y < N - e) continue;
+      const i = (y * N + x) * 4;
+      const mx = Math.max(data[i], data[i + 1], data[i + 2]);
+      const mn = Math.min(data[i], data[i + 1], data[i + 2]);
+      edgeN++;
+      if (mx - mn < 14 && mn > 150) greyEdge++;
+    }
+    metrics.greyEdge = +(greyEdge / edgeN).toFixed(3);
+    if (metrics.greyEdge > 0.5) errors.push(`opaque image has a light grey/white border (${Math.round(metrics.greyEdge * 100)}%) — fake checkerboard or blank backdrop`);
+  }
   if (lumStd < 10) errors.push('image is flat / nearly blank');
   metrics.sharpness = +(await laplacianVariance(file)).toFixed(1);
   if (metrics.sharpness < 15) warnings.push(`low edge detail (sharpness ${metrics.sharpness}) — check for blur`);

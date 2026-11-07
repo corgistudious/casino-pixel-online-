@@ -63,3 +63,11 @@ test('pessimistic pricing is used for unknown sizes', () => {
   assert.equal(estimateUsd(DEFAULT_PRICING, 'high', '1024x1024'), 0.4);
   assert.equal(estimateUsd(DEFAULT_PRICING, 'high', '2048x1152'), 0.6);
 });
+
+test('an opaque asset with a fake checkerboard around the subject fails; a full-bleed one passes', async () => {
+  const checker = '<defs><pattern id="c" width="32" height="32" patternUnits="userSpaceOnUse"><rect width="32" height="32" fill="#fff"/><rect width="16" height="16" fill="#ccc"/><rect x="16" y="16" width="16" height="16" fill="#ccc"/></pattern></defs><rect width="1024" height="1024" fill="url(#c)"/><ellipse cx="512" cy="512" rx="420" ry="300" fill="#0f5a39"/>';
+  const bad = await validateImage(await write('felt-bad.png', svg(checker)), asset({ transparency: false }));
+  assert.match(bad.errors.join(), /fake checkerboard/);
+  const good = await validateImage(await write('felt-ok.png', svg('<ellipse cx="512" cy="512" rx="420" ry="300" fill="#0f5a39"/>', '#1b1036')), asset({ transparency: false }));
+  assert.equal(good.ok, true, good.errors.join(';'));
+});

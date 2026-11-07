@@ -5,7 +5,7 @@ export function buildPrompt(a) {
   if (a.existing) return null;
   const bg = a.transparent
     ? 'Background: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.'
-    : 'Background: as described in the composition (opaque image).';
+    : 'Background: opaque, painted edge to edge exactly as described in the composition (dark, rich, in palette). NEVER a checkerboard transparency pattern, never a white or grey studio backdrop, never empty margins.';
   return [
     `Asset: ${a.name} for KEYO GAME (${a.system}). Purpose: ${a.description}`,
     `Object: ${a.object}`,
