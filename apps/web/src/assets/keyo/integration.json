@@ -31,52 +31,52 @@
  },
  "avatar.collector": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.default": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.fantasy-dealer": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.kol": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.limited": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.premium": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.royal": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.seasonal": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.tournament": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "avatar.vip": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Server chỉ nhận avatar mặc định 0–15 và chưa có vật phẩm avatar tương ứng; thêm lựa chọn = đổi API/database",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
   "wave": "library"
  },
  "bank.money-bag": {

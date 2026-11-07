@@ -26,6 +26,7 @@ import { probe } from './probe.mjs';
 import { writeReports } from './reports.mjs';
 import { exportWeb } from './export-web.mjs';
 import { integrationReport } from './integration-report.mjs';
+import { unusedReport } from './unused-report.mjs';
 
 const args = process.argv.slice(2);
 const cmd = args[0];
@@ -87,6 +88,9 @@ async function main() {
     }
     case 'export-web':
       await exportWeb();
+      break;
+    case 'unused-report':
+      await unusedReport();
       break;
     case 'integration-report':
       integrationReport();
