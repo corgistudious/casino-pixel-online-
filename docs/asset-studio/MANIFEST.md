@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 112 |
+| NEEDS_REVIEW | 117 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 134 |
+| PLANNED | 129 |
 
 ## Theo nhóm
 
@@ -282,10 +282,10 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| collectible.watch.classic | watch: classic | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| collectible.watch.classic | watch: classic | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.watch.luxury | watch: luxury | Collectibles / Gifts | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | collectible.watch.gold | watch: gold | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.watch.diamond | watch: diamond | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| collectible.watch.diamond | watch: diamond | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.watch.limited | watch: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.car.sports | car: sports | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.car.supercar | car: supercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
@@ -297,10 +297,10 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | collectible.yacht.super | yacht: super | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.yacht.royal | yacht: royal | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.yacht.limited | yacht: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.property.villa | property: villa | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.property.mansion | property: mansion | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| collectible.property.villa | property: villa | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| collectible.property.mansion | property: mansion | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.property.beach-villa | property: beach-villa | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| collectible.property.royal-estate | property: royal-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| collectible.property.royal-estate | property: royal-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.property.limited-estate | property: limited-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.standard | phone: standard | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.premium | phone: premium | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
