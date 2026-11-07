@@ -1,0 +1,87 @@
+{
+  "requestId": "2026-11-07-lib-15-6-events-tournament-achievements-4",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.2,
+  "remainingBeforeUsd": 0.0808,
+  "runCapUsd": 0.0808,
+  "planned": [],
+  "generated": [],
+  "skippedBudget": [
+    {
+      "id": "tournament.badge",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "tournament.banner",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "tournament.medal",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "tournament.ticket",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "tournament.trophy",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.thanksgiving.decoration",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.thanksgiving.icon",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.valentine.badge",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.valentine.banner",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.valentine.chest",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.valentine.decoration",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.valentine.icon",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    }
+  ],
+  "errors": [],
+  "startedAt": "2026-11-07T01:54:52.609Z",
+  "plannedEstimateUsd": 0,
+  "finishedAt": "2026-11-07T01:54:52.609Z",
+  "budgetExhausted": true,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 9.919155,
+    "spentEstimatedUsd": 23.15,
+    "spentActualUsd": 9.919155,
+    "remainingUsd": 0.0808,
+    "images": 185
+  }
+}
