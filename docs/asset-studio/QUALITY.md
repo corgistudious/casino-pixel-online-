@@ -82,7 +82,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.seasonal.lunar-new-year | USER_APPROVED | OK |  |  | 0.274 | 0 | 817.7 | 164 KB |
 | frame.special.kol | USER_APPROVED | OK |  |  | 0.271 | 0.002 | 974.5 | 153 KB |
 | avatar.default | NEEDS_REVIEW | OK |  |  | 1 | 1 | 810.3 | 124 KB |
+| avatar.premium | NEEDS_REVIEW | OK |  |  | 1 | 1 | 916.2 | 124 KB |
+| avatar.royal | NEEDS_REVIEW | OK |  |  | 1 | 1 | 937.7 | 132 KB |
+| avatar.vip | NEEDS_REVIEW | OK |  |  | 1 | 1 | 933.5 | 128 KB |
 | avatar.limited | NEEDS_REVIEW | OK |  |  | 1 | 1 | 798.5 | 107 KB |
+| avatar.seasonal | NEEDS_REVIEW | OK |  |  | 1 | 1 | 733.3 | 118 KB |
+| avatar.tournament | NEEDS_REVIEW | OK |  |  | 1 | 1 | 894.1 | 120 KB |
 | avatar.kol | NEEDS_REVIEW | OK |  |  | 1 | 1 | 788.7 | 119 KB |
 | avatar.collector | NEEDS_REVIEW | OK |  |  | 1 | 1 | 999.1 | 128 KB |
 | avatar.fantasy-dealer | NEEDS_REVIEW | OK |  |  | 1 | 1 | 884.3 | 115 KB |
