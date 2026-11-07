@@ -160,8 +160,13 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.phone.gold | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 780.6 | 92 KB |
 | collectible.phone.limited | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 1160.5 | 140 KB |
 | tournament.trophy-champion | USER_APPROVED | OK |  |  | 0.318 | 0.014 | 1139 | 171 KB |
+| event.halloween.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 776.6 | 84 KB |
+| event.halloween.badge | NEEDS_REVIEW | OK |  |  | 0.494 | 0 | 1074.5 | 156 KB |
+| event.christmas.icon | NEEDS_REVIEW | OK |  |  | 0.528 | 0 | 1035.8 | 195 KB |
 | event.christmas.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1161.1 | 132 KB |
+| event.christmas.chest | NEEDS_REVIEW | OK |  |  | 0.568 | 0 | 1496.9 | 202 KB |
 | event.christmas.badge | NEEDS_REVIEW | OK |  |  | 0.523 | 0 | 1026.4 | 188 KB |
+| event.christmas.decoration | NEEDS_REVIEW | OK |  |  | 0.347 | 0 | 992.5 | 200 KB |
 | event.anniversary.icon | NEEDS_REVIEW | OK |  |  | 0.642 | 0 | 1135.3 | 195 KB |
 | event.anniversary.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 992.3 | 104 KB |
 | event.anniversary.chest | NEEDS_REVIEW | OK |  |  | 0.567 | 0 | 1266.2 | 191 KB |

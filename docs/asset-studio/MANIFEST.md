@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 145 |
+| NEEDS_REVIEW | 150 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 101 |
+| PLANNED | 96 |
 
 ## Theo nhóm
 
@@ -346,15 +346,15 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | event.halloween.icon | halloween icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.halloween.banner | halloween banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | PLANNED | 0.10 |
+| event.halloween.banner | halloween banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.halloween.chest | halloween chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.halloween.badge | halloween badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.halloween.badge | halloween badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.halloween.decoration | halloween decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.christmas.icon | christmas icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.christmas.icon | christmas icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.christmas.banner | christmas banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |
-| event.christmas.chest | christmas chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.christmas.chest | christmas chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.christmas.badge | christmas badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
-| event.christmas.decoration | christmas decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.christmas.decoration | christmas decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.new-year.icon | new-year icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.new-year.banner | new-year banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | PLANNED | 0.10 |
 | event.new-year.chest | new-year chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
