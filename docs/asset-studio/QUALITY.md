@@ -138,8 +138,13 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | profile.accent-vip | NEEDS_REVIEW | OK |  |  | 0.229 | 0 | 583.6 | 103 KB |
 | profile.accent-limited | NEEDS_REVIEW | OK |  |  | 0.243 | 0 | 567.1 | 110 KB |
 | profile.accent-kol | NEEDS_REVIEW | OK |  |  | 0.272 | 0 | 586.2 | 111 KB |
+| fx.normal-win | NEEDS_REVIEW | OK |  |  | 0.339 | 0 | 473.8 | 203 KB |
 | fx.big-win | NEEDS_REVIEW | OK |  |  | 0.455 | 0 | 746.4 | 233 KB |
+| fx.mega-win | NEEDS_REVIEW | OK |  |  | 0.455 | 0 | 971.8 | 249 KB |
+| fx.jackpot | NEEDS_REVIEW | OK |  |  | 0.473 | 0 | 1270.3 | 251 KB |
+| fx.perfect-win | NEEDS_REVIEW | OK |  |  | 0.408 | 0 | 848.9 | 231 KB |
 | fx.champion-victory | NEEDS_REVIEW | OK |  |  | 0.422 | 0 | 1181.9 | 222 KB |
+| fx.normal-lose | NEEDS_REVIEW | OK |  |  | 0.308 | 0 | 48.8 | 108 KB |
 | fx.bust | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 781.1 | 161 KB |
 | fx.fold | NEEDS_REVIEW | OK |  |  | 0.457 | 0 | 976.3 | 211 KB |
 | fx.all-in | NEEDS_REVIEW | OK |  |  | 0.427 | 0.001 | 1109.7 | 216 KB |

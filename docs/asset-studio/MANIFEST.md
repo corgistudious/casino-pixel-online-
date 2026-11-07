@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 206 |
+| NEEDS_REVIEW | 211 |
 | NEEDS_REVISION | 3 |
-| PLANNED | 43 |
+| PLANNED | 38 |
 
 ## Theo nhóm
 
@@ -242,15 +242,15 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| fx.normal-win | Effect: normal-win | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| fx.normal-win | Effect: normal-win | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.big-win | Effect: big-win | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| fx.mega-win | Effect: mega-win | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| fx.jackpot | Effect: jackpot | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| fx.perfect-win | Effect: perfect-win | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| fx.mega-win | Effect: mega-win | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| fx.jackpot | Effect: jackpot | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| fx.perfect-win | Effect: perfect-win | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.tournament-victory | Effect: tournament-victory | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | fx.champion-victory | Effect: champion-victory | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.vip-victory | Effect: vip-victory | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| fx.normal-lose | Effect: normal-lose | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| fx.normal-lose | Effect: normal-lose | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.bust | Effect: bust | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.push | Effect: push | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | fx.fold | Effect: fold | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
