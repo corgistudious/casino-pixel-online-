@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 169 |
-| PLANNED | 83 |
+| NEEDS_REVIEW | 174 |
+| PLANNED | 78 |
 
 ## Theo nhóm
 
@@ -369,11 +369,11 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | event.valentine.chest | valentine chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.valentine.badge | valentine badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.valentine.decoration | valentine decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.summer.icon | summer icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.summer.banner | summer banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | PLANNED | 0.10 |
-| event.summer.chest | summer chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.summer.badge | summer badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.summer.decoration | summer decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.summer.icon | summer icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
+| event.summer.banner | summer banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |
+| event.summer.chest | summer chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
+| event.summer.badge | summer badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
+| event.summer.decoration | summer decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.thanksgiving.icon | thanksgiving icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.thanksgiving.banner | thanksgiving banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | PLANNED | 0.10 |
 | event.thanksgiving.chest | thanksgiving chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |

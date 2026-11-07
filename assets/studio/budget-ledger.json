@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 24.25,
-  "spentActualUsd": 10.490825,
-  "images": 196,
+  "spentEstimatedUsd": 24.75,
+  "spentActualUsd": 10.75401,
+  "images": 201,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -5118,6 +5118,136 @@
         "total_tokens": 2206
       },
       "seconds": 34
+    },
+    {
+      "at": "2026-11-07T03:00:56.069Z",
+      "requestId": "2026-11-07-lib-14-6-events-tournament-achievements-3",
+      "assetId": "event.summer.badge",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054915,
+      "usage": {
+        "input_tokens": 447,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 447
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2203
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T03:01:24.820Z",
+      "requestId": "2026-11-07-lib-14-6-events-tournament-achievements-3",
+      "assetId": "event.summer.banner",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043505,
+      "usage": {
+        "input_tokens": 469,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 469
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1841
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T03:01:57.953Z",
+      "requestId": "2026-11-07-lib-14-6-events-tournament-achievements-3",
+      "assetId": "event.summer.chest",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05492,
+      "usage": {
+        "input_tokens": 448,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 448
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2204
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-07T03:02:28.789Z",
+      "requestId": "2026-11-07-lib-14-6-events-tournament-achievements-3",
+      "assetId": "event.summer.decoration",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054925,
+      "usage": {
+        "input_tokens": 449,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 449
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2205
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T03:02:59.993Z",
+      "requestId": "2026-11-07-lib-14-6-events-tournament-achievements-3",
+      "assetId": "event.summer.icon",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05492,
+      "usage": {
+        "input_tokens": 448,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 448
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2204
+      },
+      "seconds": 31
     }
   ],
   "approvals": [

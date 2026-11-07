@@ -180,6 +180,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | event.lunar-new-year.chest | NEEDS_REVIEW | OK |  |  | 0.544 | 0 | 1171.7 | 178 KB |
 | event.lunar-new-year.badge | NEEDS_REVIEW | OK |  |  | 0.527 | 0 | 1085.6 | 196 KB |
 | event.lunar-new-year.decoration | NEEDS_REVIEW | OK |  |  | 0.276 | 0 | 615.4 | 158 KB |
+| event.summer.icon | NEEDS_REVIEW | OK |  |  | 0.575 | 0 | 870.7 | 186 KB |
+| event.summer.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1167.1 | 136 KB |
+| event.summer.chest | NEEDS_REVIEW | OK |  |  | 0.581 | 0 | 1177.2 | 188 KB |
+| event.summer.badge | NEEDS_REVIEW | OK |  |  | 0.553 | 0 | 966 | 192 KB |
+| event.summer.decoration | NEEDS_REVIEW | OK |  |  | 0.272 | 0 | 637.1 | 167 KB |
 | event.anniversary.icon | NEEDS_REVIEW | OK |  |  | 0.642 | 0 | 1135.3 | 195 KB |
 | event.anniversary.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 992.3 | 104 KB |
 | event.anniversary.chest | NEEDS_REVIEW | OK |  |  | 0.567 | 0 | 1266.2 | 191 KB |
