@@ -1,14 +1,15 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 10.35,
-  "spentActualUsd": 2.97585,
-  "images": 57,
+  "spentEstimatedUsd": 10.65,
+  "spentActualUsd": 3.117615,
+  "images": 60,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
     "2026-11-07-01-sample-1-revisions",
     "2026-11-07-lib-01-1-games-1",
-    "2026-11-07-lib-02-1-games-2"
+    "2026-11-07-lib-02-1-games-2",
+    "2026-11-07-lib-03-1-games-3"
   ],
   "entries": [
     {
@@ -1492,6 +1493,84 @@
         "total_tokens": 2214
       },
       "seconds": 31
+    },
+    {
+      "at": "2026-11-07T00:45:37.573Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.sicbo.table-vip",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.04335,
+      "usage": {
+        "input_tokens": 438,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 438
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1810
+      },
+      "seconds": 23
+    },
+    {
+      "at": "2026-11-07T00:46:01.926Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.slots.cabinet-frame",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.04349,
+      "usage": {
+        "input_tokens": 466,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 466
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1838
+      },
+      "seconds": 24
+    },
+    {
+      "at": "2026-11-07T00:46:31.720Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.slots.spin-button",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054925,
+      "usage": {
+        "input_tokens": 449,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 449
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2205
+      },
+      "seconds": 29
     }
   ]
 }

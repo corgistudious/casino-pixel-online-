@@ -1,10 +1,10 @@
 # Budget Tracking (generated)
 
 - Ngân sách đã duyệt: **$10**
-- Đã tính vào ngân sách: **$2.9758** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
-- Chi phí thật theo token usage × bảng giá đã xác minh: $2.9758; tổng ước tính trần: $10.35
-- Còn lại theo bộ đếm nội bộ: **$7.02**
-- Ảnh đã tạo: 57; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2
+- Đã tính vào ngân sách: **$3.1176** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
+- Chi phí thật theo token usage × bảng giá đã xác minh: $3.1176; tổng ước tính trần: $10.65
+- Còn lại theo bộ đếm nội bộ: **$6.88**
+- Ảnh đã tạo: 60; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
@@ -67,10 +67,13 @@
 | 2026-11-07T00:44:06.990Z | 2026-11-07-lib-03-1-games-3 | game.sicbo.icon-big | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 458 / out 1756 |
 | 2026-11-07T00:44:37.244Z | 2026-11-07-lib-03-1-games-3 | game.sicbo.icon-small | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 458 / out 1756 |
 | 2026-11-07T00:45:07.989Z | 2026-11-07-lib-03-1-games-3 | game.sicbo.icon-triple | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 458 / out 1756 |
+| 2026-11-07T00:45:37.573Z | 2026-11-07-lib-03-1-games-3 | game.sicbo.table-vip | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 438 / out 1372 |
+| 2026-11-07T00:46:01.926Z | 2026-11-07-lib-03-1-games-3 | game.slots.cabinet-frame | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 466 / out 1372 |
+| 2026-11-07T00:46:31.720Z | 2026-11-07-lib-03-1-games-3 | game.slots.spin-button | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 449 / out 1756 |
 
 ## Dự toán phần còn lại
 
-- 216 asset ở trạng thái PLANNED.
-- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$11.40**; cộng 30% dự phòng làm lại: **$14.82**.
-- Còn lại trong ngân sách đã duyệt: $7.02 → **cần nạp thêm khoảng $7.80** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.38.
-- Ước tính trần dùng để chặn chi tiêu (pricing.json): $21.60.
+- 213 asset ở trạng thái PLANNED.
+- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$11.26**; cộng 30% dự phòng làm lại: **$14.64**.
+- Còn lại trong ngân sách đã duyệt: $6.88 → **cần nạp thêm khoảng $7.75** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.38.
+- Ước tính trần dùng để chặn chi tiêu (pricing.json): $21.30.

@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 36 |
-| PLANNED | 216 |
+| NEEDS_REVIEW | 39 |
+| PLANNED | 213 |
 
 ## Theo nhóm
 
@@ -60,7 +60,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.sicbo.icon-big | Big (Tài) emblem | Sic Bo / Tài Xỉu | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.sicbo.icon-small | Small (Xỉu) emblem | Sic Bo / Tài Xỉu | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.sicbo.icon-triple | Triple emblem | Sic Bo / Tài Xỉu | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| game.sicbo.table-vip | VIP dice table felt | Sic Bo / Tài Xỉu | 1536x1024 | no | P2 |  | PLANNED | 0.10 |
+| game.sicbo.table-vip | VIP dice table felt | Sic Bo / Tài Xỉu | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.roulette.wheel-head | Roulette wheel head (no numbers) | Roulette | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | game.roulette.wheel-rim | Wheel bowl rim | Roulette | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.roulette.ball | Roulette ball | Roulette | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
@@ -97,8 +97,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.slots.symbol-crown | Slot symbol: crown | Slots | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | game.slots.symbol-scatter | Slot symbol: scatter | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.slots.symbol-gold-bar | Slot symbol: gold-bar | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.slots.cabinet-frame | Slot machine frame | Slots | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.slots.spin-button | Spin button | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.slots.cabinet-frame | Slot machine frame | Slots | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| game.slots.spin-button | Spin button | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## cardback
 

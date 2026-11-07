@@ -11,6 +11,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.sicbo.icon-big | NEEDS_REVIEW | OK |  |  | 0.461 | 0.004 | 1089.9 | 167 KB |
 | game.sicbo.icon-small | NEEDS_REVIEW | OK |  |  | 0.432 | 0 | 858.6 | 131 KB |
 | game.sicbo.icon-triple | NEEDS_REVIEW | OK |  |  | 0.472 | 0 | 820.2 | 128 KB |
+| game.sicbo.table-vip | NEEDS_REVIEW | OK |  |  | 1 | 1 | 287.8 | 139 KB |
 | game.roulette.wheel-head | USER_APPROVED | OK |  |  | 0.667 | 0 | 1228.1 | 142 KB |
 | game.roulette.wheel-rim | NEEDS_REVIEW | OK |  |  | 0.37 | 0 | 892.7 | 144 KB |
 | game.roulette.ball | NEEDS_REVIEW | OK |  |  | 0.34 | 0 | 34.1 | 32 KB |
@@ -37,6 +38,8 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.blackjack.action-insurance | NEEDS_REVIEW | OK |  |  | 0.451 | 0 | 643.1 | 110 KB |
 | game.blackjack.table-felt | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1328.7 | 118 KB |
 | game.slots.symbol-crown | USER_APPROVED | OK |  |  | 0.546 | 0 | 1369.2 | 178 KB |
+| game.slots.cabinet-frame | NEEDS_REVIEW | OK |  |  | 0.442 | 0 | 1644.8 | 146 KB |
+| game.slots.spin-button | NEEDS_REVIEW | OK |  |  | 0.518 | 0 | 549 | 111 KB |
 | cardback.classic | NEEDS_REVIEW | OK |  |  | 0.743 | 0 | 3417.5 | 166 KB |
 | cardback.royal-gold | USER_APPROVED | OK |  |  | 0.765 | 0 | 3005 | 206 KB |
 | cardback.royal-purple | USER_APPROVED | OK |  |  | 0.692 | 0 | 2166.4 | 154 KB |
