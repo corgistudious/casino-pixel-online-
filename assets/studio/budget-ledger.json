@@ -1,11 +1,12 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 5.85,
-  "spentActualUsd": 0.95678,
-  "images": 18,
+  "spentEstimatedUsd": 6.75,
+  "spentActualUsd": 1.123095,
+  "images": 21,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
-    "2026-11-06-02-sample-1-generate"
+    "2026-11-06-02-sample-1-generate",
+    "2026-11-07-01-sample-1-revisions"
   ],
   "entries": [
     {
@@ -475,6 +476,84 @@
         "total_tokens": 2241
       },
       "seconds": 32
+    },
+    {
+      "at": "2026-11-07T00:04:47.313Z",
+      "requestId": "2026-11-07-01-sample-1-revisions",
+      "assetId": "frame.seasonal.lunar-new-year",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05551,
+      "usage": {
+        "input_tokens": 566,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 566
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2322
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T00:05:15.893Z",
+      "requestId": "2026-11-07-01-sample-1-revisions",
+      "assetId": "game.roulette.wheel-head",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.055555,
+      "usage": {
+        "input_tokens": 575,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 575
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2331
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T00:05:43.746Z",
+      "requestId": "2026-11-07-01-sample-1-revisions",
+      "assetId": "vip.badge.vip-01",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.3,
+      "actualUsd": 0.05525,
+      "usage": {
+        "input_tokens": 514,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 514
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2270
+      },
+      "seconds": 28
     }
   ]
 }

@@ -602,10 +602,10 @@
       "priority": "P1",
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
-      "actualCostUsd": 0.055155,
-      "status": "NEEDS_REVISION",
+      "actualCostUsd": 0.055555,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 1,
+      "version": 2,
       "versions": [
         {
           "version": 1,
@@ -615,10 +615,19 @@
           "quality": "high",
           "createdAt": "2026-11-06T23:52:38.318Z",
           "validationOk": true
+        },
+        {
+          "version": 2,
+          "sourceFile": "assets/studio/generated/game.roulette.wheel-head/v2/source.png",
+          "optimizedFile": "assets/studio/generated/game.roulette.wheel-head/v2/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:05:16.190Z",
+          "validationOk": true
         }
       ],
-      "sourceFile": "assets/studio/generated/game.roulette.wheel-head/v1/source.png",
-      "optimizedFile": "assets/studio/generated/game.roulette.wheel-head/v1/optimized.webp",
+      "sourceFile": "assets/studio/generated/game.roulette.wheel-head/v2/source.png",
+      "optimizedFile": "assets/studio/generated/game.roulette.wheel-head/v2/optimized.webp",
       "validation": {
         "ok": true,
         "errors": [],
@@ -627,22 +636,22 @@
           "width": 1024,
           "height": 1024,
           "hasAlpha": true,
-          "coverage": 0.645,
+          "coverage": 0.663,
           "borderAlpha": 0,
-          "lumStd": 54.8,
+          "lumStd": 56.1,
           "bbox": {
-            "x": 0.046875,
-            "y": 0.046875,
-            "w": 0.90625,
-            "h": 0.90234375
+            "x": 0.0390625,
+            "y": 0.03515625,
+            "w": 0.921875,
+            "h": 0.9140625
           },
-          "sharpness": 1620.2,
-          "dhash": "396c928aaab2ec71"
+          "sharpness": 1249.4,
+          "dhash": "33f098cccce4e0b2"
         },
-        "checkedAt": "2026-11-06T23:52:38.318Z",
+        "checkedAt": "2026-11-07T00:05:16.190Z",
         "optimized": {
           "quality": 90,
-          "bytes": 213088
+          "bytes": 195738
         }
       },
       "review": {
@@ -658,17 +667,17 @@
         "at": "2026-11-06"
       },
       "usage": {
-        "input_tokens": 495,
+        "input_tokens": 575,
         "input_tokens_details": {
           "image_tokens": 0,
-          "text_tokens": 495
+          "text_tokens": 575
         },
         "output_tokens": 1756,
         "output_tokens_details": {
           "image_tokens": 1756,
           "text_tokens": 0
         },
-        "total_tokens": 2251
+        "total_tokens": 2331
       },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
@@ -2422,10 +2431,10 @@
       "priority": "P1",
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
-      "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVISION",
+      "actualCostUsd": 0.05525,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 1,
+      "version": 2,
       "versions": [
         {
           "version": 1,
@@ -2435,10 +2444,19 @@
           "quality": "high",
           "createdAt": "2026-11-06T23:54:40.963Z",
           "validationOk": true
+        },
+        {
+          "version": 2,
+          "sourceFile": "assets/studio/generated/vip.badge.vip-01/v2/source.png",
+          "optimizedFile": "assets/studio/generated/vip.badge.vip-01/v2/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:05:43.966Z",
+          "validationOk": true
         }
       ],
-      "sourceFile": "assets/studio/generated/vip.badge.vip-01/v1/source.png",
-      "optimizedFile": "assets/studio/generated/vip.badge.vip-01/v1/optimized.webp",
+      "sourceFile": "assets/studio/generated/vip.badge.vip-01/v2/source.png",
+      "optimizedFile": "assets/studio/generated/vip.badge.vip-01/v2/optimized.webp",
       "validation": {
         "ok": true,
         "errors": [],
@@ -2447,22 +2465,22 @@
           "width": 1024,
           "height": 1024,
           "hasAlpha": true,
-          "coverage": 0.464,
+          "coverage": 0.386,
           "borderAlpha": 0,
-          "lumStd": 56.2,
+          "lumStd": 46.1,
           "bbox": {
-            "x": 0.08984375,
-            "y": 0.0546875,
-            "w": 0.8203125,
-            "h": 0.88671875
+            "x": 0.16015625,
+            "y": 0.09375,
+            "w": 0.6796875,
+            "h": 0.8125
           },
-          "sharpness": 939.6,
-          "dhash": "ac9e1b4d5d190f90"
+          "sharpness": 345.4,
+          "dhash": "4c1b13133b3b5832"
         },
-        "checkedAt": "2026-11-06T23:54:40.963Z",
+        "checkedAt": "2026-11-07T00:05:43.966Z",
         "optimized": {
           "quality": 90,
-          "bytes": 140724
+          "bytes": 68484
         }
       },
       "review": {
@@ -2478,17 +2496,17 @@
         "at": "2026-11-06"
       },
       "usage": {
-        "input_tokens": 462,
+        "input_tokens": 514,
         "input_tokens_details": {
           "image_tokens": 0,
-          "text_tokens": 462
+          "text_tokens": 514
         },
         "output_tokens": 1756,
         "output_tokens_details": {
           "image_tokens": 1756,
           "text_tokens": 0
         },
-        "total_tokens": 2218
+        "total_tokens": 2270
       },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
@@ -3333,10 +3351,10 @@
       "priority": "P1",
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
-      "actualCostUsd": 0.05516,
-      "status": "NEEDS_REVISION",
+      "actualCostUsd": 0.05551,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 1,
+      "version": 2,
       "versions": [
         {
           "version": 1,
@@ -3346,37 +3364,44 @@
           "quality": "high",
           "createdAt": "2026-11-06T23:50:09.767Z",
           "validationOk": false
+        },
+        {
+          "version": 2,
+          "sourceFile": "assets/studio/generated/frame.seasonal.lunar-new-year/v2/source.png",
+          "optimizedFile": "assets/studio/generated/frame.seasonal.lunar-new-year/v2/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:04:47.618Z",
+          "validationOk": true
         }
       ],
-      "sourceFile": "assets/studio/generated/frame.seasonal.lunar-new-year/v1/source.png",
-      "optimizedFile": "assets/studio/generated/frame.seasonal.lunar-new-year/v1/optimized.webp",
+      "sourceFile": "assets/studio/generated/frame.seasonal.lunar-new-year/v2/source.png",
+      "optimizedFile": "assets/studio/generated/frame.seasonal.lunar-new-year/v2/optimized.webp",
       "validation": {
-        "ok": false,
-        "errors": [
-          "object touches the canvas edge (possibly cut off)"
-        ],
+        "ok": true,
+        "errors": [],
         "warnings": [],
         "metrics": {
           "width": 1024,
           "height": 1024,
           "hasAlpha": true,
-          "coverage": 0.326,
-          "borderAlpha": 0.014,
+          "coverage": 0.274,
+          "borderAlpha": 0,
           "lumStd": 60.1,
           "bbox": {
-            "x": 0.0234375,
-            "y": 0,
-            "w": 0.953125,
-            "h": 0.96875
+            "x": 0.0625,
+            "y": 0.02734375,
+            "w": 0.875,
+            "h": 0.91015625
           },
-          "centerAlpha": 0.037,
-          "sharpness": 1009.5,
-          "dhash": "4d8a16c0c52b338c"
+          "centerAlpha": 0.018,
+          "sharpness": 817.7,
+          "dhash": "8a176951af232bcc"
         },
-        "checkedAt": "2026-11-06T23:50:09.767Z",
+        "checkedAt": "2026-11-07T00:04:47.618Z",
         "optimized": {
           "quality": 90,
-          "bytes": 206684
+          "bytes": 167496
         }
       },
       "review": {
@@ -3392,17 +3417,17 @@
         "at": "2026-11-06"
       },
       "usage": {
-        "input_tokens": 496,
+        "input_tokens": 566,
         "input_tokens_details": {
           "image_tokens": 0,
-          "text_tokens": 496
+          "text_tokens": 566
         },
         "output_tokens": 1756,
         "output_tokens_details": {
           "image_tokens": 1756,
           "text_tokens": 0
         },
-        "total_tokens": 2252
+        "total_tokens": 2322
       },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
@@ -9672,5 +9697,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T00:03:48.440Z"
+  "updatedAt": "2026-11-07T00:05:43.966Z"
 }

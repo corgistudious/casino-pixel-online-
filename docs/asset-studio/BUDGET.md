@@ -1,10 +1,10 @@
 # Budget Tracking (generated)
 
 - Ngân sách đã duyệt: **$10**
-- Đã tính vào ngân sách: **$0.9568** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
-- Chi phí thật theo token usage × bảng giá đã xác minh: $0.9568; tổng ước tính trần: $5.85
-- Còn lại theo bộ đếm nội bộ: **$9.04**
-- Ảnh đã tạo: 18; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate
+- Đã tính vào ngân sách: **$1.1231** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
+- Chi phí thật theo token usage × bảng giá đã xác minh: $1.1231; tổng ước tính trần: $6.75
+- Còn lại theo bộ đếm nội bộ: **$8.88**
+- Ảnh đã tạo: 21; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
@@ -28,6 +28,9 @@
 | 2026-11-06T23:54:40.764Z | 2026-11-06-02-sample-1-generate | vip.badge.vip-01 | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.30 | in 462 / out 1756 |
 | 2026-11-06T23:55:11.139Z | 2026-11-06-02-sample-1-generate | vip.badge.vip-08 | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.30 | in 465 / out 1756 |
 | 2026-11-06T23:55:43.100Z | 2026-11-06-02-sample-1-generate | vip.badge.vip-15 | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.30 | in 485 / out 1756 |
+| 2026-11-07T00:04:47.313Z | 2026-11-07-01-sample-1-revisions | frame.seasonal.lunar-new-year | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.30 | in 566 / out 1756 |
+| 2026-11-07T00:05:15.893Z | 2026-11-07-01-sample-1-revisions | game.roulette.wheel-head | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.30 | in 575 / out 1756 |
+| 2026-11-07T00:05:43.746Z | 2026-11-07-01-sample-1-revisions | vip.badge.vip-01 | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.30 | in 514 / out 1756 |
 
 ## Dự toán phần còn lại
 

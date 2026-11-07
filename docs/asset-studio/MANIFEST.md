@@ -7,9 +7,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | Trạng thái | Số |
 |---|---|
 | EXISTING_APPROVED | 9 |
-| NEEDS_REVIEW | 17 |
+| USER_APPROVED | 13 |
 | PLANNED | 252 |
-| NEEDS_REVISION | 1 |
+| NEEDS_REVIEW | 5 |
 
 ## Theo nhóm
 
@@ -53,7 +53,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| game.taixiu.bowl-cover | Tài Xỉu bowl cover (top view) | Sic Bo / Tài Xỉu | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| game.taixiu.bowl-cover | Tài Xỉu bowl cover (top view) | Sic Bo / Tài Xỉu | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | game.sicbo.dice-plate | Porcelain dice plate | Sic Bo / Tài Xỉu | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.sicbo.dice-set | Premium dice (face 1–6 sheet) | Sic Bo / Tài Xỉu | 1536x1024 | yes | P2 |  | PLANNED | 0.45 |
 | game.sicbo.crystal-dome | Crystal shaker dome | Sic Bo / Tài Xỉu | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
@@ -67,7 +67,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.roulette.pointer | Result pointer | Roulette | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.roulette.marker | Betting marker (dolly) | Roulette | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.roulette.result-emblem | Result emblem | Roulette | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| game.poker.dealer-button | Dealer button (no letters) | Texas Hold'em Poker | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| game.poker.dealer-button | Dealer button (no letters) | Texas Hold'em Poker | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | game.poker.blind-small | Small blind marker | Texas Hold'em Poker | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.poker.blind-big | Big blind marker | Texas Hold'em Poker | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.poker.pot-pile | Pot chip pile | Texas Hold'em Poker | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
@@ -79,7 +79,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.cards.action-allin | All-in icon | Card games | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.lieng.reveal-fan | Three-card reveal fan | Liêng | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.xito.dealer-marker | Xì Tố dealer marker | Xì Tố | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| game.blackjack.card-shoe | Card shoe | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| game.blackjack.card-shoe | Card shoe | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | game.blackjack.result-emblem | Blackjack result emblem (no text) | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.blackjack.action-hit | Hit icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.blackjack.action-stand | Stand icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
@@ -94,7 +94,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.slots.symbol-lemon | Slot symbol: lemon | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.slots.symbol-clover | Slot symbol: clover | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.slots.symbol-wild | Slot symbol: wild | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| game.slots.symbol-crown | Slot symbol: crown | Slots | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| game.slots.symbol-crown | Slot symbol: crown | Slots | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | game.slots.symbol-scatter | Slot symbol: scatter | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.slots.symbol-gold-bar | Slot symbol: gold-bar | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | game.slots.cabinet-frame | Slot machine frame | Slots | 1536x1024 | yes | P2 |  | PLANNED | 0.45 |
@@ -126,14 +126,14 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | vip.badge.vip-05 | VIP 5 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-06 | VIP 6 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-07 | VIP 7 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| vip.badge.vip-08 | VIP 8 badge | VIP | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| vip.badge.vip-08 | VIP 8 badge | VIP | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | vip.badge.vip-09 | VIP 9 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-10 | VIP 10 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-11 | VIP 11 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-12 | VIP 12 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-13 | VIP 13 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | vip.badge.vip-14 | VIP 14 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| vip.badge.vip-15 | VIP 15 badge | VIP | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| vip.badge.vip-15 | VIP 15 badge | VIP | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 
 ## frame
 
@@ -142,11 +142,11 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | frame.vip.vip-05 | VIP 5 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.vip.vip-07 | VIP 7 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.vip.vip-10 | VIP 10 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| frame.vip.vip-15 | VIP 15 frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| frame.vip.vip-15 | VIP 15 frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | frame.seasonal.halloween | halloween frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.seasonal.christmas | christmas frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.seasonal.new-year | new-year frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| frame.seasonal.lunar-new-year | lunar-new-year frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVISION | 0.30 |
+| frame.seasonal.lunar-new-year | lunar-new-year frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
 | frame.seasonal.valentine | valentine frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.seasonal.easter | easter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.seasonal.summer | summer frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
@@ -162,7 +162,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | frame.tournament.grand-champion | Tournament grand-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.special.founder | founder frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.special.early-supporter | early-supporter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| frame.special.kol | kol frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| frame.special.kol | kol frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | frame.special.creator | creator frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.special.reviewer | reviewer frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | frame.special.collector | collector frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
@@ -191,7 +191,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|---|---|---|---|---|---|---|
 | bubble.default | Chat bubble: default | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.45 |
 | bubble.classic | Chat bubble: classic | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.45 |
-| bubble.gold | Chat bubble: gold | Chat | 1536x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.45 |
+| bubble.gold | Chat bubble: gold | Chat | 1536x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.45 |
 | bubble.diamond | Chat bubble: diamond | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.45 |
 | bubble.vip | Chat bubble: vip | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.45 |
 | bubble.royal | Chat bubble: royal | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.45 |
@@ -261,7 +261,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| bank.vault-premium | Bank: vault-premium | Bank | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| bank.vault-premium | Bank: vault-premium | Bank | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | bank.vault-open | Bank: vault-open | Bank | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | bank.money-bag | Bank: money-bag | Bank | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | bank.money-bag-vip | Bank: money-bag-vip | Bank | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
@@ -273,7 +273,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | chest.common | Chest: common | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | chest.rare | Chest: rare | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | chest.epic | Chest: epic | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| chest.legendary | Chest: legendary | Rewards | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| chest.legendary | Chest: legendary | Rewards | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | chest.limited | Chest: limited | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | chest.event | Chest: event | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 
@@ -282,7 +282,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | collectible.watch.classic | watch: classic | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| collectible.watch.luxury | watch: luxury | Collectibles / Gifts | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| collectible.watch.luxury | watch: luxury | Collectibles / Gifts | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | collectible.watch.gold | watch: gold | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | collectible.watch.diamond | watch: diamond | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | collectible.watch.limited | watch: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
@@ -312,7 +312,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | tournament.trophy | Tournament: trophy | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
-| tournament.trophy-champion | Tournament: trophy-champion | Tournament | 1024x1024 | yes | P1 | sample-1 | NEEDS_REVIEW | 0.30 |
+| tournament.trophy-champion | Tournament: trophy-champion | Tournament | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.30 |
 | tournament.medal | Tournament: medal | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | tournament.ticket | Tournament: ticket | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
 | tournament.banner | Tournament: banner | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.30 |
