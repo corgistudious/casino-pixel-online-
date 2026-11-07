@@ -138,7 +138,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | profile.accent-vip | NEEDS_REVIEW | OK |  |  | 0.229 | 0 | 583.6 | 103 KB |
 | profile.accent-limited | NEEDS_REVIEW | OK |  |  | 0.243 | 0 | 567.1 | 110 KB |
 | profile.accent-kol | NEEDS_REVIEW | OK |  |  | 0.272 | 0 | 586.2 | 111 KB |
+| fx.big-win | NEEDS_REVIEW | OK |  |  | 0.455 | 0 | 746.4 | 233 KB |
+| fx.champion-victory | NEEDS_REVIEW | OK |  |  | 0.422 | 0 | 1181.9 | 222 KB |
+| fx.bust | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 781.1 | 161 KB |
+| fx.fold | NEEDS_REVIEW | OK |  |  | 0.457 | 0 | 976.3 | 211 KB |
 | fx.all-in | NEEDS_REVIEW | OK |  |  | 0.427 | 0.001 | 1109.7 | 216 KB |
+| fx.chest-opening | NEEDS_REVIEW | OK |  |  | 0.423 | 0 | 552.8 | 193 KB |
 | bank.vault-premium | USER_APPROVED | OK |  |  | 0.609 | 0 | 1358.7 | 181 KB |
 | bank.vault-open | NEEDS_REVIEW | OK |  |  | 0.569 | 0 | 1398.4 | 181 KB |
 | bank.money-bag | NEEDS_REVIEW | OK |  |  | 0.543 | 0 | 806.2 | 193 KB |
