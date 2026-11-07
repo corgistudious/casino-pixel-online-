@@ -116,6 +116,10 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | avatar.collector | NEEDS_REVIEW | OK |  |  | 1 | 1 | 999.1 | 128 KB |
 | avatar.fantasy-dealer | NEEDS_REVIEW | OK |  |  | 1 | 1 | 884.3 | 115 KB |
 | bubble.gold | USER_APPROVED | OK |  |  | 0.441 | 0.001 | 478.1 | 39 KB |
+| profile.nameplate | NEEDS_REVIEW | OK |  |  | 0.173 | 0 | 361.3 | 64 KB |
+| profile.header | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1024.8 | 82 KB |
+| profile.background | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1176.9 | 132 KB |
+| profile.prestige-effect | NEEDS_REVIEW | OK |  |  | 0.476 | 0 | 1147.3 | 181 KB |
 | profile.achievement-showcase | NEEDS_REVIEW | OK |  |  | 0.369 | 0.004 | 709.5 | 113 KB |
 | profile.accent-vip | NEEDS_REVIEW | OK |  |  | 0.229 | 0 | 583.6 | 103 KB |
 | profile.accent-limited | NEEDS_REVIEW | OK |  |  | 0.243 | 0 | 567.1 | 110 KB |
