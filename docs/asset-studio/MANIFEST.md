@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 177 |
-| PLANNED | 75 |
+| NEEDS_REVIEW | 182 |
+| PLANNED | 70 |
 
 ## Theo nhóm
 
@@ -311,12 +311,12 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| tournament.trophy | Tournament: trophy | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| tournament.trophy | Tournament: trophy | Tournament | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | tournament.trophy-champion | Tournament: trophy-champion | Tournament | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
-| tournament.medal | Tournament: medal | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| tournament.ticket | Tournament: ticket | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| tournament.banner | Tournament: banner | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| tournament.badge | Tournament: badge | Tournament | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| tournament.medal | Tournament: medal | Tournament | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| tournament.ticket | Tournament: ticket | Tournament | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| tournament.banner | Tournament: banner | Tournament | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| tournament.badge | Tournament: badge | Tournament | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## reward
 

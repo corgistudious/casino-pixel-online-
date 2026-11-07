@@ -159,7 +159,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.phone.luxury | NEEDS_REVIEW | OK |  |  | 0.431 | 0 | 1224.4 | 143 KB |
 | collectible.phone.gold | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 780.6 | 92 KB |
 | collectible.phone.limited | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 1160.5 | 140 KB |
+| tournament.trophy | NEEDS_REVIEW | OK |  |  | 0.366 | 0 | 1080.6 | 166 KB |
 | tournament.trophy-champion | USER_APPROVED | OK |  |  | 0.318 | 0.014 | 1139 | 171 KB |
+| tournament.medal | NEEDS_REVIEW | OK |  |  | 0.44 | 0 | 906.8 | 152 KB |
+| tournament.ticket | NEEDS_REVIEW | OK |  |  | 0.402 | 0 | 995.2 | 140 KB |
+| tournament.banner | NEEDS_REVIEW | OK |  |  | 0.448 | 0 | 1007.1 | 145 KB |
+| tournament.badge | NEEDS_REVIEW | OK |  |  | 0.505 | 0 | 1223.4 | 180 KB |
 | event.halloween.icon | NEEDS_REVIEW | OK |  |  | 0.504 | 0 | 683.6 | 141 KB |
 | event.halloween.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 776.6 | 84 KB |
 | event.halloween.chest | NEEDS_REVIEW | OK |  |  | 0.521 | 0 | 1302.1 | 173 KB |

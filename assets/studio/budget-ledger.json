@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 25.05,
-  "spentActualUsd": 10.90735,
-  "images": 204,
+  "spentEstimatedUsd": 25.55,
+  "spentActualUsd": 11.181905,
+  "images": 209,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -5327,6 +5327,136 @@
         "total_tokens": 2204
       },
       "seconds": 30
+    },
+    {
+      "at": "2026-11-07T03:05:24.138Z",
+      "requestId": "2026-11-07-lib-15-6-events-tournament-achievements-4",
+      "assetId": "tournament.badge",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054895,
+      "usage": {
+        "input_tokens": 443,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 443
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2199
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T03:05:57.084Z",
+      "requestId": "2026-11-07-lib-15-6-events-tournament-achievements-4",
+      "assetId": "tournament.banner",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054925,
+      "usage": {
+        "input_tokens": 449,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 449
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2205
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-07T03:06:30.318Z",
+      "requestId": "2026-11-07-lib-15-6-events-tournament-achievements-4",
+      "assetId": "tournament.medal",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054905,
+      "usage": {
+        "input_tokens": 445,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 445
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2201
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-07T03:07:02.754Z",
+      "requestId": "2026-11-07-lib-15-6-events-tournament-achievements-4",
+      "assetId": "tournament.ticket",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05493,
+      "usage": {
+        "input_tokens": 450,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 450
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2206
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T03:07:34.427Z",
+      "requestId": "2026-11-07-lib-15-6-events-tournament-achievements-4",
+      "assetId": "tournament.trophy",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.0549,
+      "usage": {
+        "input_tokens": 444,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 444
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2200
+      },
+      "seconds": 31
     }
   ],
   "approvals": [
