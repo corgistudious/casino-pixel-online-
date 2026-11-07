@@ -79,7 +79,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.vip.vip-07 | NEEDS_REVIEW | OK |  |  | 0.21 | 0.002 | 1028 | 156 KB |
 | frame.vip.vip-10 | NEEDS_REVIEW | OK |  |  | 0.274 | 0.005 | 1137.2 | 164 KB |
 | frame.vip.vip-15 | USER_APPROVED | OK |  |  | 0.373 | 0.028 | 1550.9 | 245 KB |
+| frame.seasonal.halloween | NEEDS_REVIEW | OK |  |  | 0.273 | 0.006 | 1031.7 | 169 KB |
+| frame.seasonal.christmas | NEEDS_REVIEW | OK |  |  | 0.327 | 0.006 | 1276.2 | 180 KB |
 | frame.seasonal.lunar-new-year | USER_APPROVED | OK |  |  | 0.274 | 0 | 817.7 | 164 KB |
+| frame.seasonal.easter | NEEDS_REVIEW | OK |  |  | 0.345 | 0.027 | 999.9 | 178 KB |
+| frame.seasonal.anniversary | NEEDS_REVIEW | OK |  |  | 0.289 | 0.007 | 889.2 | 166 KB |
 | frame.special.kol | USER_APPROVED | OK |  |  | 0.271 | 0.002 | 974.5 | 153 KB |
 | avatar.default | NEEDS_REVIEW | OK |  |  | 1 | 1 | 810.3 | 124 KB |
 | avatar.premium | NEEDS_REVIEW | OK |  |  | 1 | 1 | 916.2 | 124 KB |

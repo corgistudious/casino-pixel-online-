@@ -1,10 +1,10 @@
 # Budget Tracking (generated)
 
 - Ngân sách đã duyệt: **$10**
-- Đã tính vào ngân sách: **$5.0405** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
-- Chi phí thật theo token usage × bảng giá đã xác minh: $5.0405; tổng ước tính trần: $14.15
-- Còn lại theo bộ đếm nội bộ: **$4.96**
-- Ảnh đã tạo: 95; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip
+- Đã tính vào ngân sách: **$5.2609** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
+- Chi phí thật theo token usage × bảng giá đã xác minh: $5.2609; tổng ước tính trần: $14.55
+- Còn lại theo bộ đếm nội bộ: **$4.74**
+- Ảnh đã tạo: 99; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip, 2026-11-07-lib-06-3-frames-profile-1
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
@@ -105,10 +105,14 @@
 | 2026-11-07T01:04:24.322Z | 2026-11-07-lib-06-3-frames-profile-1 | avatar.seasonal | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 430 / out 1756 |
 | 2026-11-07T01:04:53.959Z | 2026-11-07-lib-06-3-frames-profile-1 | avatar.tournament | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 430 / out 1756 |
 | 2026-11-07T01:05:25.828Z | 2026-11-07-lib-06-3-frames-profile-1 | avatar.vip | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 432 / out 1756 |
+| 2026-11-07T01:06:05.079Z | 2026-11-07-lib-06-3-frames-profile-1 | frame.seasonal.anniversary | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 485 / out 1756 |
+| 2026-11-07T01:06:35.819Z | 2026-11-07-lib-06-3-frames-profile-1 | frame.seasonal.christmas | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 485 / out 1756 |
+| 2026-11-07T01:07:04.135Z | 2026-11-07-lib-06-3-frames-profile-1 | frame.seasonal.easter | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 481 / out 1756 |
+| 2026-11-07T01:07:34.740Z | 2026-11-07-lib-06-3-frames-profile-1 | frame.seasonal.halloween | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 480 / out 1756 |
 
 ## Dự toán phần còn lại
 
-- 178 asset ở trạng thái PLANNED.
-- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$9.33**; cộng 30% dự phòng làm lại: **$12.13**.
-- Còn lại trong ngân sách đã duyệt: $4.96 → **cần nạp thêm khoảng $7.17** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.37.
-- Ước tính trần dùng để chặn chi tiêu (pricing.json): $17.80.
+- 174 asset ở trạng thái PLANNED.
+- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$9.11**; cộng 30% dự phòng làm lại: **$11.84**.
+- Còn lại trong ngân sách đã duyệt: $4.74 → **cần nạp thêm khoảng $7.10** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.37.
+- Ước tính trần dùng để chặn chi tiêu (pricing.json): $17.40.
