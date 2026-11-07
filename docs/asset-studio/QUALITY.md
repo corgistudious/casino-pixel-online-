@@ -136,7 +136,9 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.car.hypercar | NEEDS_REVIEW | OK |  |  | 0.367 | 0.002 | 1187.5 | 149 KB |
 | collectible.car.luxury | NEEDS_REVIEW | OK |  |  | 0.391 | 0.011 | 1642.1 | 151 KB |
 | collectible.car.limited | NEEDS_REVIEW | OK |  |  | 0.401 | 0.005 | 1375.1 | 147 KB |
+| collectible.yacht.small | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 865.3 | 132 KB |
 | collectible.yacht.luxury | NEEDS_REVIEW | OK |  |  | 0.41 | 0.007 | 1130.1 | 155 KB |
+| collectible.yacht.super | NEEDS_REVIEW | OK |  |  | 0.353 | 0.002 | 1074.8 | 137 KB |
 | collectible.yacht.royal | NEEDS_REVIEW | OK |  |  | 0.427 | 0 | 1146.8 | 157 KB |
 | collectible.yacht.limited | NEEDS_REVIEW | OK |  |  | 0.444 | 0 | 1202.1 | 157 KB |
 | collectible.property.villa | NEEDS_REVIEW | OK |  |  | 0.521 | 0 | 1178.6 | 246 KB |

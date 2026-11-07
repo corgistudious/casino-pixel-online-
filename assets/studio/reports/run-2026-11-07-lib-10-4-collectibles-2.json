@@ -1,0 +1,172 @@
+{
+  "requestId": "2026-11-07-lib-10-4-collectibles-2",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.2,
+  "remainingBeforeUsd": 2.5618,
+  "runCapUsd": 1.2,
+  "planned": [
+    {
+      "id": "collectible.property.mansion",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.property.royal-estate",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.property.villa",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.watch.classic",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.watch.diamond",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.watch.gold",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.watch.limited",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.yacht.limited",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.yacht.luxury",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.yacht.royal",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.yacht.small",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.yacht.super",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "collectible.property.mansion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.property.royal-estate",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.property.villa",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.watch.classic",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.watch.diamond",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.watch.gold",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.watch.limited",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.yacht.limited",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.yacht.luxury",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.yacht.royal",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.yacht.small",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.yacht.super",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T01:28:46.356Z",
+  "plannedEstimateUsd": 1.2,
+  "finishedAt": "2026-11-07T01:35:25.085Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 8.098015,
+    "spentEstimatedUsd": 19.75,
+    "spentActualUsd": 8.098015,
+    "remainingUsd": 1.902,
+    "images": 151
+  }
+}
