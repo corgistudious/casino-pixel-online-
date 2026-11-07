@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 211 |
+| NEEDS_REVIEW | 216 |
 | NEEDS_REVISION | 3 |
-| PLANNED | 38 |
+| PLANNED | 33 |
 
 ## Theo nhóm
 
@@ -210,7 +210,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| title.champion | Title plate: champion | Profile | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
+| title.champion | Title plate: champion | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.tournament-winner | Title plate: tournament-winner | Profile | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
 | title.high-roller | Title plate: high-roller | Profile | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
 | title.collector | Title plate: collector | Profile | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
@@ -247,15 +247,15 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | fx.mega-win | Effect: mega-win | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.jackpot | Effect: jackpot | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.perfect-win | Effect: perfect-win | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| fx.tournament-victory | Effect: tournament-victory | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| fx.tournament-victory | Effect: tournament-victory | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.champion-victory | Effect: champion-victory | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| fx.vip-victory | Effect: vip-victory | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| fx.vip-victory | Effect: vip-victory | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.normal-lose | Effect: normal-lose | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.bust | Effect: bust | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| fx.push | Effect: push | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| fx.push | Effect: push | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.fold | Effect: fold | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.all-in | Effect: all-in | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| fx.reward-reveal | Effect: reward-reveal | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| fx.reward-reveal | Effect: reward-reveal | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.chest-opening | Effect: chest-opening | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## bank

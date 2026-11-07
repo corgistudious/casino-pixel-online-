@@ -130,6 +130,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | bubble.christmas | NEEDS_REVIEW | OK |  |  | 0.371 | 0.031 | 470.9 | 57 KB |
 | bubble.lunar-new-year | NEEDS_REVIEW | OK |  |  | 0.447 | 0.024 | 338.9 | 46 KB |
 | bubble.anniversary | NEEDS_REVIEW | OK |  |  | 0.427 | 0.018 | 496.9 | 56 KB |
+| title.champion | NEEDS_REVIEW | OK |  |  | 0.3 | 0.028 | 883.2 | 91 KB |
 | profile.nameplate | NEEDS_REVIEW | OK |  |  | 0.173 | 0 | 361.3 | 64 KB |
 | profile.header | NEEDS_REVIEW | OK |  |  | 1 | 1 | 965.6 | 89 KB |
 | profile.background | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1176.9 | 132 KB |
@@ -143,11 +144,15 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | fx.mega-win | NEEDS_REVIEW | OK |  |  | 0.455 | 0 | 971.8 | 249 KB |
 | fx.jackpot | NEEDS_REVIEW | OK |  |  | 0.473 | 0 | 1270.3 | 251 KB |
 | fx.perfect-win | NEEDS_REVIEW | OK |  |  | 0.408 | 0 | 848.9 | 231 KB |
+| fx.tournament-victory | NEEDS_REVIEW | OK |  |  | 0.45 | 0 | 914 | 247 KB |
 | fx.champion-victory | NEEDS_REVIEW | OK |  |  | 0.422 | 0 | 1181.9 | 222 KB |
+| fx.vip-victory | NEEDS_REVIEW | OK |  |  | 0.434 | 0 | 1168.9 | 217 KB |
 | fx.normal-lose | NEEDS_REVIEW | OK |  |  | 0.308 | 0 | 48.8 | 108 KB |
 | fx.bust | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 781.1 | 161 KB |
+| fx.push | NEEDS_REVIEW | OK |  |  | 0.337 | 0 | 731.9 | 113 KB |
 | fx.fold | NEEDS_REVIEW | OK |  |  | 0.457 | 0 | 976.3 | 211 KB |
 | fx.all-in | NEEDS_REVIEW | OK |  |  | 0.427 | 0.001 | 1109.7 | 216 KB |
+| fx.reward-reveal | NEEDS_REVIEW | OK |  |  | 0.343 | 0.003 | 252 | 176 KB |
 | fx.chest-opening | NEEDS_REVIEW | OK |  |  | 0.423 | 0 | 552.8 | 193 KB |
 | bank.vault-premium | USER_APPROVED | OK |  |  | 0.609 | 0 | 1358.7 | 181 KB |
 | bank.vault-open | NEEDS_REVIEW | OK |  |  | 0.569 | 0 | 1398.4 | 181 KB |
