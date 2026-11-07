@@ -391,7 +391,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055035,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -438,7 +438,12 @@
           "bytes": 133170
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 471,
@@ -474,7 +479,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043635,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -521,7 +526,12 @@
           "bytes": 112860
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 495,
@@ -557,7 +567,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05501,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -604,7 +614,12 @@
           "bytes": 190872
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 466,
@@ -640,7 +655,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -687,7 +702,12 @@
           "bytes": 170800
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -723,7 +743,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -770,7 +790,12 @@
           "bytes": 134280
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -806,7 +831,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -853,7 +878,12 @@
           "bytes": 130674
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -889,7 +919,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04335,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -931,7 +961,12 @@
           "bytes": 142570
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 438,
@@ -1080,7 +1115,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05496,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1127,7 +1162,12 @@
           "bytes": 147172
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 456,
@@ -1163,7 +1203,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1210,7 +1250,12 @@
           "bytes": 32374
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 434,
@@ -1246,7 +1291,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054885,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1293,7 +1338,12 @@
           "bytes": 57436
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 441,
@@ -1329,7 +1379,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054915,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1376,7 +1426,12 @@
           "bytes": 110644
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 447,
@@ -1412,7 +1467,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054955,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1459,7 +1514,12 @@
           "bytes": 144780
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 455,
@@ -1588,7 +1648,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1635,7 +1695,12 @@
           "bytes": 107408
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -1671,7 +1736,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1718,7 +1783,12 @@
           "bytes": 123712
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -1754,7 +1824,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054985,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1801,7 +1871,12 @@
           "bytes": 139512
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 461,
@@ -1837,7 +1912,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043435,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1879,7 +1954,12 @@
           "bytes": 95600
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 455,
@@ -1915,7 +1995,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1962,7 +2042,12 @@
           "bytes": 105414
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -1998,7 +2083,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05488,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2045,7 +2130,12 @@
           "bytes": 137460
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 440,
@@ -2081,7 +2171,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05488,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2128,7 +2218,12 @@
           "bytes": 164248
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 440,
@@ -2164,7 +2259,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05488,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2211,7 +2306,12 @@
           "bytes": 130142
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 440,
@@ -2247,7 +2347,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054885,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2294,7 +2394,12 @@
           "bytes": 138984
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 441,
@@ -2330,7 +2435,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05495,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2377,7 +2482,12 @@
           "bytes": 187026
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 454,
@@ -2413,7 +2523,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054945,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2460,7 +2570,12 @@
           "bytes": 151578
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 453,
@@ -2589,7 +2704,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05506,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2636,7 +2751,12 @@
           "bytes": 127966
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 476,
@@ -2672,7 +2792,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05496,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2719,7 +2839,12 @@
           "bytes": 123136
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 456,
@@ -2755,7 +2880,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054965,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2802,7 +2927,12 @@
           "bytes": 130888
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 457,
@@ -2838,7 +2968,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05498,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2885,7 +3015,12 @@
           "bytes": 132658
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 460,
@@ -2921,7 +3056,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05495,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2968,7 +3103,12 @@
           "bytes": 116062
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 454,
@@ -3004,7 +3144,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05494,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3051,7 +3191,12 @@
           "bytes": 112626
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 452,
@@ -3087,7 +3232,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043775,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -3139,10 +3284,10 @@
         }
       },
       "review": {
-        "decision": "revise",
-        "note": "Owner: redo (see QA note)",
-        "at": "2026-11-07T02:52:58.050Z",
-        "by": "owner (chat 2026-11-07: 'làm lại 6 asset')"
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
       },
       "qa": {
         "verdict": "recommend-revise",
@@ -3185,7 +3330,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054945,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3232,7 +3377,12 @@
           "bytes": 114848
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 453,
@@ -3268,7 +3418,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05489,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3315,7 +3465,12 @@
           "bytes": 101276
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 442,
@@ -3351,7 +3506,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05488,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3398,7 +3553,12 @@
           "bytes": 128514
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 440,
@@ -3434,7 +3594,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05488,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3481,7 +3641,12 @@
           "bytes": 116384
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 440,
@@ -3517,7 +3682,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054865,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3564,7 +3729,12 @@
           "bytes": 102756
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 437,
@@ -3600,7 +3770,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05491,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3647,7 +3817,12 @@
           "bytes": 160644
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 446,
@@ -3683,7 +3858,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3730,7 +3905,12 @@
           "bytes": 130640
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -3859,7 +4039,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054935,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3906,7 +4086,12 @@
           "bytes": 176748
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 451,
@@ -3942,7 +4127,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054885,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3989,7 +4174,12 @@
           "bytes": 95420
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 441,
@@ -4025,7 +4215,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04349,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4072,7 +4262,12 @@
           "bytes": 149376
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 466,
@@ -4108,7 +4303,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4155,7 +4350,12 @@
           "bytes": 113834
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -4191,7 +4391,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043585,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4238,7 +4438,12 @@
           "bytes": 170150
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 485,
@@ -4460,7 +4665,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043585,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4507,7 +4712,12 @@
           "bytes": 219432
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 485,
@@ -4543,7 +4753,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04359,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4590,7 +4800,12 @@
           "bytes": 165810
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 486,
@@ -4626,7 +4841,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04356,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4673,7 +4888,12 @@
           "bytes": 147074
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 480,
@@ -4709,7 +4929,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043565,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4756,7 +4976,12 @@
           "bytes": 153394
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 481,
@@ -4792,7 +5017,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04356,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4839,7 +5064,12 @@
           "bytes": 162384
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 480,
@@ -4875,7 +5105,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04359,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4922,7 +5152,12 @@
           "bytes": 191530
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 486,
@@ -4958,7 +5193,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043575,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5005,7 +5240,12 @@
           "bytes": 187052
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 483,
@@ -5144,7 +5384,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05498,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5191,7 +5431,12 @@
           "bytes": 113826
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 460,
@@ -5227,7 +5472,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5274,7 +5519,12 @@
           "bytes": 168976
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -5310,7 +5560,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5357,7 +5607,12 @@
           "bytes": 164184
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 464,
@@ -5393,7 +5648,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05501,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5440,7 +5695,12 @@
           "bytes": 134880
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 466,
@@ -5476,7 +5736,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5523,7 +5783,12 @@
           "bytes": 250202
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -5559,7 +5824,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05502,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5606,7 +5871,12 @@
           "bytes": 152494
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 468,
@@ -5735,7 +6005,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054995,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5782,7 +6052,12 @@
           "bytes": 186104
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 463,
@@ -5818,7 +6093,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05501,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5865,7 +6140,12 @@
           "bytes": 203314
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 466,
@@ -5901,7 +6181,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -5948,7 +6228,12 @@
           "bytes": 170094
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 464,
@@ -5984,7 +6269,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054995,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6031,7 +6316,12 @@
           "bytes": 210768
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 463,
@@ -6067,7 +6357,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055025,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6114,7 +6404,12 @@
           "bytes": 246574
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 469,
@@ -6150,7 +6445,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05504,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6197,7 +6492,12 @@
           "bytes": 279218
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 472,
@@ -6326,7 +6626,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055135,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6374,7 +6674,12 @@
           "bytes": 157850
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 491,
@@ -6410,7 +6715,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055115,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6458,7 +6763,12 @@
           "bytes": 159398
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 487,
@@ -6494,7 +6804,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055145,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6542,7 +6852,12 @@
           "bytes": 168004
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 493,
@@ -6672,7 +6987,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05508,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6720,7 +7035,12 @@
           "bytes": 172800
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 480,
@@ -6756,7 +7076,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055105,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6804,7 +7124,12 @@
           "bytes": 183810
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 485,
@@ -6840,7 +7165,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05509,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6888,7 +7213,12 @@
           "bytes": 175134
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 482,
@@ -7028,7 +7358,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05509,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7076,7 +7406,12 @@
           "bytes": 179238
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 482,
@@ -7112,7 +7447,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055085,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7160,7 +7495,12 @@
           "bytes": 182638
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 481,
@@ -7196,7 +7536,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055075,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7244,7 +7584,12 @@
           "bytes": 171258
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 479,
@@ -7280,7 +7625,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05507,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7328,7 +7673,12 @@
           "bytes": 193314
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 478,
@@ -7364,7 +7714,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055105,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7412,7 +7762,12 @@
           "bytes": 170198
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 485,
@@ -7448,7 +7803,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05508,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7496,7 +7851,12 @@
           "bytes": 144906
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 480,
@@ -7532,7 +7892,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05509,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7580,7 +7940,12 @@
           "bytes": 176242
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 482,
@@ -7616,7 +7981,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055105,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7664,7 +8029,12 @@
           "bytes": 162534
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 485,
@@ -7700,7 +8070,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055105,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7748,7 +8118,12 @@
           "bytes": 176282
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 485,
@@ -7784,7 +8159,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055095,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7832,7 +8207,12 @@
           "bytes": 170656
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 483,
@@ -7868,7 +8248,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.0551,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7916,7 +8296,12 @@
           "bytes": 178396
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 484,
@@ -7952,7 +8337,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05533,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -8010,10 +8395,10 @@
         }
       },
       "review": {
-        "decision": "revise",
-        "note": "Owner: redo (see QA note)",
-        "at": "2026-11-07T02:52:58.500Z",
-        "by": "owner (chat 2026-11-07: 'làm lại 6 asset')"
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
       },
       "qa": {
         "verdict": "recommend-revise",
@@ -8056,7 +8441,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05534,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -8114,10 +8499,10 @@
         }
       },
       "review": {
-        "decision": "revise",
-        "note": "Owner: redo (see QA note)",
-        "at": "2026-11-07T02:52:58.707Z",
-        "by": "owner (chat 2026-11-07: 'làm lại 6 asset')"
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
       },
       "qa": {
         "verdict": "recommend-revise",
@@ -8160,7 +8545,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055075,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -8208,7 +8593,12 @@
           "bytes": 146152
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 479,
@@ -8244,7 +8634,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055095,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -8292,7 +8682,12 @@
           "bytes": 160480
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 483,
@@ -8422,7 +8817,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055095,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -8470,7 +8865,12 @@
           "bytes": 155724
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 483,
@@ -8506,7 +8906,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05508,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -8554,7 +8954,12 @@
           "bytes": 158666
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 480,
@@ -8590,7 +8995,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05507,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -8638,7 +9043,12 @@
           "bytes": 151382
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 478,
@@ -8674,7 +9084,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055105,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -8722,7 +9132,12 @@
           "bytes": 161474
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 485,
@@ -8758,7 +9173,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055085,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -8806,7 +9221,12 @@
           "bytes": 150318
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 481,
@@ -8842,7 +9262,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05508,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -8890,7 +9310,12 @@
           "bytes": 198054
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 480,
@@ -8926,7 +9351,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054845,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -8982,7 +9407,12 @@
           "bytes": 124728
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9025,7 +9455,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054845,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9081,7 +9511,12 @@
           "bytes": 125364
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9124,7 +9559,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05483,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9180,7 +9615,12 @@
           "bytes": 135312
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9223,7 +9663,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05484,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9279,7 +9719,12 @@
           "bytes": 131892
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9322,7 +9767,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05482,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9378,7 +9823,12 @@
           "bytes": 109798
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9421,7 +9871,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05483,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9477,7 +9927,12 @@
           "bytes": 116086
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9520,7 +9975,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05483,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9576,7 +10031,12 @@
           "bytes": 120764
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9619,7 +10079,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054825,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9675,7 +10135,12 @@
           "bytes": 120048
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9718,7 +10183,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05483,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9774,7 +10239,12 @@
           "bytes": 130824
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9817,7 +10287,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054895,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9873,7 +10343,12 @@
           "bytes": 118944
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Round mascot badge; white corners removed by circle mask (v2 = v1 artwork, real alpha outside the circle).",
@@ -9916,7 +10391,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04366,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -9972,7 +10447,12 @@
           "bytes": 41054
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 500,
@@ -10009,7 +10489,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04365,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10056,7 +10536,12 @@
           "bytes": 40998
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 498,
@@ -10185,7 +10670,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043655,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10232,7 +10717,12 @@
           "bytes": 52226
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 499,
@@ -10268,7 +10758,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043655,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10315,7 +10805,12 @@
           "bytes": 50598
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 499,
@@ -10351,7 +10846,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04365,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -10407,7 +10902,12 @@
           "bytes": 44624
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 498,
@@ -10444,7 +10944,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04366,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10491,7 +10991,12 @@
           "bytes": 48054
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 500,
@@ -10527,7 +11032,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04364,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -10583,7 +11088,12 @@
           "bytes": 45548
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 496,
@@ -10620,7 +11130,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043645,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10667,7 +11177,12 @@
           "bytes": 53280
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 497,
@@ -10703,7 +11218,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04365,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10750,7 +11265,12 @@
           "bytes": 57256
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 498,
@@ -10786,7 +11306,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043655,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10833,7 +11353,12 @@
           "bytes": 56244
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 499,
@@ -10869,7 +11394,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043645,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10916,7 +11441,12 @@
           "bytes": 55392
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 497,
@@ -10952,7 +11482,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043645,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -10999,7 +11529,12 @@
           "bytes": 58038
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 497,
@@ -11035,7 +11570,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04365,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11082,7 +11617,12 @@
           "bytes": 46978
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 498,
@@ -11118,7 +11658,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043635,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11165,7 +11705,12 @@
           "bytes": 57348
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 495,
@@ -11201,7 +11746,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043475,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11248,7 +11793,12 @@
           "bytes": 93272
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 463,
@@ -11284,7 +11834,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04349,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11331,7 +11881,12 @@
           "bytes": 113394
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 466,
@@ -11367,7 +11922,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11414,7 +11969,12 @@
           "bytes": 89880
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 465,
@@ -11450,7 +12010,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04347,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -11506,7 +12066,12 @@
           "bytes": 74514
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -11543,7 +12108,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11590,7 +12155,12 @@
           "bytes": 77130
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 465,
@@ -11626,7 +12196,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04349,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11673,7 +12243,12 @@
           "bytes": 97698
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 466,
@@ -11709,7 +12284,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11756,7 +12331,12 @@
           "bytes": 86048
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 465,
@@ -11792,7 +12372,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043475,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -11839,7 +12419,12 @@
           "bytes": 71630
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 463,
@@ -11875,7 +12460,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04347,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -11931,7 +12516,12 @@
           "bytes": 76156
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -11968,7 +12558,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04347,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12015,7 +12605,12 @@
           "bytes": 82206
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -12051,7 +12646,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04347,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12098,7 +12693,12 @@
           "bytes": 66680
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -12134,7 +12734,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043475,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -12190,7 +12790,12 @@
           "bytes": 83250
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 463,
@@ -12227,7 +12832,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12274,7 +12879,12 @@
           "bytes": 73610
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 465,
@@ -12310,7 +12920,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12357,7 +12967,12 @@
           "bytes": 100196
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 465,
@@ -12393,7 +13008,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054865,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12440,7 +13055,12 @@
           "bytes": 65214
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 437,
@@ -12476,7 +13096,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043585,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -12528,10 +13148,10 @@
         }
       },
       "review": {
-        "decision": "revise",
-        "note": "Owner: redo (see QA note)",
-        "at": "2026-11-07T02:52:58.288Z",
-        "by": "owner (chat 2026-11-07: 'làm lại 6 asset')"
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
       },
       "qa": {
         "verdict": "recommend-revise",
@@ -12574,7 +13194,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043265,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12616,7 +13236,12 @@
           "bytes": 135650
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 421,
@@ -12652,7 +13277,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12699,7 +13324,12 @@
           "bytes": 185332
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 434,
@@ -12735,7 +13365,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05488,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12782,7 +13412,12 @@
           "bytes": 115604
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 440,
@@ -12818,7 +13453,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054865,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12865,7 +13500,12 @@
           "bytes": 105252
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 437,
@@ -12901,7 +13541,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054865,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -12948,7 +13588,12 @@
           "bytes": 112636
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 437,
@@ -12984,7 +13629,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054865,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13031,7 +13676,12 @@
           "bytes": 113634
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 437,
@@ -13067,7 +13717,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05498,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13114,7 +13764,12 @@
           "bytes": 207398
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 460,
@@ -13150,7 +13805,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05498,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13197,7 +13852,12 @@
           "bytes": 239062
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 460,
@@ -13233,7 +13893,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054985,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13280,7 +13940,12 @@
           "bytes": 254576
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 461,
@@ -13316,7 +13981,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13363,7 +14028,12 @@
           "bytes": 256844
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 464,
@@ -13399,7 +14069,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054965,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13446,7 +14116,12 @@
           "bytes": 236730
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 457,
@@ -13482,7 +14157,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13529,7 +14204,12 @@
           "bytes": 253292
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -13565,7 +14245,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13612,7 +14292,12 @@
           "bytes": 227698
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -13648,7 +14333,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05502,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13695,7 +14380,12 @@
           "bytes": 221866
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 468,
@@ -13731,7 +14421,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054985,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13778,7 +14468,12 @@
           "bytes": 110386
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 461,
@@ -13814,7 +14509,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05498,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13861,7 +14556,12 @@
           "bytes": 165172
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 460,
@@ -13897,7 +14597,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -13944,7 +14644,12 @@
           "bytes": 116078
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -13980,7 +14685,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054965,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14027,7 +14732,12 @@
           "bytes": 216418
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 457,
@@ -14063,7 +14773,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055005,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14110,7 +14820,12 @@
           "bytes": 221036
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 465,
@@ -14146,7 +14861,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14193,7 +14908,12 @@
           "bytes": 180370
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -14229,7 +14949,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05501,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14276,7 +14996,12 @@
           "bytes": 197222
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 466,
@@ -14405,7 +15130,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055035,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14452,7 +15177,12 @@
           "bytes": 185776
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 471,
@@ -14488,7 +15218,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14535,7 +15265,12 @@
           "bytes": 197562
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 464,
@@ -14571,7 +15306,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05503,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14618,7 +15353,12 @@
           "bytes": 196992
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 470,
@@ -14654,7 +15394,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05491,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14701,7 +15441,12 @@
           "bytes": 146938
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 446,
@@ -14737,7 +15482,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05491,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14784,7 +15529,12 @@
           "bytes": 153376
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 446,
@@ -14820,7 +15570,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -14867,7 +15617,12 @@
           "bytes": 160990
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -14996,7 +15751,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05491,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15043,7 +15798,12 @@
           "bytes": 156644
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 446,
@@ -15079,7 +15839,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05491,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15126,7 +15886,12 @@
           "bytes": 151766
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 446,
@@ -15162,7 +15927,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15209,7 +15974,12 @@
           "bytes": 146384
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -15338,7 +16108,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15385,7 +16155,12 @@
           "bytes": 150640
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -15421,7 +16196,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054975,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15468,7 +16243,12 @@
           "bytes": 223758
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 459,
@@ -15504,7 +16284,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054995,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15551,7 +16331,12 @@
           "bytes": 165572
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 463,
@@ -15587,7 +16372,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15634,7 +16419,12 @@
           "bytes": 142266
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -15670,7 +16460,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05498,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15717,7 +16507,12 @@
           "bytes": 154026
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 460,
@@ -15753,7 +16548,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05521,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -15810,10 +16605,10 @@
         }
       },
       "review": {
-        "decision": "revise",
-        "note": "Owner: redo (see QA note)",
-        "at": "2026-11-07T02:52:58.941Z",
-        "by": "owner (chat 2026-11-07: 'làm lại 6 asset')"
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
       },
       "qa": {
         "verdict": "recommend-revise",
@@ -15856,7 +16651,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054975,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15903,7 +16698,12 @@
           "bytes": 155110
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 459,
@@ -15939,7 +16739,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -15986,7 +16786,12 @@
           "bytes": 151022
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 464,
@@ -16022,7 +16827,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054975,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16069,7 +16874,12 @@
           "bytes": 134832
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 459,
@@ -16105,7 +16915,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16152,7 +16962,12 @@
           "bytes": 159128
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -16188,7 +17003,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16235,7 +17050,12 @@
           "bytes": 139854
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 462,
@@ -16271,7 +17091,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054985,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16318,7 +17138,12 @@
           "bytes": 161164
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 461,
@@ -16354,7 +17179,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16401,7 +17226,12 @@
           "bytes": 160352
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -16437,7 +17267,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054995,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16484,7 +17314,12 @@
           "bytes": 252054
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 463,
@@ -16520,7 +17355,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05498,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16567,7 +17402,12 @@
           "bytes": 236094
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 460,
@@ -16603,7 +17443,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16650,7 +17490,12 @@
           "bytes": 241684
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 464,
@@ -16686,7 +17531,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16733,7 +17578,12 @@
           "bytes": 257676
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 464,
@@ -16769,7 +17619,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054995,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16816,7 +17666,12 @@
           "bytes": 249890
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 463,
@@ -16852,7 +17707,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054965,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -16899,7 +17754,12 @@
           "bytes": 100484
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 457,
@@ -16935,7 +17795,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055195,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 2,
       "versions": [
@@ -16992,10 +17852,10 @@
         }
       },
       "review": {
-        "decision": "revise",
-        "note": "Owner: redo (see QA note)",
-        "at": "2026-11-07T02:52:59.196Z",
-        "by": "owner (chat 2026-11-07: 'làm lại 6 asset')"
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
       },
       "qa": {
         "verdict": "recommend-revise",
@@ -17038,7 +17898,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054985,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17085,7 +17945,12 @@
           "bytes": 146920
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 461,
@@ -17121,7 +17986,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05497,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17168,7 +18033,12 @@
           "bytes": 94716
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 458,
@@ -17204,7 +18074,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054975,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17251,7 +18121,12 @@
           "bytes": 143368
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 459,
@@ -17287,7 +18162,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.0549,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17334,7 +18209,12 @@
           "bytes": 169698
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 444,
@@ -17463,7 +18343,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054905,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17510,7 +18390,12 @@
           "bytes": 155626
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 445,
@@ -17546,7 +18431,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05493,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17593,7 +18478,12 @@
           "bytes": 143672
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 450,
@@ -17629,7 +18519,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17676,7 +18566,12 @@
           "bytes": 148040
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -17712,7 +18607,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054895,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17759,7 +18654,12 @@
           "bytes": 184708
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 443,
@@ -17795,7 +18695,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17842,7 +18742,12 @@
           "bytes": 96496
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -17878,7 +18783,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05493,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -17925,7 +18830,12 @@
           "bytes": 169370
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 450,
@@ -17961,7 +18871,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05491,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18008,7 +18918,12 @@
           "bytes": 134118
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 446,
@@ -18044,7 +18959,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18091,7 +19006,12 @@
           "bytes": 121364
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -18127,7 +19047,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05493,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18174,7 +19094,12 @@
           "bytes": 130600
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 450,
@@ -18210,7 +19135,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054905,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18257,7 +19182,12 @@
           "bytes": 148586
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 445,
@@ -18293,7 +19223,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05496,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18340,7 +19270,12 @@
           "bytes": 134596
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 456,
@@ -18376,7 +19311,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18423,7 +19358,12 @@
           "bytes": 135338
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -18459,7 +19399,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18506,7 +19446,12 @@
           "bytes": 163612
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 464,
@@ -18542,7 +19487,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054895,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18589,7 +19534,12 @@
           "bytes": 95796
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 443,
@@ -18625,7 +19575,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054885,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18672,7 +19622,12 @@
           "bytes": 135490
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 441,
@@ -18708,7 +19663,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054905,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18755,7 +19710,12 @@
           "bytes": 143956
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 445,
@@ -18791,7 +19751,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18838,7 +19798,12 @@
           "bytes": 144614
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -18874,7 +19839,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043355,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18916,7 +19881,12 @@
           "bytes": 86136
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 439,
@@ -18952,7 +19922,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -18999,7 +19969,12 @@
           "bytes": 176726
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -19035,7 +20010,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054915,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19082,7 +20057,12 @@
           "bytes": 159440
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 447,
@@ -19118,7 +20098,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19165,7 +20145,12 @@
           "bytes": 152986
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -19201,7 +20186,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19248,7 +20233,12 @@
           "bytes": 199796
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -19284,7 +20274,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043355,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19326,7 +20316,12 @@
           "bytes": 135304
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 439,
@@ -19362,7 +20357,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19409,7 +20404,12 @@
           "bytes": 207100
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -19445,7 +20445,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054915,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19492,7 +20492,12 @@
           "bytes": 192584
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 447,
@@ -19528,7 +20533,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19575,7 +20580,12 @@
           "bytes": 205096
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -19611,7 +20621,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05493,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19658,7 +20668,12 @@
           "bytes": 199684
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 450,
@@ -19694,7 +20709,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043515,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19736,7 +20751,12 @@
           "bytes": 149618
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 471,
@@ -19772,7 +20792,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05493,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19819,7 +20839,12 @@
           "bytes": 205992
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 450,
@@ -19855,7 +20880,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19902,7 +20927,12 @@
           "bytes": 207344
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -19938,7 +20968,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054935,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -19985,7 +21015,12 @@
           "bytes": 223030
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 451,
@@ -20021,7 +21056,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05494,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20068,7 +21103,12 @@
           "bytes": 181046
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 452,
@@ -20104,7 +21144,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043375,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20146,7 +21186,12 @@
           "bytes": 148526
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 443,
@@ -20182,7 +21227,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05494,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20229,7 +21274,12 @@
           "bytes": 182094
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 452,
@@ -20265,7 +21315,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054935,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20312,7 +21362,12 @@
           "bytes": 201196
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 451,
@@ -20348,7 +21403,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054945,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20395,7 +21450,12 @@
           "bytes": 161656
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 453,
@@ -20431,7 +21491,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05493,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20478,7 +21538,12 @@
           "bytes": 138866
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 450,
@@ -20514,7 +21579,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043515,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20556,7 +21621,12 @@
           "bytes": 106230
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 471,
@@ -20592,7 +21662,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05493,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20639,7 +21709,12 @@
           "bytes": 171456
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 450,
@@ -20675,7 +21750,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20722,7 +21797,12 @@
           "bytes": 175086
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -20758,7 +21838,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054935,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20805,7 +21885,12 @@
           "bytes": 118166
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 451,
@@ -20841,7 +21926,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20888,7 +21973,12 @@
           "bytes": 190852
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -20924,7 +22014,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043505,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -20966,7 +22056,12 @@
           "bytes": 138990
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 469,
@@ -21002,7 +22097,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21049,7 +22144,12 @@
           "bytes": 192796
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -21085,7 +22185,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054915,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21132,7 +22232,12 @@
           "bytes": 196394
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 447,
@@ -21168,7 +22273,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21215,7 +22320,12 @@
           "bytes": 170496
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -21251,7 +22361,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21298,7 +22408,12 @@
           "bytes": 209544
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -21334,7 +22449,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043505,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21376,7 +22491,12 @@
           "bytes": 134800
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 469,
@@ -21412,7 +22532,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21459,7 +22579,12 @@
           "bytes": 175300
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -21495,7 +22620,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054915,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21542,7 +22667,12 @@
           "bytes": 233056
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 447,
@@ -21578,7 +22708,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21625,7 +22755,12 @@
           "bytes": 152532
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -21661,7 +22796,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21708,7 +22843,12 @@
           "bytes": 199458
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -21744,7 +22884,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043355,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21786,7 +22926,12 @@
           "bytes": 106876
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 439,
@@ -21822,7 +22967,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05492,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21869,7 +23014,12 @@
           "bytes": 195564
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 448,
@@ -21905,7 +23055,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054915,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -21952,7 +23102,12 @@
           "bytes": 195608
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 447,
@@ -21988,7 +23143,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054925,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22035,7 +23190,12 @@
           "bytes": 143172
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 449,
@@ -22071,7 +23231,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05487,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22118,7 +23278,12 @@
           "bytes": 133620
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 438,
@@ -22154,7 +23319,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05487,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22201,7 +23366,12 @@
           "bytes": 158140
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 438,
@@ -22237,7 +23407,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054875,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22284,7 +23454,12 @@
           "bytes": 167982
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 439,
@@ -22320,7 +23495,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05489,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22367,7 +23542,12 @@
           "bytes": 157420
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 442,
@@ -22403,7 +23583,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054875,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22450,7 +23630,12 @@
           "bytes": 159862
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 439,
@@ -22486,7 +23671,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05489,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22533,7 +23718,12 @@
           "bytes": 193798
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 442,
@@ -22569,7 +23759,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22616,7 +23806,12 @@
           "bytes": 72578
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 434,
@@ -22652,7 +23847,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054865,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22699,7 +23894,12 @@
           "bytes": 101014
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 437,
@@ -22735,7 +23935,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054865,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22782,7 +23982,12 @@
           "bytes": 143378
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 437,
@@ -22818,7 +24023,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22865,7 +24070,12 @@
           "bytes": 118574
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 434,
@@ -22901,7 +24111,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.043365,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -22948,7 +24158,12 @@
           "bytes": 104318
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 441,
@@ -22984,7 +24199,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.04336,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -23031,7 +24246,12 @@
           "bytes": 92832
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 440,
@@ -23067,7 +24287,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.054865,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -23114,7 +24334,12 @@
           "bytes": 125762
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 437,
@@ -23150,7 +24375,7 @@
       "batch": null,
       "costEstimateUsd": 0.1,
       "actualCostUsd": 0.05485,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -23197,7 +24422,12 @@
           "bytes": 130516
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "owner approved all 252 library assets",
+        "at": "2026-11-07T05:09:10.939Z",
+        "by": "owner — chat 2026-11-07: 'Duyệt tất 252 asset'"
+      },
       "qa": null,
       "usage": {
         "input_tokens": 434,
@@ -23216,5 +24446,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T03:54:55.231Z"
+  "updatedAt": "2026-11-07T05:09:11.470Z"
 }

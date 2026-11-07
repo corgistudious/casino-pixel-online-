@@ -60,3 +60,7 @@ bubble, title, fx, reward, spin, ui, cardback (nền plum + nền sáng, kích t
 
 1. Duyệt theo nhóm: `node tools/asset-studio/src/cli.mjs review <id> approve|revise|reject`, hoặc trả lời trong chat.
 2. Tích hợp vào game chỉ làm sau khi có duyệt và yêu cầu riêng.
+
+## Quyết định của chủ dự án
+
+2026-11-07 — chat: "Duyệt tất 252 asset" → cả 252 asset chuyển sang `USER_APPROVED` (tổng 270 USER_APPROVED + 9 EXISTING_APPROVED). Chưa tích hợp vào game.
