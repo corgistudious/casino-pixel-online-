@@ -88,7 +88,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.seasonal.summer | NEEDS_REVIEW | OK |  |  | 0.266 | 0.003 | 914.1 | 167 KB |
 | frame.seasonal.thanksgiving | NEEDS_REVIEW | OK |  |  | 0.294 | 0.001 | 807.2 | 189 KB |
 | frame.seasonal.anniversary | NEEDS_REVIEW | OK |  |  | 0.289 | 0.007 | 889.2 | 166 KB |
+| frame.special.founder | NEEDS_REVIEW | OK |  |  | 0.222 | 0.001 | 913.8 | 143 KB |
+| frame.special.early-supporter | NEEDS_REVISION | FAIL | near-duplicate of frame.vip.vip-05 |  | 0.244 | 0 | 897.4 | 157 KB |
 | frame.special.kol | USER_APPROVED | OK |  |  | 0.271 | 0.002 | 974.5 | 153 KB |
+| frame.special.creator | NEEDS_REVIEW | OK |  |  | 0.254 | 0 | 975.2 | 152 KB |
+| frame.special.collector | NEEDS_REVISION | FAIL | near-duplicate of frame.seasonal.summer |  | 0.216 | 0.002 | 1052.1 | 148 KB |
+| frame.special.event-exclusive | NEEDS_REVIEW | OK |  |  | 0.26 | 0.001 | 934.7 | 147 KB |
 | frame.special.anniversary-exclusive | NEEDS_REVISION | FAIL | near-duplicate of frame.vip.vip-10 |  | 0.287 | 0.007 | 978.3 | 193 KB |
 | avatar.default | NEEDS_REVIEW | OK |  |  | 1 | 1 | 810.3 | 124 KB |
 | avatar.premium | NEEDS_REVIEW | OK |  |  | 1 | 1 | 916.2 | 124 KB |

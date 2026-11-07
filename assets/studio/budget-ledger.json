@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 15.05,
-  "spentActualUsd": 5.536295,
-  "images": 104,
+  "spentEstimatedUsd": 15.55,
+  "spentActualUsd": 5.811715,
+  "images": 109,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -2716,6 +2716,136 @@
           "text_tokens": 0
         },
         "total_tokens": 2236
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T01:10:56.485Z",
+      "requestId": "2026-11-07-lib-07-3-frames-profile-2",
+      "assetId": "frame.special.collector",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05507,
+      "usage": {
+        "input_tokens": 478,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 478
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2234
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T01:11:27.284Z",
+      "requestId": "2026-11-07-lib-07-3-frames-profile-2",
+      "assetId": "frame.special.creator",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055095,
+      "usage": {
+        "input_tokens": 483,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 483
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2239
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:11:56.967Z",
+      "requestId": "2026-11-07-lib-07-3-frames-profile-2",
+      "assetId": "frame.special.early-supporter",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055095,
+      "usage": {
+        "input_tokens": 483,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 483
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2239
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:12:27.137Z",
+      "requestId": "2026-11-07-lib-07-3-frames-profile-2",
+      "assetId": "frame.special.event-exclusive",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055085,
+      "usage": {
+        "input_tokens": 481,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 481
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2237
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:12:59.469Z",
+      "requestId": "2026-11-07-lib-07-3-frames-profile-2",
+      "assetId": "frame.special.founder",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055075,
+      "usage": {
+        "input_tokens": 479,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 479
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2235
       },
       "seconds": 32
     }

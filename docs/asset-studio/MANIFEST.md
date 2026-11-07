@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 82 |
-| PLANNED | 169 |
-| NEEDS_REVISION | 1 |
+| NEEDS_REVIEW | 85 |
+| PLANNED | 164 |
+| NEEDS_REVISION | 3 |
 
 ## Theo nhóm
 
@@ -161,14 +161,14 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | frame.tournament.champion | Tournament champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | frame.tournament.seasonal-champion | Tournament seasonal-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | frame.tournament.grand-champion | Tournament grand-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.special.founder | founder frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.special.early-supporter | early-supporter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.special.founder | founder frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| frame.special.early-supporter | early-supporter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | frame.special.kol | kol frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
-| frame.special.creator | creator frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.special.creator | creator frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.reviewer | reviewer frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.special.collector | collector frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.special.collector | collector frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | frame.special.limited-edition | limited-edition frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.special.event-exclusive | event-exclusive frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.special.event-exclusive | event-exclusive frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.anniversary-exclusive | anniversary-exclusive frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 
 ## avatar
