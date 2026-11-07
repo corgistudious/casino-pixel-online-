@@ -5,14 +5,20 @@
   "wave": "library"
  },
  "achievement.champion": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Thành tích: biểu tượng đầu trang",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "achievements"
+  ]
  },
  "achievement.collector": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Bộ sưu tập / Cửa hàng: biểu tượng đầu trang (PageHeader \"collection\")",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "collection"
+  ]
  },
  "achievement.epic": {
   "status": "INTEGRATED",
@@ -80,24 +86,36 @@
   "wave": "library"
  },
  "bank.money-bag": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Ngân hàng: thẻ Cxu Bạc (trang trí)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "bank"
+  ]
  },
  "bank.money-bag-vip": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Ngân hàng: thẻ Cxu Vàng (trang trí)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "bank"
+  ]
  },
  "bank.vault-open": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Ngân hàng: trang trí quầy gửi/rút",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "bank"
+  ]
  },
  "bank.vault-premium": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Ngân hàng: biểu tượng đầu trang",
-  "wave": "sample"
+  "wave": "sample",
+  "verifiedOn": [
+   "bank"
+  ]
  },
  "bubble.anniversary": {
   "status": "INTEGRATED",
@@ -710,9 +728,12 @@
   "wave": "library"
  },
  "frame.vip.vip-05": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Khung mốc VIP 5: VipCrest (VIP Hub, hồ sơ công khai) theo cấp VIP thật — chỉ trang trí, không phải vật phẩm, không cấp quyền",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "vip"
+  ]
  },
  "frame.vip.vip-07": {
   "status": "INTEGRATED",
@@ -735,9 +756,20 @@
   "wave": "library"
  },
  "fx.big-win": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Thắng lớn: mọi bàn",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "sicbo",
+   "taixiu",
+   "roulette-table",
+   "slots",
+   "blackjack",
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "fx.bust": {
   "status": "INTEGRATED",
@@ -770,14 +802,36 @@
   "wave": "library"
  },
  "fx.normal-lose": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Thua: Roulette, Sic Bo/Tài Xỉu, Blackjack",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "sicbo",
+   "taixiu",
+   "roulette-table",
+   "slots",
+   "blackjack",
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "fx.normal-win": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Thắng thường: mọi bàn (Phaser)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "sicbo",
+   "taixiu",
+   "roulette-table",
+   "slots",
+   "blackjack",
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "fx.perfect-win": {
   "status": "INTEGRATED",
@@ -830,19 +884,28 @@
   "wave": "library"
  },
  "game.blackjack.card-shoe": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Blackjack solo: hộp bài (texture card-shoe)",
-  "wave": "sample"
+  "wave": "sample",
+  "verifiedOn": [
+   "blackjack"
+  ]
  },
  "game.blackjack.result-emblem": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Blackjack solo: huy hiệu cạnh dòng kết quả",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "blackjack"
+  ]
  },
  "game.blackjack.table-felt": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Mặt bàn Blackjack (solo Phaser + bàn nhiều người) cho skin Xanh Cổ Điển (mặc định)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "blackjack"
+  ]
  },
  "game.cards.action-allin": {
   "status": "INTEGRATED",
@@ -855,44 +918,80 @@
   "wave": "library"
  },
  "game.cards.action-fold": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Nút Bỏ bài (icon)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "lieng"
+  ]
  },
  "game.cards.action-raise": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Nút Tố (icon)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "lieng"
+  ]
  },
  "game.cards.chip-stack": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Poker/Liêng/Xì Tố: chồng chip cược trước ghế",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "game.lieng.reveal-fan": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Liêng: biểu tượng lật bài khi so bài",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "game.poker.blind-big": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Poker: dấu Big Blind cạnh ghế",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "game.poker.blind-small": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Poker: dấu Small Blind cạnh ghế",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "game.poker.dealer-button": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Poker/Liêng: nút dealer (texture dealer-btn)",
-  "wave": "sample"
+  "wave": "sample",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "game.poker.pot-pile": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Poker/Liêng/Xì Tố: đống chip ở ô POT",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "game.poker.table-felt-royal": {
   "status": "INTEGRATED",
@@ -900,44 +999,76 @@
   "wave": "library"
  },
  "game.roulette.ball": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Roulette: bi",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
  },
  "game.roulette.marker": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Roulette: con dolly trên ô số trúng",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
  },
  "game.roulette.pointer": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Roulette: kim chỉ cố định phía trên bánh xe",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
  },
  "game.roulette.result-emblem": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Roulette: huy hiệu phía sau dòng kết quả",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
  },
  "game.roulette.wheel-head": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Roulette: bánh xe 37 ô (vòng số do code vẽ, đúng thứ tự châu Âu và màu)",
-  "wave": "sample"
+  "wave": "sample",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
  },
  "game.roulette.wheel-rim": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Roulette: vành bát quanh bánh xe (đường bi chạy)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
  },
  "game.sicbo.crystal-dome": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Sic Bo: chụp pha lê khi lắc (texture sicbo-dome)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
  },
  "game.sicbo.dice-plate": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Sic Bo / Tài Xỉu: đĩa xúc xắc (texture sicbo-plate)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
  },
  "game.sicbo.dice-set": {
   "status": "READY_FOR_FUTURE_USE",
@@ -945,19 +1076,31 @@
   "wave": "library"
  },
  "game.sicbo.icon-big": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Sic Bo: biểu tượng cửa Tài (bên nhãn, chỉ khi đủ chỗ)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
  },
  "game.sicbo.icon-small": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Sic Bo: biểu tượng cửa Xỉu (bên nhãn, chỉ khi đủ chỗ)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
  },
  "game.sicbo.icon-triple": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Sic Bo: biểu tượng Bộ ba bất kỳ (bên nhãn, chỉ khi đủ chỗ)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
  },
  "game.sicbo.table-vip": {
   "status": "INTEGRATED",
@@ -970,24 +1113,37 @@
   "wave": "library"
  },
  "game.slots.spin-button": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Slots / Roulette / Sic Bo: icon nút Quay",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "slots"
+  ]
  },
  "game.slots.symbol-bell": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Slots: chuông",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
  },
  "game.slots.symbol-cherry": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Slots: anh đào",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
  },
  "game.slots.symbol-clover": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Slots: cỏ bốn lá",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
  },
  "game.slots.symbol-crown": {
   "status": "READY_FOR_FUTURE_USE",
@@ -995,9 +1151,12 @@
   "wave": "sample"
  },
  "game.slots.symbol-diamond": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Slots: kim cương",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
  },
  "game.slots.symbol-gold-bar": {
   "status": "READY_FOR_FUTURE_USE",
@@ -1005,9 +1164,12 @@
   "wave": "library"
  },
  "game.slots.symbol-lemon": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Slots: chanh",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
  },
  "game.slots.symbol-scatter": {
   "status": "READY_FOR_FUTURE_USE",
@@ -1015,29 +1177,47 @@
   "wave": "library"
  },
  "game.slots.symbol-seven": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Slots: biểu tượng 7",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
  },
  "game.slots.symbol-wild": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Slots: WILD",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
  },
  "game.taixiu.bowl-cover": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Tài Xỉu: bát (texture taixiu-bowl, scene sicbo/taixiu)",
-  "wave": "sample"
+  "wave": "sample",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
  },
  "game.xito.dealer-marker": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Xì Tố: dấu dealer",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "profile.accent-kol": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Dấu nhấn KOL cạnh tên cho tài khoản Partner (Hồ sơ)",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "profile"
+  ]
  },
  "profile.accent-limited": {
   "status": "READY_FOR_FUTURE_USE",
@@ -1055,14 +1235,20 @@
   "wave": "library"
  },
  "profile.background": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Nền mờ phía sau trang Hồ sơ của tôi",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "profile"
+  ]
  },
  "profile.header": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Ảnh sân khấu ở đầu Hồ sơ của tôi và Hồ sơ công khai",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "profile"
+  ]
  },
  "profile.nameplate": {
   "status": "INTEGRATED",
@@ -1090,9 +1276,12 @@
   "wave": "library"
  },
  "reward.mystery-gift": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Giftcode: biểu tượng đầu trang",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "gifts"
+  ]
  },
  "reward.premium-gift": {
   "status": "READY_FOR_FUTURE_USE",
@@ -1105,9 +1294,12 @@
   "wave": "library"
  },
  "reward.vip-daily": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "VIP Hub: nút nhận quà VIP hằng ngày",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "vip"
+  ]
  },
  "reward.weekly-gift": {
   "status": "INTEGRATED",
@@ -1205,24 +1397,36 @@
   "wave": "library"
  },
  "tournament.badge": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Rank: huy hiệu mùa xếp hạng",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "rank"
+  ]
  },
  "tournament.banner": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Rank: biểu tượng đầu trang",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "rank"
+  ]
  },
  "tournament.medal": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Rank: tiêu đề bảng bậc",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "rank"
+  ]
  },
  "tournament.ticket": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Rank: trang trí thẻ mùa xếp hạng",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "rank"
+  ]
  },
  "tournament.trophy": {
   "status": "INTEGRATED",
@@ -1250,14 +1454,20 @@
   "wave": "library"
  },
  "ui.leaderboard": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Bảng xếp hạng: biểu tượng đầu trang",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "leaderboard"
+  ]
  },
  "ui.mailbox": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Hộp thư: biểu tượng đầu trang",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "mail"
+  ]
  },
  "ui.notification": {
   "status": "READY_FOR_FUTURE_USE",
@@ -1270,9 +1480,12 @@
   "wave": "library"
  },
  "ui.quest": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Nhiệm vụ: biểu tượng đầu trang",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "missions"
+  ]
  },
  "vip.badge.vip-01": {
   "status": "INTEGRATED",
@@ -1280,14 +1493,24 @@
   "wave": "sample"
  },
  "vip.badge.vip-02": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 2: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
  },
  "vip.badge.vip-03": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 3: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "bjt"
+  ]
  },
  "vip.badge.vip-04": {
   "status": "INTEGRATED",
@@ -1295,34 +1518,62 @@
   "wave": "library"
  },
  "vip.badge.vip-05": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 5: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito",
+   "bjt"
+  ]
  },
  "vip.badge.vip-06": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 6: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "hub",
+   "poker",
+   "lieng",
+   "xito",
+   "vip"
+  ]
  },
  "vip.badge.vip-07": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 7: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito",
+   "vip"
+  ]
  },
  "vip.badge.vip-08": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 8: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "sample"
+  "wave": "sample",
+  "verifiedOn": [
+   "bjt"
+  ]
  },
  "vip.badge.vip-09": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 9: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "bjt"
+  ]
  },
  "vip.badge.vip-10": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 10: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "hub"
+  ]
  },
  "vip.badge.vip-11": {
   "status": "INTEGRATED",
@@ -1335,9 +1586,12 @@
   "wave": "library"
  },
  "vip.badge.vip-13": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 13: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "library"
+  "wave": "library",
+  "verifiedOn": [
+   "hub"
+  ]
  },
  "vip.badge.vip-14": {
   "status": "INTEGRATED",
@@ -1345,8 +1599,11 @@
   "wave": "library"
  },
  "vip.badge.vip-15": {
-  "status": "INTEGRATED",
+  "status": "VERIFIED",
   "where": "Huy hiệu VIP 15: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
-  "wave": "sample"
+  "wave": "sample",
+  "verifiedOn": [
+   "hub"
+  ]
  }
 }
