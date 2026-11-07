@@ -1,12 +1,13 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 7.75,
-  "spentActualUsd": 1.581645,
-  "images": 31,
+  "spentEstimatedUsd": 8.05,
+  "spentActualUsd": 1.7465,
+  "images": 34,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
-    "2026-11-07-01-sample-1-revisions"
+    "2026-11-07-01-sample-1-revisions",
+    "2026-11-07-lib-01-1-games-1"
   ],
   "entries": [
     {
@@ -814,6 +815,84 @@
         "total_tokens": 2212
       },
       "seconds": 29
+    },
+    {
+      "at": "2026-11-07T00:32:04.472Z",
+      "requestId": "2026-11-07-lib-01-1-games-1",
+      "assetId": "game.blackjack.action-insurance",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05494,
+      "usage": {
+        "input_tokens": 452,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 452
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2208
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T00:32:31.933Z",
+      "requestId": "2026-11-07-lib-01-1-games-1",
+      "assetId": "game.blackjack.action-split",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05495,
+      "usage": {
+        "input_tokens": 454,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 454
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2210
+      },
+      "seconds": 27
+    },
+    {
+      "at": "2026-11-07T00:33:02.132Z",
+      "requestId": "2026-11-07-lib-01-1-games-1",
+      "assetId": "game.blackjack.action-stand",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054965,
+      "usage": {
+        "input_tokens": 457,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 457
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2213
+      },
+      "seconds": 30
     }
   ]
 }
