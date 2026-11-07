@@ -1,0 +1,184 @@
+{
+  "requestId": "2026-11-07-lib-12-6-events-tournament-achievements-1",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.3,
+  "remainingBeforeUsd": 1.4624,
+  "runCapUsd": 1.3,
+  "planned": [
+    {
+      "id": "achievement.badge",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "achievement.champion",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "achievement.collector",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "achievement.epic",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "achievement.legendary",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "achievement.rare",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "event.anniversary.badge",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "event.anniversary.banner",
+      "size": "1536x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "event.anniversary.chest",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "event.anniversary.decoration",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "event.anniversary.icon",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "event.christmas.badge",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "event.christmas.banner",
+      "size": "1536x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "achievement.badge",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "achievement.champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "achievement.collector",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "achievement.epic",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "achievement.legendary",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "achievement.rare",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.anniversary.badge",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.anniversary.banner",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.anniversary.chest",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.anniversary.decoration",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.anniversary.icon",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.christmas.badge",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.christmas.banner",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T01:39:58.510Z",
+  "plannedEstimateUsd": 1.3,
+  "finishedAt": "2026-11-07T01:47:03.265Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 9.22822,
+    "spentEstimatedUsd": 21.85,
+    "spentActualUsd": 9.22822,
+    "remainingUsd": 0.7718,
+    "images": 172
+  }
+}
