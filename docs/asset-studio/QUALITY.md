@@ -7,9 +7,14 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.taixiu.bowl-cover | USER_APPROVED | OK |  |  | 0.681 | 0 | 1319.1 | 168 KB |
 | game.roulette.wheel-head | USER_APPROVED | OK |  |  | 0.667 | 0 | 1228.1 | 142 KB |
 | game.poker.dealer-button | USER_APPROVED | OK |  |  | 0.461 | 0 | 684.1 | 99 KB |
+| game.poker.blind-small | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 613.2 | 105 KB |
+| game.poker.blind-big | NEEDS_REVIEW | OK |  |  | 0.46 | 0 | 855.3 | 121 KB |
+| game.cards.chip-stack | NEEDS_REVIEW | OK |  |  | 0.478 | 0 | 611.8 | 103 KB |
 | game.cards.action-fold | NEEDS_REVIEW | OK |  |  | 0.456 | 0 | 778.9 | 134 KB |
 | game.cards.action-call | NEEDS_REVIEW | OK |  |  | 0.404 | 0 | 951.8 | 160 KB |
+| game.cards.action-raise | NEEDS_REVIEW | OK |  |  | 0.432 | 0 | 979.9 | 127 KB |
 | game.cards.action-allin | NEEDS_REVIEW | OK |  |  | 0.372 | 0 | 942.6 | 136 KB |
+| game.lieng.reveal-fan | NEEDS_REVIEW | OK |  |  | 0.453 | 0 | 1642.3 | 183 KB |
 | game.blackjack.card-shoe | USER_APPROVED | OK |  |  | 0.441 | 0 | 907.1 | 129 KB |
 | game.blackjack.result-emblem | NEEDS_REVIEW | OK |  |  | 0.472 | 0 | 733.9 | 125 KB |
 | game.blackjack.action-hit | NEEDS_REVIEW | OK |  |  | 0.426 | 0 | 719.7 | 120 KB |

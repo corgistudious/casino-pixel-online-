@@ -1,10 +1,10 @@
 # Budget Tracking (generated)
 
 - Ngân sách đã duyệt: **$10**
-- Đã tính vào ngân sách: **$2.0096** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
-- Chi phí thật theo token usage × bảng giá đã xác minh: $2.0096; tổng ước tính trần: $8.55
-- Còn lại theo bộ đếm nội bộ: **$7.99**
-- Ảnh đã tạo: 39; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1
+- Đã tính vào ngân sách: **$2.2843** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
+- Chi phí thật theo token usage × bảng giá đã xác minh: $2.2843; tổng ước tính trần: $9.05
+- Còn lại theo bộ đếm nội bộ: **$7.72**
+- Ảnh đã tạo: 44; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
@@ -49,10 +49,15 @@
 | 2026-11-07T00:35:02.270Z | 2026-11-07-lib-02-1-games-2 | game.cards.action-allin | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 441 / out 1756 |
 | 2026-11-07T00:35:35.204Z | 2026-11-07-lib-02-1-games-2 | game.cards.action-call | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 440 / out 1756 |
 | 2026-11-07T00:36:03.895Z | 2026-11-07-lib-02-1-games-2 | game.cards.action-fold | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 440 / out 1756 |
+| 2026-11-07T00:36:40.872Z | 2026-11-07-lib-02-1-games-2 | game.cards.action-raise | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 440 / out 1756 |
+| 2026-11-07T00:37:10.157Z | 2026-11-07-lib-02-1-games-2 | game.cards.chip-stack | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 458 / out 1756 |
+| 2026-11-07T00:37:38.823Z | 2026-11-07-lib-02-1-games-2 | game.lieng.reveal-fan | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 454 / out 1756 |
+| 2026-11-07T00:38:09.297Z | 2026-11-07-lib-02-1-games-2 | game.poker.blind-big | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 448 / out 1756 |
+| 2026-11-07T00:38:38.489Z | 2026-11-07-lib-02-1-games-2 | game.poker.blind-small | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 449 / out 1756 |
 
 ## Dự toán phần còn lại
 
-- 234 asset ở trạng thái PLANNED.
-- Theo chi phí thật đã đo (1024x1024: $0.0551, 1536x1024: $0.0436, 1024x1536: $0.0436): **$12.38**; cộng 30% dự phòng làm lại: **$16.09**.
-- Còn lại trong ngân sách đã duyệt: $7.99 → **cần nạp thêm khoảng $8.10** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.39.
-- Ước tính trần dùng để chặn chi tiêu (pricing.json): $23.40.
+- 229 asset ở trạng thái PLANNED.
+- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0436, 1024x1536: $0.0436): **$12.10**; cộng 30% dự phòng làm lại: **$15.73**.
+- Còn lại trong ngân sách đã duyệt: $7.72 → **cần nạp thêm khoảng $8.01** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.38.
+- Ước tính trần dùng để chặn chi tiêu (pricing.json): $22.90.
