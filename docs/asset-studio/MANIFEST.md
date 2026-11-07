@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 155 |
+| NEEDS_REVIEW | 158 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 91 |
+| PLANNED | 88 |
 
 ## Theo nhóm
 
@@ -360,11 +360,11 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | event.new-year.chest | new-year chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.new-year.badge | new-year badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.new-year.decoration | new-year decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.lunar-new-year.icon | lunar-new-year icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.lunar-new-year.icon | lunar-new-year icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.lunar-new-year.banner | lunar-new-year banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |
-| event.lunar-new-year.chest | lunar-new-year chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.lunar-new-year.chest | lunar-new-year chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.lunar-new-year.badge | lunar-new-year badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
-| event.lunar-new-year.decoration | lunar-new-year decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.lunar-new-year.decoration | lunar-new-year decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.valentine.icon | valentine icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.valentine.banner | valentine banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | PLANNED | 0.10 |
 | event.valentine.chest | valentine chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
