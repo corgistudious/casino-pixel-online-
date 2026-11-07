@@ -1,3 +1,4 @@
+import { keyoUrl, type KeyoAssetId } from '../assets/keyo';
 import { cosmeticDef, type EffectArt, type FrameGlyph } from '@casino/shared';
 import { useEffect, useRef, useState } from 'react';
 import { useSession } from '../store/session';
@@ -81,6 +82,9 @@ function spawn(a: EffectArt, w: number, h: number, scale: number): Particle[] {
 
 const DURATION = 2200;
 
+/** Victory effect items whose centrepiece is Asset Studio art (by item id). */
+const VICTORY_ART: Readonly<Record<string, KeyoAssetId>> = { fx_royal_crown: 'fx.champion-victory' };
+
 export function VictoryEffectHost() {
   const ref = useRef<HTMLCanvasElement>(null);
   const [play, setPlay] = useState<Play | null>(null);
@@ -108,6 +112,15 @@ export function VictoryEffectHost() {
     const scale = Math.max(0.7, Math.min(1.4, Math.min(w, h) / 420));
     const calm = reduceMotion || matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const parts = calm ? [] : spawn(a, w, h, scale);
+    // Asset Studio centrepiece for this effect (drawn glyph until it has loaded, or if it fails).
+    const studio = VICTORY_ART[play.effect];
+    let centreImg: HTMLImageElement | null = null;
+    if (studio) {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = keyoUrl(studio, Math.min(w, h) * 0.5);
+      centreImg = img;
+    }
     const start = performance.now();
     let last = start;
     let raf = 0;
@@ -129,10 +142,15 @@ export function VictoryEffectHost() {
         const k = calm ? 1 : Math.min(1, t / 380);
         const bounce = calm ? 1 : 1 + Math.sin(Math.min(1, t / 520) * Math.PI) * 0.18;
         const size = Math.min(w, h) * 0.2 * k * bounce;
-        ctx.shadowColor = a.glow;
-        ctx.shadowBlur = 24;
-        drawGlyph(ctx, a.centre, w / 2, h * 0.45, size, a.colors[0]!);
-        ctx.shadowBlur = 0;
+        if (centreImg?.complete && centreImg.naturalWidth > 0) {
+          const s2 = size * 2.2;
+          ctx.drawImage(centreImg, w / 2 - s2 / 2, h * 0.45 - s2 / 2, s2, s2);
+        } else {
+          ctx.shadowColor = a.glow;
+          ctx.shadowBlur = 24;
+          drawGlyph(ctx, a.centre, w / 2, h * 0.45, size, a.colors[0]!);
+          ctx.shadowBlur = 0;
+        }
       }
       for (const p of parts) {
         if (a.motion === 'swirl') {

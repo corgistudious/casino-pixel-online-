@@ -1,3 +1,4 @@
+import { KeyoImg } from '../assets/keyo';
 import { vipTierOf, type VipLevelView } from '@casino/shared';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +11,7 @@ import { startVipSync, useVip } from '../store/vip';
 import { AppShell, PageHeader } from '../ui/AppShell';
 import { CurrencyIcon } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
-import { VipEmblem, vipTier } from '../ui/VipEmblem';
+import { VipCrest, VipEmblem, vipTier } from '../ui/VipEmblem';
 
 const RULES = ['earn', 'noBuy', 'permanent', 'max', 'fair'] as const;
 /** The daily VIP reward resets at midnight Vietnam time (same as the server). */
@@ -55,7 +56,8 @@ export function VipPage() {
     <AppShell>
       <div className="flex flex-col gap-4 p-3 lg:p-5">
         <PageHeader icon="vip" title={t('vip.title')} subtitle={t('identity.vipSubtitle')} />
-        <button disabled={!status || claimed || busy} onClick={() => void claim()} className="rounded-xl bg-amber-500 px-4 py-3 font-bold text-black disabled:opacity-40">
+        <button disabled={!status || claimed || busy} onClick={() => void claim()} className="flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-4 py-3 font-bold text-black disabled:opacity-40">
+          <KeyoImg id="reward.vip-daily" size={34} alt="" decorative eager className="-my-2" />
           {claimed ? t('identity.vipClaimedToday') : t('identity.vipClaim')}
         </button>
 
@@ -66,7 +68,7 @@ export function VipPage() {
             <span className="sheen opacity-50" />
             <div className="relative flex items-center gap-4">
               <div className="animate-[pulseGlow_3s_ease-in-out_infinite] rounded-full">
-                <VipEmblem level={level} size={104} />
+                <VipCrest level={level} size={112} />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-white/50">{t('vip.yourLevel')}</div>
@@ -96,7 +98,7 @@ export function VipPage() {
           {shown && (
             <section className="glass flex flex-col gap-3 p-5">
               <div className="flex items-center gap-3">
-                {shown.iconUrl ? <img src={assetSrc(shown.iconUrl)} alt="" className="h-14 w-14 object-contain" /> : <VipEmblem level={shown.level} size={56} />}
+                {shown.iconUrl ? <img src={assetSrc(shown.iconUrl)} alt="" className="h-14 w-14 object-contain" /> : <VipCrest level={shown.level} size={64} />}
                 <div>
                   <div className="font-display text-2xl font-bold" style={{ color: shown.color || tierColor }}>
                     {shown.name[lang]}

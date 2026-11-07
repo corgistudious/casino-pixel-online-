@@ -1,3 +1,5 @@
+import { KeyoImg } from '../assets/keyo';
+import { rewardChest } from '../assets/keyo/bindings';
 import type { MailAttachment, MailMessage } from '@casino/shared';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -55,6 +57,7 @@ export function MailboxPage() {
     }
   };
 
+  const [burst, setBurst] = useState(false);
   const claim = async (m: MailMessage) => {
     setBusy(true);
     try {
@@ -63,6 +66,7 @@ export function MailboxPage() {
       applyWallet(r.wallet);
       setUnread(r.unread);
       sfx.win();
+      setBurst(true);
       toast(t('mail.claimedToast'), 'success');
     } catch (err) {
       fail(err);
@@ -81,6 +85,7 @@ export function MailboxPage() {
       setUnread(r.unread);
       if (r.claimed.length) {
         sfx.win();
+        setBurst(true);
         toast(t('mail.claimedToast'), 'success');
       }
     } catch (err) {
@@ -109,6 +114,7 @@ export function MailboxPage() {
     <AppShell>
       <div className="flex flex-col gap-4 p-3 lg:p-5">
         <PageHeader icon="mail" title={t('mail.title')} subtitle={t('mail.subtitle')} />
+        {burst && <RewardBurst onDone={() => setBurst(false)} />}
         {mail === null ? (
           <p className="text-white/50">{t('app.loading')}</p>
         ) : mail.length === 0 ? (
@@ -138,6 +144,7 @@ export function MailboxPage() {
                           </span>
                           <span className={`block truncate ${m.readAt ? 'text-white/75' : 'font-semibold text-white'}`}>{m.subject}</span>
                         </span>
+                        {st === 'claimable' && <MailChest m={m} />}
                         {st === 'claimable' && <CurrencyIcon currency={m.attachments.find((a) => a.type !== 'item')?.type === 'gold' ? 'gold' : 'silver'} size={22} />}
                         {st === 'claimed' && <span className="text-[11px] text-emerald-400">{t('mail.claimed')}</span>}
                         {st === 'expired' && <span className="text-[11px] text-white/40">{t('mail.expired')}</span>}
@@ -196,6 +203,30 @@ export function MailboxPage() {
   );
 }
 
+/** Reward chest for a claimable mail (Asset Studio), by event / seasonal items / top item rarity. */
+function MailChest({ m }: { m: MailMessage }) {
+  const catalog = useCatalog((c) => c.items);
+  const items = m.attachments.flatMap((a) => (a.type === 'item' ? [{ id: a.itemId, rarity: catalog[a.itemId]?.rarity, source: catalog[a.itemId]?.source }] : []));
+  const chest = rewardChest(m.kind, items, m.attachments.some((a) => a.type !== 'item'));
+  return chest ? <KeyoImg id={chest} size={30} alt="" decorative className="-my-1 shrink-0" /> : null;
+}
+
+/** Short chest-opening burst after a successful claim (static fade under reduced motion). */
+export function RewardBurst({ onDone }: { onDone: () => void }) {
+  useEffect(() => {
+    const id = window.setTimeout(onDone, 1500);
+    return () => window.clearTimeout(id);
+  }, [onDone]);
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
+      <div className="relative motion-safe:animate-[rewardPop_1.5s_ease-out_forwards] motion-reduce:animate-[fadeOut_1.5s_ease-out_forwards]">
+        <KeyoImg id="fx.reward-reveal" size={260} alt="" decorative eager className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-80" />
+        <KeyoImg id="fx.chest-opening" size={180} alt="" decorative eager className="relative" />
+      </div>
+    </div>
+  );
+}
+
 function AttachmentChip({ a, skipped }: { a: MailAttachment; skipped: boolean }) {
   const { t, i18n } = useTranslation();
   const catalog = useCatalog((c) => c.items);
@@ -203,6 +234,10 @@ function AttachmentChip({ a, skipped }: { a: MailAttachment; skipped: boolean })
     <span className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-3 py-2 text-sm">
       {a.type === 'item' ? (
         <>
+          {(() => {
+            const chest = rewardChest('item', [{ id: a.itemId, rarity: catalog[a.itemId]?.rarity, source: catalog[a.itemId]?.source }], false);
+            return chest ? <KeyoImg id={chest} size={24} alt="" decorative className="-my-1" /> : null;
+          })()}
           <span className="text-white/85">{itemName(catalog[a.itemId], i18n.language, a.itemId)}</span>
           {skipped && <span className="text-[11px] text-white/45">({t('mail.alreadyOwned')})</span>}
         </>

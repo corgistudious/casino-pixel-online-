@@ -1,3 +1,4 @@
+import { KeyoImg } from '../assets/keyo';
 import {
   DIVISIONS,
   GAMEPLAY_EXP,
@@ -95,7 +96,7 @@ export function RankPage() {
   return (
     <AppShell>
       <div className="flex flex-col gap-4 p-3 lg:p-5">
-        <PageHeader icon="rank" title={t('rank.title')} subtitle={rank ? `${t('rank.season')}: ${rank.seasonName}` : undefined} />
+        <PageHeader icon="rank" art="tournament.banner" title={t('rank.title')} subtitle={rank ? `${t('rank.season')}: ${rank.seasonName}` : undefined} />
         {failed && <p className="rounded-xl bg-red-950/40 px-3 py-2 text-sm text-red-200">{t('errors.network')}</p>}
 
         <div className="grid gap-4 lg:grid-cols-2">
@@ -133,6 +134,9 @@ export function RankPage() {
 
           {/* Rank */}
           <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-ink-800 via-ink-900 to-[#3a0f2a] p-5 shadow-panel">
+            {/* Ranked season (tournament art): ticket and season badge, decoration only. */}
+            <KeyoImg id="tournament.ticket" size={92} alt="" decorative className="pointer-events-none absolute -bottom-4 -right-3 rotate-[-8deg] opacity-25" />
+            <KeyoImg id="tournament.badge" size={40} alt="" decorative className="pointer-events-none absolute right-3 top-3 opacity-90" />
             {!progress && !failed && <p className="text-white/50">{t('app.loading')}</p>}
             {progress && !rank && <p className="text-white/60">{t('rank.noSeason')}</p>}
             {rank && st && (
@@ -187,7 +191,10 @@ export function RankPage() {
 
         {/* Tier ladder */}
         <section className="glass p-4">
-          <h2 className="mb-3 font-display text-lg text-gold-100">{t('rank.tiersTitle')}</h2>
+          <h2 className="mb-3 flex items-center gap-2 font-display text-lg text-gold-100">
+            <KeyoImg id="tournament.medal" size={30} alt="" decorative className="-my-1" />
+            {t('rank.tiersTitle')}
+          </h2>
           <div className="flex gap-3 overflow-x-auto pb-2">
             {RANK_TIERS.map((tier) => {
               const first = DIVISIONS.find((d) => d.tier === tier.id)!.index;

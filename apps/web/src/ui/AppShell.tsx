@@ -11,6 +11,7 @@ import { Avatar } from './Avatar';
 import { NavIcon, type NavIconName } from './NavIcons';
 import { CurrencyIcon, PlayerName } from './OfficialAssets';
 import { VipEmblem } from './VipEmblem';
+import { KeyoImg, type KeyoAssetId } from '../assets/keyo';
 import { ChatButton } from './ChatButton';
 import { BottomTabBar } from './BottomTabBar';
 import { usePortraitLayout } from '../lib/layout';
@@ -199,13 +200,25 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
 }
 
-export function PageHeader({ icon, title, subtitle, right }: { icon: NavIconName; title: string; subtitle?: string; right?: ReactNode }) {
+/** Asset Studio emblem per page icon (the drawn nav icon is the fallback). */
+const PAGE_ART: Partial<Record<NavIconName, KeyoAssetId>> = {
+  mail: 'ui.mailbox',
+  leaderboard: 'ui.leaderboard',
+  gifts: 'reward.mystery-gift',
+  collection: 'achievement.collector',
+};
+
+export function PageHeader({ icon, title, subtitle, right, art }: { icon: NavIconName; title: string; subtitle?: string; right?: ReactNode; art?: KeyoAssetId }) {
+  const studio = art ?? PAGE_ART[icon];
+  const drawn = (
+    <div className="gold-border flex h-11 w-11 items-center justify-center rounded-xl">
+      <NavIcon name={icon} size={24} active />
+    </div>
+  );
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
       <div className="flex items-center gap-3">
-        <div className="gold-border flex h-11 w-11 items-center justify-center rounded-xl">
-          <NavIcon name={icon} size={24} active />
-        </div>
+        {studio ? <KeyoImg id={studio} size={52} alt="" decorative eager className="-my-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.55)]" fallback={drawn} /> : drawn}
         <div>
           <h1 className="font-display text-2xl font-bold text-gold lg:text-3xl">{title}</h1>
           {subtitle && <p className="text-sm text-white/50">{subtitle}</p>}

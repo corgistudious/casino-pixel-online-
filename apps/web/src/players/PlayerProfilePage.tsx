@@ -15,7 +15,11 @@ import { TitleBadge } from '../ui/Cosmetics';
 import { Amount, PlayerName } from '../ui/OfficialAssets';
 import { RankEmblem, useRankName } from '../ui/RankEmblem';
 import { toast } from '../ui/toast';
-import { VipEmblem } from '../ui/VipEmblem';
+import { VipCrest } from '../ui/VipEmblem';
+import { PrestigeAura, ProfileAccents, ProfileBanner } from '../ui/ProfileArt';
+import { KeyoImg } from '../assets/keyo';
+import { SliceFrame } from '../assets/keyo/SliceFrame';
+import { ACHIEVEMENT_ART } from '../assets/keyo/bindings';
 import { onRelationChange, PlayerTrigger, usePlayerActionItems } from './PlayerActions';
 import { ReportDialog } from './ReportDialog';
 import { CaptainBadges } from '../support/SupportMenu';
@@ -84,10 +88,13 @@ export function PlayerProfilePage() {
           <>
             {/* Header */}
             <section className="glass relative overflow-hidden p-4 lg:p-6">
+              <ProfileBanner />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-fuchsia-600/20 via-violet-700/10 to-transparent" />
               <div className="relative flex flex-wrap items-center gap-4">
                 <div className="flex flex-col items-center gap-1.5">
-                  <PlayerAvatar player={p} size={104} status={p.presence} animated />
+                  <PrestigeAura vipLevel={p.vip.level} size={104}>
+                    <PlayerAvatar player={p} size={104} status={p.presence} animated />
+                  </PrestigeAura>
                   {p.relation === 'self' && (
                     <button type="button" onClick={() => setCropping(true)} className="rounded-full border border-gold-300/40 bg-black/40 px-3 py-1 text-[11px] text-gold-100 hover:bg-black/60">
                       📷 {t('avatarUpload.change')}
@@ -96,7 +103,17 @@ export function PlayerProfilePage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex min-w-0 items-center gap-2">
-                    <PlayerName name={p.displayName} badges={p.badges} size={22} className="min-w-0 font-display text-2xl font-bold text-white" />
+                    <SliceFrame
+                      id="profile.nameplate"
+                      cut={{ t: 0.3, b: 0.3, l: 0.16, r: 0.16 }}
+                      scale={0.085}
+                      pad={{ t: 0, b: 0, l: 2, r: 2 }}
+                      className="min-w-0 max-w-full"
+                      fallback={<PlayerName name={p.displayName} badges={p.badges} size={22} className="min-w-0 font-display text-2xl font-bold text-white" />}
+                    >
+                      <PlayerName name={p.displayName} badges={p.badges} size={22} className="min-w-0 font-display text-2xl font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]" />
+                    </SliceFrame>
+                    <ProfileAccents vipLevel={p.vip.level} partner={p.badges.includes('partner')} />
                     <PlayerRankBadge rank={p.rank} size={26} />
                   </div>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-white/60">
@@ -117,7 +134,7 @@ export function PlayerProfilePage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex flex-col items-center gap-1">
-                    <VipEmblem level={p.vip.level} size={56} />
+                    <VipCrest level={p.vip.level} size={64} />
                     <span className="text-[11px] text-fuchsia-100">{t('people.profile.vip', { level: p.vip.level })}</span>
                   </div>
                   {p.rank && (
@@ -250,14 +267,18 @@ export function PlayerProfilePage() {
             <div className="grid gap-4 lg:grid-cols-2">
               {/* Achievements & badges */}
               <section className="glass p-4">
-                <h2 className="mb-3 font-display text-lg text-gold-100">{t('people.profile.achievements')}</h2>
+                <h2 className="mb-3 flex items-center gap-2 font-display text-lg text-gold-100">
+                  <KeyoImg id="profile.achievement-showcase" size={56} alt="" decorative className="-my-3" />
+                  {t('people.profile.achievements')}
+                </h2>
                 {p.achievements.length === 0 ? (
                   <p className="text-sm text-white/50">{t('people.profile.noAchievements')}</p>
                 ) : (
                   <ul className="flex flex-wrap gap-2">
                     {p.achievements.map((a) => (
-                      <li key={a} className="rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-xs text-amber-100">
-                        🏆 {ACHIEVEMENT_TITLES[a]?.[i18n.language.startsWith('vi') ? 0 : 1] ?? a}
+                      <li key={a} className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-300/10 py-1 pl-1.5 pr-3 text-xs text-amber-100">
+                        {ACHIEVEMENT_ART[a] ? <KeyoImg id={ACHIEVEMENT_ART[a]!} size={20} alt="" decorative fallback={<span aria-hidden>🏆</span>} /> : <span aria-hidden>🏆</span>}
+                        {ACHIEVEMENT_TITLES[a]?.[i18n.language.startsWith('vi') ? 0 : 1] ?? a}
                       </li>
                     ))}
                   </ul>

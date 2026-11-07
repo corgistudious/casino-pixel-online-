@@ -1,3 +1,5 @@
+import { KeyoImg } from '../assets/keyo';
+import { GIFT_ART } from '../assets/keyo/bindings';
 import { GIFT_CATEGORIES, GIFT_RULES, type GiftCategory, type GiftItemView, type GiftRarity, type GiftShopView } from '@casino/shared';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -40,7 +42,10 @@ const RARITY_RING: Record<GiftRarity, string> = {
   mythic: 'border-rose-300/80 shadow-[0_0_18px_-4px_rgba(255,120,160,0.8)]',
 };
 
-export function GiftIcon({ gift, size = 40 }: { gift: Pick<GiftItemView, 'icon' | 'iconUrl'>; size?: number }) {
+export function GiftIcon({ gift, size = 40 }: { gift: Pick<GiftItemView, 'icon' | 'iconUrl'> & { id?: string }; size?: number }) {
+  // An uploaded icon wins; otherwise the Asset Studio art for the default gift, else the emoji.
+  const studio = !gift.iconUrl && gift.id ? GIFT_ART[gift.id] : undefined;
+  if (studio) return <KeyoImg id={studio} size={size} alt="" decorative fallback={<span className="flex items-center justify-center leading-none" style={{ width: size, height: size, fontSize: size * 0.8 }}>{gift.icon}</span>} />;
   return gift.iconUrl ? (
     <img src={assetSrc(gift.iconUrl)} alt="" className="object-contain" style={{ width: size, height: size }} draggable={false} />
   ) : (

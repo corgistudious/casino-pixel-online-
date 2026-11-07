@@ -1,3 +1,4 @@
+import { KeyoImg, type KeyoAssetId } from '../assets/keyo';
 import { vipProgress, type MissionGroup, type MissionsOverview, type MissionView } from '@casino/shared';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,10 +14,10 @@ import { toast } from '../ui/toast';
 import { VipEmblem } from '../ui/VipEmblem';
 import { useVip } from '../store/vip';
 
-const GROUPS: { id: MissionGroup; tone: string; ring: string; icon: string }[] = [
-  { id: 'daily', tone: 'from-sky-500/25 via-sky-500/5', ring: 'border-sky-300/30', icon: '☀️' },
-  { id: 'weekly', tone: 'from-violet-500/25 via-violet-500/5', ring: 'border-violet-300/30', icon: '📅' },
-  { id: 'rank', tone: 'from-amber-500/30 via-amber-500/5', ring: 'border-amber-300/40', icon: '🏆' },
+const GROUPS: { id: MissionGroup; tone: string; ring: string; icon: string; art: KeyoAssetId }[] = [
+  { id: 'daily', tone: 'from-sky-500/25 via-sky-500/5', ring: 'border-sky-300/30', icon: '☀️', art: 'reward.daily-gift' },
+  { id: 'weekly', tone: 'from-violet-500/25 via-violet-500/5', ring: 'border-violet-300/30', icon: '📅', art: 'reward.weekly-gift' },
+  { id: 'rank', tone: 'from-amber-500/30 via-amber-500/5', ring: 'border-amber-300/40', icon: '🏆', art: 'reward.milestone' },
 ];
 
 /** Daily, weekly and rank missions with live progress, countdowns and one-tap claiming. */
@@ -43,9 +44,19 @@ export function MissionsPage() {
         <section className="relative overflow-hidden rounded-3xl border border-emerald-300/25 bg-gradient-to-br from-[#0c3b2e] via-[#0f1d33] to-[#24113d] p-5 shadow-panel">
           <div className="pointer-events-none absolute -left-10 -top-16 h-56 w-56 rounded-full bg-emerald-400/20 blur-3xl" />
           <div className="relative flex flex-wrap items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-300/40 bg-black/30">
-              <NavIcon name="missions" size={30} active />
-            </div>
+            <KeyoImg
+              id="ui.quest"
+              size={68}
+              alt=""
+              decorative
+              eager
+              className="-my-2 drop-shadow-[0_6px_12px_rgba(0,0,0,0.55)]"
+              fallback={
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-300/40 bg-black/30">
+                  <NavIcon name="missions" size={30} active />
+                </div>
+              }
+            />
             <div className="min-w-0 flex-1">
               <h1 className="font-display text-3xl font-heading text-white">{t('missions.title')}</h1>
               <p className="text-sm text-white/60">{t('missions.subtitle')}</p>
@@ -74,8 +85,9 @@ export function MissionsPage() {
             return (
               <section key={g.id} className={`overflow-hidden rounded-3xl border ${g.ring} bg-gradient-to-br ${g.tone} to-black/30`}>
                 <header className="flex flex-wrap items-baseline justify-between gap-2 px-5 pt-4">
-                  <h2 className="font-display text-xl font-heading text-white">
-                    <span aria-hidden>{g.icon}</span> {t(`missions.groups.${g.id}`)}
+                  <h2 className="flex items-center gap-2 font-display text-xl font-heading text-white">
+                    <KeyoImg id={g.art} size={36} alt="" decorative className="-my-2" fallback={<span aria-hidden>{g.icon}</span>} />
+                    {t(`missions.groups.${g.id}`)}
                   </h2>
                   <span className="text-xs text-white/50">{t(`missions.groupHint.${g.id}`)}</span>
                 </header>
