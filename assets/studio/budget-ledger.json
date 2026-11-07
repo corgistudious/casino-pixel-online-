@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 31.55,
-  "spentActualUsd": 14.14881,
-  "images": 269,
+  "spentEstimatedUsd": 32.05,
+  "spentActualUsd": 14.41179,
+  "images": 274,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -7022,6 +7022,136 @@
         "total_tokens": 2199
       },
       "seconds": 28
+    },
+    {
+      "at": "2026-11-07T03:40:38.623Z",
+      "requestId": "2026-11-07-lib-20-8-other-2",
+      "assetId": "spin.ticket",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054885,
+      "usage": {
+        "input_tokens": 441,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 441
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2197
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T03:41:10.824Z",
+      "requestId": "2026-11-07-lib-20-8-other-2",
+      "assetId": "spin.wheel",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055,
+      "usage": {
+        "input_tokens": 464,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 464
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2220
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T03:41:40.061Z",
+      "requestId": "2026-11-07-lib-20-8-other-2",
+      "assetId": "ui.announcement",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054865,
+      "usage": {
+        "input_tokens": 437,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 437
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2193
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T03:42:11.468Z",
+      "requestId": "2026-11-07-lib-20-8-other-2",
+      "assetId": "ui.calendar",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054865,
+      "usage": {
+        "input_tokens": 437,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 437
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2193
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T03:42:35.808Z",
+      "requestId": "2026-11-07-lib-20-8-other-2",
+      "assetId": "ui.claim-panel",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043365,
+      "usage": {
+        "input_tokens": 441,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 441
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1813
+      },
+      "seconds": 24
     }
   ],
   "approvals": [

@@ -18403,7 +18403,7 @@
       "name": "Spin wheel: wheel",
       "description": "Art only; no new gameplay is added without separate approval.",
       "prompt": "Asset: Spin wheel: wheel for KEYO GAME (Spin Wheel (planned — no gameplay without approval)). Purpose: Art only; no new gameplay is added without separate approval.\nObject: a prize spin wheel face with 8 coloured segments, gold rim and studs, segments empty for UI icons; no text.\nMaterials: gold, enamel.\nCamera: Orthographic front view, perfectly circular.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -18412,17 +18412,69 @@
       "priority": "P3",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.055,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/spin.wheel/v1/source.png",
+          "optimizedFile": "assets/studio/generated/spin.wheel/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:41:11.067Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/spin.wheel/v1/source.png",
+      "optimizedFile": "assets/studio/generated/spin.wheel/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.612,
+          "borderAlpha": 0,
+          "lumStd": 52.3,
+          "bbox": {
+            "x": 0.05859375,
+            "y": 0.046875,
+            "w": 0.8828125,
+            "h": 0.89453125
+          },
+          "sharpness": 1097.1,
+          "dhash": "2b33b28b83ce4d12",
+          "avgColor": [
+            154,
+            111,
+            103
+          ]
+        },
+        "checkedAt": "2026-11-07T03:41:11.067Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 163612
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 464,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 464
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2220
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -18517,7 +18569,7 @@
       "name": "Spin wheel: ticket",
       "description": "Art only; no new gameplay is added without separate approval.",
       "prompt": "Asset: Spin wheel: ticket for KEYO GAME (Spin Wheel (planned — no gameplay without approval)). Purpose: Art only; no new gameplay is added without separate approval.\nObject: a spin ticket; no text.\nMaterials: gold, enamel.\nCamera: Front view.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -18526,17 +18578,69 @@
       "priority": "P3",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054885,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/spin.ticket/v1/source.png",
+          "optimizedFile": "assets/studio/generated/spin.ticket/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:40:38.871Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/spin.ticket/v1/source.png",
+      "optimizedFile": "assets/studio/generated/spin.ticket/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.389,
+          "borderAlpha": 0,
+          "lumStd": 73.9,
+          "bbox": {
+            "x": 0.0546875,
+            "y": 0.1953125,
+            "w": 0.91796875,
+            "h": 0.62109375
+          },
+          "sharpness": 854.2,
+          "dhash": "18c316be929b54a2",
+          "avgColor": [
+            192,
+            134,
+            103
+          ]
+        },
+        "checkedAt": "2026-11-07T03:40:38.871Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 135490
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 441,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 441
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2197
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -22471,7 +22575,7 @@
       "name": "UI: calendar",
       "description": "System UI art.",
       "prompt": "Asset: UI: calendar for KEYO GAME (System UI). Purpose: System UI art.\nObject: an event calendar icon (no numbers); no text.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -22480,17 +22584,69 @@
       "priority": "P3",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054865,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/ui.calendar/v1/source.png",
+          "optimizedFile": "assets/studio/generated/ui.calendar/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:42:11.704Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/ui.calendar/v1/source.png",
+      "optimizedFile": "assets/studio/generated/ui.calendar/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.566,
+          "borderAlpha": 0,
+          "lumStd": 73.1,
+          "bbox": {
+            "x": 0.0625,
+            "y": 0.07421875,
+            "w": 0.88671875,
+            "h": 0.875
+          },
+          "sharpness": 1095.6,
+          "dhash": "b2a66c3e12760686",
+          "avgColor": [
+            192,
+            161,
+            137
+          ]
+        },
+        "checkedAt": "2026-11-07T03:42:11.704Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 143378
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 437,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 437
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2193
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -22533,7 +22689,7 @@
       "name": "UI: claim-panel",
       "description": "System UI art.",
       "prompt": "Asset: UI: claim-panel for KEYO GAME (System UI). Purpose: System UI art.\nObject: an ornamental empty reward claim panel frame (centre transparent); no text.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -22542,17 +22698,69 @@
       "priority": "P3",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.043365,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/ui.claim-panel/v1/source.png",
+          "optimizedFile": "assets/studio/generated/ui.claim-panel/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:42:36.040Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/ui.claim-panel/v1/source.png",
+      "optimizedFile": "assets/studio/generated/ui.claim-panel/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.274,
+          "borderAlpha": 0,
+          "lumStd": 61.8,
+          "bbox": {
+            "x": 0.08203125,
+            "y": 0.0390625,
+            "w": 0.8359375,
+            "h": 0.86328125
+          },
+          "sharpness": 813,
+          "dhash": "0f4daab6aaaa96d4",
+          "avgColor": [
+            159,
+            104,
+            79
+          ]
+        },
+        "checkedAt": "2026-11-07T03:42:36.040Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 104318
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 441,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 441
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1813
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -22595,7 +22803,7 @@
       "name": "UI: announcement",
       "description": "System UI art.",
       "prompt": "Asset: UI: announcement for KEYO GAME (System UI). Purpose: System UI art.\nObject: an announcement trumpet-and-ribbon decoration; no text.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -22604,17 +22812,69 @@
       "priority": "P3",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054865,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/ui.announcement/v1/source.png",
+          "optimizedFile": "assets/studio/generated/ui.announcement/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:41:40.286Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/ui.announcement/v1/source.png",
+      "optimizedFile": "assets/studio/generated/ui.announcement/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.401,
+          "borderAlpha": 0,
+          "lumStd": 58.8,
+          "bbox": {
+            "x": 0.0625,
+            "y": 0.0703125,
+            "w": 0.8828125,
+            "h": 0.82421875
+          },
+          "sharpness": 697.2,
+          "dhash": "30dc5b79ac96d429",
+          "avgColor": [
+            160,
+            93,
+            93
+          ]
+        },
+        "checkedAt": "2026-11-07T03:41:40.286Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 125762
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 437,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 437
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2193
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -22650,5 +22910,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T03:39:42.095Z"
+  "updatedAt": "2026-11-07T03:42:36.040Z"
 }

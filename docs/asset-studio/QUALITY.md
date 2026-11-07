@@ -216,7 +216,9 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | reward.milestone | NEEDS_REVIEW | OK |  |  | 0.428 | 0 | 804.7 | 145 KB |
 | reward.mystery-gift | NEEDS_REVIEW | OK |  |  | 0.53 | 0 | 665.1 | 131 KB |
 | reward.premium-gift | NEEDS_REVIEW | OK |  |  | 0.433 | 0 | 900.5 | 132 KB |
+| spin.wheel | NEEDS_REVIEW | OK |  |  | 0.612 | 0 | 1097.1 | 160 KB |
 | spin.pointer | NEEDS_REVIEW | OK |  |  | 0.302 | 0 | 622.8 | 94 KB |
+| spin.ticket | NEEDS_REVIEW | OK |  |  | 0.389 | 0 | 854.2 | 132 KB |
 | spin.button | NEEDS_REVIEW | OK |  |  | 0.584 | 0 | 961.4 | 141 KB |
 | event.halloween.icon | NEEDS_REVIEW | OK |  |  | 0.504 | 0 | 683.6 | 141 KB |
 | event.halloween.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 776.6 | 84 KB |
@@ -264,3 +266,6 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | achievement.legendary | NEEDS_REVIEW | OK |  |  | 0.487 | 0 | 936 | 154 KB |
 | achievement.collector | NEEDS_REVIEW | OK |  |  | 0.477 | 0 | 1092.1 | 156 KB |
 | achievement.champion | NEEDS_REVIEW | OK |  |  | 0.541 | 0 | 1122.3 | 189 KB |
+| ui.calendar | NEEDS_REVIEW | OK |  |  | 0.566 | 0 | 1095.6 | 140 KB |
+| ui.claim-panel | NEEDS_REVIEW | OK |  |  | 0.274 | 0 | 813 | 102 KB |
+| ui.announcement | NEEDS_REVIEW | OK |  |  | 0.401 | 0 | 697.2 | 123 KB |

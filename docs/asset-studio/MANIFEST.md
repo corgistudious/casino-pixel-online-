@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 236 |
+| NEEDS_REVIEW | 241 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 10 |
+| PLANNED | 5 |
 
 ## Theo nhóm
 
@@ -336,9 +336,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| spin.wheel | Spin wheel: wheel | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| spin.wheel | Spin wheel: wheel | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | spin.pointer | Spin wheel: pointer | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
-| spin.ticket | Spin wheel: ticket | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| spin.ticket | Spin wheel: ticket | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | spin.button | Spin wheel: button | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 
 ## event
@@ -403,10 +403,10 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|---|---|---|---|---|---|---|
 | ui.notification | UI: notification | System UI | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | ui.mailbox | UI: mailbox | System UI | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| ui.calendar | UI: calendar | System UI | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| ui.calendar | UI: calendar | System UI | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | ui.quest | UI: quest | System UI | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| ui.claim-panel | UI: claim-panel | System UI | 1536x1024 | yes | P3 |  | PLANNED | 0.10 |
+| ui.claim-panel | UI: claim-panel | System UI | 1536x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | ui.progress-panel | UI: progress-panel | System UI | 1536x1024 | yes | P3 |  | PLANNED | 0.10 |
-| ui.announcement | UI: announcement | System UI | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| ui.announcement | UI: announcement | System UI | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | ui.leaderboard | UI: leaderboard | System UI | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 
