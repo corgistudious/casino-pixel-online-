@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 19.05,
-  "spentActualUsd": 7.71316,
-  "images": 144,
+  "spentEstimatedUsd": 19.55,
+  "spentActualUsd": 7.98805,
+  "images": 149,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -3761,6 +3761,136 @@
         "total_tokens": 2215
       },
       "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:32:06.800Z",
+      "requestId": "2026-11-07-lib-10-4-collectibles-2",
+      "assetId": "collectible.watch.gold",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05497,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:32:35.625Z",
+      "requestId": "2026-11-07-lib-10-4-collectibles-2",
+      "assetId": "collectible.watch.limited",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054995,
+      "usage": {
+        "input_tokens": 463,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 463
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2219
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:33:07.109Z",
+      "requestId": "2026-11-07-lib-10-4-collectibles-2",
+      "assetId": "collectible.yacht.limited",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05497,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:33:40.081Z",
+      "requestId": "2026-11-07-lib-10-4-collectibles-2",
+      "assetId": "collectible.yacht.luxury",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05497,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T01:34:12.929Z",
+      "requestId": "2026-11-07-lib-10-4-collectibles-2",
+      "assetId": "collectible.yacht.royal",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054985,
+      "usage": {
+        "input_tokens": 461,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 461
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2217
+      },
+      "seconds": 32
     }
   ]
 }

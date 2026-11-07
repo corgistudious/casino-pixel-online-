@@ -11703,7 +11703,7 @@
       "name": "watch: gold",
       "description": "Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.",
       "prompt": "Asset: watch: gold for KEYO GAME (Collectibles / Gifts). Purpose: Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.\nObject: a solid gold wristwatch; fictional design, no real brand, logo or text.\nMaterials: as described.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -11712,17 +11712,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05497,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/collectible.watch.gold/v1/source.png",
+          "optimizedFile": "assets/studio/generated/collectible.watch.gold/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:32:07.037Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/collectible.watch.gold/v1/source.png",
+      "optimizedFile": "assets/studio/generated/collectible.watch.gold/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.443,
+          "borderAlpha": 0,
+          "lumStd": 66.3,
+          "bbox": {
+            "x": 0.18359375,
+            "y": 0.0625,
+            "w": 0.65234375,
+            "h": 0.8828125
+          },
+          "sharpness": 1326.2,
+          "dhash": "4f973272732b9a64"
+        },
+        "checkedAt": "2026-11-07T01:32:07.037Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 150640
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -11812,7 +11859,7 @@
       "name": "watch: limited",
       "description": "Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.",
       "prompt": "Asset: watch: limited for KEYO GAME (Collectibles / Gifts). Purpose: Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.\nObject: a limited-edition skeleton wristwatch with visible gears; fictional design, no real brand, logo or text.\nMaterials: as described.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -11821,17 +11868,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054995,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/collectible.watch.limited/v1/source.png",
+          "optimizedFile": "assets/studio/generated/collectible.watch.limited/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:32:35.851Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/collectible.watch.limited/v1/source.png",
+      "optimizedFile": "assets/studio/generated/collectible.watch.limited/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.436,
+          "borderAlpha": 0,
+          "lumStd": 63.9,
+          "bbox": {
+            "x": 0.1875,
+            "y": 0.07421875,
+            "w": 0.66015625,
+            "h": 0.85546875
+          },
+          "sharpness": 1466.2,
+          "dhash": "599c5e5e4c646530"
+        },
+        "checkedAt": "2026-11-07T01:32:35.851Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 165572
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 463,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 463
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2219
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -12264,7 +12358,7 @@
       "name": "yacht: luxury",
       "description": "Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.",
       "prompt": "Asset: yacht: luxury for KEYO GAME (Collectibles / Gifts). Purpose: Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.\nObject: a stylized luxury yacht; fictional design, no real brand, logo or text.\nMaterials: as described.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -12273,17 +12367,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05497,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/collectible.yacht.luxury/v1/source.png",
+          "optimizedFile": "assets/studio/generated/collectible.yacht.luxury/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:33:40.800Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/collectible.yacht.luxury/v1/source.png",
+      "optimizedFile": "assets/studio/generated/collectible.yacht.luxury/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.41,
+          "borderAlpha": 0.007,
+          "lumStd": 67.5,
+          "bbox": {
+            "x": 0.0234375,
+            "y": 0.06640625,
+            "w": 0.9609375,
+            "h": 0.859375
+          },
+          "sharpness": 1130.1,
+          "dhash": "a03a6c5349c65b3c"
+        },
+        "checkedAt": "2026-11-07T01:33:40.800Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 159128
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -12326,7 +12467,7 @@
       "name": "yacht: royal",
       "description": "Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.",
       "prompt": "Asset: yacht: royal for KEYO GAME (Collectibles / Gifts). Purpose: Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.\nObject: a stylized royal yacht with gold trim; fictional design, no real brand, logo or text.\nMaterials: as described.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -12335,17 +12476,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054985,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/collectible.yacht.royal/v1/source.png",
+          "optimizedFile": "assets/studio/generated/collectible.yacht.royal/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:34:13.165Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/collectible.yacht.royal/v1/source.png",
+      "optimizedFile": "assets/studio/generated/collectible.yacht.royal/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.427,
+          "borderAlpha": 0,
+          "lumStd": 72.9,
+          "bbox": {
+            "x": 0.04296875,
+            "y": 0.046875,
+            "w": 0.92578125,
+            "h": 0.89453125
+          },
+          "sharpness": 1146.8,
+          "dhash": "1418061785e13a82"
+        },
+        "checkedAt": "2026-11-07T01:34:13.165Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 161164
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 461,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 461
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2217
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -12357,7 +12545,7 @@
       "name": "yacht: limited",
       "description": "Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.",
       "prompt": "Asset: yacht: limited for KEYO GAME (Collectibles / Gifts). Purpose: Collectible item icon for Shop/Inventory/Profile. Price, quantity and ownership are untouched.\nObject: a stylized futuristic yacht; fictional design, no real brand, logo or text.\nMaterials: as described.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -12366,17 +12554,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05497,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/collectible.yacht.limited/v1/source.png",
+          "optimizedFile": "assets/studio/generated/collectible.yacht.limited/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:33:07.816Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/collectible.yacht.limited/v1/source.png",
+      "optimizedFile": "assets/studio/generated/collectible.yacht.limited/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.444,
+          "borderAlpha": 0,
+          "lumStd": 69.9,
+          "bbox": {
+            "x": 0.03515625,
+            "y": 0.02734375,
+            "w": 0.93359375,
+            "h": 0.9296875
+          },
+          "sharpness": 1202.1,
+          "dhash": "303866591187731c"
+        },
+        "checkedAt": "2026-11-07T01:33:07.816Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 160352
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 458,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 458
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2214
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -15450,5 +15685,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T01:31:26.376Z"
+  "updatedAt": "2026-11-07T01:34:13.165Z"
 }

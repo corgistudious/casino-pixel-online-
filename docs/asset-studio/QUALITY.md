@@ -128,12 +128,17 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | chest.legendary | USER_APPROVED | OK |  |  | 0.571 | 0 | 1395.4 | 193 KB |
 | collectible.watch.classic | NEEDS_REVIEW | OK |  |  | 0.483 | 0 | 1103.8 | 143 KB |
 | collectible.watch.luxury | USER_APPROVED | OK |  |  | 0.496 | 0 | 1402.1 | 172 KB |
+| collectible.watch.gold | NEEDS_REVIEW | OK |  |  | 0.443 | 0 | 1326.2 | 147 KB |
 | collectible.watch.diamond | NEEDS_REVIEW | OK |  |  | 0.45 | 0 | 1978.6 | 219 KB |
+| collectible.watch.limited | NEEDS_REVIEW | OK |  |  | 0.436 | 0 | 1466.2 | 162 KB |
 | collectible.car.sports | NEEDS_REVIEW | OK |  |  | 0.381 | 0.001 | 1106.8 | 139 KB |
 | collectible.car.supercar | NEEDS_REVIEW | OK |  |  | 0.386 | 0.001 | 1270.7 | 150 KB |
 | collectible.car.hypercar | NEEDS_REVIEW | OK |  |  | 0.367 | 0.002 | 1187.5 | 149 KB |
 | collectible.car.luxury | NEEDS_REVIEW | OK |  |  | 0.391 | 0.011 | 1642.1 | 151 KB |
 | collectible.car.limited | NEEDS_REVIEW | OK |  |  | 0.401 | 0.005 | 1375.1 | 147 KB |
+| collectible.yacht.luxury | NEEDS_REVIEW | OK |  |  | 0.41 | 0.007 | 1130.1 | 155 KB |
+| collectible.yacht.royal | NEEDS_REVIEW | OK |  |  | 0.427 | 0 | 1146.8 | 157 KB |
+| collectible.yacht.limited | NEEDS_REVIEW | OK |  |  | 0.444 | 0 | 1202.1 | 157 KB |
 | collectible.property.villa | NEEDS_REVIEW | OK |  |  | 0.521 | 0 | 1178.6 | 246 KB |
 | collectible.property.mansion | NEEDS_REVIEW | OK |  |  | 0.526 | 0 | 1715.6 | 231 KB |
 | collectible.property.beach-villa | NEEDS_REVIEW | OK |  |  | 0.546 | 0 | 920.4 | 236 KB |
