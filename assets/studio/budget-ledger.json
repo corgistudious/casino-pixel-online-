@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 29.75,
-  "spentActualUsd": 13.251755,
-  "images": 251,
+  "spentEstimatedUsd": 30.25,
+  "spentActualUsd": 13.469155,
+  "images": 256,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -6552,6 +6552,136 @@
         "total_tokens": 1837
       },
       "seconds": 24
+    },
+    {
+      "at": "2026-11-07T03:29:57.473Z",
+      "requestId": "2026-11-07-lib-18-7-bubbles-titles-fx-3",
+      "assetId": "title.high-roller",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043485,
+      "usage": {
+        "input_tokens": 465,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 465
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1837
+      },
+      "seconds": 24
+    },
+    {
+      "at": "2026-11-07T03:30:20.874Z",
+      "requestId": "2026-11-07-lib-18-7-bubbles-titles-fx-3",
+      "assetId": "title.jackpot-winner",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.04349,
+      "usage": {
+        "input_tokens": 466,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 466
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1838
+      },
+      "seconds": 23
+    },
+    {
+      "at": "2026-11-07T03:30:45.416Z",
+      "requestId": "2026-11-07-lib-18-7-bubbles-titles-fx-3",
+      "assetId": "title.kol",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.04347,
+      "usage": {
+        "input_tokens": 462,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 462
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1834
+      },
+      "seconds": 24
+    },
+    {
+      "at": "2026-11-07T03:31:08.317Z",
+      "requestId": "2026-11-07-lib-18-7-bubbles-titles-fx-3",
+      "assetId": "title.limited",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.04347,
+      "usage": {
+        "input_tokens": 462,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 462
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1834
+      },
+      "seconds": 23
+    },
+    {
+      "at": "2026-11-07T03:31:30.125Z",
+      "requestId": "2026-11-07-lib-18-7-bubbles-titles-fx-3",
+      "assetId": "title.lucky-player",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043485,
+      "usage": {
+        "input_tokens": 465,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 465
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1837
+      },
+      "seconds": 22
     }
   ],
   "approvals": [

@@ -11281,7 +11281,7 @@
       "name": "Title plate: high-roller",
       "description": "Decorative plate behind a title (title text is UI text, VI/EN).",
       "prompt": "Asset: Title plate: high-roller for KEYO GAME (Profile). Purpose: Decorative plate behind a title (title text is UI text, VI/EN).\nObject: A horizontal ornamental title plaque for \"high roller\" (themed motifs at both ends), the centre is a plain empty band for UI text; no letters.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Plaque centred, fills 90% width, ends symmetrical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -11290,17 +11290,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.043485,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/title.high-roller/v1/source.png",
+          "optimizedFile": "assets/studio/generated/title.high-roller/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:29:57.696Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/title.high-roller/v1/source.png",
+      "optimizedFile": "assets/studio/generated/title.high-roller/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.314,
+          "borderAlpha": 0.02,
+          "lumStd": 62.2,
+          "bbox": {
+            "x": 0.01171875,
+            "y": 0.19921875,
+            "w": 0.9765625,
+            "h": 0.48046875
+          },
+          "sharpness": 943.1,
+          "dhash": "324daaf0e8b24100",
+          "avgColor": [
+            127,
+            74,
+            74
+          ]
+        },
+        "checkedAt": "2026-11-07T03:29:57.696Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 89880
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 465,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 465
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1837
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -11398,7 +11450,7 @@
       "name": "Title plate: lucky-player",
       "description": "Decorative plate behind a title (title text is UI text, VI/EN).",
       "prompt": "Asset: Title plate: lucky-player for KEYO GAME (Profile). Purpose: Decorative plate behind a title (title text is UI text, VI/EN).\nObject: A horizontal ornamental title plaque for \"lucky player\" (themed motifs at both ends), the centre is a plain empty band for UI text; no letters.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Plaque centred, fills 90% width, ends symmetrical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -11407,17 +11459,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.043485,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/title.lucky-player/v1/source.png",
+          "optimizedFile": "assets/studio/generated/title.lucky-player/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:31:30.325Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/title.lucky-player/v1/source.png",
+      "optimizedFile": "assets/studio/generated/title.lucky-player/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.292,
+          "borderAlpha": 0.021,
+          "lumStd": 64.1,
+          "bbox": {
+            "x": 0.015625,
+            "y": 0.24609375,
+            "w": 0.96875,
+            "h": 0.43359375
+          },
+          "sharpness": 825.3,
+          "dhash": "100caaf4e80a5000",
+          "avgColor": [
+            124,
+            84,
+            86
+          ]
+        },
+        "checkedAt": "2026-11-07T03:31:30.325Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 77130
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 465,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 465
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1837
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -11429,7 +11533,7 @@
       "name": "Title plate: jackpot-winner",
       "description": "Decorative plate behind a title (title text is UI text, VI/EN).",
       "prompt": "Asset: Title plate: jackpot-winner for KEYO GAME (Profile). Purpose: Decorative plate behind a title (title text is UI text, VI/EN).\nObject: A horizontal ornamental title plaque for \"jackpot winner\" (themed motifs at both ends), the centre is a plain empty band for UI text; no letters.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Plaque centred, fills 90% width, ends symmetrical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -11438,17 +11542,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.04349,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/title.jackpot-winner/v1/source.png",
+          "optimizedFile": "assets/studio/generated/title.jackpot-winner/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:30:21.109Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/title.jackpot-winner/v1/source.png",
+      "optimizedFile": "assets/studio/generated/title.jackpot-winner/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.321,
+          "borderAlpha": 0.039,
+          "lumStd": 63.7,
+          "bbox": {
+            "x": 0.00390625,
+            "y": 0.203125,
+            "w": 0.9921875,
+            "h": 0.50390625
+          },
+          "sharpness": 775.8,
+          "dhash": "208c0bc8cc8e6002",
+          "avgColor": [
+            150,
+            88,
+            87
+          ]
+        },
+        "checkedAt": "2026-11-07T03:30:21.109Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 97698
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 466,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 466
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1838
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -11574,7 +11730,7 @@
       "name": "Title plate: kol",
       "description": "Decorative plate behind a title (title text is UI text, VI/EN).",
       "prompt": "Asset: Title plate: kol for KEYO GAME (Profile). Purpose: Decorative plate behind a title (title text is UI text, VI/EN).\nObject: A horizontal ornamental title plaque for \"kol\" (themed motifs at both ends), the centre is a plain empty band for UI text; no letters.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Plaque centred, fills 90% width, ends symmetrical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -11583,17 +11739,71 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.04347,
+      "status": "NEEDS_REVISION",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/title.kol/v1/source.png",
+          "optimizedFile": "assets/studio/generated/title.kol/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:30:45.646Z",
+          "validationOk": false
+        }
+      ],
+      "sourceFile": "assets/studio/generated/title.kol/v1/source.png",
+      "optimizedFile": "assets/studio/generated/title.kol/v1/optimized.webp",
+      "validation": {
+        "ok": false,
+        "errors": [
+          "object touches the canvas edge (possibly cut off)"
+        ],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.314,
+          "borderAlpha": 0.028,
+          "lumStd": 63.3,
+          "bbox": {
+            "x": 0,
+            "y": 0.26171875,
+            "w": 1,
+            "h": 0.45703125
+          },
+          "sharpness": 765.9,
+          "dhash": "126916dcdcba4500",
+          "avgColor": [
+            134,
+            80,
+            96
+          ]
+        },
+        "checkedAt": "2026-11-07T03:30:45.646Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 89070
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 462,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 462
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1834
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -11688,7 +11898,7 @@
       "name": "Title plate: limited",
       "description": "Decorative plate behind a title (title text is UI text, VI/EN).",
       "prompt": "Asset: Title plate: limited for KEYO GAME (Profile). Purpose: Decorative plate behind a title (title text is UI text, VI/EN).\nObject: A horizontal ornamental title plaque for \"limited\" (themed motifs at both ends), the centre is a plain empty band for UI text; no letters.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Plaque centred, fills 90% width, ends symmetrical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -11697,17 +11907,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.04347,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/title.limited/v1/source.png",
+          "optimizedFile": "assets/studio/generated/title.limited/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:31:08.536Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/title.limited/v1/source.png",
+      "optimizedFile": "assets/studio/generated/title.limited/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.255,
+          "borderAlpha": 0.008,
+          "lumStd": 60.8,
+          "bbox": {
+            "x": 0.01171875,
+            "y": 0.24609375,
+            "w": 0.9765625,
+            "h": 0.45703125
+          },
+          "sharpness": 632,
+          "dhash": "008a49f4cc138000",
+          "avgColor": [
+            118,
+            64,
+            89
+          ]
+        },
+        "checkedAt": "2026-11-07T03:31:08.536Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 66680
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 462,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 462
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1834
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -21709,5 +21971,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T03:29:20.256Z"
+  "updatedAt": "2026-11-07T03:31:30.325Z"
 }
