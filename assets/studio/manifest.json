@@ -298,7 +298,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05518,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -340,7 +340,12 @@
           "bytes": 172512
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:18.541Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Circular, clean lacquer + gold band, reads well at 44 px. Fits the procedural plate size.",
@@ -587,7 +592,7 @@
       "system": "Roulette",
       "name": "Roulette wheel head (no numbers)",
       "description": "Spinning wheel head; numbers are drawn in code so they stay correct.",
-      "prompt": "Asset: Roulette wheel head (no numbers) for KEYO GAME (Roulette). Purpose: Spinning wheel head; numbers are drawn in code so they stay correct.\nObject: A European roulette wheel head seen from directly above with 37 evenly spaced pockets alternating ruby red and charcoal black and one emerald pocket, polished gold frets, a mahogany cone and a four-arm gold turret; pockets carry NO numbers or text.\nMaterials: mahogany, lacquer, polished gold.\nCamera: Orthographic top-down, perfectly circular and radially symmetric.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
+      "prompt": "Asset: Roulette wheel head (no numbers) for KEYO GAME (Roulette). Purpose: Spinning wheel head; numbers are drawn in code so they stay correct.\nObject: A European roulette wheel head (the spinning part only) seen from directly above. From the outside in: a thin polished gold outer lip; EXACTLY ONE single ring of 37 evenly spaced pockets — 18 ruby red and 18 charcoal black strictly alternating, plus one emerald green pocket — separated by thin gold frets; inside that single ring a smooth mahogany cone with a soft highlight; a four-arm polished gold turret at the centre. There is only one ring of coloured pockets (no second inner ring, no number ring, no outer bowl, no diamond deflectors, no ball track). Pockets carry NO numbers or text.\nMaterials: mahogany, lacquer, polished gold.\nCamera: Orthographic top-down, perfectly circular and radially symmetric.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
       "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
@@ -598,7 +603,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.055155,
-      "status": "NEEDS_REVIEW",
+      "status": "NEEDS_REVISION",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -640,7 +645,12 @@
           "bytes": 213088
         }
       },
-      "review": null,
+      "review": {
+        "decision": "revise",
+        "note": "Owner: redo — one ring of 37 pockets, no bowl",
+        "at": "2026-11-07T00:03:21.626Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-revise",
         "note": "Two concentric rings of coloured pockets (a real wheel has ONE ring of 37); pocket count cannot be confirmed. Also includes the outer bowl with diamonds although that is a separate catalog asset. Revise with a single 37-pocket ring and no bowl.",
@@ -836,7 +846,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.055,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -878,7 +888,12 @@
           "bytes": 101126
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:18.809Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Clean ivory puck, crown emblem, no letters; thickness visible.",
@@ -1260,7 +1275,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.054975,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1302,7 +1317,12 @@
           "bytes": 131754
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:19.188Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Premium smoked-acrylic shoe with gold trim; card back peeking out.",
@@ -1777,7 +1797,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05491,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -1819,7 +1839,12 @@
           "bytes": 181940
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:19.406Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Strong silhouette, readable at 44 px (future symbol — no gameplay change).",
@@ -2387,7 +2412,7 @@
       "system": "VIP",
       "name": "VIP 1 badge",
       "description": "Badge for VIP level 1 (tier silver). Level number is UI text.",
-      "prompt": "Asset: VIP 1 badge for KEYO GAME (VIP). Purpose: Badge for VIP level 1 (tier silver). Level number is UI text.\nObject: A VIP rank badge: a small brushed-silver shield with a simple bevel; its prestige clearly greater than lower levels; no numbers or text.\nMaterials: brushed silver.\nCamera: Front view, centred, symmetrical.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
+      "prompt": "Asset: VIP 1 badge for KEYO GAME (VIP). Purpose: Badge for VIP level 1 (tier silver). Level number is UI text.\nObject: A VIP rank badge: the simplest badge of the whole set: a small plain heater-shaped shield in brushed silver with one clean bevelled rim and a smooth, slightly domed face; NO wings, NO laurels, NO stars, NO gems, NO crown, NO extra ornaments — modest and entry-level, but still polished and premium; its prestige clearly greater than lower levels; no numbers or text.\nMaterials: brushed silver.\nCamera: Front view, centred, symmetrical.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
       "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
@@ -2398,7 +2423,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05499,
-      "status": "NEEDS_REVIEW",
+      "status": "NEEDS_REVISION",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2440,7 +2465,12 @@
           "bytes": 140724
         }
       },
-      "review": null,
+      "review": {
+        "decision": "revise",
+        "note": "Owner: redo — simplest entry-level badge",
+        "at": "2026-11-07T00:03:21.834Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-revise",
         "note": "Looks too ornate for the entry level (laurel wings + star overlap with the planned VIP 2/3 designs); revise to the simple brushed-silver shield described so the 1→15 progression reads clearly.",
@@ -2667,7 +2697,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.055005,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2709,7 +2739,12 @@
           "bytes": 192306
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:19.673Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Platinum + sapphire + feathered wings, as specified.",
@@ -2936,7 +2971,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.055105,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -2978,7 +3013,12 @@
           "bytes": 233132
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:19.914Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Majestic crown emblem; clearly top tier.",
@@ -3112,7 +3152,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.055245,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3155,7 +3195,12 @@
           "bytes": 250546
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:20.114Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Centre fully transparent, ring even, crown/wings outside the photo area. Test on avatar photo passed.",
@@ -3278,7 +3323,7 @@
       "system": "Profile / Avatar frames",
       "name": "lunar-new-year frame",
       "description": "lunar-new-year frame avatar frame.",
-      "prompt": "Asset: lunar-new-year frame for KEYO GAME (Profile / Avatar frames). Purpose: lunar-new-year frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; red lacquer ring with gold clouds, two small lanterns and a coiled stylized dragon at the top; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
+      "prompt": "Asset: lunar-new-year frame for KEYO GAME (Profile / Avatar frames). Purpose: lunar-new-year frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; red lacquer ring with gold clouds, two small lanterns hanging close to the ring at the sides and a compact coiled stylized dragon resting on the top of the ring (head, horns, whiskers and flames kept small and close to the ring). Every part — dragon, lanterns, tassels, clouds — stays inside the central 82% of the canvas, leaving a clearly empty transparent margin of at least 9% on all four sides; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
       "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
@@ -3334,7 +3379,12 @@
           "bytes": 206684
         }
       },
-      "review": null,
+      "review": {
+        "decision": "revise",
+        "note": "Owner: redo — keep dragon/lanterns inside the canvas",
+        "at": "2026-11-07T00:03:22.047Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-revise",
         "note": "Dragon head and lanterns touch/extend past the canvas edge (validator: possibly cut off). Revise with a wider margin; design itself is strong.",
@@ -3840,7 +3890,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05513,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -3883,7 +3933,12 @@
           "bytes": 157006
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:20.327Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Even ring, broadcast star at the top, centre clear.",
@@ -4482,7 +4537,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.45,
       "actualCostUsd": 0.04368,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -4524,7 +4579,12 @@
           "bytes": 39894
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:20.540Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Decoration in corners only, straight edges plain → 9-slice friendly. Interior even.",
@@ -6084,7 +6144,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05504,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6126,7 +6186,12 @@
           "bytes": 185590
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:20.748Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "No currency symbols; strong 2.5D read.",
@@ -6353,7 +6418,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.054985,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6395,7 +6460,12 @@
           "bytes": 198008
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:20.950Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Clearly legendary tier; no text.",
@@ -6529,7 +6599,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05502,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -6571,7 +6641,12 @@
           "bytes": 175892
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:21.239Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Fictional design, no brand marks visible at review size.",
@@ -7356,7 +7431,7 @@
       "batch": "sample-1",
       "costEstimateUsd": 0.3,
       "actualCostUsd": 0.05502,
-      "status": "NEEDS_REVIEW",
+      "status": "USER_APPROVED",
       "integration": "not-integrated",
       "version": 1,
       "versions": [
@@ -7398,7 +7473,12 @@
           "bytes": 175492
         }
       },
-      "review": null,
+      "review": {
+        "decision": "approve",
+        "note": "Owner approved the recommended sample-1 asset",
+        "at": "2026-11-07T00:03:21.436Z",
+        "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
+      },
       "qa": {
         "verdict": "recommend-approve",
         "note": "Gold cup, wing handles, gems, black marble base — as specified.",
@@ -9592,5 +9672,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-06T23:59:47.320Z"
+  "updatedAt": "2026-11-07T00:03:48.440Z"
 }

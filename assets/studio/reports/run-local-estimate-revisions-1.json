@@ -1,0 +1,44 @@
+{
+  "requestId": "local-estimate-revisions-1",
+  "dryRun": true,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1,
+  "remainingBeforeUsd": 9.0432,
+  "runCapUsd": 1,
+  "planned": [
+    {
+      "id": "frame.seasonal.lunar-new-year",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.roulette.wheel-head",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "vip.badge.vip-01",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    }
+  ],
+  "generated": [],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T00:03:48.468Z",
+  "plannedEstimateUsd": 0.9,
+  "finishedAt": "2026-11-07T00:03:48.469Z",
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 0.95678,
+    "spentEstimatedUsd": 5.85,
+    "spentActualUsd": 0.95678,
+    "remainingUsd": 9.0432,
+    "images": 18
+  }
+}

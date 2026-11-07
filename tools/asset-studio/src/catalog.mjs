@@ -60,7 +60,7 @@ GAME('sicbo.icon-triple', 'sicbo', 'Sic Bo / Tài Xỉu', 'Triple emblem', 'Embl
 GAME('sicbo.table-vip', 'sicbo', 'Sic Bo / Tài Xỉu', 'VIP dice table felt', 'Opaque felt texture for the VIP dice table (layout drawn in code on top).', 'A seamless-looking deep emerald velvet felt surface with a subtle embossed royal damask pattern and soft centre spotlight, no markings.', 'velvet felt', { transparent: false, size: WIDE, camera: 'Top-down flat surface.', composition: 'Full-bleed texture, evenly lit, no objects.' });
 
 // B. Roulette
-GAME('roulette.wheel-head', 'roulette', 'Roulette', 'Roulette wheel head (no numbers)', 'Spinning wheel head; numbers are drawn in code so they stay correct.', 'A European roulette wheel head seen from directly above with 37 evenly spaced pockets alternating ruby red and charcoal black and one emerald pocket, polished gold frets, a mahogany cone and a four-arm gold turret; pockets carry NO numbers or text.', 'mahogany, lacquer, polished gold', { camera: 'Orthographic top-down, perfectly circular and radially symmetric.', priority: 'P1', batch: 'sample-1', animation: 'Rotated in code; must be radially symmetric.' });
+GAME('roulette.wheel-head', 'roulette', 'Roulette', 'Roulette wheel head (no numbers)', 'Spinning wheel head; numbers are drawn in code so they stay correct.', 'A European roulette wheel head (the spinning part only) seen from directly above. From the outside in: a thin polished gold outer lip; EXACTLY ONE single ring of 37 evenly spaced pockets — 18 ruby red and 18 charcoal black strictly alternating, plus one emerald green pocket — separated by thin gold frets; inside that single ring a smooth mahogany cone with a soft highlight; a four-arm polished gold turret at the centre. There is only one ring of coloured pockets (no second inner ring, no number ring, no outer bowl, no diamond deflectors, no ball track). Pockets carry NO numbers or text.', 'mahogany, lacquer, polished gold', { camera: 'Orthographic top-down, perfectly circular and radially symmetric.', priority: 'P1', batch: 'sample-1', animation: 'Rotated in code; must be radially symmetric.' });
 GAME('roulette.wheel-rim', 'roulette', 'Roulette', 'Wheel bowl rim', 'Static bowl ring around the wheel.', 'A circular polished mahogany bowl ring seen from above with eight small gold diamond deflectors and a gold inner lip; the centre is empty and fully transparent.', 'mahogany, gold', { camera: 'Orthographic top-down.' });
 GAME('roulette.ball', 'roulette', 'Roulette', 'Roulette ball', 'Ivory ball.', 'A single small glossy ivory-white ball with a crisp highlight.', 'ivory', {});
 GAME('roulette.pointer', 'roulette', 'Roulette', 'Result pointer', 'Pointer marking the winning pocket.', 'A slim gold arrow pointer with a small ruby, pointing downwards.', 'gold, ruby', {});
@@ -125,7 +125,7 @@ for (const [k, desc, sample] of [
 
 // ---------------------------------------------------------------- VIP badges (15 distinct designs; level shown by UI text)
 const VIP = [
-  'a small brushed-silver shield with a simple bevel',
+  'the simplest badge of the whole set: a small plain heater-shaped shield in brushed silver with one clean bevelled rim and a smooth, slightly domed face; NO wings, NO laurels, NO stars, NO gems, NO crown, NO extra ornaments — modest and entry-level, but still polished and premium',
   'a silver shield with a single raised star',
   'a round silver crest with two laurel sprigs',
   'a gold hexagon badge with a bevelled rim',
@@ -152,7 +152,7 @@ frame('vip', 'vip-10', 'VIP 10 frame', 'faceted crystal-diamond ring with silver
 frame('vip', 'vip-15', 'VIP 15 frame', 'the most prestigious frame: double gold ring with diamond inlays, a jewelled imperial crown at the top, phoenix wings at the sides and a radiant amethyst at the bottom', { priority: 'P1', batch: 'sample-1', materials: 'gold, diamond, amethyst', animation: 'Gold shimmer + diamond sparkle overlay (CSS, reduced-motion aware).' });
 for (const [k, desc, sample] of [
   ['halloween', 'purple and orange ring with tiny pumpkins and bats', false], ['christmas', 'emerald and red ring with holly, snowflakes and a small star', false],
-  ['new-year', 'midnight blue ring with gold fireworks and confetti', false], ['lunar-new-year', 'red lacquer ring with gold clouds, two small lanterns and a coiled stylized dragon at the top', true],
+  ['new-year', 'midnight blue ring with gold fireworks and confetti', false], ['lunar-new-year', 'red lacquer ring with gold clouds, two small lanterns hanging close to the ring at the sides and a compact coiled stylized dragon resting on the top of the ring (head, horns, whiskers and flames kept small and close to the ring). Every part — dragon, lanterns, tassels, clouds — stays inside the central 82% of the canvas, leaving a clearly empty transparent margin of at least 9% on all four sides', true],
   ['valentine', 'rose-gold ring with small hearts and roses', false], ['easter', 'pastel ring with painted eggs and spring flowers', false], ['summer', 'turquoise ring with sun, waves and pearls', false],
   ['thanksgiving', 'amber ring with autumn leaves and wheat', false], ['anniversary', 'gold ring with a ribbon, stars and a small cake medallion', false],
 ]) frame('seasonal', k, `${k} frame`, desc, { priority: sample ? 'P1' : 'P2', batch: sample ? 'sample-1' : null });

@@ -1,0 +1,11 @@
+{
+  "id": "2026-11-07-01-sample-1-revisions",
+  "mode": "generate",
+  "assets": ["game.roulette.wheel-head", "vip.badge.vip-01", "frame.seasonal.lunar-new-year"],
+  "batchSize": 3,
+  "budgetLimitUsd": 1.0,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi'",
+  "note": "v2 of the three assets marked NEEDS_REVISION by the owner, with tightened prompts: roulette = exactly one ring of 37 pockets and no bowl; VIP 1 = the simplest plain silver shield; Lunar New Year frame = every ornament inside the central 82% of the canvas. v1 files are kept."
+}
