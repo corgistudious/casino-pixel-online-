@@ -33,15 +33,21 @@ export function preloadOverrides(scene: Phaser.Scene, extra: readonly { key: str
     scene.load.image(s.key, keyoUrlPx(s.id, s.canvasW * RES * 1.25));
   }
   if (!pending.size) return;
-  scene.load.on(Phaser.Loader.Events.FILE_COMPLETE, (key: string) => {
-    const w = pending.get(key);
-    const src = w !== undefined ? scene.textures.get(key).getSourceImage() : null;
-    if (w !== undefined && src) overrideScale.set(key, w / src.width);
-  });
-  scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
+  // Per-file one-shot listeners, and the error listener is removed when this load finishes, so a
+  // restarted scene never accumulates handlers on its (persistent) loader.
+  for (const [key, w] of pending) {
+    scene.load.once(`filecomplete-image-${key}`, () => {
+      const src = scene.textures.get(key).getSourceImage();
+      if (src) overrideScale.set(key, w / src.width);
+    });
+  }
+  const onError = (file: Phaser.Loader.File) => {
+    if (!pending.has(file.key)) return;
     overrideScale.delete(file.key);
     console.warn(`[keyo-assets] ${file.key} failed to load; using the drawn texture`);
-  });
+  };
+  scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
+  scene.load.once(Phaser.Loader.Events.COMPLETE, () => scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onError));
 }
 
 /**
@@ -59,9 +65,11 @@ export function lazyStudioTexture(scene: Phaser.Scene, key: string, id: KeyoAsse
     lazyRequested.delete(key);
     if (scene.sys.isActive()) onReady();
   });
-  scene.load.once(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
+  const onError = (file: Phaser.Loader.File) => {
     if (file.key === key) console.warn(`[keyo-assets] ${key} failed to load`);
-  });
+  };
+  scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
+  scene.load.once(Phaser.Loader.Events.COMPLETE, () => scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onError));
   if (!scene.load.isLoading()) scene.load.start();
 }
 
