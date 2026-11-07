@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 158 |
-| NEEDS_REVISION | 6 |
+| NEEDS_REVIEW | 160 |
+| NEEDS_REVISION | 4 |
 | PLANNED | 88 |
 
 ## Theo nhóm
@@ -87,7 +87,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.blackjack.action-double | Double icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-split | Split icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-insurance | Insurance icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| game.blackjack.table-felt | Blackjack arc table (opaque) | Blackjack (Multiplayer & Solo) | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
+| game.blackjack.table-felt | Blackjack arc table (opaque) | Blackjack (Multiplayer & Solo) | 1536x1024 | no | P2 |  | NEEDS_REVISION | 0.10 |
 | game.slots.symbol-seven | Slot symbol: seven | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-diamond | Slot symbol: diamond | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-bell | Slot symbol: bell | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
@@ -162,29 +162,29 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | frame.tournament.seasonal-champion | Tournament seasonal-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | frame.tournament.grand-champion | Tournament grand-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | frame.special.founder | founder frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| frame.special.early-supporter | early-supporter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| frame.special.early-supporter | early-supporter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.kol | kol frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | frame.special.creator | creator frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.reviewer | reviewer frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| frame.special.collector | collector frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
-| frame.special.limited-edition | limited-edition frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| frame.special.collector | collector frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| frame.special.limited-edition | limited-edition frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.event-exclusive | event-exclusive frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| frame.special.anniversary-exclusive | anniversary-exclusive frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| frame.special.anniversary-exclusive | anniversary-exclusive frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## avatar
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| avatar.default | Avatar: default | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.premium | Avatar: premium | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.royal | Avatar: royal | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.vip | Avatar: vip | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.limited | Avatar: limited | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.seasonal | Avatar: seasonal | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.tournament | Avatar: tournament | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.kol | Avatar: kol | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.collector | Avatar: collector | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
-| avatar.fantasy-dealer | Avatar: fantasy-dealer | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.default | Avatar: default | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.premium | Avatar: premium | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.royal | Avatar: royal | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.vip | Avatar: vip | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.limited | Avatar: limited | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.seasonal | Avatar: seasonal | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.tournament | Avatar: tournament | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.kol | Avatar: kol | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.collector | Avatar: collector | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.fantasy-dealer | Avatar: fantasy-dealer | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## bubble
 
@@ -230,7 +230,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | profile.nameplate | Profile nameplate | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| profile.header | Profile header | Profile | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
+| profile.header | Profile header | Profile | 1536x1024 | no | P2 |  | NEEDS_REVISION | 0.10 |
 | profile.background | Profile background | Profile | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | profile.prestige-effect | Profile prestige-effect | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | profile.achievement-showcase | Profile achievement-showcase | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |

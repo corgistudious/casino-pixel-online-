@@ -80,7 +80,13 @@ export async function validateImage(file, asset, otherHashes = []) {
   metrics.sharpness = +(await laplacianVariance(file)).toFixed(1);
   if (metrics.sharpness < 15) warnings.push(`low edge detail (sharpness ${metrics.sharpness}) — check for blur`);
   metrics.dhash = await dHash(file);
-  const dup = otherHashes.find((o) => hamming(o.hash, metrics.dhash) <= 5);
+  // Average visible colour: two assets are near-duplicates only when the shape hash AND the colours
+  // match (avatar frames all share a ring silhouette but differ in palette and motifs).
+  let cr = 0, cg = 0, cb = 0, cn = 0;
+  for (let i = 0; i < data.length; i += 4) if (data[i + 3] > 32) { cr += data[i]; cg += data[i + 1]; cb += data[i + 2]; cn++; }
+  metrics.avgColor = cn ? [Math.round(cr / cn), Math.round(cg / cn), Math.round(cb / cn)] : [0, 0, 0];
+  const colourClose = (o) => !o.color || Math.hypot(o.color[0] - metrics.avgColor[0], o.color[1] - metrics.avgColor[1], o.color[2] - metrics.avgColor[2]) < 18;
+  const dup = otherHashes.find((o) => hamming(o.hash, metrics.dhash) <= 5 && colourClose(o));
   if (dup) errors.push(`near-duplicate of ${dup.id}`);
   return { ok: errors.length === 0, errors, warnings, metrics, checkedAt: new Date().toISOString() };
 }

@@ -76,7 +76,7 @@ async function main() {
       const hashes = [];
       for (const a of m.assets.filter((x) => x.sourceFile?.startsWith('assets/studio/'))) {
         a.validation = { ...(await validateImage(path.join(REPO, a.sourceFile), a, hashes)), optimized: a.validation?.optimized };
-        hashes.push({ id: a.id, hash: a.validation.metrics.dhash });
+        hashes.push({ id: a.id, hash: a.validation.metrics.dhash, color: a.validation.metrics.avgColor });
         if (['GENERATED', 'TECHNICALLY_VALIDATED', 'NEEDS_REVIEW', 'NEEDS_REVISION'].includes(a.status) && !a.review) a.status = a.validation.ok ? 'NEEDS_REVIEW' : 'NEEDS_REVISION';
         console.log(`${a.id}: ${a.validation.ok ? 'OK' : a.validation.errors.join('; ')}`);
       }
@@ -100,6 +100,33 @@ async function main() {
       console.log(`${id} → ${a.status}`);
       break;
     }
+    case 'circle-mask': {
+      // Post-process (no paid call): round badge art → real transparent corners. Usage: circle-mask <category|id>
+      const [, target] = args;
+      const { circleMask } = await import('./compose/circle.mjs');
+      const { optimize } = await import('./validate.mjs');
+      const m = loadManifest();
+      const list = m.assets.filter((x) => (x.id === target || x.category === target) && x.sourceFile?.startsWith('assets/studio/') && !['USER_APPROVED', 'INTEGRATED'].includes(x.status));
+      for (const a of list) {
+        const base = a.sourceFile;
+        const version = (a.version ?? 0) + 1;
+        const dir = path.join(PATHS.generated, a.id, `v${version}`);
+        fs.mkdirSync(dir, { recursive: true });
+        const src = path.join(dir, 'source.png');
+        await circleMask(path.join(REPO, base), src);
+        const webp = path.join(dir, 'optimized.webp');
+        const opt = await optimize(src, webp);
+        Object.assign(a, { version, sourceFile: path.relative(REPO, src), optimizedFile: path.relative(REPO, webp), transparency: true, method: 'postprocess-circle-mask' });
+        const others = m.assets.filter((x) => x.id !== a.id && x.validation?.metrics?.dhash).map((x) => ({ id: x.id, hash: x.validation.metrics.dhash, color: x.validation.metrics.avgColor }));
+        a.validation = { ...(await validateImage(src, a, others)), optimized: opt };
+        a.status = a.validation.ok ? 'NEEDS_REVIEW' : 'NEEDS_REVISION';
+        a.provenance = `${a.provenance} Post-processed: circle mask (outside of the round badge made truly transparent) from ${base}; artwork unchanged.`;
+        a.versions = [...(a.versions ?? []), { version, sourceFile: a.sourceFile, optimizedFile: a.optimizedFile, method: 'postprocess-circle-mask', from: base, createdAt: new Date().toISOString(), validationOk: a.validation.ok }];
+        console.log(`${a.id} v${version} → ${a.status}${a.validation.errors.length ? ` (${a.validation.errors.join('; ')})` : ''}`);
+      }
+      saveManifest(m);
+      break;
+    }
     case 'compose': {
       // Post-processing for assets an image model cannot produce exactly (no paid call).
       const [, what] = args;
@@ -117,7 +144,7 @@ async function main() {
       await composeRoulette(path.join(REPO, base.sourceFile), src);
       const webp = path.join(dir, 'optimized.webp');
       const opt = await optimize(src, webp);
-      const others = m.assets.filter((x) => x.id !== a.id && x.validation?.metrics?.dhash).map((x) => ({ id: x.id, hash: x.validation.metrics.dhash }));
+      const others = m.assets.filter((x) => x.id !== a.id && x.validation?.metrics?.dhash).map((x) => ({ id: x.id, hash: x.validation.metrics.dhash, color: x.validation.metrics.avgColor }));
       Object.assign(a, { version, sourceFile: path.relative(REPO, src), optimizedFile: path.relative(REPO, webp), actualCostUsd: 0, method: 'composite' });
       a.validation = { ...(await validateImage(src, a, others)), optimized: opt };
       a.status = a.validation.ok ? 'NEEDS_REVIEW' : 'NEEDS_REVISION';

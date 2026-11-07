@@ -43,7 +43,7 @@ export async function runBatch({ client = null, dryRun = true, model, quality = 
   log(`[plan] ${report.planned.length} asset(s), estimate $${committed.toFixed(2)} (cap $${runCap.toFixed(2)}, pricing ${pricing.verified ? 'verified' : 'UNVERIFIED pessimistic'}); ${report.skippedBudget.length} left for a later batch`);
   if (dryRun || !client) return finish(report, ledger, log);
 
-  const hashes = manifest.assets.filter((x) => x.validation?.metrics?.dhash).map((x) => ({ id: x.id, hash: x.validation.metrics.dhash }));
+  const hashes = manifest.assets.filter((x) => x.validation?.metrics?.dhash).map((x) => ({ id: x.id, hash: x.validation.metrics.dhash, color: x.validation.metrics.avgColor }));
   // Live budget: the plan above uses upper-bound estimates; while generating, completed images count
   // at their real cost (usage) when known, so the run continues through `picked` only while
   // (spent in this run + the next image's upper-bound estimate) stays within the cap.
@@ -119,7 +119,7 @@ export async function runBatch({ client = null, dryRun = true, model, quality = 
     a.status = a.validation.ok ? 'NEEDS_REVIEW' : 'NEEDS_REVISION';
     a.versions = [...(a.versions ?? []), { version, sourceFile: a.sourceFile, optimizedFile: a.optimizedFile, model, quality, createdAt: new Date().toISOString(), validationOk: a.validation.ok }];
     delete a.lastError;
-    hashes.push({ id: a.id, hash: a.validation.metrics.dhash });
+    hashes.push({ id: a.id, hash: a.validation.metrics.dhash, color: a.validation.metrics.avgColor });
     saveManifest(manifest);
     report.generated.push({ id: a.id, status: a.status, errors: a.validation.errors, warnings: a.validation.warnings });
     log(`[ok] ${a.id} → ${a.status}${a.validation.errors.length ? ` (${a.validation.errors.join('; ')})` : ''}`);

@@ -37,7 +37,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.blackjack.action-double | NEEDS_REVIEW | OK |  |  | 0.483 | 0 | 931.4 | 130 KB |
 | game.blackjack.action-split | NEEDS_REVIEW | OK |  |  | 0.423 | 0 | 704.6 | 113 KB |
 | game.blackjack.action-insurance | NEEDS_REVIEW | OK |  |  | 0.451 | 0 | 643.1 | 110 KB |
-| game.blackjack.table-felt | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1328.7 | 118 KB |
+| game.blackjack.table-felt | NEEDS_REVISION | FAIL | opaque image has a light grey/white border (98%) — fake checkerboard or blank backdrop |  | 1 | 1 | 1328.7 | 118 KB |
 | game.slots.symbol-seven | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 686.5 | 112 KB |
 | game.slots.symbol-diamond | NEEDS_REVIEW | OK |  |  | 0.367 | 0 | 587 | 99 KB |
 | game.slots.symbol-bell | NEEDS_REVIEW | OK |  |  | 0.501 | 0 | 624.4 | 126 KB |
@@ -97,27 +97,27 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.tournament.seasonal-champion | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.29 | 0.007 | 957.2 | 169 KB |
 | frame.tournament.grand-champion | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.34 | 0.009 | 1347 | 211 KB |
 | frame.special.founder | NEEDS_REVIEW | OK |  |  | 0.222 | 0.001 | 913.8 | 143 KB |
-| frame.special.early-supporter | NEEDS_REVISION | FAIL | near-duplicate of frame.vip.vip-05 |  | 0.244 | 0 | 897.4 | 157 KB |
+| frame.special.early-supporter | NEEDS_REVIEW | OK |  |  | 0.244 | 0 | 897.4 | 157 KB |
 | frame.special.kol | USER_APPROVED | OK |  |  | 0.271 | 0.002 | 974.5 | 153 KB |
 | frame.special.creator | NEEDS_REVIEW | OK |  |  | 0.254 | 0 | 975.2 | 152 KB |
 | frame.special.reviewer | NEEDS_REVIEW | OK |  |  | 0.241 | 0.002 | 1045.6 | 155 KB |
-| frame.special.collector | NEEDS_REVISION | FAIL | near-duplicate of frame.seasonal.summer |  | 0.216 | 0.002 | 1052.1 | 148 KB |
-| frame.special.limited-edition | NEEDS_REVISION | FAIL | near-duplicate of frame.special.anniversary-exclusive |  | 0.235 | 0.01 | 765.7 | 158 KB |
+| frame.special.collector | NEEDS_REVIEW | OK |  |  | 0.216 | 0.002 | 1052.1 | 148 KB |
+| frame.special.limited-edition | NEEDS_REVIEW | OK |  |  | 0.235 | 0.01 | 765.7 | 158 KB |
 | frame.special.event-exclusive | NEEDS_REVIEW | OK |  |  | 0.26 | 0.001 | 934.7 | 147 KB |
-| frame.special.anniversary-exclusive | NEEDS_REVISION | FAIL | near-duplicate of frame.vip.vip-10 |  | 0.287 | 0.007 | 978.3 | 193 KB |
-| avatar.default | NEEDS_REVIEW | OK |  |  | 1 | 1 | 810.3 | 124 KB |
-| avatar.premium | NEEDS_REVIEW | OK |  |  | 1 | 1 | 916.2 | 124 KB |
-| avatar.royal | NEEDS_REVIEW | OK |  |  | 1 | 1 | 937.7 | 132 KB |
-| avatar.vip | NEEDS_REVIEW | OK |  |  | 1 | 1 | 933.5 | 128 KB |
-| avatar.limited | NEEDS_REVIEW | OK |  |  | 1 | 1 | 798.5 | 107 KB |
-| avatar.seasonal | NEEDS_REVIEW | OK |  |  | 1 | 1 | 733.3 | 118 KB |
-| avatar.tournament | NEEDS_REVIEW | OK |  |  | 1 | 1 | 894.1 | 120 KB |
-| avatar.kol | NEEDS_REVIEW | OK |  |  | 1 | 1 | 788.7 | 119 KB |
-| avatar.collector | NEEDS_REVIEW | OK |  |  | 1 | 1 | 999.1 | 128 KB |
-| avatar.fantasy-dealer | NEEDS_REVIEW | OK |  |  | 1 | 1 | 884.3 | 115 KB |
+| frame.special.anniversary-exclusive | NEEDS_REVIEW | OK |  |  | 0.287 | 0.007 | 978.3 | 193 KB |
+| avatar.default | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 652.5 | 122 KB |
+| avatar.premium | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 759.5 | 122 KB |
+| avatar.royal | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 787 | 132 KB |
+| avatar.vip | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 792.4 | 129 KB |
+| avatar.limited | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 644.7 | 107 KB |
+| avatar.seasonal | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 568.3 | 113 KB |
+| avatar.tournament | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 725.6 | 118 KB |
+| avatar.kol | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 625.9 | 117 KB |
+| avatar.collector | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 840.2 | 128 KB |
+| avatar.fantasy-dealer | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 739.6 | 116 KB |
 | bubble.gold | USER_APPROVED | OK |  |  | 0.441 | 0.001 | 478.1 | 39 KB |
 | profile.nameplate | NEEDS_REVIEW | OK |  |  | 0.173 | 0 | 361.3 | 64 KB |
-| profile.header | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1024.8 | 82 KB |
+| profile.header | NEEDS_REVISION | FAIL | opaque image has a light grey/white border (95%) — fake checkerboard or blank backdrop |  | 1 | 1 | 1024.8 | 82 KB |
 | profile.background | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1176.9 | 132 KB |
 | profile.prestige-effect | NEEDS_REVIEW | OK |  |  | 0.476 | 0 | 1147.3 | 181 KB |
 | profile.achievement-showcase | NEEDS_REVIEW | OK |  |  | 0.369 | 0.004 | 709.5 | 113 KB |
