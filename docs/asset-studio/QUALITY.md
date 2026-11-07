@@ -160,7 +160,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.phone.gold | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 780.6 | 92 KB |
 | collectible.phone.limited | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 1160.5 | 140 KB |
 | tournament.trophy-champion | USER_APPROVED | OK |  |  | 0.318 | 0.014 | 1139 | 171 KB |
+| event.anniversary.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 992.3 | 104 KB |
+| event.anniversary.chest | NEEDS_REVIEW | OK |  |  | 0.567 | 0 | 1266.2 | 191 KB |
+| event.anniversary.badge | NEEDS_REVIEW | OK |  |  | 0.434 | 0 | 1016.4 | 191 KB |
+| event.anniversary.decoration | NEEDS_REVIEW | OK |  |  | 0.217 | 0.029 | 595.1 | 140 KB |
 | achievement.badge | NEEDS_REVIEW | OK |  |  | 0.518 | 0 | 927.6 | 130 KB |
+| achievement.rare | NEEDS_REVIEW | OK |  |  | 0.486 | 0 | 1170.4 | 154 KB |
 | achievement.epic | NEEDS_REVIEW | OK |  |  | 0.496 | 0 | 1120.2 | 164 KB |
 | achievement.legendary | NEEDS_REVIEW | OK |  |  | 0.487 | 0 | 936 | 154 KB |
 | achievement.collector | NEEDS_REVIEW | OK |  |  | 0.477 | 0 | 1092.1 | 156 KB |
