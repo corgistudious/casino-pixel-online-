@@ -2,23 +2,94 @@
   "reviewer": "Claude (technical + visual QA — NOT an approval; only the user approves)",
   "at": "2026-11-06",
   "notes": {
-    "game.taixiu.bowl-cover": { "verdict": "recommend-approve", "note": "Circular, clean lacquer + gold band, reads well at 44 px. Fits the procedural plate size." },
-    "game.roulette.wheel-head": { "verdict": "recommend-revise", "note": "Two concentric rings of coloured pockets (a real wheel has ONE ring of 37); pocket count cannot be confirmed. Also includes the outer bowl with diamonds although that is a separate catalog asset. Revise with a single 37-pocket ring and no bowl." },
-    "game.poker.dealer-button": { "verdict": "recommend-approve", "note": "Clean ivory puck, crown emblem, no letters; thickness visible." },
-    "game.blackjack.card-shoe": { "verdict": "recommend-approve", "note": "Premium smoked-acrylic shoe with gold trim; card back peeking out." },
-    "game.slots.symbol-crown": { "verdict": "recommend-approve", "note": "Strong silhouette, readable at 44 px (future symbol — no gameplay change)." },
-    "cardback.royal-gold": { "verdict": "user-decision", "note": "Mirror-symmetric left/right; not 180° symmetric (upright crown). Fine for a flip animation; decide whether card backs must read the same upside down." },
-    "cardback.royal-purple": { "verdict": "user-decision", "note": "Same as royal-gold (upright fleur-de-lis). Otherwise clean, thin even border." },
-    "vip.badge.vip-01": { "verdict": "recommend-revise", "note": "Looks too ornate for the entry level (laurel wings + star overlap with the planned VIP 2/3 designs); revise to the simple brushed-silver shield described so the 1→15 progression reads clearly." },
-    "vip.badge.vip-08": { "verdict": "recommend-approve", "note": "Platinum + sapphire + feathered wings, as specified." },
-    "vip.badge.vip-15": { "verdict": "recommend-approve", "note": "Majestic crown emblem; clearly top tier." },
-    "frame.vip.vip-15": { "verdict": "recommend-approve", "note": "Centre fully transparent, ring even, crown/wings outside the photo area. Test on avatar photo passed." },
-    "frame.seasonal.lunar-new-year": { "verdict": "recommend-revise", "note": "Dragon head and lanterns touch/extend past the canvas edge (validator: possibly cut off). Revise with a wider margin; design itself is strong." },
-    "frame.special.kol": { "verdict": "recommend-approve", "note": "Even ring, broadcast star at the top, centre clear." },
-    "bubble.gold": { "verdict": "recommend-approve", "note": "Decoration in corners only, straight edges plain → 9-slice friendly. Interior even." },
-    "bank.vault-premium": { "verdict": "recommend-approve", "note": "No currency symbols; strong 2.5D read." },
-    "chest.legendary": { "verdict": "recommend-approve", "note": "Clearly legendary tier; no text." },
-    "collectible.watch.luxury": { "verdict": "recommend-approve", "note": "Fictional design, no brand marks visible at review size." },
-    "tournament.trophy-champion": { "verdict": "recommend-approve", "note": "Gold cup, wing handles, gems, black marble base — as specified." }
+    "game.taixiu.bowl-cover": {
+      "verdict": "recommend-approve",
+      "note": "Circular, clean lacquer + gold band, reads well at 44 px. Fits the procedural plate size."
+    },
+    "game.roulette.wheel-head": {
+      "verdict": "recommend-revise",
+      "note": "Two concentric rings of coloured pockets (a real wheel has ONE ring of 37); pocket count cannot be confirmed. Also includes the outer bowl with diamonds although that is a separate catalog asset. Revise with a single 37-pocket ring and no bowl."
+    },
+    "game.poker.dealer-button": {
+      "verdict": "recommend-approve",
+      "note": "Clean ivory puck, crown emblem, no letters; thickness visible."
+    },
+    "game.blackjack.card-shoe": {
+      "verdict": "recommend-approve",
+      "note": "Premium smoked-acrylic shoe with gold trim; card back peeking out."
+    },
+    "game.slots.symbol-crown": {
+      "verdict": "recommend-approve",
+      "note": "Strong silhouette, readable at 44 px (future symbol — no gameplay change)."
+    },
+    "cardback.royal-gold": {
+      "verdict": "user-decision",
+      "note": "Mirror-symmetric left/right; not 180° symmetric (upright crown). Fine for a flip animation; decide whether card backs must read the same upside down."
+    },
+    "cardback.royal-purple": {
+      "verdict": "user-decision",
+      "note": "Same as royal-gold (upright fleur-de-lis). Otherwise clean, thin even border."
+    },
+    "vip.badge.vip-01": {
+      "verdict": "recommend-revise",
+      "note": "Looks too ornate for the entry level (laurel wings + star overlap with the planned VIP 2/3 designs); revise to the simple brushed-silver shield described so the 1→15 progression reads clearly."
+    },
+    "vip.badge.vip-08": {
+      "verdict": "recommend-approve",
+      "note": "Platinum + sapphire + feathered wings, as specified."
+    },
+    "vip.badge.vip-15": {
+      "verdict": "recommend-approve",
+      "note": "Majestic crown emblem; clearly top tier."
+    },
+    "frame.vip.vip-15": {
+      "verdict": "recommend-approve",
+      "note": "Centre fully transparent, ring even, crown/wings outside the photo area. Test on avatar photo passed."
+    },
+    "frame.seasonal.lunar-new-year": {
+      "verdict": "recommend-revise",
+      "note": "Dragon head and lanterns touch/extend past the canvas edge (validator: possibly cut off). Revise with a wider margin; design itself is strong."
+    },
+    "frame.special.kol": {
+      "verdict": "recommend-approve",
+      "note": "Even ring, broadcast star at the top, centre clear."
+    },
+    "bubble.gold": {
+      "verdict": "recommend-approve",
+      "note": "Decoration in corners only, straight edges plain → 9-slice friendly. Interior even."
+    },
+    "bank.vault-premium": {
+      "verdict": "recommend-approve",
+      "note": "No currency symbols; strong 2.5D read."
+    },
+    "chest.legendary": {
+      "verdict": "recommend-approve",
+      "note": "Clearly legendary tier; no text."
+    },
+    "collectible.watch.luxury": {
+      "verdict": "recommend-approve",
+      "note": "Fictional design, no brand marks visible at review size."
+    },
+    "tournament.trophy-champion": {
+      "verdict": "recommend-approve",
+      "note": "Gold cup, wing handles, gems, black marble base — as specified."
+    }
+  },
+  "revisions": {
+    "at": "2026-11-07",
+    "notes": {
+      "game.roulette.wheel-head": {
+        "verdict": "recommend-hybrid",
+        "note": "v2 fixes the structure (one ring, no bowl) but has about 56 pockets (28 red / 27 black / 1 green, counted by colour sampling), not 37. The game places the ball on 37 code-computed positions, so a generated wheel face cannot be used as the spinning wheel. Recommendation: keep the procedural 37-pocket ring (exact, numbered) and generate only the cone + turret centrepiece (and use the approved style for the rim); do not spend more on full-wheel retries."
+      },
+      "vip.badge.vip-01": {
+        "verdict": "recommend-approve",
+        "note": "v2 is the plain brushed-silver shield with one bevel — clearly the entry level; progression to VIP 8/15 now reads well."
+      },
+      "frame.seasonal.lunar-new-year": {
+        "verdict": "recommend-approve",
+        "note": "v2 keeps the dragon, lanterns and tassels inside the canvas with a clear margin; centre fully transparent; validator OK."
+      }
+    }
   }
 }

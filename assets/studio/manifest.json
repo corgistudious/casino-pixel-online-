@@ -661,10 +661,11 @@
         "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
       },
       "qa": {
-        "verdict": "recommend-revise",
-        "note": "Two concentric rings of coloured pockets (a real wheel has ONE ring of 37); pocket count cannot be confirmed. Also includes the outer bowl with diamonds although that is a separate catalog asset. Revise with a single 37-pocket ring and no bowl.",
-        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
-        "at": "2026-11-06"
+        "verdict": "recommend-hybrid",
+        "note": "v2 fixes the structure (one ring, no bowl) but has about 56 pockets (28 red / 27 black / 1 green, counted by colour sampling), not 37. The game places the ball on 37 code-computed positions, so a generated wheel face cannot be used as the spinning wheel. Recommendation: keep the procedural 37-pocket ring (exact, numbered) and generate only the cone + turret centrepiece (and use the approved style for the rim); do not spend more on full-wheel retries.",
+        "by": "Claude (QA — not an approval)",
+        "at": "2026-11-07",
+        "version": 2
       },
       "usage": {
         "input_tokens": 575,
@@ -2490,10 +2491,11 @@
         "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
       },
       "qa": {
-        "verdict": "recommend-revise",
-        "note": "Looks too ornate for the entry level (laurel wings + star overlap with the planned VIP 2/3 designs); revise to the simple brushed-silver shield described so the 1→15 progression reads clearly.",
-        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
-        "at": "2026-11-06"
+        "verdict": "recommend-approve",
+        "note": "v2 is the plain brushed-silver shield with one bevel — clearly the entry level; progression to VIP 8/15 now reads well.",
+        "by": "Claude (QA — not an approval)",
+        "at": "2026-11-07",
+        "version": 2
       },
       "usage": {
         "input_tokens": 514,
@@ -3411,10 +3413,11 @@
         "by": "owner (chat 2026-11-07: 'duyệt 13 asset đề xuất và làm lại 3 asset lỗi')"
       },
       "qa": {
-        "verdict": "recommend-revise",
-        "note": "Dragon head and lanterns touch/extend past the canvas edge (validator: possibly cut off). Revise with a wider margin; design itself is strong.",
-        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
-        "at": "2026-11-06"
+        "verdict": "recommend-approve",
+        "note": "v2 keeps the dragon, lanterns and tassels inside the canvas with a clear margin; centre fully transparent; validator OK.",
+        "by": "Claude (QA — not an approval)",
+        "at": "2026-11-07",
+        "version": 2
       },
       "usage": {
         "input_tokens": 566,
@@ -9697,5 +9700,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T00:05:43.966Z"
+  "updatedAt": "2026-11-07T00:08:12.324Z"
 }
