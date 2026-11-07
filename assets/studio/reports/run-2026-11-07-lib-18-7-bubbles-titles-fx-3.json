@@ -1,0 +1,92 @@
+{
+  "requestId": "2026-11-07-lib-18-7-bubbles-titles-fx-3",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.3,
+  "remainingBeforeUsd": 0.0808,
+  "runCapUsd": 0.0808,
+  "planned": [],
+  "generated": [],
+  "skippedBudget": [
+    {
+      "id": "title.collector",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.creator",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.event-winner",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.founder",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.grand-champion",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.high-roller",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.jackpot-winner",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.kol",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.limited",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.lucky-player",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.seasonal",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.tournament-winner",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.vip-elite",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    }
+  ],
+  "errors": [],
+  "startedAt": "2026-11-07T01:55:22.463Z",
+  "plannedEstimateUsd": 0,
+  "finishedAt": "2026-11-07T01:55:22.463Z",
+  "budgetExhausted": true,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 9.919155,
+    "spentEstimatedUsd": 23.15,
+    "spentActualUsd": 9.919155,
+    "remainingUsd": 0.0808,
+    "images": 185
+  }
+}
