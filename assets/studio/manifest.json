@@ -9937,7 +9937,7 @@
       "name": "Chat bubble: classic",
       "description": "Chat bubble base art for 9-slice scaling (text rendered by the UI).",
       "prompt": "Asset: Chat bubble: classic for KEYO GAME (Chat). Purpose: Chat bubble base art for 9-slice scaling (text rendered by the UI).\nObject: A wide rounded-rectangle chat speech bubble with a small tail at the bottom-left: warm ivory bubble with a thin gold rim. All decoration sits in the four corners and the tail; the long straight edges are plain and uniform so the bubble can be 9-slice stretched; the interior is an even flat fill with no text.\nMaterials: glass, metal trims.\nCamera: Perfectly frontal, flat.\nComposition: Bubble fills ~85% width, centred, straight edges perfectly horizontal/vertical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -9946,17 +9946,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.04365,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/bubble.classic/v1/source.png",
+          "optimizedFile": "assets/studio/generated/bubble.classic/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:13:21.336Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/bubble.classic/v1/source.png",
+      "optimizedFile": "assets/studio/generated/bubble.classic/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.46,
+          "borderAlpha": 0,
+          "lumStd": 34,
+          "bbox": {
+            "x": 0.03515625,
+            "y": 0.1953125,
+            "w": 0.9296875,
+            "h": 0.5859375
+          },
+          "sharpness": 373.8,
+          "dhash": "802745454553c001",
+          "avgColor": [
+            242,
+            229,
+            201
+          ]
+        },
+        "checkedAt": "2026-11-07T03:13:21.336Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 40998
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 498,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 498
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1870
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -10216,7 +10268,7 @@
       "name": "Chat bubble: champion",
       "description": "Chat bubble base art for 9-slice scaling (text rendered by the UI).",
       "prompt": "Asset: Chat bubble: champion for KEYO GAME (Chat). Purpose: Chat bubble base art for 9-slice scaling (text rendered by the UI).\nObject: A wide rounded-rectangle chat speech bubble with a small tail at the bottom-left: gold bubble with tiny trophy corner ornament. All decoration sits in the four corners and the tail; the long straight edges are plain and uniform so the bubble can be 9-slice stretched; the interior is an even flat fill with no text.\nMaterials: glass, metal trims.\nCamera: Perfectly frontal, flat.\nComposition: Bubble fills ~85% width, centred, straight edges perfectly horizontal/vertical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -10225,17 +10277,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.043645,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/bubble.champion/v1/source.png",
+          "optimizedFile": "assets/studio/generated/bubble.champion/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:12:36.796Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/bubble.champion/v1/source.png",
+      "optimizedFile": "assets/studio/generated/bubble.champion/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.477,
+          "borderAlpha": 0.055,
+          "lumStd": 39.9,
+          "bbox": {
+            "x": 0.01953125,
+            "y": 0.1796875,
+            "w": 0.9609375,
+            "h": 0.625
+          },
+          "sharpness": 579,
+          "dhash": "40055b4545414081",
+          "avgColor": [
+            238,
+            199,
+            111
+          ]
+        },
+        "checkedAt": "2026-11-07T03:12:36.796Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 53280
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 497,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 497
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1869
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -10278,7 +10382,7 @@
       "name": "Chat bubble: creator",
       "description": "Chat bubble base art for 9-slice scaling (text rendered by the UI).",
       "prompt": "Asset: Chat bubble: creator for KEYO GAME (Chat). Purpose: Chat bubble base art for 9-slice scaling (text rendered by the UI).\nObject: A wide rounded-rectangle chat speech bubble with a small tail at the bottom-left: teal bubble with a brush-stroke corner ornament. All decoration sits in the four corners and the tail; the long straight edges are plain and uniform so the bubble can be 9-slice stretched; the interior is an even flat fill with no text.\nMaterials: glass, metal trims.\nCamera: Perfectly frontal, flat.\nComposition: Bubble fills ~85% width, centred, straight edges perfectly horizontal/vertical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -10287,17 +10391,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.043655,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/bubble.creator/v1/source.png",
+          "optimizedFile": "assets/studio/generated/bubble.creator/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:13:43.241Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/bubble.creator/v1/source.png",
+      "optimizedFile": "assets/studio/generated/bubble.creator/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.471,
+          "borderAlpha": 0.038,
+          "lumStd": 32.6,
+          "bbox": {
+            "x": 0.0234375,
+            "y": 0.19140625,
+            "w": 0.95703125,
+            "h": 0.59765625
+          },
+          "sharpness": 426.2,
+          "dhash": "806d4d09c044c200",
+          "avgColor": [
+            65,
+            176,
+            173
+          ]
+        },
+        "checkedAt": "2026-11-07T03:13:43.241Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 56244
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 499,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 499
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1871
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -10340,7 +10496,7 @@
       "name": "Chat bubble: christmas",
       "description": "Chat bubble base art for 9-slice scaling (text rendered by the UI).",
       "prompt": "Asset: Chat bubble: christmas for KEYO GAME (Chat). Purpose: Chat bubble base art for 9-slice scaling (text rendered by the UI).\nObject: A wide rounded-rectangle chat speech bubble with a small tail at the bottom-left: green bubble with a holly corner. All decoration sits in the four corners and the tail; the long straight edges are plain and uniform so the bubble can be 9-slice stretched; the interior is an even flat fill with no text.\nMaterials: glass, metal trims.\nCamera: Perfectly frontal, flat.\nComposition: Bubble fills ~85% width, centred, straight edges perfectly horizontal/vertical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -10349,17 +10505,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.043645,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/bubble.christmas/v1/source.png",
+          "optimizedFile": "assets/studio/generated/bubble.christmas/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:12:58.981Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/bubble.christmas/v1/source.png",
+      "optimizedFile": "assets/studio/generated/bubble.christmas/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.371,
+          "borderAlpha": 0.031,
+          "lumStd": 37.8,
+          "bbox": {
+            "x": 0.0078125,
+            "y": 0.23828125,
+            "w": 0.984375,
+            "h": 0.51171875
+          },
+          "sharpness": 470.9,
+          "dhash": "80307bc2a4a14200",
+          "avgColor": [
+            58,
+            117,
+            61
+          ]
+        },
+        "checkedAt": "2026-11-07T03:12:58.981Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 58038
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 497,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 497
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1869
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -10402,7 +10610,7 @@
       "name": "Chat bubble: anniversary",
       "description": "Chat bubble base art for 9-slice scaling (text rendered by the UI).",
       "prompt": "Asset: Chat bubble: anniversary for KEYO GAME (Chat). Purpose: Chat bubble base art for 9-slice scaling (text rendered by the UI).\nObject: A wide rounded-rectangle chat speech bubble with a small tail at the bottom-left: champagne bubble with ribbon corner. All decoration sits in the four corners and the tail; the long straight edges are plain and uniform so the bubble can be 9-slice stretched; the interior is an even flat fill with no text.\nMaterials: glass, metal trims.\nCamera: Perfectly frontal, flat.\nComposition: Bubble fills ~85% width, centred, straight edges perfectly horizontal/vertical.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": true,
@@ -10411,17 +10619,69 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.043635,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/bubble.anniversary/v1/source.png",
+          "optimizedFile": "assets/studio/generated/bubble.anniversary/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:12:12.733Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/bubble.anniversary/v1/source.png",
+      "optimizedFile": "assets/studio/generated/bubble.anniversary/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.427,
+          "borderAlpha": 0.018,
+          "lumStd": 50,
+          "bbox": {
+            "x": 0.0234375,
+            "y": 0.171875,
+            "w": 0.953125,
+            "h": 0.58984375
+          },
+          "sharpness": 496.9,
+          "dhash": "609313255563c001",
+          "avgColor": [
+            230,
+            207,
+            180
+          ]
+        },
+        "checkedAt": "2026-11-07T03:12:12.733Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 57348
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 495,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 495
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1867
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -19880,5 +20140,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T03:11:37.546Z"
+  "updatedAt": "2026-11-07T03:13:43.241Z"
 }

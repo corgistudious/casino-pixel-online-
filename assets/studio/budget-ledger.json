@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 26.25,
-  "spentActualUsd": 11.554985,
-  "images": 216,
+  "spentEstimatedUsd": 26.75,
+  "spentActualUsd": 11.773215,
+  "images": 221,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -5640,6 +5640,136 @@
         "total_tokens": 2206
       },
       "seconds": 30
+    },
+    {
+      "at": "2026-11-07T03:12:12.218Z",
+      "requestId": "2026-11-07-lib-16-7-bubbles-titles-fx-1",
+      "assetId": "bubble.anniversary",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043635,
+      "usage": {
+        "input_tokens": 495,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 495
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1867
+      },
+      "seconds": 22
+    },
+    {
+      "at": "2026-11-07T03:12:36.291Z",
+      "requestId": "2026-11-07-lib-16-7-bubbles-titles-fx-1",
+      "assetId": "bubble.champion",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043645,
+      "usage": {
+        "input_tokens": 497,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 497
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1869
+      },
+      "seconds": 24
+    },
+    {
+      "at": "2026-11-07T03:12:58.487Z",
+      "requestId": "2026-11-07-lib-16-7-bubbles-titles-fx-1",
+      "assetId": "bubble.christmas",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043645,
+      "usage": {
+        "input_tokens": 497,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 497
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1869
+      },
+      "seconds": 22
+    },
+    {
+      "at": "2026-11-07T03:13:21.134Z",
+      "requestId": "2026-11-07-lib-16-7-bubbles-titles-fx-1",
+      "assetId": "bubble.classic",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.04365,
+      "usage": {
+        "input_tokens": 498,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 498
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1870
+      },
+      "seconds": 22
+    },
+    {
+      "at": "2026-11-07T03:13:42.749Z",
+      "requestId": "2026-11-07-lib-16-7-bubbles-titles-fx-1",
+      "assetId": "bubble.creator",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043655,
+      "usage": {
+        "input_tokens": 499,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 499
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1871
+      },
+      "seconds": 21
     }
   ],
   "approvals": [
