@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 59 |
-| PLANNED | 193 |
+| NEEDS_REVIEW | 64 |
+| PLANNED | 188 |
 
 ## Theo nhóm
 
@@ -128,11 +128,11 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | vip.badge.vip-07 | VIP 7 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | vip.badge.vip-08 | VIP 8 badge | VIP | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | vip.badge.vip-09 | VIP 9 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| vip.badge.vip-10 | VIP 10 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| vip.badge.vip-11 | VIP 11 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| vip.badge.vip-12 | VIP 12 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| vip.badge.vip-13 | VIP 13 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| vip.badge.vip-14 | VIP 14 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| vip.badge.vip-10 | VIP 10 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| vip.badge.vip-11 | VIP 11 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| vip.badge.vip-12 | VIP 12 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| vip.badge.vip-13 | VIP 13 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| vip.badge.vip-14 | VIP 14 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | vip.badge.vip-15 | VIP 15 badge | VIP | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 
 ## frame
