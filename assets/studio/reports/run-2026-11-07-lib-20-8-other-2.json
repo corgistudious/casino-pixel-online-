@@ -1,0 +1,148 @@
+{
+  "requestId": "2026-11-07-lib-20-8-other-2",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1,
+  "remainingBeforeUsd": 5.8512,
+  "runCapUsd": 1,
+  "planned": [
+    {
+      "id": "spin.ticket",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "spin.wheel",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "ui.announcement",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "ui.calendar",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "ui.claim-panel",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "ui.leaderboard",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "ui.mailbox",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "ui.notification",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "ui.progress-panel",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "ui.quest",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "spin.ticket",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "spin.wheel",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.announcement",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.calendar",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.claim-panel",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.leaderboard",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.mailbox",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.notification",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.progress-panel",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "ui.quest",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T03:40:10.281Z",
+  "plannedEstimateUsd": 1,
+  "finishedAt": "2026-11-07T03:45:26.833Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 20,
+    "spentUsd": 14.674565,
+    "spentEstimatedUsd": 32.55,
+    "spentActualUsd": 14.674565,
+    "remainingUsd": 5.3254,
+    "images": 279
+  }
+}

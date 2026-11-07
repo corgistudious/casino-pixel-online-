@@ -1,0 +1,184 @@
+{
+  "requestId": "2026-11-07-lib-03-1-games-3",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.3,
+  "remainingBeforeUsd": 7.5625,
+  "runCapUsd": 1.3,
+  "planned": [
+    {
+      "id": "game.roulette.marker",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.roulette.pointer",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.roulette.result-emblem",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.roulette.wheel-rim",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.sicbo.crystal-dome",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.sicbo.dice-plate",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.sicbo.dice-set",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.sicbo.icon-big",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.sicbo.icon-small",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.sicbo.icon-triple",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.sicbo.table-vip",
+      "size": "1536x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.cabinet-frame",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.spin-button",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "game.roulette.marker",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.roulette.pointer",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.roulette.result-emblem",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.roulette.wheel-rim",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.sicbo.crystal-dome",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.sicbo.dice-plate",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.sicbo.dice-set",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.sicbo.icon-big",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.sicbo.icon-small",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.sicbo.icon-triple",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.sicbo.table-vip",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.cabinet-frame",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.spin-button",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T00:40:08.438Z",
+  "plannedEstimateUsd": 1.3,
+  "finishedAt": "2026-11-07T00:46:31.944Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 3.117615,
+    "spentEstimatedUsd": 10.65,
+    "spentActualUsd": 3.117615,
+    "remainingUsd": 6.8824,
+    "images": 60
+  }
+}

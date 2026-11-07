@@ -1,0 +1,63 @@
+{
+  "requestId": "2026-11-07-01-sample-1-revisions",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1,
+  "remainingBeforeUsd": 9.0432,
+  "runCapUsd": 1,
+  "planned": [
+    {
+      "id": "frame.seasonal.lunar-new-year",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.roulette.wheel-head",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "vip.badge.vip-01",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    }
+  ],
+  "generated": [
+    {
+      "id": "frame.seasonal.lunar-new-year",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.roulette.wheel-head",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "vip.badge.vip-01",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T00:04:18.479Z",
+  "plannedEstimateUsd": 0.9,
+  "finishedAt": "2026-11-07T00:05:43.971Z",
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 1.123095,
+    "spentEstimatedUsd": 6.75,
+    "spentActualUsd": 1.123095,
+    "remainingUsd": 8.8769,
+    "images": 21
+  }
+}

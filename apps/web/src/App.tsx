@@ -38,7 +38,11 @@ import { useCatalog } from './store/catalog';
 import { useSession } from './store/session';
 import { useSettings } from './store/settings';
 import { ConnectionBanner, LevelUpBanner, TestEnvBadge, Toasts } from './ui/Chrome';
-import { OrientationGuard } from './ui/OrientationGuard';
+import { MobilePortraitGuard } from './ui/MobilePortraitGuard';
+import { useGameChat } from './ui/game/GameTableLayout';
+import { StandaloneInsetHint } from './ui/StandaloneInsetHint';
+import { ViewportDiagnostics, viewportDiagEnabled } from './ui/ViewportDiagnostics';
+import { markBoot } from './lib/viewportProbe';
 import { KeyoLogo } from './ui/KeyoLogo';
 
 // Heavy, rarely-first screens load on demand: the game rooms (Phaser) and the staff console.
@@ -147,29 +151,35 @@ function TableRoute() {
   return tableId ? <SharedTableGame key={tableId} tableId={tableId} /> : <Navigate to="/" replace />;
 }
 
-/** Floating in-room chat: opening it does not unmount the active game/table. */
+/**
+ * In-room chat: opening it does not unmount the active game/table. Table screens built on
+ * GameTableLayout open it from their HUD (useGameChat); older screens keep the floating button.
+ */
 function InGameChat() {
-  const [open, setOpen] = useState(false);
+  const open = useGameChat((s) => s.open);
+  const hudOwned = useGameChat((s) => s.hudOwned > 0);
   const { pathname } = useLocation();
   const inGame = ['/play/', '/tables/', '/bjt/', '/cards/'].some((prefix) => pathname.startsWith(prefix)) || pathname === '/bjt';
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => useGameChat.getState().close(), [pathname]);
   if (!inGame) return null;
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-label="Chat"
-        title="Chat"
-        className="hide-on-keyboard fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-[max(0.75rem,env(safe-area-inset-left))] z-40 flex h-11 w-11 items-center justify-center rounded-full border border-[#f2c14e]/70 bg-[#180f38]/95 shadow-lg hover:brightness-125"
-      >
-        <NavIcon name="chat" size={23} active />
-      </button>
+      {!hudOwned && (
+        <button
+          type="button"
+          onClick={() => useGameChat.getState().toggle()}
+          aria-label="Chat"
+          title="Chat"
+          className="hide-on-keyboard fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-[max(0.75rem,env(safe-area-inset-left))] z-40 flex h-11 w-11 items-center justify-center rounded-full border border-[#f2c14e]/70 bg-[#180f38]/95 shadow-lg hover:brightness-125"
+        >
+          <NavIcon name="chat" size={23} active />
+        </button>
+      )}
       {open && (
         <div className="overlay z-50 flex items-center justify-center bg-black/60" role="dialog" aria-modal="true" aria-label="Chat">
           <div className="flex h-[min(100%,680px)] w-[min(94vw,850px)] min-h-0 flex-col overflow-hidden rounded-2xl border border-[#f2c14e]/50 bg-[#0b0920] shadow-2xl">
             <div className="flex shrink-0 justify-end border-b border-white/10 px-3 py-1">
-              <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="rounded-lg px-3 py-1 text-lg text-white hover:bg-white/10">×</button>
+              <button type="button" onClick={() => useGameChat.getState().close()} aria-label="Close chat" className="rounded-lg px-3 py-1 text-lg text-white hover:bg-white/10">×</button>
             </div>
             <div className="min-h-0 flex-1"><ChatContent /></div>
           </div>
@@ -194,6 +204,7 @@ export function App() {
   const boot = useSession((s) => s.boot);
   const reduceMotion = useSettings((s) => s.reduceMotion);
   const signedIn = useSession((s) => !!s.user);
+  useEffect(() => markBoot('react-mount'), []);
   useEffect(() => {
     if (signedIn) prefetchGames();
   }, [signedIn]);
@@ -222,7 +233,9 @@ export function App() {
     <HashRouter>
       <ConnectionBanner />
       <TestEnvBadge />
-      <OrientationGuard />
+      <MobilePortraitGuard />
+      <StandaloneInsetHint />
+      {viewportDiagEnabled() && <ViewportDiagnostics />}
       <Toasts />
       <LevelUpBanner />
       <PlayerActionHost />

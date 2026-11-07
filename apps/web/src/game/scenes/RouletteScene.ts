@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { ROULETTE_WHEEL, rouletteColor, rouletteReturn, type RouletteResult } from '@casino/shared';
 import { sfx } from '../../audio/sfx';
 import { parseKey } from '../../lib/bets';
-import { ensureWheelTextures, hdImage, WHEEL_SIZE } from '../art';
+import { ensureWheelTextures, hasStudioTexture, hdImage, WHEEL_SIZE } from '../art';
 import { H } from './BaseScene';
 import { TableScene } from './TableScene';
 
@@ -24,6 +24,9 @@ export class RouletteScene extends TableScene {
   protected wheel!: Phaser.GameObjects.Image;
   protected ball!: Phaser.GameObjects.Image;
   protected resultText!: Phaser.GameObjects.Text;
+  /** Studio art (only when its file loaded): emblem behind the result, dolly on the winning number. */
+  protected resultEmblem: Phaser.GameObjects.Image | null = null;
+  protected winMarker: Phaser.GameObjects.Image | null = null;
   private history: Phaser.GameObjects.Container[] = [];
 
   constructor() {
@@ -32,18 +35,31 @@ export class RouletteScene extends TableScene {
 
   protected build() {
     ensureWheelTextures(this);
-    const g = this.add.graphics();
-    // Wooden bowl with soft shadow
-    g.fillStyle(0x000000, 0.45).fillCircle(WHEEL_X + 3, WHEEL_Y + 5, WHEEL_SIZE / 2 + 9);
-    g.fillStyle(0x2a1306, 1).fillCircle(WHEEL_X, WHEEL_Y, WHEEL_SIZE / 2 + 8);
-    g.lineStyle(1.5, 0xe8b64a, 1).strokeCircle(WHEEL_X, WHEEL_Y, WHEEL_SIZE / 2 + 7);
+    // V7.1 2.5D static mahogany bowl with diamond deflectors (the wheel spins inside it).
+    // Studio rim when loaded (its inner lip is the ball track), else the drawn mahogany bowl.
+    hdImage(this, WHEEL_X, WHEEL_Y, hasStudioTexture(this, 'roulette-rim') ? 'roulette-rim' : 'roulette-bowl');
     this.wheel = hdImage(this, WHEEL_X, WHEEL_Y, 'roulette-wheel');
     hdImage(this, WHEEL_X, WHEEL_Y, 'roulette-gloss').setDepth(6);
     this.ball = hdImage(this, WHEEL_X, WHEEL_Y - BALL_OUTER, 'roulette-ball').setDepth(5);
+    // Fixed pointer above the wheel (decoration: the result is the pocket the ball rests in).
+    if (hasStudioTexture(this, 'roulette-pointer')) hdImage(this, WHEEL_X, WHEEL_Y - WHEEL_SIZE / 2 - 9, 'roulette-pointer').setDepth(7);
+    if (hasStudioTexture(this, 'roulette-emblem')) this.resultEmblem = hdImage(this, WHEEL_X, WHEEL_Y + WHEEL_SIZE / 2 + 22, 'roulette-emblem').setAlpha(0);
     this.resultText = this.text(WHEEL_X, WHEEL_Y + WHEEL_SIZE / 2 + 22, '', { size: 16, display: true, shadow: true });
 
     this.text(BOARD_X, 40, 'ROULETTE', { size: 20, display: true, color: '#ffe08a', originX: 0, shadow: true });
     this.buildBoard();
+  }
+
+  /** Portrait (phones): wheel on top, numbers in two halves (bigger cells), outside bets, history. */
+  override portraitRegions() {
+    const split = BOARD_X + 24 + 6 * CW;
+    return [
+      { x: 10, y: 84, w: 188, h: 210, maxZoom: 0.8 },
+      { x: BOARD_X - 4, y: 30, w: split - BOARD_X + 4, h: 154, maxZoom: 1.25, gap: 2 },
+      { x: split, y: 58, w: 6 * CW + 38, h: 126, maxZoom: 1.25 },
+      { x: BOARD_X + 20, y: 180, w: 12 * CW + 8, h: 70, gap: 2 },
+      { x: BOARD_X + 20, y: H - 50, w: 12 * CW + 8, h: 32 },
+    ];
   }
 
   private buildBoard() {
@@ -83,6 +99,7 @@ export class RouletteScene extends TableScene {
     this.interactive = false;
     this.highlightSpots([]);
     this.resultText.setText('');
+    this.showResultArt(null);
     const startWheel = this.wheel.rotation;
     const endWheel = startWheel + Math.PI * 2 * 3 + Phaser.Math.FloatBetween(0, Math.PI * 2);
     const startBall = Math.atan2(this.ball.x - WHEEL_X, -(this.ball.y - WHEEL_Y));
@@ -125,6 +142,7 @@ export class RouletteScene extends TableScene {
     const color = rouletteColor(result.number);
     this.resultText.setText(this.t('roulette.result', { number: result.number }));
     this.resultText.setColor(color === 'red' ? '#ff7a8a' : color === 'green' ? '#6ff0a8' : '#ffffff');
+    this.showResultArt(result.number);
     this.pushHistory(result.number);
 
     const winning = [...this.spots.keys()].filter((key) => rouletteReturn(parseKey(key), result.number) > 0);
@@ -133,9 +151,24 @@ export class RouletteScene extends TableScene {
       const big = result.payout >= result.bets.reduce((s, b) => s + b.amount, 0) * 10;
       big ? sfx.bigWin() : sfx.win();
       this.celebrate(result.payout, 420, 170, big);
-    } else sfx.lose();
+    } else {
+      sfx.lose();
+      this.resultFx('normal-lose', 420, 170, 0.8);
+    }
     await this.wait(this.reduceMotion ? 200 : 800);
     this.interactive = true;
+  }
+
+  /** Result emblem + winning-number dolly (studio art; nothing changes if the files did not load). */
+  protected showResultArt(n: number | null) {
+    this.resultEmblem?.setAlpha(n === null ? 0 : 1);
+    this.winMarker?.destroy();
+    this.winMarker = null;
+    const spot = n === null ? undefined : this.spots.get(`straight:${n}`);
+    if (spot && hasStudioTexture(this, 'roulette-marker')) {
+      this.winMarker = hdImage(this, spot.x + spot.w - 6, spot.y + 9, 'roulette-marker').setDepth(21);
+      if (!this.reduceMotion) this.tweens.add({ targets: this.winMarker, y: { from: spot.y - 6, to: spot.y + 9 }, duration: 280, ease: 'Bounce.easeOut' });
+    }
   }
 
   protected pushHistory(n: number) {

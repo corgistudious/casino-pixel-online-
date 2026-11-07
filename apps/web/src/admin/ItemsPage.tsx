@@ -1,3 +1,6 @@
+import { isKeyoAssetId, KEYO_ASSETS, keyoUrlPx, type KeyoAssetId } from '../assets/keyo';
+import type { KeyoAssetEntry } from '../assets/keyo/registry.generated';
+import integration from '../assets/keyo/integration.json';
 import { ITEM_KINDS, ITEM_SOURCES, ITEM_STATUSES, RARITIES, type CatalogItem, type FrameRender, type ItemKind } from '@casino/shared';
 import { useEffect, useState, type FormEvent } from 'react';
 import { adminApi, newIdempotencyKey } from '../net/adminApi';
@@ -142,6 +145,14 @@ export function ItemsPage() {
   );
 }
 
+/** Studio prefixes per item kind, for the Keyo Library picker. */
+const LIBRARY_PREFIX: Partial<Record<ItemKind, string>> = { frame: 'frame.', avatar: 'avatar.', title: 'title.', chat_bubble: 'bubble.', card_back: 'cardback.', collectible: 'collectible.' };
+function libraryFor(kind: ItemKind): KeyoAssetId[] {
+  const prefix = LIBRARY_PREFIX[kind];
+  if (!prefix) return [];
+  return (Object.entries(integration) as [KeyoAssetId, { status: string }][]).filter(([id, e]) => id.startsWith(prefix) && e.status === 'READY_FOR_FUTURE_USE').map(([id]) => id);
+}
+
 function ItemThumb({ item, size }: { item: Pick<CatalogItem, 'kind' | 'assetUrl' | 'render' | 'id' | 'style'> & Partial<Pick<CatalogItem, 'name'>>; size: number }) {
   if (item.kind === 'frame') return <FramedAvatar index={3} size={size} frame={item.id} frameItem={item} />;
   if (item.kind === 'avatar') return <FramedAvatar index={3} size={size} frame="none" avatarSrc={assetSrc(item.assetUrl)} avatarArt={!item.assetUrl && item.style?.art === 'vuong_gia' ? 'vuong_gia' : undefined} />;
@@ -170,6 +181,28 @@ function Editor({ initial, isNew, builtIn, onSaved }: { initial: Draft; isNew: b
       setBusy(false);
     }
   };
+
+  /**
+   * Keyo Library: approved studio art that no existing item uses yet (READY_FOR_FUTURE_USE). Picking
+   * one uploads its delivery file through the same asset upload as a manual file; nothing is created
+   * until the Owner saves the item.
+   */
+  const pickLibrary = async (id: string) => {
+    if (!isKeyoAssetId(id)) return;
+    setBusy(true);
+    try {
+      const blob = await (await fetch(keyoUrlPx(id, 512))).blob();
+      await upload(new File([blob], `${id}.webp`, { type: 'image/webp' }));
+      const hole = (KEYO_ASSETS[id] as KeyoAssetEntry).hole;
+      // Frames: size the ring so its transparent centre fits the avatar (same rule as the game).
+      if (d.kind === 'frame' && hole) set('render', { scale: Math.min(1.8, Math.max(1, Math.round((1 / (2 * (hole / 1000) * 0.97)) * 100) / 100)), offsetX: 0, offsetY: 0 });
+    } catch (err) {
+      fail(err);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const library = libraryFor(d.kind);
 
   const save = async (e: FormEvent) => {
     e.preventDefault();
@@ -286,6 +319,19 @@ function Editor({ initial, isNew, builtIn, onSaved }: { initial: Draft; isNew: b
           <label className="flex flex-col gap-1 text-xs text-white/55">
             {t('admin.items.upload')}
             <input type="file" accept="image/png,image/webp,image/gif" onChange={(e) => void upload(e.target.files?.[0])} className="text-sm text-white/70 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-1.5 file:text-white" />
+          </label>
+        )}
+        {!builtIn && editable && library.length > 0 && (
+          <label className="flex flex-col gap-1 text-xs text-white/55">
+            {t('admin.items.keyoLibrary')}
+            <select className="field text-sm" value="" disabled={busy} onChange={(e) => void pickLibrary(e.target.value)}>
+              <option value="">{t('admin.items.keyoLibraryPick')}</option>
+              {library.map((id) => (
+                <option key={id} value={id}>
+                  {id}
+                </option>
+              ))}
+            </select>
           </label>
         )}
         {drawn && editable && (

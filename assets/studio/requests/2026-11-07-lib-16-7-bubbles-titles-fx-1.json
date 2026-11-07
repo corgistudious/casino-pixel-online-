@@ -1,0 +1,27 @@
+{
+  "id": "2026-11-07-lib-16-7-bubbles-titles-fx-1",
+  "mode": "generate",
+  "assets": [
+    "bubble.anniversary",
+    "bubble.champion",
+    "bubble.christmas",
+    "bubble.classic",
+    "bubble.creator",
+    "bubble.default",
+    "bubble.diamond",
+    "bubble.halloween",
+    "bubble.kol",
+    "bubble.limited",
+    "bubble.lunar-new-year",
+    "bubble.royal",
+    "bubble.tournament",
+    "bubble.vip",
+    "fx.all-in"
+  ],
+  "batchSize": 15,
+  "budgetLimitUsd": 1.5,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 16/20 (7-bubbles-titles-fx 1/3)."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "2026-11-06-01-probe-dry-run",
+  "mode": "dry_run",
+  "batch": "sample-1",
+  "batchSize": 25,
+  "budgetLimitUsd": 8.5,
+  "model": "auto",
+  "quality": "high",
+  "approvedBy": "owner (brief: Source Audit → Manifest → Pipeline → Dry-run → Sample Batch)",
+  "note": "Free run: probe available image models, try to read official pricing, validate manifest, estimate the sample batch. No paid calls."
+}

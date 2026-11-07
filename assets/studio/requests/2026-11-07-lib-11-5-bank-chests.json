@@ -1,0 +1,20 @@
+{
+  "id": "2026-11-07-lib-11-5-bank-chests",
+  "mode": "generate",
+  "assets": [
+    "bank.money-bag",
+    "bank.money-bag-vip",
+    "bank.vault-open",
+    "chest.common",
+    "chest.epic",
+    "chest.event",
+    "chest.limited",
+    "chest.rare"
+  ],
+  "batchSize": 8,
+  "budgetLimitUsd": 0.8,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 11/20 (5-bank-chests 1/1)."
+}

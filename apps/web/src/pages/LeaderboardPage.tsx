@@ -1,3 +1,4 @@
+import { KeyoImg } from '../assets/keyo';
 import { LB_GAMES, LB_GROUPS, WIN_RATE_MIN_ROUNDS, type LbBoardView, type LbEntry, type LbGame, type LbGroup, type LbMetric, type LbPeriod, type LeaderboardEntry } from '@casino/shared';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -163,7 +164,12 @@ function Board({ meta, period, game }: { meta: BoardMeta; period: LbPeriod; game
         <span>{t('lb.utcNote')}</span>
         {meta.game && <span>{t('lb.streakNote')}</span>}
         {meta.metric === 'win_rate' && <span>{t('lb.minRounds', { n: WIN_RATE_MIN_ROUNDS })}</span>}
-        {meta.reward && <span className="text-gold-200/80">🏆 {t('lb.reward')}</span>}
+        {meta.reward && (
+          <span className="inline-flex items-center gap-1 text-gold-200/80">
+            <KeyoImg id="tournament.trophy" size={18} alt="" decorative fallback={<span aria-hidden>🏆</span>} />
+            {t('lb.reward')}
+          </span>
+        )}
       </div>
       {all.length === 0 ? (
         <p className="glass p-6 text-center text-sm text-white/55">{t('lb.empty')}</p>
@@ -253,7 +259,8 @@ function Podium({ entries, valueText }: { entries: LbEntry[]; valueText: (e: LbE
         const v = valueText(e);
         const size = e.position === 1 ? 64 : 52;
         return (
-          <div key={i} className={`flex min-w-0 flex-col items-center gap-1.5 rounded-2xl border px-1.5 pb-2.5 pt-5 text-center ${PODIUM_STYLE[Math.min(e.position, 3) - 1]}`}>
+          <div key={i} className={`relative flex min-w-0 flex-col items-center gap-1.5 rounded-2xl border px-1.5 pb-2.5 pt-5 text-center ${PODIUM_STYLE[Math.min(e.position, 3) - 1]}`}>
+            {e.position === 1 && <KeyoImg id="tournament.trophy-champion" size={44} alt="" decorative className="pointer-events-none absolute right-1.5 top-1.5 opacity-90 short:hidden" />}
             <Medal rank={e.position} size={30} />
             {e.guild ? (
               <Who e={e} size={size} />

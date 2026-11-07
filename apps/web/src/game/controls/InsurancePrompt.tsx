@@ -1,3 +1,4 @@
+import { KeyoImg } from '../../assets/keyo';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatChips } from '../../lib/format';
@@ -43,7 +44,10 @@ export function InsurancePrompt({ max, deadline: given, busy, onDecide }: { max:
           <text x="22" y="26" textAnchor="middle" fontSize="12" fontWeight="800" fill="#fff">{Math.ceil(left / 1000)}</text>
         </svg>
         <div className="min-w-0">
-          <h3 id="ins-title" className="font-display text-lg font-heading text-cyan-100">🛡️ {t('blackjack.insurance.title')}</h3>
+          <h3 id="ins-title" className="flex items-center gap-1.5 font-display text-lg font-heading text-cyan-100">
+            <KeyoImg id="game.blackjack.action-insurance" size={28} alt="" decorative eager fallback={<span aria-hidden>🛡️</span>} />
+            {t('blackjack.insurance.title')}
+          </h3>
           <p className="text-xs leading-snug text-white/70">{t('blackjack.insurance.body', { max: fmt(max) })}</p>
         </div>
       </div>

@@ -16,15 +16,16 @@ import { clockOffset, mergeBets, phaseAt, sumBets } from '../../lib/tables';
 import { ApiError } from '../../net/api';
 import { socket } from '../../net/socket';
 import { useSession } from '../../store/session';
-import { Button } from '../../ui/Button';
-import { ChipSelector } from '../../ui/Chip';
 import { toast } from '../../ui/toast';
 import { PhaserView } from '../PhaserView';
 import { RouletteTableScene } from '../scenes/RouletteTableScene';
 import { TaiXiuScene } from '../scenes/TaiXiuScene';
-import { GameLayout, Stat } from './GameLayout';
 import { PlayerIdentityCompact } from '../../players/identity';
 import { celebrateWin } from '../../cosmetics/VictoryEffect';
+import { GameButton } from '../../ui/game/GameButton';
+import { ActionIcon } from '../../ui/game/ActionIcons';
+import { GameCard, GameChipRack, GameStat, GameTimer } from '../../ui/game/GameParts';
+import { GameTableLayout, type GameTool } from '../../ui/game/GameTableLayout';
 
 type View = Omit<TableRoundView, 'myBets'>;
 type Scene = TaiXiuScene | RouletteTableScene;
@@ -207,112 +208,121 @@ export function SharedTableGame({ tableId }: { tableId: string }) {
       ? t('tables.rouletteRevealing')
       : t(`tables.phase.${info.phase}`);
 
+  const rebet = () => totalOf(lastBets) <= useSession.getState().balance && setPending(lastBets);
+  const canvas = view && (
+    <PhaserView<Scene>
+      create={() => (view.table.game === 'roulette' ? new RouletteTableScene() : new TaiXiuScene())}
+      onReady={(s) => {
+        scene.current = s;
+        s.setRound(state.current.view!.round, now);
+        if (s instanceof RouletteTableScene && seedRef.current) s.seedHistory(seedRef.current);
+        s.events.on('spot', onSpot);
+      }}
+    />
+  );
+
+  // Table layout (HUD · centred table · bottom control bar · floating tools) for Tài Xỉu and Roulette.
+  const tools: GameTool[] = view
+    ? [
+        {
+          id: 'players',
+          label: t('gameUi.players'),
+          icon: 'players',
+          badge: view.bettors || undefined,
+          content: (
+            <>
+              <GameCard title={t('gameUi.bettors', { n: view.bettors })}>
+                <IdentityList players={view.players} empty={t('gameUi.noBettors')} context={`table:${view.table.id}`} />
+              </GameCard>
+              <GameCard title={t('gameUi.atTable', { n: view.watchers })}>
+                <IdentityList players={view.members} empty={t('gameUi.noViewers')} context={`table:${view.table.id}`} />
+              </GameCard>
+            </>
+          ),
+        },
+        {
+          id: 'stats',
+          label: t('gameUi.stats'),
+          icon: 'stats',
+          content: (
+            <>
+              <Pool view={view} />
+              <GameCard>
+                <History game={view.table.game} items={view.history} />
+              </GameCard>
+            </>
+          ),
+        },
+        {
+          id: 'info',
+          label: t('gameUi.info'),
+          icon: 'info',
+          content: (
+            <>
+              <GameCard>
+                <div className="flex items-center justify-between text-xs text-white/60">
+                  <span>{t('tables.round', { seq: view.round.seq })}</span>
+                  <span>{t('tables.players', { n: view.bettors, w: view.watchers })}</span>
+                </div>
+                {canBet && placedTotal > 0 && <p className="mt-2 text-[11px] text-white/50">{t('tables.sameRound')}</p>}
+              </GameCard>
+              <Fairness round={view.round} />
+              <Link to={`/play/${game === 'roulette' ? 'roulette' : 'sicbo'}`} className="text-center text-xs text-white/55 underline hover:text-white/80">
+                {t('tables.solo')}
+              </Link>
+              <p className="text-[11px] leading-snug text-white/40">{t('app.disclaimer')}</p>
+            </>
+          ),
+        },
+      ]
+    : [];
   return (
-    <GameLayout
+    <GameTableLayout
       title={view ? view.table.name[lang === 'en' ? 'en' : 'vi'] : t('tables.live')}
-      canvas={
+      subtitle={view ? t('tables.round', { seq: view.round.seq }) : undefined}
+      status={<GameTimer label={warn ? t('tables.closingSoon', { s: seconds }) : phaseLabel} seconds={info && !warn ? seconds : null} warn={warn} />}
+      tools={tools}
+      stage={<div className="gstage-canvas">{canvas}</div>}
+      controls={
         <>
-          {view && (
-            <PhaserView<Scene>
-              create={() => (view.table.game === 'roulette' ? new RouletteTableScene() : new TaiXiuScene())}
-              onReady={(s) => {
-                scene.current = s;
-                s.setRound(state.current.view!.round, now);
-                if (s instanceof RouletteTableScene && seedRef.current) s.seedHistory(seedRef.current);
-                s.events.on('spot', onSpot);
-              }}
-            />
-          )}
-          {/* Top-right is empty on both table layouts, so the timer never covers the felt. */}
-          <div className="pointer-events-none absolute right-2 top-2 flex justify-end sm:right-3">
-            <div
-              role="status"
-              aria-live="polite"
-              className={`flex items-center gap-3 rounded-full border px-4 py-1.5 backdrop-blur ${
-                warn ? 'animate-pulse border-red-400/80 bg-red-950/80 text-red-100' : 'border-gold-300/50 bg-ink-950/80 text-gold-100'
-              }`}
-            >
-              <span className="text-sm font-semibold">{warn ? t('tables.closingSoon', { s: seconds }) : phaseLabel}</span>
-              {info && seconds > 0 && <span className="font-display text-xl font-bold tabular-nums">{seconds}s</span>}
-            </div>
+          {view?.table.status === 'paused' && <p className="gbar-note w-full">{t('tables.paused')}</p>}
+          <div className="gbar-group">
+            <GameChipRack values={CHIP_VALUES} value={chip} onChange={setChip} />
           </div>
-        </>
-      }
-      panel={
-        <>
-          {view && (
-            <div className="flex items-center justify-between text-[11px] text-white/50">
-              <span>{t('tables.round', { seq: view.round.seq })}</span>
-              <span>{t('tables.players', { n: view.bettors, w: view.watchers })}</span>
-            </div>
-          )}
-          {view && (
-            <div className="rounded-xl border border-gold-300/20 bg-black/30 px-3 py-2">
-              <div className="mb-2 text-xs font-semibold text-gold-100">
-                {i18n.language === 'vi' ? 'Người chơi đã đặt cược' : 'Players betting this round'} ({view.bettors})
-              </div>
-              {view.players.length ? (
-                <div className="flex max-h-28 flex-wrap gap-1.5 overflow-y-auto">
-                  {view.players.map((player) => (
-                    <span key={player.uid} className="rounded-full border border-white/15 bg-white/10 py-0.5 pl-0.5 pr-2">
-                      <PlayerIdentityCompact player={player} size={22} context={`table:${view.table.id}`} />
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-white/45">{i18n.language === 'vi' ? 'Chưa có người đặt cược trong vòng này' : 'No bets placed this round'}</p>
-              )}
-            </div>
-          )}
-          {view && (
-            <div className="rounded-xl border border-gold-300/20 bg-black/30 px-3 py-2">
-              <div className="mb-2 text-xs font-semibold text-gold-100">
-                {i18n.language === 'vi' ? 'Đang có mặt tại bàn' : 'At this table'} ({view.watchers})
-              </div>
-              {view.members.length ? (
-                <div className="flex max-h-28 flex-wrap gap-1.5 overflow-y-auto">
-                  {view.members.map((member) => (
-                    <span key={member.uid} className="rounded-full border border-white/15 bg-white/10 py-0.5 pl-0.5 pr-2">
-                      <PlayerIdentityCompact player={member} size={22} context={`table:${view.table.id}`} />
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-white/45">{i18n.language === 'vi' ? 'Chưa có người xem' : 'No viewers yet'}</p>
-              )}
-            </div>
-          )}
-          {view?.table.status === 'paused' && <p className="rounded-lg bg-amber-900/40 px-3 py-2 text-xs text-amber-100">{t('tables.paused')}</p>}
-          {view && <Pool view={view} />}
-          <ChipSelector values={CHIP_VALUES} value={chip} onChange={setChip} />
-          <Stat label={t('tables.pending')} value={formatChips(pendingTotal, lang)} accent />
-          <Button variant="gold" size="lg" onClick={() => void confirm()} disabled={!canBet || placing || pendingTotal === 0}>
-            {placing ? t('tables.placing') : t('tables.confirm')}
-          </Button>
-          <div className="grid grid-cols-2 gap-2">
-            <Button size="sm" onClick={() => setPending({})} disabled={placing || pendingTotal === 0}>
+          <div className="gbar-group gbar-group--wide">
+            <GameStat label={t('tables.pending')} value={formatChips(pendingTotal, lang)} accent />
+            <GameStat label={t('tables.placed')} value={formatChips(placedTotal, lang)} />
+            {lastWin !== null && <GameStat label={t('play.lastWin')} value={formatChips(lastWin, lang)} accent={lastWin > 0} />}
+          </div>
+          <div className="gbar-group">
+            <GameButton size="sm" icon={<ActionIcon name="clear" size={18} />} onClick={() => setPending({})} disabled={placing || pendingTotal === 0}>
               {t('play.clear')}
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => totalOf(lastBets) <= useSession.getState().balance && setPending(lastBets)}
-              disabled={!canBet || placing || totalOf(lastBets) === 0}
-            >
+            </GameButton>
+            <GameButton size="sm" icon={<ActionIcon name="rebet" size={18} />} onClick={rebet} disabled={!canBet || placing || totalOf(lastBets) === 0}>
               {t('play.rebet')}
-            </Button>
+            </GameButton>
+            <GameButton tone="primary" icon={<ActionIcon name="confirm" />} loading={placing} onClick={() => void confirm()} disabled={!canBet || pendingTotal === 0}>
+              {placing ? t('tables.placing') : t('tables.confirm')}
+              {!placing && pendingTotal > 0 && <span className="tabular-nums"> · {formatChips(pendingTotal, lang)}</span>}
+            </GameButton>
           </div>
-          <Stat label={t('tables.placed')} value={formatChips(placedTotal, lang)} />
-          {canBet && placedTotal > 0 && <p className="text-[11px] text-white/45">{t('tables.sameRound')}</p>}
-          <Stat label={t('play.lastWin')} value={lastWin === null ? '—' : formatChips(lastWin, lang)} accent={!!lastWin} />
-          {view && <History game={view.table.game} items={view.history} />}
-          {view && <Fairness round={view.round} />}
-          <Link to={`/play/${game === 'roulette' ? 'roulette' : 'sicbo'}`} className="text-center text-xs text-white/50 underline hover:text-white/80">
-            {t('tables.solo')}
-          </Link>
-          <p className="mt-auto text-[11px] leading-snug text-white/40">{t('app.disclaimer')}</p>
         </>
       }
     />
+  );
+}
+
+/** Public identities as compact pills (opens the player menu on tap). */
+function IdentityList({ players, empty, context }: { players: View['players']; empty: string; context: string }) {
+  if (!players.length) return <p className="text-xs text-white/45">{empty}</p>;
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {players.map((player) => (
+        <span key={player.uid} className="rounded-full border border-white/15 bg-white/10 py-0.5 pl-0.5 pr-2">
+          <PlayerIdentityCompact player={player} size={22} context={context} />
+        </span>
+      ))}
+    </div>
   );
 }
 
@@ -347,7 +357,7 @@ function Pool({ view }: { view: View }) {
     );
   }
   const total = Object.values(view.totals).reduce((s, x) => s + x.amount, 0);
-  return <Stat label={t('tables.pool')} value={formatChips(total, lang)} />;
+  return <GameStat label={t('tables.pool')} value={formatChips(total, lang)} />;
 }
 
 function History({ game, items }: { game: View['table']['game']; items: RoundOutcome[] }) {

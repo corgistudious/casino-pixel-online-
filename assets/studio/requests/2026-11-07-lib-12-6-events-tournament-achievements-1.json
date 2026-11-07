@@ -1,0 +1,25 @@
+{
+  "id": "2026-11-07-lib-12-6-events-tournament-achievements-1",
+  "mode": "generate",
+  "assets": [
+    "achievement.badge",
+    "achievement.champion",
+    "achievement.collector",
+    "achievement.epic",
+    "achievement.legendary",
+    "achievement.rare",
+    "event.anniversary.badge",
+    "event.anniversary.banner",
+    "event.anniversary.chest",
+    "event.anniversary.decoration",
+    "event.anniversary.icon",
+    "event.christmas.badge",
+    "event.christmas.banner"
+  ],
+  "batchSize": 13,
+  "budgetLimitUsd": 1.3,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 12/20 (6-events-tournament-achievements 1/4)."
+}

@@ -46,6 +46,9 @@ export default {
         rise: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'none' } },
         shake: { '0%,100%': { transform: 'translateX(0)' }, '20%,60%': { transform: 'translateX(-6px)' }, '40%,80%': { transform: 'translateX(6px)' } },
         pulseGlow: { '0%,100%': { boxShadow: '0 0 12px rgba(242,193,78,0.25)' }, '50%': { boxShadow: '0 0 28px rgba(242,193,78,0.6)' } },
+        // Asset Studio reward burst (Mailbox claim): pop in, hold, fade.
+        rewardPop: { '0%': { opacity: '0', transform: 'scale(.55)' }, '22%': { opacity: '1', transform: 'scale(1)' }, '75%': { opacity: '1', transform: 'scale(1.03)' }, '100%': { opacity: '0', transform: 'scale(1.1)' } },
+        fadeOut: { '0%,70%': { opacity: '1' }, '100%': { opacity: '0' } },
       },
       animation: {
         sheen: 'sheen 2.8s ease-in-out infinite',

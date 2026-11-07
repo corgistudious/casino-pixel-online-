@@ -17,6 +17,9 @@ import { BadgeIcon, CurrencyIcon, PlayerName } from '../ui/OfficialAssets';
 import { toast } from '../ui/toast';
 import { AvatarCropDialog } from '../players/AvatarCropDialog';
 import { PlayerAvatar } from '../players/identity';
+import { PrestigeAura, ProfileAccents, ProfileBackdrop, ProfileBanner } from '../ui/ProfileArt';
+import { useVip } from '../store/vip';
+import { vipProgress } from '@casino/shared';
 
 const TABS = ['overview', 'history', 'fairness'] as const;
 type Tab = (typeof TABS)[number];
@@ -25,6 +28,9 @@ const STAT_GAMES = ['roulette', 'sicbo', 'blackjack'] as const;
 export function ProfilePage() {
   const { t, i18n } = useTranslation();
   const user = useSession((s) => s.user)!;
+  const vipStatus = useVip((v) => v.status);
+  const vipExp = useVip((v) => v.exp);
+  const vipLevel = vipStatus?.level ?? vipProgress(vipExp ?? 0).level;
   const setUser = useSession((s) => s.setUser);
   const signOut = useSession((s) => s.signOut);
   const balance = useSession((s) => s.balance);
@@ -92,22 +98,29 @@ export function ProfilePage() {
 
   return (
     <AppShell>
-      <div className="flex flex-col gap-4 p-3 lg:p-5">
+      <div className="relative isolate flex flex-col gap-4 p-3 lg:p-5">
+        <ProfileBackdrop />
         {/* Profile header */}
         <section className="relative overflow-hidden rounded-2xl border border-gold-300/25 shadow-panel">
           <div className="absolute inset-0 bg-gradient-to-r from-ink-800 via-[#0b2a3a] to-emerald-800" />
+          <ProfileBanner />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_30%,rgba(242,193,78,0.22),transparent_45%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(115deg,transparent_0_38px,rgba(255,241,184,0.04)_38px_40px)]" />
           <div className="relative flex flex-wrap items-center gap-4 p-4 lg:gap-6 lg:p-6">
             <div className="flex flex-col items-center gap-1.5">
-              <PlayerAvatar player={{ ...user, avatar }} size={104} />
+              <PrestigeAura vipLevel={vipLevel} size={104}>
+                <PlayerAvatar player={{ ...user, avatar }} size={104} />
+              </PrestigeAura>
               <button type="button" onClick={() => setCropping(true)} className="rounded-full border border-gold-300/40 bg-black/40 px-3 py-1 text-[11px] text-gold-100 hover:bg-black/60">
                 📷 {t('avatarUpload.change')}
               </button>
             </div>
             <div className="min-w-0 flex-1">
               <h1 className="font-display text-2xl font-bold lg:text-3xl">
-                <PlayerName name={user.displayName} badges={user.badges} size={26} />
+                <span className="inline-flex max-w-full items-center gap-2">
+                  <PlayerName name={user.displayName} badges={user.badges} size={26} />
+                  <ProfileAccents vipLevel={vipLevel} partner={user.badges.includes('partner')} />
+                </span>
               </h1>
               {user.title && (
                 <div className="mt-1">

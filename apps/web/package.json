@@ -10,7 +10,8 @@
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
     "cap:sync": "cap sync android",
-    "build:preview": "tsc -p tsconfig.json && vite build --mode preview --outDir dist-preview"
+    "build:preview": "tsc -p tsconfig.json && vite build --mode preview --outDir dist-preview",
+    "e2e": "node e2e/run.mjs"
   },
   "dependencies": {
     "@casino/shared": "workspace:*",

@@ -1,3 +1,4 @@
+import { KeyoImg } from '../assets/keyo';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatChips } from '../lib/format';
@@ -96,9 +97,20 @@ export function BankPage() {
           <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-gold-300/15 blur-3xl" />
           <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(242,193,78,0.04)_0_1px,transparent_1px_10px)]" />
           <div className="relative flex flex-wrap items-center gap-5">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gold-300/50 bg-black/40 shadow-glow">
-              <NavIcon name="bank" size={30} active />
-            </div>
+            {/* Bank vault (Asset Studio); the drawn icon is the fallback. Balances and the ledger are untouched. */}
+            <KeyoImg
+              id="bank.vault-premium"
+              size={72}
+              alt=""
+              decorative
+              eager
+              className="-my-2 drop-shadow-[0_6px_14px_rgba(0,0,0,0.6)]"
+              fallback={
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gold-300/50 bg-black/40 shadow-glow">
+                  <NavIcon name="bank" size={30} active />
+                </div>
+              }
+            />
             <div className="min-w-0 flex-1">
               <h1 className="font-display text-3xl font-heading text-gold">{t('bankPage.title')}</h1>
               <p className="text-sm text-white/60">{t('bankPage.subtitle')}</p>
@@ -127,6 +139,7 @@ export function BankPage() {
               className={`group relative overflow-hidden rounded-3xl border p-5 text-left transition ${currency === c ? 'border-gold-300/70 shadow-[0_0_30px_-10px_rgba(242,193,78,0.8)]' : 'border-white/10 hover:border-white/25'} ${c === 'gold' ? 'bg-gradient-to-br from-[#4a3208] via-[#1f1606] to-[#0d0b10]' : 'bg-gradient-to-br from-[#2b3442] via-[#141821] to-[#0b0d12]'}`}
             >
               <span className="sheen opacity-40" />
+              <KeyoImg id={c === 'gold' ? 'bank.money-bag-vip' : 'bank.money-bag'} size={96} alt="" decorative className="pointer-events-none absolute -bottom-3 right-2 opacity-35 transition group-hover:opacity-55" />
               <div className="relative flex items-center justify-between">
                 <span className="flex items-center gap-2 font-display text-lg font-heading text-white">
                   <CurrencyIcon currency={c} size={30} /> {cur(c)}
@@ -148,8 +161,9 @@ export function BankPage() {
         </div>
 
         <div className="grid gap-4 lg:grid-cols-[420px_1fr]">
-          <section className="glass flex flex-col gap-4 p-5">
-            <div className="grid grid-cols-2 gap-1 rounded-2xl bg-black/35 p-1" role="tablist">
+          <section className="glass relative flex flex-col gap-4 overflow-hidden p-5">
+            <KeyoImg id="bank.vault-open" size={120} alt="" decorative className="pointer-events-none absolute -bottom-6 -right-6 opacity-20" />
+            <div className="relative grid grid-cols-2 gap-1 rounded-2xl bg-black/35 p-1" role="tablist">
               {(['deposit', 'withdraw'] as const).map((d) => (
                 <button key={d} type="button" role="tab" aria-selected={direction === d} onClick={() => change(setDirection)(d)} className={`rounded-xl py-2.5 font-label text-sm transition ${direction === d ? (d === 'deposit' ? 'bg-gradient-to-r from-emerald-400 to-teal-500 text-ink-900' : 'bg-gradient-to-r from-amber-300 to-orange-500 text-ink-900') : 'text-white/60 hover:text-white'}`}>
                   {d === 'deposit' ? '⬇ ' : '⬆ '}

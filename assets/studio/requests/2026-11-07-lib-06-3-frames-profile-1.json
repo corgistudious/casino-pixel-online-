@@ -1,0 +1,26 @@
+{
+  "id": "2026-11-07-lib-06-3-frames-profile-1",
+  "mode": "generate",
+  "assets": [
+    "avatar.collector",
+    "avatar.default",
+    "avatar.fantasy-dealer",
+    "avatar.kol",
+    "avatar.limited",
+    "avatar.premium",
+    "avatar.royal",
+    "avatar.seasonal",
+    "avatar.tournament",
+    "avatar.vip",
+    "frame.seasonal.anniversary",
+    "frame.seasonal.christmas",
+    "frame.seasonal.easter",
+    "frame.seasonal.halloween"
+  ],
+  "batchSize": 14,
+  "budgetLimitUsd": 1.4,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 6/20 (3-frames-profile 1/3)."
+}

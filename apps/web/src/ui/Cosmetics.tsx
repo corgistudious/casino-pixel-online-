@@ -5,6 +5,13 @@ import { cosmeticDef, type FrameGlyph } from '@casino/shared';
 import { cardBackDataUrl } from '../cosmetics/cardBackArt';
 import { assetSrc, itemName, useCatalog } from '../store/catalog';
 import { GLYPHS } from './glyphs';
+import { KeyoFit } from '../assets/keyo';
+import { DEFAULT_BUBBLE, itemArt } from '../assets/keyo/bindings';
+import { SliceFrame } from '../assets/keyo/SliceFrame';
+import type { KeyoAssetId } from '../assets/keyo/registry.generated';
+
+/** Studio bubbles with a light body: their text is dark ink instead of white. */
+const LIGHT_BUBBLES: ReadonlySet<KeyoAssetId> = new Set(['bubble.classic', 'bubble.diamond', 'bubble.limited', 'bubble.champion', 'bubble.anniversary']);
 
 /** Small inline glyph (decorations on titles and bubbles). */
 export function GlyphIcon({ glyph, size, color }: { glyph: FrameGlyph; size: number; color: string }) {
@@ -35,6 +42,28 @@ export function TitleBadge({ itemId, size = 'md', item: given }: { itemId: strin
   if (!itemId) return null;
   const name = itemName(item, i18n.language, itemId);
   if (item?.assetUrl) return <img src={assetSrc(item.assetUrl)} alt={name} title={name} className={size === 'sm' ? 'h-5' : 'h-7'} />;
+  const drawn = <DrawnTitle itemId={itemId} item={item} name={name} size={size} />;
+  const studio = itemArt(itemId, item?.style?.art);
+  if (!studio) return drawn;
+  // Studio plaque (nine-slice: the ornate ends never stretch, long VI/EN names just widen it).
+  return (
+    <SliceFrame
+      id={studio}
+      cut={{ t: 0.28, b: 0.28, l: 0.2, r: 0.2 }}
+      scale={size === 'sm' ? 0.042 : 0.056}
+      pad={{ t: 0, b: 0, l: 2, r: 2 }}
+      className={`inline-flex max-w-full items-center font-bold tracking-wide text-[#fff3c4] ${size === 'sm' ? 'text-[11px]' : 'text-xs'}`}
+      fallback={drawn}
+      data-title={itemId}
+    >
+      <span className="truncate drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)]" title={name}>
+        {name}
+      </span>
+    </SliceFrame>
+  );
+}
+
+function DrawnTitle({ itemId, item, name, size }: { itemId: string; item: Preview | undefined; name: string; size: 'sm' | 'md' }) {
   const lib = cosmeticDef(item?.style?.art ?? itemId);
   if (lib?.kind === 'title') {
     const a = lib.art;
@@ -71,6 +100,29 @@ export function TitleBadge({ itemId, size = 'md', item: given }: { itemId: strin
 export function ChatBubble({ itemId, children, mine = false, item: given }: { itemId: string | null | undefined; children: ReactNode; mine?: boolean; item?: Preview }) {
   const stored = useCatalog((c) => (itemId ? c.items[itemId] : undefined));
   const item = given ?? stored;
+  const studio = item?.assetUrl ? null : itemId ? itemArt(itemId, item?.style?.art) : DEFAULT_BUBBLE;
+  if (studio) {
+    const light = LIGHT_BUBBLES.has(studio);
+    // Studio bubble (nine-slice; the tail flips to the right for your own messages).
+    return (
+      <SliceFrame
+        id={studio}
+        cut={{ t: 0.3, b: 0.46, l: 0.12, r: 0.1 }}
+        scale={0.105}
+        mirror={mine}
+        pad={{ t: 1, b: 0, l: 2, r: 2 }}
+        className={`max-w-xs text-sm font-medium ${light ? 'text-[#2a1530]' : 'text-white'}`}
+        fallback={<DrawnBubble itemId={itemId} item={item} mine={mine}>{children}</DrawnBubble>}
+        data-bubble={itemId ?? 'default'}
+      >
+        <span className={`relative break-words ${light ? '' : 'drop-shadow-[0_1px_1px_rgba(0,0,0,0.85)]'}`}>{children}</span>
+      </SliceFrame>
+    );
+  }
+  return <DrawnBubble itemId={itemId} item={item} mine={mine}>{children}</DrawnBubble>;
+}
+
+function DrawnBubble({ itemId, children, mine, item }: { itemId: string | null | undefined; children: ReactNode; mine: boolean; item: Preview | undefined }) {
   const colors = colorsOf(item, ['#272048', '#3a3166']);
   const royal = isVuongGia(item);
   const radius = mine ? 'rounded-2xl rounded-br-md' : 'rounded-2xl rounded-bl-md';
@@ -118,11 +170,18 @@ export function ChatBubble({ itemId, children, mine = false, item: given }: { it
 
 /** Card back (Poker, Liêng, Xì Tố). Purely decorative: a back never reveals a card. */
 export function CardBack({ itemId, width = 64, item: given }: { itemId: string | null | undefined; width?: number; item?: Preview }) {
-  const id = useId();
   const stored = useCatalog((c) => (itemId ? c.items[itemId] : undefined));
   const item = given ?? stored;
   const height = Math.round(width * 1.4);
   if (item?.assetUrl) return <img src={assetSrc(item.assetUrl)} alt="" width={width} height={height} className="rounded-md shadow-lg" />;
+  const studio = itemArt(itemId, item?.style?.art);
+  if (studio) return <KeyoFit id={studio} w={width} h={Math.round((width * 68) / 48)} alt={itemName(item, 'vi', itemId ?? '')} className="drop-shadow-lg" fallback={<DrawnCardBack itemId={itemId} width={width} item={item} />} />;
+  return <DrawnCardBack itemId={itemId} width={width} item={item} />;
+}
+
+function DrawnCardBack({ itemId, width, item }: { itemId: string | null | undefined; width: number; item: Preview | undefined }) {
+  const id = useId();
+  const height = Math.round(width * 1.4);
   const libUrl = cardBackDataUrl(item?.style?.art ?? itemId ?? '', Math.min(256, width * 2));
   if (libUrl) return <img src={libUrl} alt={itemName(item, 'vi', itemId ?? '')} width={width} height={Math.round((width * 68) / 48)} className="shrink-0 drop-shadow-lg" />;
   const [a, b, c] = colorsOf(item, ['#7d1222', '#d42a44', '#f7d77a']) as [string, string, string?];

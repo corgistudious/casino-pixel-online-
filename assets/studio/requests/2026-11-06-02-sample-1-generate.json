@@ -1,0 +1,11 @@
+{
+  "id": "2026-11-06-02-sample-1-generate",
+  "mode": "generate",
+  "batch": "sample-1",
+  "batchSize": 18,
+  "budgetLimitUsd": 6.0,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — brief 'KEYO GAME V7.1 MASTER ASSET STUDIO', step 5: Premium Sample Batch within the approved $10",
+  "note": "First premium sample batch (18 assets: one per game incl. card backs for Liêng/Xì Tố, VIP 1/8/15 badges, VIP 15 / Lunar New Year / KOL frames, gold chat bubble, luxury watch, legendary chest, premium vault, champion trophy). Estimated upper bound $5.85 at verified token prices; real cost from usage. No retries, one image per asset."
+}

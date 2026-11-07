@@ -1,0 +1,27 @@
+{
+  "id": "2026-11-07-lib-05-2-vip",
+  "mode": "generate",
+  "assets": [
+    "frame.vip.vip-05",
+    "frame.vip.vip-07",
+    "frame.vip.vip-10",
+    "vip.badge.vip-02",
+    "vip.badge.vip-03",
+    "vip.badge.vip-04",
+    "vip.badge.vip-05",
+    "vip.badge.vip-06",
+    "vip.badge.vip-07",
+    "vip.badge.vip-09",
+    "vip.badge.vip-10",
+    "vip.badge.vip-11",
+    "vip.badge.vip-12",
+    "vip.badge.vip-13",
+    "vip.badge.vip-14"
+  ],
+  "batchSize": 15,
+  "budgetLimitUsd": 1.5,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 5/20 (2-vip 1/1)."
+}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { classifyDevice, type DeviceEnv } from '../src/lib/device';
-import { readOrientation, requiredOrientation } from '../src/lib/orientation';
+import { classifyDevice, classifyFormFactor, type DeviceEnv } from '../src/lib/device';
+import { isAuthRoute, isGameRoute, mustRotateToLandscape, phoneMustRotate, readOrientation, tablePortraitLayout } from '../src/lib/orientation';
 
 const touch = { coarse: true, noHover: true, anyFine: false, fineHover: false };
 const mouse = { coarse: false, noHover: false, anyFine: true, fineHover: true };
@@ -74,47 +74,83 @@ describe('readOrientation', () => {
   });
 });
 
-describe('requiredOrientation', () => {
-  it('auth screens are portrait; lobby, rooms and signed-in features are landscape', () => {
-    expect(requiredOrientation({ signedIn: false, verified: false, pathname: '/' })).toBe('portrait');
-    expect(requiredOrientation({ signedIn: false, verified: false, pathname: '/cards/poker-1' })).toBe('portrait');
-    expect(requiredOrientation({ signedIn: true, verified: false, pathname: '/' })).toBe('portrait');
-    expect(requiredOrientation({ signedIn: true, verified: true, pathname: '/reset-password' })).toBe('portrait');
-    expect(requiredOrientation({ signedIn: false, verified: false, pathname: '/activate' })).toBe('portrait');
-    expect(requiredOrientation({ signedIn: true, verified: true, pathname: '/' })).toBe('landscape');
-    expect(requiredOrientation({ signedIn: true, verified: true, pathname: '/tables/taixiu-1' })).toBe('landscape');
-    expect(requiredOrientation({ signedIn: true, verified: true, pathname: '/settings' })).toBe('landscape');
-    expect(requiredOrientation({ signedIn: true, verified: true, pathname: '/admin/items' })).toBe('landscape');
+describe('classifyFormFactor (V7.1: phones are portrait-only)', () => {
+  const f = (ua: string, over: Partial<DeviceEnv> = {}, screenShort = 390) => classifyFormFactor({ ...env(ua, over), screenShort });
+  it('phones: iPhone (Safari/Chrome), Android phones, Firefox Android, foldables', () => {
+    expect(f(UA.iphoneSafari, { maxTouchPoints: 5, media: touch })).toBe('phone');
+    expect(f(UA.iphoneChrome, { maxTouchPoints: 5, media: touch })).toBe('phone');
+    expect(f(UA.androidPhone, { maxTouchPoints: 5, media: touch, uaData: { mobile: true, platform: 'Android' } })).toBe('phone');
+    expect(f(UA.firefoxAndroid, { maxTouchPoints: 5, media: touch })).toBe('phone');
+    expect(f(UA.samsungFold, { maxTouchPoints: 10, media: touch })).toBe('phone');
+  });
+  it('tablets: iPad (also desktop-mode Safari) and Android tablets — never asked to rotate', () => {
+    expect(f(UA.ipadDesktopSafari, { maxTouchPoints: 5, media: touch }, 820)).toBe('tablet');
+    expect(f(UA.ipadChrome, { maxTouchPoints: 5, media: touch }, 820)).toBe('tablet');
+    expect(f(UA.androidTablet, { maxTouchPoints: 10, media: touch, uaData: { mobile: false, platform: 'Android' } }, 800)).toBe('tablet');
+  });
+  it('PCs stay PCs, even in a narrow window', () => {
+    expect(f(UA.winChrome, { uaData: { mobile: false, platform: 'Windows' } }, 1080)).toBe('pc');
+    expect(f(UA.macSafari, {}, 900)).toBe('pc');
+    expect(f(UA.linuxDesktop, {}, 1080)).toBe('pc');
+  });
+  it('unknown touch-only devices: by the shorter screen side', () => {
+    expect(f('SomeBrowser/1.0', { media: touch }, 380)).toBe('phone');
+    expect(f('SomeBrowser/1.0', { media: touch }, 768)).toBe('tablet');
   });
 });
 
-describe('keyboardState', () => {
-  it('only shrinks the app while a field is focused and the visible area is clearly shorter', async () => {
-    const { keyboardState } = await import('../src/lib/viewport');
-    // iPhone landscape, keyboard up: layout 390, visible 180.
-    expect(keyboardState(390, 180, true)).toEqual({ open: true, appHeight: 180 });
-    // Same heights but nothing focused (e.g. a toolbar hiding): leave the layout alone.
-    expect(keyboardState(390, 180, false)).toEqual({ open: false, appHeight: null });
-    // Small changes (browser chrome, suggestion bar) never resize the app.
-    expect(keyboardState(844, 790, true)).toEqual({ open: false, appHeight: null });
-    // Android resizes-content: layout already equals the visible height.
-    expect(keyboardState(420, 420, true)).toEqual({ open: false, appHeight: null });
-    expect(keyboardState(844, 503.6, true)).toEqual({ open: true, appHeight: 504 });
+describe('phoneMustRotate (V7.1 final: phones play in landscape)', () => {
+  it('only a phone held upright is asked to rotate, outside the sign-in pages', () => {
+    expect(phoneMustRotate('phone', 'portrait')).toBe(true);
+    expect(phoneMustRotate('phone', 'landscape')).toBe(false);
+    expect(phoneMustRotate('phone', 'portrait', true)).toBe(false);
+    expect(phoneMustRotate('tablet', 'portrait')).toBe(false);
+    expect(phoneMustRotate('tablet', 'landscape')).toBe(false);
+    expect(phoneMustRotate('pc', 'portrait')).toBe(false);
+    expect(phoneMustRotate('pc', 'landscape')).toBe(false);
   });
 });
 
-describe('standaloneAppSize', () => {
-  it('sizes an iPhone home-screen app from the screen, by physical orientation', async () => {
-    const { standaloneAppSize } = await import('../src/lib/viewport');
-    const iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15';
-    // iOS reports screen.width/height portrait-fixed (430×932 on a Pro Max) whatever the rotation.
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'landscape' })).toEqual({ w: 932, h: 430 });
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'portrait' })).toEqual({ w: 430, h: 932 });
-    // Same result if a browser reports the screen already rotated.
-    expect(standaloneAppSize({ standalone: true, userAgent: iphone, screenW: 932, screenH: 430, orientation: 'landscape' })).toEqual({ w: 932, h: 430 });
-    // Safari tab (not installed), iPad (multitasking windows) and Android: leave the size to the browser.
-    expect(standaloneAppSize({ standalone: false, userAgent: iphone, screenW: 430, screenH: 932, orientation: 'landscape' })).toBeNull();
-    expect(standaloneAppSize({ standalone: true, userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X)', screenW: 820, screenH: 1180, orientation: 'landscape' })).toBeNull();
-    expect(standaloneAppSize({ standalone: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) Mobile', screenW: 412, screenH: 915, orientation: 'landscape' })).toBeNull();
+describe('isAuthRoute', () => {
+  it('sign-in, unverified and e-mail link pages are free of the rotate guard', () => {
+    expect(isAuthRoute({ signedIn: false, verified: false, pathname: '/' })).toBe(true);
+    expect(isAuthRoute({ signedIn: true, verified: false, pathname: '/' })).toBe(true);
+    expect(isAuthRoute({ signedIn: true, verified: true, pathname: '/reset-password' })).toBe(true);
+    expect(isAuthRoute({ signedIn: true, verified: true, pathname: '/cards/poker-1' })).toBe(false);
+  });
+});
+
+describe('mustRotateToLandscape (V7.1: phones everywhere, tablets in game rooms)', () => {
+  it('phones: upright = rotate, except the sign-in pages', () => {
+    expect(mustRotateToLandscape('phone', 'portrait')).toBe(true);
+    expect(mustRotateToLandscape('phone', 'portrait', { authRoute: true })).toBe(false);
+    expect(mustRotateToLandscape('phone', 'landscape', { gameRoute: true })).toBe(false);
+  });
+  it('tablets: only inside a game room (the table never re-lays out mid-round)', () => {
+    expect(mustRotateToLandscape('tablet', 'portrait', { gameRoute: true })).toBe(true);
+    expect(mustRotateToLandscape('tablet', 'portrait', { gameRoute: false })).toBe(false);
+    expect(mustRotateToLandscape('tablet', 'landscape', { gameRoute: true })).toBe(false);
+  });
+  it('PCs: never', () => {
+    expect(mustRotateToLandscape('pc', 'portrait', { gameRoute: true })).toBe(false);
+  });
+});
+
+describe('isGameRoute', () => {
+  it('matches every game room and nothing else', () => {
+    for (const p of ['/play/sicbo', '/play/slots', '/tables/taixiu-1', '/tables/roulette-1', '/cards/poker-1', '/bjt/bj-1']) expect(isGameRoute(p)).toBe(true);
+    for (const p of ['/', '/bjt', '/rooms', '/bank', '/profile', '/settings', '/custom-rooms']) expect(isGameRoute(p)).toBe(false);
+  });
+});
+
+describe('tablePortraitLayout', () => {
+  it('phones and tablets always get the landscape table, whatever the box', () => {
+    expect(tablePortraitLayout('phone', { w: 390, h: 800 })).toBe(false);
+    expect(tablePortraitLayout('tablet', { w: 820, h: 1100 })).toBe(false);
+  });
+  it('a tall PC window gets the portrait table; a wide one landscape', () => {
+    expect(tablePortraitLayout('pc', { w: 520, h: 800 })).toBe(true);
+    expect(tablePortraitLayout('pc', { w: 1366, h: 700 })).toBe(false);
+    expect(tablePortraitLayout('pc', null)).toBe(false);
   });
 });

@@ -4,13 +4,14 @@ import { addChip, totalOf } from '../../lib/bets';
 import { CHIP_VALUES, formatChips } from '../../lib/format';
 import { sfx } from '../../audio/sfx';
 import { useSession } from '../../store/session';
-import { Button } from '../../ui/Button';
-import { ChipSelector } from '../../ui/Chip';
 import { toast } from '../../ui/toast';
 import { ECONOMY } from '@casino/shared';
 import { PhaserView } from '../PhaserView';
 import type { TableScene } from '../scenes/TableScene';
-import { GameLayout, Stat } from './GameLayout';
+import { GameTableLayout } from '../../ui/game/GameTableLayout';
+import { GameButton } from '../../ui/game/GameButton';
+import { ActionIcon } from '../../ui/game/ActionIcons';
+import { GameCard, GameChipRack, GameStat, GameTimer } from '../../ui/game/GameParts';
 import { usePlay } from './usePlay';
 import { celebrateWin } from '../../cosmetics/VictoryEffect';
 
@@ -20,6 +21,7 @@ interface Props<S extends TableScene, T extends { balance: number; roundId?: str
   create: () => S;
   request: (bets: Record<string, number>) => Promise<T>;
   animate: (scene: S, env: T) => Promise<void>;
+  icon?: 'spin' | 'roll';
 }
 
 /** Shared flow for roulette & sic bo: place chips on the table, then spin/roll. */
@@ -72,39 +74,60 @@ export function BetBoardGame<S extends TableScene, T extends { balance: number; 
   };
 
   return (
-    <GameLayout
+    <GameTableLayout
       title={props.title}
-      canvas={
-        <PhaserView
-          create={props.create}
-          onReady={(s) => {
-            scene.current = s;
-            s.events.on('spot', onSpot);
-          }}
-        />
+      status={<GameTimer label={busy ? t('play.busy') : t('play.placeBets')} />}
+      tools={[
+        {
+          id: 'info',
+          label: t('gameUi.info'),
+          icon: 'info',
+          content: (
+            <>
+              <GameCard>
+                <p className="text-xs text-white/60">{t('play.placeBets')}</p>
+                <div className="mt-2 flex gap-2">
+                  <GameStat label={t('play.totalBet')} value={formatChips(total, i18n.language)} accent />
+                  <GameStat label={t('play.lastWin')} value={formatChips(lastWin, i18n.language)} accent={lastWin > 0} />
+                </div>
+              </GameCard>
+              <p className="text-[11px] leading-snug text-white/40">{t('app.disclaimer')}</p>
+            </>
+          ),
+        },
+      ]}
+      stage={
+        <div className="gstage-canvas">
+          <PhaserView
+            create={props.create}
+            onReady={(s) => {
+              scene.current = s;
+              s.events.on('spot', onSpot);
+            }}
+          />
+        </div>
       }
-      panel={
+      controls={
         <>
-          <div className="hidden text-center text-xs text-white/50 sm:block">{t('play.placeBets')}</div>
-          <ChipSelector values={CHIP_VALUES} value={chip} onChange={setChip} />
-          <Stat label={t('play.totalBet')} value={formatChips(total, i18n.language)} accent />
-          <Button variant="gold" size="lg" onClick={() => void play()} disabled={busy || total === 0}>
-            {busy ? t('play.busy') : props.actionLabel}
-          </Button>
-          <div className="grid grid-cols-2 gap-2">
-            <Button size="sm" onClick={() => setBets({})} disabled={busy || total === 0}>
-              {t('play.clear')}
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => totalOf(lastBets) <= useSession.getState().balance && setBets(lastBets)}
-              disabled={busy || totalOf(lastBets) === 0}
-            >
-              {t('play.rebet')}
-            </Button>
+          <div className="gbar-group">
+            <GameChipRack values={CHIP_VALUES} value={chip} onChange={setChip} disabled={busy} />
           </div>
-          <Stat label={t('play.lastWin')} value={formatChips(lastWin, i18n.language)} accent={lastWin > 0} />
-          <p className="mt-auto text-[11px] leading-snug text-white/40">{t('app.disclaimer')}</p>
+          <div className="gbar-group gbar-group--wide">
+            <GameStat label={t('play.totalBet')} value={formatChips(total, i18n.language)} accent />
+            <GameStat label={t('play.lastWin')} value={formatChips(lastWin, i18n.language)} accent={lastWin > 0} />
+          </div>
+          <div className="gbar-group">
+            <GameButton size="sm" icon={<ActionIcon name="clear" size={18} />} onClick={() => setBets({})} disabled={busy || total === 0}>
+              {t('play.clear')}
+            </GameButton>
+            <GameButton size="sm" onClick={() => totalOf(lastBets) <= useSession.getState().balance && setBets(lastBets)} disabled={busy || totalOf(lastBets) === 0}>
+              {t('play.rebet')}
+            </GameButton>
+            <GameButton tone="primary" icon={<ActionIcon name={props.icon ?? 'confirm'} />} loading={busy} onClick={() => void play()} disabled={total === 0}>
+              {busy ? t('play.busy') : props.actionLabel}
+              {!busy && total > 0 && <span className="tabular-nums"> · {formatChips(total, i18n.language)}</span>}
+            </GameButton>
+          </div>
         </>
       }
     />

@@ -1,0 +1,18 @@
+{
+  "verified": true,
+  "verifiedAt": "2026-11-06",
+  "source": "https://developers.openai.com/api/docs/pricing and https://platform.openai.com/docs/pricing (read by the CI probe, see assets/studio/reports/probe.json)",
+  "tokensUnit": "USD per 1M tokens (standard, non-batch)",
+  "tokens": {
+    "gpt-image-2.5-sunburst": { "textInput": 5.0, "imageInput": 8.0, "imageOutput": 30.0, "cachedImageInput": 2.0, "cachedTextInput": 1.25 },
+    "gpt-image-2.5-flare": { "textInput": 5.0, "imageInput": 8.0, "imageOutput": 30.0, "cachedImageInput": 2.0, "cachedTextInput": 1.25 },
+    "gpt-image-2.6-sunburst": { "textInput": 5.0, "imageInput": 8.0, "imageOutput": 30.0, "cachedImageInput": 2.0, "cachedTextInput": 1.25 },
+    "gpt-image-2.6-flare": { "textInput": 5.0, "imageInput": 8.0, "imageOutput": 30.0, "cachedImageInput": 2.0, "cachedTextInput": 1.25 }
+  },
+  "perImageNote": "Planning estimates (upper bounds). Updated 2026-11-07 from 21 real gpt-image-2.5-sunburst high images: max 1756 output + 575 input tokens = $0.0556. Bound used: 3000 output + 800 input tokens = $0.094 → $0.10 per image (≈1.8× the observed maximum). Real cost is taken from the API usage object; the estimate is charged only when usage is missing.",
+  "perImageUsd": {
+    "high": { "1024x1024": 0.1, "1536x1024": 0.1, "1024x1536": 0.1 },
+    "medium": { "1024x1024": 0.08, "1536x1024": 0.12, "1024x1536": 0.12 },
+    "low": { "1024x1024": 0.03, "1536x1024": 0.04, "1024x1536": 0.04 }
+  }
+}

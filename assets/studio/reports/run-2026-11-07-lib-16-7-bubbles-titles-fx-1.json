@@ -1,0 +1,214 @@
+{
+  "requestId": "2026-11-07-lib-16-7-bubbles-titles-fx-1",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.5,
+  "remainingBeforeUsd": 8.445,
+  "runCapUsd": 1.5,
+  "planned": [
+    {
+      "id": "bubble.anniversary",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.champion",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.christmas",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.classic",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.creator",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.default",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.diamond",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.halloween",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.kol",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.limited",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.lunar-new-year",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.royal",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.tournament",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "bubble.vip",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "fx.all-in",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "bubble.anniversary",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.christmas",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.classic",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.creator",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.default",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "background not transparent at the edges (edge alpha 6%) — opaque backdrop or fake checkerboard"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "bubble.diamond",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.halloween",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.kol",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.limited",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.lunar-new-year",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.royal",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "bubble.tournament",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "bubble.vip",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.all-in",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T03:11:49.733Z",
+  "plannedEstimateUsd": 1.5,
+  "finishedAt": "2026-11-07T03:18:13.973Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 20,
+    "spentUsd": 12.221085,
+    "spentEstimatedUsd": 27.75,
+    "spentActualUsd": 12.221085,
+    "remainingUsd": 7.7789,
+    "images": 231
+  }
+}

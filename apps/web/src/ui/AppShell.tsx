@@ -11,7 +11,10 @@ import { Avatar } from './Avatar';
 import { NavIcon, type NavIconName } from './NavIcons';
 import { CurrencyIcon, PlayerName } from './OfficialAssets';
 import { VipEmblem } from './VipEmblem';
+import { KeyoImg, type KeyoAssetId } from '../assets/keyo';
 import { ChatButton } from './ChatButton';
+import { BottomTabBar } from './BottomTabBar';
+import { usePortraitLayout } from '../lib/layout';
 
 export const NAV_ITEMS: { to: string; icon: NavIconName; label: string }[] = [
   { to: '/', icon: 'hub', label: 'nav.hub' },
@@ -91,7 +94,7 @@ export function VipMeter({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function PlayerBar() {
+export function PlayerBar() {
   const { t, i18n } = useTranslation();
   const user = useSession((s) => s.user)!;
   const balance = useSession((s) => s.balance);
@@ -125,9 +128,9 @@ function PlayerBar() {
         </div>
         <ChatButton />
         {(['silver', 'gold'] as const).map((c) => (
-          <div key={c} className="gold-border flex items-center gap-1.5 rounded-full py-0.5 pl-0.5 pr-3" title={t(`currency.${c}`)}>
-            <CurrencyIcon currency={c} size={28} />
-            <span className={`text-sm font-bold tabular-nums ${c === 'gold' ? 'text-gold-100' : 'text-white'}`}>{fmt(c === 'gold' ? gold : balance)}</span>
+          <div key={c} className="gold-border flex items-center gap-1 rounded-full py-0.5 pl-0.5 pr-2 sm:gap-1.5 sm:pr-3" title={t(`currency.${c}`)}>
+            <CurrencyIcon currency={c} size={24} />
+            <span className={`text-xs font-bold tabular-nums sm:text-sm ${c === 'gold' ? 'text-gold-100' : 'text-white'}`}>{fmt(c === 'gold' ? gold : balance)}</span>
           </div>
         ))}
       </div>
@@ -178,27 +181,44 @@ export function DemoBanner() {
   );
 }
 
-/** Lobby-style screens: player bar on top, navigation rail on the left. */
+/**
+ * Lobby-style screens. Landscape (PC, tablets held sideways): player bar on top, navigation rail on
+ * the left. Portrait (phones, V7.1): player bar on top, content, bottom tab bar (+ "More" sheet).
+ */
 export function AppShell({ children }: { children: ReactNode }) {
+  const portrait = usePortraitLayout();
   return (
-    <div className="flex h-full flex-col">
+    <div className="v71-shell flex h-full flex-col">
       <DemoBanner />
       <PlayerBar />
       <div className="flex min-h-0 flex-1">
-        <NavRail />
-        <main className="min-w-0 flex-1 overflow-y-auto pb-[var(--sa-b)] pr-[var(--sa-r)]">{children}</main>
+        {!portrait && <NavRail />}
+        <main className={`min-w-0 flex-1 overflow-y-auto pr-[var(--sa-r)] ${portrait ? 'pl-[var(--sa-l)]' : 'pb-[var(--sa-b)]'}`}>{children}</main>
       </div>
+      {portrait && <BottomTabBar />}
     </div>
   );
 }
 
-export function PageHeader({ icon, title, subtitle, right }: { icon: NavIconName; title: string; subtitle?: string; right?: ReactNode }) {
+/** Asset Studio emblem per page icon (the drawn nav icon is the fallback). */
+const PAGE_ART: Partial<Record<NavIconName, KeyoAssetId>> = {
+  mail: 'ui.mailbox',
+  leaderboard: 'ui.leaderboard',
+  gifts: 'reward.mystery-gift',
+  collection: 'achievement.collector',
+};
+
+export function PageHeader({ icon, title, subtitle, right, art }: { icon: NavIconName; title: string; subtitle?: string; right?: ReactNode; art?: KeyoAssetId }) {
+  const studio = art ?? PAGE_ART[icon];
+  const drawn = (
+    <div className="gold-border flex h-11 w-11 items-center justify-center rounded-xl">
+      <NavIcon name={icon} size={24} active />
+    </div>
+  );
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
       <div className="flex items-center gap-3">
-        <div className="gold-border flex h-11 w-11 items-center justify-center rounded-xl">
-          <NavIcon name={icon} size={24} active />
-        </div>
+        {studio ? <KeyoImg id={studio} size={52} alt="" decorative eager className="-my-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.55)]" fallback={drawn} /> : drawn}
         <div>
           <h1 className="font-display text-2xl font-bold text-gold lg:text-3xl">{title}</h1>
           {subtitle && <p className="text-sm text-white/50">{subtitle}</p>}

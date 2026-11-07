@@ -1,0 +1,134 @@
+{
+  "requestId": "local-estimate-sample-1-verified",
+  "dryRun": true,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 6,
+  "remainingBeforeUsd": 10,
+  "runCapUsd": 6,
+  "planned": [
+    {
+      "id": "bank.vault-premium",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "bubble.gold",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.45
+    },
+    {
+      "id": "cardback.royal-gold",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.45
+    },
+    {
+      "id": "cardback.royal-purple",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.45
+    },
+    {
+      "id": "chest.legendary",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "collectible.watch.luxury",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "frame.seasonal.lunar-new-year",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "frame.special.kol",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "frame.vip.vip-15",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.blackjack.card-shoe",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.poker.dealer-button",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.roulette.wheel-head",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.slots.symbol-crown",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.taixiu.bowl-cover",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "tournament.trophy-champion",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "vip.badge.vip-01",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "vip.badge.vip-08",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "vip.badge.vip-15",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    }
+  ],
+  "generated": [],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-06T23:45:55.538Z",
+  "plannedEstimateUsd": 5.85,
+  "finishedAt": "2026-11-06T23:45:55.538Z",
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 0,
+    "spentEstimatedUsd": 0,
+    "spentActualUsd": 0,
+    "remainingUsd": 10,
+    "images": 0
+  }
+}

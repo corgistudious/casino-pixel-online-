@@ -1,0 +1,245 @@
+{
+  "requestId": "2026-11-06-02-sample-1-generate",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 6,
+  "remainingBeforeUsd": 10,
+  "runCapUsd": 6,
+  "planned": [
+    {
+      "id": "bank.vault-premium",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "bubble.gold",
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.45
+    },
+    {
+      "id": "cardback.royal-gold",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.45
+    },
+    {
+      "id": "cardback.royal-purple",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.45
+    },
+    {
+      "id": "chest.legendary",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "collectible.watch.luxury",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "frame.seasonal.lunar-new-year",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "frame.special.kol",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "frame.vip.vip-15",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.blackjack.card-shoe",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.poker.dealer-button",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.roulette.wheel-head",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.slots.symbol-crown",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "game.taixiu.bowl-cover",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "tournament.trophy-champion",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "vip.badge.vip-01",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "vip.badge.vip-08",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    },
+    {
+      "id": "vip.badge.vip-15",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.3
+    }
+  ],
+  "generated": [
+    {
+      "id": "bank.vault-premium",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.gold",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.royal-gold",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.royal-purple",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "chest.legendary",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.watch.luxury",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.seasonal.lunar-new-year",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "object touches the canvas edge (possibly cut off)"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.kol",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.vip.vip-15",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.blackjack.card-shoe",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.poker.dealer-button",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.roulette.wheel-head",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-crown",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.taixiu.bowl-cover",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "tournament.trophy-champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "vip.badge.vip-01",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "vip.badge.vip-08",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "vip.badge.vip-15",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-06T23:46:35.382Z",
+  "plannedEstimateUsd": 5.85,
+  "finishedAt": "2026-11-06T23:55:43.326Z",
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 0.95678,
+    "spentEstimatedUsd": 5.85,
+    "spentActualUsd": 0.95678,
+    "remainingUsd": 9.0432,
+    "images": 18
+  }
+}

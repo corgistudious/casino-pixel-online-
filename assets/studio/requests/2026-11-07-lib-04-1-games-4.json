@@ -1,0 +1,22 @@
+{
+  "id": "2026-11-07-lib-04-1-games-4",
+  "mode": "generate",
+  "assets": [
+    "game.slots.symbol-bell",
+    "game.slots.symbol-cherry",
+    "game.slots.symbol-clover",
+    "game.slots.symbol-diamond",
+    "game.slots.symbol-gold-bar",
+    "game.slots.symbol-lemon",
+    "game.slots.symbol-scatter",
+    "game.slots.symbol-seven",
+    "game.slots.symbol-wild",
+    "game.xito.dealer-marker"
+  ],
+  "batchSize": 10,
+  "budgetLimitUsd": 1,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 4/20 (1-games 4/4)."
+}

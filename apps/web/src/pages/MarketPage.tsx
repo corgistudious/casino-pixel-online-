@@ -1,5 +1,7 @@
+import { KeyoImg, keyoUrl, type KeyoAssetId } from '../assets/keyo';
+import { eventArt } from '../assets/keyo/bindings';
 import { cosmeticDef, PERSONAL_KINDS, RARITIES, SEASON_THEMES, type CatalogItem, type CollectionView, type InventoryEntry, type ItemKind, type PublicUser, type Rarity } from '@casino/shared';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sfx } from '../audio/sfx';
 import { ItemPreviewLarge, ItemThumb } from '../cosmetics/ItemPreview';
@@ -360,6 +362,13 @@ function PreviewDialog({ itemId, kind, item, offer, collection, owned, onClose, 
   );
 }
 
+/** Event banner image (cover); falls back to the given node if the file fails. */
+function EventBanner({ id, fallback }: { id: KeyoAssetId; fallback: ReactNode }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <>{fallback}</>;
+  return <img src={keyoUrl(id, 800)} alt="" aria-hidden decoding="async" loading="lazy" draggable={false} onError={() => setFailed(true)} data-keyo-asset={id} className="absolute inset-0 h-full w-full select-none object-cover" />;
+}
+
 function Collections({ collections, owned, onPick, onEquipped }: { collections: CollectionView[] | null; owned: Set<string>; onPick: (id: string, kind: ItemKind) => void; onEquipped: (u: PublicUser) => void }) {
   const { t, i18n } = useTranslation();
   const catalog = useCatalog((c) => c.items);
@@ -389,15 +398,25 @@ function Collections({ collections, owned, onPick, onEquipped }: { collections: 
         return (
           <section key={c.id} className="glass overflow-hidden">
             <div className="relative h-28 short:h-20">
-              <TableSkinCanvas skinId={skin} layout="board" />
-              <div className="absolute inset-0 flex items-center justify-between gap-3 bg-gradient-to-r from-black/70 via-black/30 to-transparent px-4">
-                <div>
+              {/* Seasonal event banner (Asset Studio) for the collection's theme; the table skin otherwise. */}
+              {eventArt(c.theme, 'banner') ? (
+                <EventBanner id={eventArt(c.theme, 'banner')!} fallback={<TableSkinCanvas skinId={skin} layout="board" />} />
+              ) : (
+                <TableSkinCanvas skinId={skin} layout="board" />
+              )}
+              {eventArt(c.theme, 'decoration') && <KeyoImg id={eventArt(c.theme, 'decoration')!} size={72} alt="" decorative className="pointer-events-none absolute -top-2 right-24 opacity-90 short:hidden" />}
+              <div className="absolute inset-0 flex items-center justify-between gap-3 bg-gradient-to-r from-black/75 via-black/35 to-transparent px-4">
+                <div className="flex min-w-0 items-center gap-3">
+                  {eventArt(c.theme, 'icon') && <KeyoImg id={eventArt(c.theme, 'icon')!} size={56} alt="" decorative className="shrink-0 drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] short:hidden" />}
+                  <div className="min-w-0">
                   <h3 className="font-display text-xl font-heading text-gold-100 drop-shadow">{c.name[lang]}</h3>
                   <p className="text-[11px] text-white/75">
                     {fmt(c.startsAt, c.timezone)} – {fmt(c.endsAt, c.timezone)} · {c.timezone}
                   </p>
+                  </div>
                 </div>
-                <span className={`rounded-full px-2.5 py-0.5 text-xs font-label ${c.status === 'active' ? 'bg-emerald-500/80 text-white' : c.status === 'scheduled' ? 'bg-sky-500/70 text-white' : 'bg-white/20 text-white/80'}`}>{t(`market.status.${c.status}`)}</span>
+                {c.status === 'active' && eventArt(c.theme, 'badge') && <KeyoImg id={eventArt(c.theme, 'badge')!} size={40} alt="" decorative className="-mr-2 shrink-0" />}
+                <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-label ${c.status === 'active' ? 'bg-emerald-500/80 text-white' : c.status === 'scheduled' ? 'bg-sky-500/70 text-white' : 'bg-white/20 text-white/80'}`}>{t(`market.status.${c.status}`)}</span>
               </div>
             </div>
             <div className="flex flex-col gap-3 p-3">
@@ -419,7 +438,10 @@ function Collections({ collections, owned, onPick, onEquipped }: { collections: 
                 })}
               </ul>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs text-white/55">{t('market.ownedCount', { n: ownedCount, total: c.items.length })}</span>
+                <span className="flex items-center gap-1.5 text-xs text-white/55">
+                  {eventArt(c.theme, 'chest') && <KeyoImg id={eventArt(c.theme, 'chest')!} size={30} alt="" decorative className={ownedCount === c.items.length ? '' : 'opacity-60 grayscale-[40%]'} />}
+                  {t('market.ownedCount', { n: ownedCount, total: c.items.length })}
+                </span>
                 <Button size="sm" variant="gold" disabled={busy !== null || ownedCount === 0} onClick={() => void equipSet(c)}>
                   {t('market.equipSet')}
                 </Button>

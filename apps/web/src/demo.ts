@@ -1,4 +1,5 @@
 import {
+  DEFAULT_CARD_CONFIG,
   CHECKIN_REWARDS,
   checkinDayEnd,
   ECONOMY,
@@ -202,6 +203,21 @@ export async function demoApi(path: string, method: string, body: unknown): Prom
       return { request: null };
     case 'POST /api/me/rescue':
       throw new DemoError('rescue_not_available');
+    // Lobby lists for the card and Blackjack tables (the tables themselves run in demoSocket.ts).
+    case 'GET /api/cards/tables':
+      return {
+        tables: (['poker', 'lieng', 'xito'] as const).map((game) => ({
+          id: `${game}-1`,
+          game,
+          name: { poker: { vi: "Texas Hold'em — Bàn Kim Cương", en: "Texas Hold'em — Diamond Table" }, lieng: { vi: 'Liêng — Bàn Phượng Hoàng', en: 'Liêng — Phoenix Table' }, xito: { vi: 'Xì Tố — Bàn Hoàng Kim', en: 'Xì Tố — Golden Table' } }[game],
+          mode: 'casual',
+          status: 'open',
+          config: DEFAULT_CARD_CONFIG[game],
+          seated: DEFAULT_CARD_CONFIG[game].seats - 2,
+        })),
+      };
+    case 'GET /api/bjt/tables':
+      return { tables: [{ id: 'bj-1', name: { vi: 'Blackjack — Bàn Ngọc Lục Bảo', en: 'Blackjack — Emerald Table' }, minBet: 100, maxBet: 50_000, seats: 5, seated: 4, status: 'open' }] };
     default:
       throw new DemoError('network');
   }

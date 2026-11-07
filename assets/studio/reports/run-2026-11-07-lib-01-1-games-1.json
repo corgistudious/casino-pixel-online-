@@ -1,0 +1,184 @@
+{
+  "requestId": "2026-11-07-lib-01-1-games-1",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.3,
+  "remainingBeforeUsd": 8.8769,
+  "runCapUsd": 1.3,
+  "planned": [
+    {
+      "id": "cardback.christmas",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "cardback.classic",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "cardback.diamond",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "cardback.halloween",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "cardback.limited",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "cardback.lunar-new-year",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "cardback.tournament",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "cardback.vip",
+      "size": "1024x1536",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.blackjack.action-double",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.blackjack.action-hit",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.blackjack.action-insurance",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.blackjack.action-split",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.blackjack.action-stand",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "cardback.christmas",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.classic",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.diamond",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.halloween",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.limited",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.lunar-new-year",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.tournament",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "cardback.vip",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.blackjack.action-double",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.blackjack.action-hit",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.blackjack.action-insurance",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.blackjack.action-split",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.blackjack.action-stand",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T00:26:50.957Z",
+  "plannedEstimateUsd": 1.3,
+  "finishedAt": "2026-11-07T00:33:02.405Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 1.7465,
+    "spentEstimatedUsd": 8.05,
+    "spentActualUsd": 1.7465,
+    "remainingUsd": 8.2535,
+    "images": 34
+  }
+}

@@ -1,5 +1,7 @@
 import { vipTierOf, type VipTier } from '@casino/shared';
-import { useId } from 'react';
+import { useId, useState } from 'react';
+import { keyoUrl } from '../assets/keyo';
+import { vipBadgeId, vipFrameId } from '../assets/keyo/bindings';
 
 /** Badge look per tier (same everywhere): 1–3 silver, 4–6 gold, 7–9 platinum, 10–12 diamond, 13+ royal. */
 const TIERS: Record<VipTier, { colors: [string, string, string]; gem: string }> = {
@@ -15,8 +17,44 @@ export function vipTier(level: number) {
   return { tier, ...TIERS[tier] };
 }
 
-/** Shield emblem with the VIP level number. */
+/**
+ * VIP badge used on every screen (Profile, player cards, leaderboards, VIP Hub, header, missions,
+ * admin): the Asset Studio badge of the level (vip.badge.vip-01…15) with the level number on a small
+ * plate, so the level stays readable at 24 px. Falls back to the drawn shield if the file fails.
+ */
 export function VipEmblem({ level, size = 40, dim = false }: { level: number; size?: number; dim?: boolean }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <DrawnVipEmblem level={level} size={size} dim={dim} />;
+  const fs = Math.max(8, Math.round(size * 0.25));
+  return (
+    <span role="img" aria-label={`VIP ${level}`} className={`relative inline-flex shrink-0 items-center justify-center ${dim ? 'opacity-35 grayscale' : ''}`} style={{ width: size, height: size }}>
+      <img src={keyoUrl(vipBadgeId(level), size)} alt="" width={size} height={size} loading="lazy" decoding="async" draggable={false} onError={() => setFailed(true)} data-keyo-asset={vipBadgeId(level)} className="h-full w-full select-none object-contain drop-shadow-[0_2px_3px_rgba(0,0,0,0.45)]" />
+      <span aria-hidden className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[18%] rounded-full bg-[#14081f]/85 px-[0.35em] font-display font-extrabold leading-[1.15] text-[#ffe7a3] ring-1 ring-[#f2c14e]/70" style={{ fontSize: fs }}>
+        {level}
+      </span>
+    </span>
+  );
+}
+
+/**
+ * VIP crest: the badge inside the VIP milestone frame the level has reached (VIP 5 / 7 / 10 / 15).
+ * Decoration of the VIP level only (VIP Hub, profile VIP card) — it is not an avatar frame item and
+ * grants nothing; below VIP 5 it is just the badge.
+ */
+export function VipCrest({ level, size = 96, dim = false }: { level: number; size?: number; dim?: boolean }) {
+  const frame = vipFrameId(level);
+  const [failed, setFailed] = useState(false);
+  if (!frame || failed) return <VipEmblem level={level} size={size} dim={dim} />;
+  return (
+    <span className={`relative inline-flex shrink-0 items-center justify-center ${dim ? 'opacity-35 grayscale' : ''}`} style={{ width: size, height: size }}>
+      <VipEmblem level={level} size={Math.round(size * 0.56)} />
+      <img src={keyoUrl(frame, size)} alt="" aria-hidden width={size} height={size} loading="lazy" decoding="async" draggable={false} onError={() => setFailed(true)} data-keyo-asset={frame} className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain" />
+    </span>
+  );
+}
+
+/** Drawn shield emblem with the VIP level number (fallback). */
+function DrawnVipEmblem({ level, size = 40, dim = false }: { level: number; size?: number; dim?: boolean }) {
   const id = useId();
   const tier = vipTier(level);
   const [hi, mid, lo] = tier.colors;

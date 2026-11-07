@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
+import { useStableSize } from '../lib/viewport';
 
 export interface StageInfo {
   /** Virtual stage size in design pixels. */
@@ -22,17 +23,9 @@ function measure(w: number, h: number): StageInfo & { scale: number } {
  */
 export function Stage({ children }: { children: (info: StageInfo) => ReactNode }) {
   const host = useRef<HTMLDivElement>(null);
-  const [m, setM] = useState(() => measure(window.innerWidth, window.innerHeight));
-
-  useEffect(() => {
-    const el = host.current;
-    if (!el) return;
-    const update = () => setM(measure(el.clientWidth || 1, el.clientHeight || 1));
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+  // Stable while the on-screen keyboard is up: typing never rescales the lobby (lib/viewport.ts).
+  const box = useStableSize(host);
+  const m = measure(box?.w ?? window.innerWidth, box?.h ?? window.innerHeight);
 
   return (
     <div ref={host} className="relative h-full w-full overflow-hidden">

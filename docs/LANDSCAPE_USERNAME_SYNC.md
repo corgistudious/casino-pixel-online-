@@ -19,7 +19,7 @@ Không merge, không deploy, không chạy migration trên Production.
   - **Sảnh:** nền lounge tràn viền; stage (nút, thẻ game, thanh dưới) chừa vùng an toàn.
   - **AppShell:** header tràn viền, nội dung tránh Dynamic Island; thanh điều hướng trái mở rộng ra mép, icon nằm ngoài vùng an toàn; vùng nội dung chừa phải và dưới.
   - **Phòng chơi (GameLayout/TopBar), Admin, Đăng nhập:** cùng nguyên tắc.
-- **iPhone PWA (`navigator.standalone`):** kích thước app lấy từ `screen` theo hướng vật lý, vì app trên màn hình chính iPhone luôn phủ toàn màn hình. Nhờ vậy mở thẳng lúc ngang cũng đúng ngay. iPad được loại trừ (Split View và Stage Manager làm cửa sổ nhỏ hơn màn hình).
+- **iPhone PWA (`navigator.standalone`):** app luôn dùng đúng cửa sổ iOS cấp, không ép theo `screen` nữa. Xem `docs/IOS_PWA_LANDSCAPE_STARTUP.md`.
 - Không kéo giãn hay ép tỉ lệ. Không che bằng màu nền. Bàn phím, OrientationGuard và vùng an toàn vẫn chạy chung qua `lib/viewport.ts`.
 
 ### Kiểm thử (Chromium giả lập, safe-area giả lập thật qua CDP `Emulation.setSafeAreaInsetsOverride`)

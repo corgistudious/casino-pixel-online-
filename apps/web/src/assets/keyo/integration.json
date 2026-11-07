@@ -1,0 +1,1609 @@
+{
+ "achievement.badge": {
+  "status": "INTEGRATED",
+  "where": "Thành tích: Trận đấu đầu tiên (cả hồ sơ công khai)",
+  "wave": "library"
+ },
+ "achievement.champion": {
+  "status": "VERIFIED",
+  "where": "Thành tích: biểu tượng đầu trang",
+  "wave": "library",
+  "verifiedOn": [
+   "achievements"
+  ]
+ },
+ "achievement.collector": {
+  "status": "VERIFIED",
+  "where": "Bộ sưu tập / Cửa hàng: biểu tượng đầu trang (PageHeader \"collection\")",
+  "wave": "library",
+  "verifiedOn": [
+   "collection"
+  ]
+ },
+ "achievement.epic": {
+  "status": "INTEGRATED",
+  "where": "Thành tích: 100 trận (cả hồ sơ công khai)",
+  "wave": "library"
+ },
+ "achievement.legendary": {
+  "status": "INTEGRATED",
+  "where": "Thành tích: 1000 trận (cả hồ sơ công khai)",
+  "wave": "library"
+ },
+ "achievement.rare": {
+  "status": "INTEGRATED",
+  "where": "Thành tích: 10 trận (cả hồ sơ công khai)",
+  "wave": "library"
+ },
+ "avatar.collector": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.default": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.fantasy-dealer": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.kol": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.premium": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.royal": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.seasonal": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.tournament": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "avatar.vip": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm avatar tương ứng trong catalog (avatar mặc định 0–15 do server cố định; vật phẩm avatar thì tạo được qua Admin, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "bank.money-bag": {
+  "status": "VERIFIED",
+  "where": "Ngân hàng: thẻ Cxu Bạc (trang trí)",
+  "wave": "library",
+  "verifiedOn": [
+   "bank"
+  ]
+ },
+ "bank.money-bag-vip": {
+  "status": "VERIFIED",
+  "where": "Ngân hàng: thẻ Cxu Vàng (trang trí)",
+  "wave": "library",
+  "verifiedOn": [
+   "bank"
+  ]
+ },
+ "bank.vault-open": {
+  "status": "VERIFIED",
+  "where": "Ngân hàng: trang trí quầy gửi/rút",
+  "wave": "library",
+  "verifiedOn": [
+   "bank"
+  ]
+ },
+ "bank.vault-premium": {
+  "status": "VERIFIED",
+  "where": "Ngân hàng: biểu tượng đầu trang",
+  "wave": "sample",
+  "verifiedOn": [
+   "bank"
+  ]
+ },
+ "bubble.anniversary": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — ss2026_anniversary_bubble: chat, cửa hàng, kho, xem trước",
+  "wave": "library"
+ },
+ "bubble.champion": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung chat tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "bubble.christmas": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — ss2026_christmas_bubble: chat, cửa hàng, kho, xem trước",
+  "wave": "library"
+ },
+ "bubble.classic": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — bubble_classic: chat, cửa hàng, kho, xem trước",
+  "wave": "library"
+ },
+ "bubble.creator": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung chat tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "bubble.default": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — khung chat mặc định (chưa trang bị): chat, cửa hàng, kho, xem trước",
+  "wave": "library"
+ },
+ "bubble.diamond": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — bubble_diamond_blue: chat, cửa hàng, kho, xem trước",
+  "wave": "library"
+ },
+ "bubble.gold": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — bubble_classic_gold: chat, cửa hàng, kho, xem trước",
+  "wave": "sample"
+ },
+ "bubble.halloween": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — ss2026_halloween_bubble: chat, cửa hàng, kho, xem trước",
+  "wave": "library"
+ },
+ "bubble.kol": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung chat tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "bubble.limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung chat tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "bubble.lunar-new-year": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — ss2026_lunar_new_year_bubble: chat, cửa hàng, kho, xem trước",
+  "wave": "library"
+ },
+ "bubble.royal": {
+  "status": "INTEGRATED",
+  "where": "Khung chat (9-slice) — bubble_royal_purple: chat, cửa hàng, kho, xem trước",
+  "wave": "library"
+ },
+ "bubble.tournament": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung chat tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "bubble.vip": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung chat tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "cardback.christmas": {
+  "status": "INTEGRATED",
+  "where": "Mặt sau lá bài của vật phẩm ss2026_christmas_cards: bàn Poker/Liêng/Xì Tố, Cửa hàng, Kho, xem trước",
+  "wave": "library"
+ },
+ "cardback.classic": {
+  "status": "INTEGRATED",
+  "where": "Mặt sau lá bài của vật phẩm card_back_classic: bàn Poker/Liêng/Xì Tố, Cửa hàng, Kho, xem trước",
+  "wave": "library"
+ },
+ "cardback.diamond": {
+  "status": "INTEGRATED",
+  "where": "Mặt sau lá bài của vật phẩm card_back_sapphire: bàn Poker/Liêng/Xì Tố, Cửa hàng, Kho, xem trước",
+  "wave": "library"
+ },
+ "cardback.halloween": {
+  "status": "INTEGRATED",
+  "where": "Mặt sau lá bài của vật phẩm ss2026_halloween_cards: bàn Poker/Liêng/Xì Tố, Cửa hàng, Kho, xem trước",
+  "wave": "library"
+ },
+ "cardback.limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm mặt sau lá bài tương ứng trong catalog (tạo vật phẩm = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "cardback.lunar-new-year": {
+  "status": "INTEGRATED",
+  "where": "Mặt sau lá bài của vật phẩm ss2026_lunar_new_year_cards: bàn Poker/Liêng/Xì Tố, Cửa hàng, Kho, xem trước",
+  "wave": "library"
+ },
+ "cardback.royal-gold": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm mặt sau lá bài tương ứng trong catalog (tạo vật phẩm = sửa database, cần Owner duyệt)",
+  "wave": "sample"
+ },
+ "cardback.royal-purple": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm mặt sau lá bài tương ứng trong catalog (tạo vật phẩm = sửa database, cần Owner duyệt)",
+  "wave": "sample"
+ },
+ "cardback.tournament": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm mặt sau lá bài tương ứng trong catalog (tạo vật phẩm = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "cardback.vip": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm mặt sau lá bài tương ứng trong catalog (tạo vật phẩm = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "chest.common": {
+  "status": "INTEGRATED",
+  "where": "Hộp thư: rương theo phần quà (common) ở danh sách thư và đính kèm",
+  "wave": "library"
+ },
+ "chest.epic": {
+  "status": "INTEGRATED",
+  "where": "Hộp thư: rương theo phần quà (epic) ở danh sách thư và đính kèm",
+  "wave": "library"
+ },
+ "chest.event": {
+  "status": "INTEGRATED",
+  "where": "Hộp thư: rương theo phần quà (event) ở danh sách thư và đính kèm",
+  "wave": "library"
+ },
+ "chest.legendary": {
+  "status": "INTEGRATED",
+  "where": "Hộp thư: rương theo phần quà (legendary) ở danh sách thư và đính kèm",
+  "wave": "sample"
+ },
+ "chest.limited": {
+  "status": "INTEGRATED",
+  "where": "Hộp thư: rương theo phần quà (limited) ở danh sách thư và đính kèm",
+  "wave": "library"
+ },
+ "chest.rare": {
+  "status": "INTEGRATED",
+  "where": "Hộp thư: rương theo phần quà (rare) ở danh sách thư và đính kèm",
+  "wave": "library"
+ },
+ "collectible.car.hypercar": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.car.limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.car.luxury": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.car.sports": {
+  "status": "INTEGRATED",
+  "where": "Quà tặng mặc định \"sports_car\" (Shop quà, Tủ quà trên hồ sơ) khi chưa có icon tải lên",
+  "wave": "library"
+ },
+ "collectible.car.supercar": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.phone.gold": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.phone.limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.phone.luxury": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.phone.premium": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.phone.standard": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.property.beach-villa": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.property.limited-estate": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.property.mansion": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.property.royal-estate": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.property.villa": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.watch.classic": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.watch.diamond": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.watch.gold": {
+  "status": "INTEGRATED",
+  "where": "Quà tặng mặc định \"gold_watch\" (Shop quà, Tủ quà trên hồ sơ) khi chưa có icon tải lên",
+  "wave": "library"
+ },
+ "collectible.watch.limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.watch.luxury": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "sample"
+ },
+ "collectible.yacht.limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.yacht.luxury": {
+  "status": "INTEGRATED",
+  "where": "Quà tặng mặc định \"yacht\" (Shop quà, Tủ quà trên hồ sơ) khi chưa có icon tải lên",
+  "wave": "library"
+ },
+ "collectible.yacht.royal": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.yacht.small": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "collectible.yacht.super": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm sưu tầm tương ứng trong database (tạo vật phẩm/giá cần Owner duyệt)",
+  "wave": "library"
+ },
+ "event.anniversary.badge": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa anniversary: huy hiệu khi đang mở bán",
+  "wave": "library"
+ },
+ "event.anniversary.banner": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa anniversary: ảnh đầu thẻ bộ sưu tập",
+  "wave": "library"
+ },
+ "event.anniversary.chest": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa anniversary: rương cạnh tiến độ sở hữu",
+  "wave": "library"
+ },
+ "event.anniversary.decoration": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa anniversary: trang trí góc",
+  "wave": "library"
+ },
+ "event.anniversary.icon": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa anniversary: biểu tượng cạnh tên",
+  "wave": "library"
+ },
+ "event.christmas.badge": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa christmas: huy hiệu khi đang mở bán",
+  "wave": "library"
+ },
+ "event.christmas.banner": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa christmas: ảnh đầu thẻ bộ sưu tập",
+  "wave": "library"
+ },
+ "event.christmas.chest": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa christmas: rương cạnh tiến độ sở hữu",
+  "wave": "library"
+ },
+ "event.christmas.decoration": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa christmas: trang trí góc",
+  "wave": "library"
+ },
+ "event.christmas.icon": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa christmas: biểu tượng cạnh tên",
+  "wave": "library"
+ },
+ "event.halloween.badge": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa halloween: huy hiệu khi đang mở bán",
+  "wave": "library"
+ },
+ "event.halloween.banner": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa halloween: ảnh đầu thẻ bộ sưu tập",
+  "wave": "library"
+ },
+ "event.halloween.chest": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa halloween: rương cạnh tiến độ sở hữu",
+  "wave": "library"
+ },
+ "event.halloween.decoration": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa halloween: trang trí góc",
+  "wave": "library"
+ },
+ "event.halloween.icon": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa halloween: biểu tượng cạnh tên",
+  "wave": "library"
+ },
+ "event.lunar-new-year.badge": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa lunar-new-year: huy hiệu khi đang mở bán",
+  "wave": "library"
+ },
+ "event.lunar-new-year.banner": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa lunar-new-year: ảnh đầu thẻ bộ sưu tập",
+  "wave": "library"
+ },
+ "event.lunar-new-year.chest": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa lunar-new-year: rương cạnh tiến độ sở hữu",
+  "wave": "library"
+ },
+ "event.lunar-new-year.decoration": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa lunar-new-year: trang trí góc",
+  "wave": "library"
+ },
+ "event.lunar-new-year.icon": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa lunar-new-year: biểu tượng cạnh tên",
+  "wave": "library"
+ },
+ "event.new-year.badge": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa new-year: huy hiệu khi đang mở bán",
+  "wave": "library"
+ },
+ "event.new-year.banner": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa new-year: ảnh đầu thẻ bộ sưu tập",
+  "wave": "library"
+ },
+ "event.new-year.chest": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa new-year: rương cạnh tiến độ sở hữu",
+  "wave": "library"
+ },
+ "event.new-year.decoration": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa new-year: trang trí góc",
+  "wave": "library"
+ },
+ "event.new-year.icon": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa new-year: biểu tượng cạnh tên",
+  "wave": "library"
+ },
+ "event.summer.badge": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa summer: huy hiệu khi đang mở bán",
+  "wave": "library"
+ },
+ "event.summer.banner": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa summer: ảnh đầu thẻ bộ sưu tập",
+  "wave": "library"
+ },
+ "event.summer.chest": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa summer: rương cạnh tiến độ sở hữu",
+  "wave": "library"
+ },
+ "event.summer.decoration": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa summer: trang trí góc",
+  "wave": "library"
+ },
+ "event.summer.icon": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa summer: biểu tượng cạnh tên",
+  "wave": "library"
+ },
+ "event.thanksgiving.badge": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có mùa Lễ Tạ Ơn (SEASON_THEMES)",
+  "wave": "library"
+ },
+ "event.thanksgiving.banner": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có mùa Lễ Tạ Ơn (SEASON_THEMES)",
+  "wave": "library"
+ },
+ "event.thanksgiving.chest": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có mùa Lễ Tạ Ơn (SEASON_THEMES)",
+  "wave": "library"
+ },
+ "event.thanksgiving.decoration": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có mùa Lễ Tạ Ơn (SEASON_THEMES)",
+  "wave": "library"
+ },
+ "event.thanksgiving.icon": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có mùa Lễ Tạ Ơn (SEASON_THEMES)",
+  "wave": "library"
+ },
+ "event.valentine.badge": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa valentine: huy hiệu khi đang mở bán",
+  "wave": "library"
+ },
+ "event.valentine.banner": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa valentine: ảnh đầu thẻ bộ sưu tập",
+  "wave": "library"
+ },
+ "event.valentine.chest": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa valentine: rương cạnh tiến độ sở hữu",
+  "wave": "library"
+ },
+ "event.valentine.decoration": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa valentine: trang trí góc",
+  "wave": "library"
+ },
+ "event.valentine.icon": {
+  "status": "INTEGRATED",
+  "where": "Cửa hàng › Bộ sưu tập mùa valentine: biểu tượng cạnh tên",
+  "wave": "library"
+ },
+ "frame.seasonal.anniversary": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm ss2026_keyo_royal_legacy (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.seasonal.christmas": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm ss2026_winter_royalty (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.seasonal.easter": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có mùa sự kiện này (SEASON_THEMES)",
+  "wave": "library"
+ },
+ "frame.seasonal.halloween": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm ss2026_phantom_crown (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.seasonal.lunar-new-year": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm ss2026_lunar_emperor (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "sample"
+ },
+ "frame.seasonal.new-year": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm ss2026_new_year_royal (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.seasonal.summer": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm ss2026_summer_crown (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.seasonal.thanksgiving": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có mùa sự kiện này (SEASON_THEMES)",
+  "wave": "library"
+ },
+ "frame.seasonal.valentine": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm ss2026_eternal_love (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.special.anniversary-exclusive": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.special.collector": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.special.creator": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.special.early-supporter": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.special.event-exclusive": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm tour_special (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.special.founder": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.special.kol": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "sample"
+ },
+ "frame.special.limited-edition": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.special.reviewer": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.tournament.champion": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm tour_champion (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.tournament.grand-champion": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm hof_champion (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.tournament.participant": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm tour_participant (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.tournament.runner-up": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm tour_runner_up (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.tournament.seasonal-champion": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.tournament.top-10": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm tour_top10 (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.tournament.top-100": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm khung tương ứng trong catalog (tạo vật phẩm/điều kiện trao = sửa database, cần Owner duyệt)",
+  "wave": "library"
+ },
+ "frame.tournament.top-3": {
+  "status": "INTEGRATED",
+  "where": "Khung avatar của vật phẩm tour_top3 (mọi nơi hiện avatar: hồ sơ, bảng xếp hạng, chat, thư viện khung, cửa hàng)",
+  "wave": "library"
+ },
+ "frame.vip.vip-05": {
+  "status": "VERIFIED",
+  "where": "Khung mốc VIP 5: VipCrest (VIP Hub, hồ sơ công khai) theo cấp VIP thật — chỉ trang trí, không phải vật phẩm, không cấp quyền",
+  "wave": "library",
+  "verifiedOn": [
+   "vip"
+  ]
+ },
+ "frame.vip.vip-07": {
+  "status": "INTEGRATED",
+  "where": "Khung mốc VIP 7: VipCrest (VIP Hub, hồ sơ công khai) theo cấp VIP thật — chỉ trang trí, không phải vật phẩm, không cấp quyền",
+  "wave": "library"
+ },
+ "frame.vip.vip-10": {
+  "status": "INTEGRATED",
+  "where": "Khung mốc VIP 10: VipCrest (VIP Hub, hồ sơ công khai) theo cấp VIP thật — chỉ trang trí, không phải vật phẩm, không cấp quyền",
+  "wave": "library"
+ },
+ "frame.vip.vip-15": {
+  "status": "INTEGRATED",
+  "where": "Khung mốc VIP 15: VipCrest (VIP Hub, hồ sơ công khai) theo cấp VIP thật — chỉ trang trí, không phải vật phẩm, không cấp quyền",
+  "wave": "sample"
+ },
+ "fx.all-in": {
+  "status": "INTEGRATED",
+  "where": "Bàn bài: lúc một người all-in",
+  "wave": "library"
+ },
+ "fx.big-win": {
+  "status": "VERIFIED",
+  "where": "Thắng lớn: mọi bàn",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "sicbo",
+   "taixiu",
+   "roulette-table",
+   "slots",
+   "blackjack",
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "fx.bust": {
+  "status": "INTEGRATED",
+  "where": "Blackjack: Quắc",
+  "wave": "library"
+ },
+ "fx.champion-victory": {
+  "status": "INTEGRATED",
+  "where": "Hiệu ứng thắng \"Vương Miện Hoàng Gia\" (fx_royal_crown): hình trung tâm",
+  "wave": "library"
+ },
+ "fx.chest-opening": {
+  "status": "INTEGRATED",
+  "where": "Hộp thư: rương mở khi nhận quà",
+  "wave": "library"
+ },
+ "fx.fold": {
+  "status": "INTEGRATED",
+  "where": "Bàn bài: lúc một người bỏ bài",
+  "wave": "library"
+ },
+ "fx.jackpot": {
+  "status": "INTEGRATED",
+  "where": "Slots: thắng ≥ 500×",
+  "wave": "library"
+ },
+ "fx.mega-win": {
+  "status": "INTEGRATED",
+  "where": "Slots: thắng ≥ 100× tổng hệ số",
+  "wave": "library"
+ },
+ "fx.normal-lose": {
+  "status": "VERIFIED",
+  "where": "Thua: Roulette, Sic Bo/Tài Xỉu, Blackjack",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "sicbo",
+   "taixiu",
+   "roulette-table",
+   "slots",
+   "blackjack",
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "fx.normal-win": {
+  "status": "VERIFIED",
+  "where": "Thắng thường: mọi bàn (Phaser)",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "sicbo",
+   "taixiu",
+   "roulette-table",
+   "slots",
+   "blackjack",
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "fx.perfect-win": {
+  "status": "INTEGRATED",
+  "where": "Blackjack: thắng Blackjack",
+  "wave": "library"
+ },
+ "fx.push": {
+  "status": "INTEGRATED",
+  "where": "Blackjack: Hoà",
+  "wave": "library"
+ },
+ "fx.reward-reveal": {
+  "status": "INTEGRATED",
+  "where": "Hộp thư: hiệu ứng khi nhận quà",
+  "wave": "library"
+ },
+ "fx.tournament-victory": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm hiệu ứng chiến thắng tương ứng (cần Owner duyệt)",
+  "wave": "library"
+ },
+ "fx.vip-victory": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm hiệu ứng chiến thắng tương ứng (cần Owner duyệt)",
+  "wave": "library"
+ },
+ "game.blackjack.action-double": {
+  "status": "INTEGRATED",
+  "where": "Blackjack (solo + nhiều người): nút Gấp đôi",
+  "wave": "library"
+ },
+ "game.blackjack.action-hit": {
+  "status": "INTEGRATED",
+  "where": "Blackjack (solo + nhiều người): nút Rút",
+  "wave": "library"
+ },
+ "game.blackjack.action-insurance": {
+  "status": "INTEGRATED",
+  "where": "Blackjack: hộp thoại Bảo hiểm",
+  "wave": "library"
+ },
+ "game.blackjack.action-split": {
+  "status": "INTEGRATED",
+  "where": "Blackjack (solo + nhiều người): nút Tách",
+  "wave": "library"
+ },
+ "game.blackjack.action-stand": {
+  "status": "INTEGRATED",
+  "where": "Blackjack (solo + nhiều người): nút Dừng",
+  "wave": "library"
+ },
+ "game.blackjack.card-shoe": {
+  "status": "VERIFIED",
+  "where": "Blackjack solo: hộp bài (texture card-shoe)",
+  "wave": "sample",
+  "verifiedOn": [
+   "blackjack"
+  ]
+ },
+ "game.blackjack.result-emblem": {
+  "status": "VERIFIED",
+  "where": "Blackjack solo: huy hiệu cạnh dòng kết quả",
+  "wave": "library",
+  "verifiedOn": [
+   "blackjack"
+  ]
+ },
+ "game.blackjack.table-felt": {
+  "status": "VERIFIED",
+  "where": "Mặt bàn Blackjack (solo Phaser + bàn nhiều người) cho skin Xanh Cổ Điển (mặc định)",
+  "wave": "library",
+  "verifiedOn": [
+   "blackjack"
+  ]
+ },
+ "game.cards.action-allin": {
+  "status": "INTEGRATED",
+  "where": "Nút All-in (icon)",
+  "wave": "library"
+ },
+ "game.cards.action-call": {
+  "status": "INTEGRATED",
+  "where": "Nút Theo (icon)",
+  "wave": "library"
+ },
+ "game.cards.action-fold": {
+  "status": "VERIFIED",
+  "where": "Nút Bỏ bài (icon)",
+  "wave": "library",
+  "verifiedOn": [
+   "lieng"
+  ]
+ },
+ "game.cards.action-raise": {
+  "status": "VERIFIED",
+  "where": "Nút Tố (icon)",
+  "wave": "library",
+  "verifiedOn": [
+   "lieng"
+  ]
+ },
+ "game.cards.chip-stack": {
+  "status": "VERIFIED",
+  "where": "Poker/Liêng/Xì Tố: chồng chip cược trước ghế",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "game.lieng.reveal-fan": {
+  "status": "VERIFIED",
+  "where": "Liêng: biểu tượng lật bài khi so bài",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "game.poker.blind-big": {
+  "status": "VERIFIED",
+  "where": "Poker: dấu Big Blind cạnh ghế",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "game.poker.blind-small": {
+  "status": "VERIFIED",
+  "where": "Poker: dấu Small Blind cạnh ghế",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "game.poker.dealer-button": {
+  "status": "VERIFIED",
+  "where": "Poker/Liêng: nút dealer (texture dealer-btn)",
+  "wave": "sample",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "game.poker.pot-pile": {
+  "status": "VERIFIED",
+  "where": "Poker/Liêng/Xì Tố: đống chip ở ô POT",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "game.poker.table-felt-royal": {
+  "status": "INTEGRATED",
+  "where": "Mặt bàn studio cho skin Tím Nửa Đêm (bàn oval Poker/Liêng/Xì Tố, ngang)",
+  "wave": "library"
+ },
+ "game.roulette.ball": {
+  "status": "VERIFIED",
+  "where": "Roulette: bi",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
+ },
+ "game.roulette.marker": {
+  "status": "VERIFIED",
+  "where": "Roulette: con dolly trên ô số trúng",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
+ },
+ "game.roulette.pointer": {
+  "status": "VERIFIED",
+  "where": "Roulette: kim chỉ cố định phía trên bánh xe",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
+ },
+ "game.roulette.result-emblem": {
+  "status": "VERIFIED",
+  "where": "Roulette: huy hiệu phía sau dòng kết quả",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
+ },
+ "game.roulette.wheel-head": {
+  "status": "VERIFIED",
+  "where": "Roulette: bánh xe 37 ô (vòng số do code vẽ, đúng thứ tự châu Âu và màu)",
+  "wave": "sample",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
+ },
+ "game.roulette.wheel-rim": {
+  "status": "VERIFIED",
+  "where": "Roulette: vành bát quanh bánh xe (đường bi chạy)",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "roulette-table"
+  ]
+ },
+ "game.sicbo.crystal-dome": {
+  "status": "VERIFIED",
+  "where": "Sic Bo: chụp pha lê khi lắc (texture sicbo-dome)",
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
+ },
+ "game.sicbo.dice-plate": {
+  "status": "VERIFIED",
+  "where": "Sic Bo / Tài Xỉu: đĩa xúc xắc (texture sicbo-plate)",
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
+ },
+ "game.sicbo.dice-set": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Bảng 6 mặt xúc xắc (1–6) trong một ảnh; game dùng 6 texture riêng die-1…6 nên cần cắt ảnh thành 6 mặt trước khi thay (chưa làm)",
+  "wave": "library"
+ },
+ "game.sicbo.icon-big": {
+  "status": "VERIFIED",
+  "where": "Sic Bo: biểu tượng cửa Tài (bên nhãn, chỉ khi đủ chỗ)",
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
+ },
+ "game.sicbo.icon-small": {
+  "status": "VERIFIED",
+  "where": "Sic Bo: biểu tượng cửa Xỉu (bên nhãn, chỉ khi đủ chỗ)",
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
+ },
+ "game.sicbo.icon-triple": {
+  "status": "VERIFIED",
+  "where": "Sic Bo: biểu tượng Bộ ba bất kỳ (bên nhãn, chỉ khi đủ chỗ)",
+  "wave": "library",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
+ },
+ "game.sicbo.table-vip": {
+  "status": "INTEGRATED",
+  "where": "Mặt bàn studio cho skin Cung Điện Lục Bảo (bố cục bàn cược: Sic Bo, Tài Xỉu, Roulette)",
+  "wave": "library"
+ },
+ "game.slots.cabinet-frame": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Ô cửa của khung (≈1.93:1) không khớp vùng 5×3 cuộn (1.67:1) trong thế giới 640×360; ghép vào sẽ phải đổi bố cục/hitbox — giữ khung vẽ bằng code",
+  "wave": "library"
+ },
+ "game.slots.spin-button": {
+  "status": "VERIFIED",
+  "where": "Slots / Roulette / Sic Bo: icon nút Quay",
+  "wave": "library",
+  "verifiedOn": [
+   "roulette",
+   "slots"
+  ]
+ },
+ "game.slots.symbol-bell": {
+  "status": "VERIFIED",
+  "where": "Slots: chuông",
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
+ },
+ "game.slots.symbol-cherry": {
+  "status": "VERIFIED",
+  "where": "Slots: anh đào",
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
+ },
+ "game.slots.symbol-clover": {
+  "status": "VERIFIED",
+  "where": "Slots: cỏ bốn lá",
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
+ },
+ "game.slots.symbol-crown": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Slots hiện có 7 biểu tượng (SLOT_SYMBOLS); thêm biểu tượng = đổi tỉ lệ/bảng trả thưởng (gameplay) — không làm",
+  "wave": "sample"
+ },
+ "game.slots.symbol-diamond": {
+  "status": "VERIFIED",
+  "where": "Slots: kim cương",
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
+ },
+ "game.slots.symbol-gold-bar": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Slots hiện có 7 biểu tượng (SLOT_SYMBOLS); thêm biểu tượng = đổi tỉ lệ/bảng trả thưởng (gameplay) — không làm",
+  "wave": "library"
+ },
+ "game.slots.symbol-lemon": {
+  "status": "VERIFIED",
+  "where": "Slots: chanh",
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
+ },
+ "game.slots.symbol-scatter": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Slots hiện có 7 biểu tượng (SLOT_SYMBOLS); thêm biểu tượng = đổi tỉ lệ/bảng trả thưởng (gameplay) — không làm",
+  "wave": "library"
+ },
+ "game.slots.symbol-seven": {
+  "status": "VERIFIED",
+  "where": "Slots: biểu tượng 7",
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
+ },
+ "game.slots.symbol-wild": {
+  "status": "VERIFIED",
+  "where": "Slots: WILD",
+  "wave": "library",
+  "verifiedOn": [
+   "slots"
+  ]
+ },
+ "game.taixiu.bowl-cover": {
+  "status": "VERIFIED",
+  "where": "Tài Xỉu: bát (texture taixiu-bowl, scene sicbo/taixiu)",
+  "wave": "sample",
+  "verifiedOn": [
+   "sicbo",
+   "taixiu"
+  ]
+ },
+ "game.xito.dealer-marker": {
+  "status": "VERIFIED",
+  "where": "Xì Tố: dấu dealer",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "profile.accent-kol": {
+  "status": "VERIFIED",
+  "where": "Dấu nhấn KOL cạnh tên cho tài khoản Partner (Hồ sơ)",
+  "wave": "library",
+  "verifiedOn": [
+   "profile"
+  ]
+ },
+ "profile.accent-limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có dữ liệu \"người chơi giới hạn\" để quyết định hiển thị",
+  "wave": "library"
+ },
+ "profile.accent-vip": {
+  "status": "INTEGRATED",
+  "where": "Dấu nhấn VIP cạnh tên từ VIP 10 (Hồ sơ)",
+  "wave": "library"
+ },
+ "profile.achievement-showcase": {
+  "status": "INTEGRATED",
+  "where": "Biểu tượng mục Thành tích trên Hồ sơ công khai",
+  "wave": "library"
+ },
+ "profile.background": {
+  "status": "VERIFIED",
+  "where": "Nền mờ phía sau trang Hồ sơ của tôi",
+  "wave": "library",
+  "verifiedOn": [
+   "profile"
+  ]
+ },
+ "profile.header": {
+  "status": "VERIFIED",
+  "where": "Ảnh sân khấu ở đầu Hồ sơ của tôi và Hồ sơ công khai",
+  "wave": "library",
+  "verifiedOn": [
+   "profile"
+  ]
+ },
+ "profile.nameplate": {
+  "status": "INTEGRATED",
+  "where": "Bảng tên (9-slice) sau tên trên Hồ sơ công khai",
+  "wave": "library"
+ },
+ "profile.prestige-effect": {
+  "status": "INTEGRATED",
+  "where": "Hào quang sau avatar từ VIP 13 (Hồ sơ, Hồ sơ công khai)",
+  "wave": "library"
+ },
+ "reward.daily-gift": {
+  "status": "INTEGRATED",
+  "where": "Nhiệm vụ: nhóm Hằng ngày",
+  "wave": "library"
+ },
+ "reward.login-chest": {
+  "status": "INTEGRATED",
+  "where": "Điểm danh: ngày 7",
+  "wave": "library"
+ },
+ "reward.milestone": {
+  "status": "INTEGRATED",
+  "where": "Nhiệm vụ: nhóm Rank",
+  "wave": "library"
+ },
+ "reward.mystery-gift": {
+  "status": "VERIFIED",
+  "where": "Giftcode: biểu tượng đầu trang",
+  "wave": "library",
+  "verifiedOn": [
+   "gifts"
+  ]
+ },
+ "reward.premium-gift": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có màn hình quà cao cấp riêng",
+  "wave": "library"
+ },
+ "reward.streak": {
+  "status": "INTEGRATED",
+  "where": "Điểm danh: dòng chuỗi ngày",
+  "wave": "library"
+ },
+ "reward.vip-daily": {
+  "status": "VERIFIED",
+  "where": "VIP Hub: nút nhận quà VIP hằng ngày",
+  "wave": "library",
+  "verifiedOn": [
+   "vip"
+  ]
+ },
+ "reward.weekly-gift": {
+  "status": "INTEGRATED",
+  "where": "Nhiệm vụ: nhóm Hằng tuần",
+  "wave": "library"
+ },
+ "spin.button": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có tính năng Vòng quay may mắn (không tự tạo gameplay)",
+  "wave": "library"
+ },
+ "spin.pointer": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có tính năng Vòng quay may mắn (không tự tạo gameplay)",
+  "wave": "library"
+ },
+ "spin.ticket": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có tính năng Vòng quay may mắn (không tự tạo gameplay)",
+  "wave": "library"
+ },
+ "spin.wheel": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có tính năng Vòng quay may mắn (không tự tạo gameplay)",
+  "wave": "library"
+ },
+ "title.champion": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.collector": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.creator": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.event-winner": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.founder": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.grand-champion": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.high-roller": {
+  "status": "INTEGRATED",
+  "where": "Danh hiệu (9-slice) — vật phẩm title_high_roller: dưới tên người chơi, hồ sơ, cửa hàng",
+  "wave": "library"
+ },
+ "title.jackpot-winner": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.kol": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.limited": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.lucky-player": {
+  "status": "INTEGRATED",
+  "where": "Danh hiệu (9-slice) — vật phẩm title_lucky_star: dưới tên người chơi, hồ sơ, cửa hàng",
+  "wave": "library"
+ },
+ "title.seasonal": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.tournament-winner": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "title.vip-elite": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Chưa có vật phẩm danh hiệu tương ứng trong catalog (cần Owner duyệt tạo vật phẩm)",
+  "wave": "library"
+ },
+ "tournament.badge": {
+  "status": "VERIFIED",
+  "where": "Rank: huy hiệu mùa xếp hạng",
+  "wave": "library",
+  "verifiedOn": [
+   "rank"
+  ]
+ },
+ "tournament.banner": {
+  "status": "VERIFIED",
+  "where": "Rank: biểu tượng đầu trang",
+  "wave": "library",
+  "verifiedOn": [
+   "rank"
+  ]
+ },
+ "tournament.medal": {
+  "status": "VERIFIED",
+  "where": "Rank: tiêu đề bảng bậc",
+  "wave": "library",
+  "verifiedOn": [
+   "rank"
+  ]
+ },
+ "tournament.ticket": {
+  "status": "VERIFIED",
+  "where": "Rank: trang trí thẻ mùa xếp hạng",
+  "wave": "library",
+  "verifiedOn": [
+   "rank"
+  ]
+ },
+ "tournament.trophy": {
+  "status": "INTEGRATED",
+  "where": "Bảng xếp hạng: dòng \"có thưởng\"",
+  "wave": "library"
+ },
+ "tournament.trophy-champion": {
+  "status": "INTEGRATED",
+  "where": "Bảng xếp hạng: bục Top 1",
+  "wave": "sample"
+ },
+ "ui.announcement": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có trung tâm thông báo / bảng tin",
+  "wave": "library"
+ },
+ "ui.calendar": {
+  "status": "INTEGRATED",
+  "where": "Điểm danh 7 ngày: tiêu đề",
+  "wave": "library"
+ },
+ "ui.claim-panel": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Khung panel lớn cho popup nhận thưởng/tiến độ sự kiện chưa tồn tại",
+  "wave": "library"
+ },
+ "ui.leaderboard": {
+  "status": "VERIFIED",
+  "where": "Bảng xếp hạng: biểu tượng đầu trang",
+  "wave": "library",
+  "verifiedOn": [
+   "leaderboard"
+  ]
+ },
+ "ui.mailbox": {
+  "status": "VERIFIED",
+  "where": "Hộp thư: biểu tượng đầu trang",
+  "wave": "library",
+  "verifiedOn": [
+   "mail"
+  ]
+ },
+ "ui.notification": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Game chưa có trung tâm thông báo / bảng tin",
+  "wave": "library"
+ },
+ "ui.progress-panel": {
+  "status": "READY_FOR_FUTURE_USE",
+  "why": "Khung panel lớn cho popup nhận thưởng/tiến độ sự kiện chưa tồn tại",
+  "wave": "library"
+ },
+ "ui.quest": {
+  "status": "VERIFIED",
+  "where": "Nhiệm vụ: biểu tượng đầu trang",
+  "wave": "library",
+  "verifiedOn": [
+   "missions"
+  ]
+ },
+ "vip.badge.vip-01": {
+  "status": "INTEGRATED",
+  "where": "Huy hiệu VIP 1: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "sample"
+ },
+ "vip.badge.vip-02": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 2: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito"
+  ]
+ },
+ "vip.badge.vip-03": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 3: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "bjt"
+  ]
+ },
+ "vip.badge.vip-04": {
+  "status": "INTEGRATED",
+  "where": "Huy hiệu VIP 4: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library"
+ },
+ "vip.badge.vip-05": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 5: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito",
+   "bjt"
+  ]
+ },
+ "vip.badge.vip-06": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 6: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library",
+  "verifiedOn": [
+   "hub",
+   "poker",
+   "lieng",
+   "xito",
+   "vip"
+  ]
+ },
+ "vip.badge.vip-07": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 7: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library",
+  "verifiedOn": [
+   "poker",
+   "lieng",
+   "xito",
+   "vip"
+  ]
+ },
+ "vip.badge.vip-08": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 8: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "sample",
+  "verifiedOn": [
+   "bjt"
+  ]
+ },
+ "vip.badge.vip-09": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 9: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library",
+  "verifiedOn": [
+   "bjt"
+  ]
+ },
+ "vip.badge.vip-10": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 10: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library",
+  "verifiedOn": [
+   "hub"
+  ]
+ },
+ "vip.badge.vip-11": {
+  "status": "INTEGRATED",
+  "where": "Huy hiệu VIP 11: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library"
+ },
+ "vip.badge.vip-12": {
+  "status": "INTEGRATED",
+  "where": "Huy hiệu VIP 12: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library"
+ },
+ "vip.badge.vip-13": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 13: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library",
+  "verifiedOn": [
+   "hub"
+  ]
+ },
+ "vip.badge.vip-14": {
+  "status": "INTEGRATED",
+  "where": "Huy hiệu VIP 14: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "library"
+ },
+ "vip.badge.vip-15": {
+  "status": "VERIFIED",
+  "where": "Huy hiệu VIP 15: VipEmblem (Hồ sơ, thẻ người chơi, Bảng xếp hạng, VIP Hub, thanh trên, Nhiệm vụ, Admin) + bàn bài Phaser",
+  "wave": "sample",
+  "verifiedOn": [
+   "hub"
+  ]
+ }
+}

@@ -4,23 +4,81 @@ import { paintCardBack } from '../cosmetics/cardBackArt';
 import { paintTable, type OvalGeometry, type TableLayout } from '../cosmetics/tableArt';
 import { ROULETTE_WHEEL, rouletteColor, type Card, type SlotSymbol } from '@casino/shared';
 import { FONT_DISPLAY, FONT_UI, RES, WORLD_H, WORLD_W } from './hd';
+import { keyoUrlPx, type KeyoAssetId } from '../assets/keyo';
+import { texturesForScene } from './assetTextures';
 
 /**
  * Procedural HD vector art. Every asset is drawn with canvas paths, gradients and
  * shadows at RES× resolution — original artwork with no third-party licences.
- * Raster replacements can be dropped in through ASSET_OVERRIDES (see docs/ART_PIPELINE.md).
+ * Approved Asset Studio art replaces some textures (game/assetTextures.ts); this art stays the fallback.
  */
 
 type Ctx = CanvasRenderingContext2D;
 
-/** Optional raster files that replace a procedural texture of the same key. Filled in when final art is delivered. */
-export const ASSET_OVERRIDES: Record<string, string> = {};
+/**
+ * Asset Studio art that replaces a procedural texture of the same key (game/assetTextures.ts lists
+ * them per scene). Loaded in the scene's preload; if a file fails, the procedural texture is drawn
+ * instead because `hdTexture` only skips keys that already exist. Scale: world units per source pixel
+ * of the loaded file, recorded when it loads (the file's size depends on the screen's variant).
+ */
+const overrideScale = new Map<string, number>();
 
-export function preloadOverrides(scene: Phaser.Scene) {
-  for (const [key, url] of Object.entries(ASSET_OVERRIDES)) if (!scene.textures.exists(key)) scene.load.image(key, url);
+export function preloadOverrides(scene: Phaser.Scene, extra: readonly { key: string; id: KeyoAssetId; canvasW: number }[] = []) {
+  const specs = [...texturesForScene(scene.scene.key), ...extra];
+  if (!specs.length) return;
+  const pending = new Map<string, number>();
+  for (const s of specs) {
+    if (scene.textures.exists(s.key)) continue;
+    pending.set(s.key, s.canvasW);
+    scene.load.image(s.key, keyoUrlPx(s.id, s.canvasW * RES * 1.25));
+  }
+  if (!pending.size) return;
+  // Per-file one-shot listeners, and the error listener is removed when this load finishes, so a
+  // restarted scene never accumulates handlers on its (persistent) loader.
+  for (const [key, w] of pending) {
+    scene.load.once(`filecomplete-image-${key}`, () => {
+      const src = scene.textures.get(key).getSourceImage();
+      if (src) overrideScale.set(key, w / src.width);
+    });
+  }
+  const onError = (file: Phaser.Loader.File) => {
+    if (!pending.has(file.key)) return;
+    overrideScale.delete(file.key);
+    console.warn(`[keyo-assets] ${file.key} failed to load; using the drawn texture`);
+  };
+  scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
+  scene.load.once(Phaser.Loader.Events.COMPLETE, () => scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onError));
 }
 
-function hdTexture(scene: Phaser.Scene, key: string, w: number, h: number, draw: (ctx: Ctx) => void) {
+/**
+ * Loads a studio texture after the scene has started (for art that depends on live data, e.g. the
+ * VIP badge of whoever sits down) and calls `onReady` once it is usable. Each key loads once.
+ */
+const lazyRequested = new Set<string>();
+export function lazyStudioTexture(scene: Phaser.Scene, key: string, id: KeyoAssetId, worldW: number, onReady: () => void) {
+  if (scene.textures.exists(key) || lazyRequested.has(key)) return;
+  lazyRequested.add(key);
+  scene.load.image(key, keyoUrlPx(id, worldW * RES * 1.25));
+  scene.load.once(`filecomplete-image-${key}`, () => {
+    const src = scene.textures.get(key).getSourceImage();
+    overrideScale.set(key, worldW / src.width);
+    lazyRequested.delete(key);
+    if (scene.sys.isActive()) onReady();
+  });
+  const onError = (file: Phaser.Loader.File) => {
+    if (file.key === key) console.warn(`[keyo-assets] ${key} failed to load`);
+  };
+  scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
+  scene.load.once(Phaser.Loader.Events.COMPLETE, () => scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onError));
+  if (!scene.load.isLoading()) scene.load.start();
+}
+
+/** Scale factor from texture pixels to world units for `key` (Asset Studio file or HD canvas). */
+const pxToWorld = (key: string) => overrideScale.get(key) ?? 1 / RES;
+/** True once a studio file for `key` has loaded (keys with no procedural fallback check this). */
+export const hasStudioTexture = (scene: Phaser.Scene, key: string) => overrideScale.has(key) && scene.textures.exists(key);
+
+export function hdTexture(scene: Phaser.Scene, key: string, w: number, h: number, draw: (ctx: Ctx) => void) {
   if (scene.textures.exists(key)) return;
   const tex = scene.textures.createCanvas(key, Math.ceil(w * RES), Math.ceil(h * RES));
   if (!tex) return;
@@ -35,15 +93,13 @@ function hdTexture(scene: Phaser.Scene, key: string, w: number, h: number, draw:
 /** Adds an image of an HD texture at its natural world size (times `scale`). */
 export function hdImage(scene: Phaser.Scene, x: number, y: number, key: string, scale = 1) {
   const img = scene.add.image(x, y, key);
-  const fromOverride = key in ASSET_OVERRIDES;
-  // Overrides are authored at 3× world size.
-  img.setScale((scale / (fromOverride ? 3 : RES)));
+  img.setScale(scale * pxToWorld(key));
   return img;
 }
 
-export const hdScale = (key: string, scale = 1) => scale / (key in ASSET_OVERRIDES ? 3 : RES);
+export const hdScale = (key: string, scale = 1) => scale * pxToWorld(key);
 
-function roundRect(ctx: Ctx, x: number, y: number, w: number, h: number, r: number) {
+export function roundRect(ctx: Ctx, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
   ctx.arcTo(x + w, y, x + w, y + h, r);
@@ -53,13 +109,13 @@ function roundRect(ctx: Ctx, x: number, y: number, w: number, h: number, r: numb
   ctx.closePath();
 }
 
-function linear(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [number, string][]) {
+export function linear(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [number, string][]) {
   const g = ctx.createLinearGradient(x0, y0, x1, y1);
   stops.forEach(([o, c]) => g.addColorStop(o, c));
   return g;
 }
 
-function radial(ctx: Ctx, x: number, y: number, r0: number, r1: number, stops: [number, string][], fx = x, fy = y) {
+export function radial(ctx: Ctx, x: number, y: number, r0: number, r1: number, stops: [number, string][], fx = x, fy = y) {
   const g = ctx.createRadialGradient(fx, fy, r0, x, y, r1);
   stops.forEach(([o, c]) => g.addColorStop(o, c));
   return g;
@@ -199,18 +255,20 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
     const W = CARD_W;
     const H = CARD_H;
     if (!card) {
-      roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4);
+      // V7.1 Game Center back: royal purple, gold lattice, metallic frame and a Keyo spade crest.
+      roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4.5);
       ctx.fillStyle = linear(ctx, 0, 0, W, H, [
-        [0, '#7a1630'],
-        [1, '#3e0816'],
+        [0, '#5b2aa3'],
+        [0.55, '#2c1260'],
+        [1, '#160830'],
       ]);
       ctx.fill();
       ctx.save();
-      roundRect(ctx, 4, 4, W - 8, H - 8, 2.5);
+      roundRect(ctx, 3.5, 3.5, W - 7, H - 7, 3);
       ctx.clip();
-      ctx.strokeStyle = 'rgba(247,215,122,0.35)';
-      ctx.lineWidth = 0.5;
-      for (let i = -H; i < W + H; i += 4) {
+      ctx.strokeStyle = 'rgba(247,215,122,0.28)';
+      ctx.lineWidth = 0.45;
+      for (let i = -H; i < W + H; i += 3.4) {
         ctx.beginPath();
         ctx.moveTo(i, 0);
         ctx.lineTo(i + H, H);
@@ -218,13 +276,41 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
         ctx.lineTo(i, H);
         ctx.stroke();
       }
+      ctx.fillStyle = radial(ctx, W / 2, H / 2, 0, W * 0.6, [
+        [0, 'rgba(199,155,255,0.35)'],
+        [1, 'rgba(199,155,255,0)'],
+      ]);
+      ctx.fillRect(0, 0, W, H);
       ctx.restore();
       ctx.strokeStyle = linear(ctx, 0, 0, W, H, GOLD);
-      ctx.lineWidth = 1;
-      roundRect(ctx, 4, 4, W - 8, H - 8, 2.5);
+      ctx.lineWidth = 1.2;
+      roundRect(ctx, 3.5, 3.5, W - 7, H - 7, 3);
       ctx.stroke();
-      ctx.fillStyle = linear(ctx, W / 2 - 8, H / 2 - 8, W / 2 + 8, H / 2 + 8, GOLD);
-      diamondSuit(ctx, W / 2, H / 2, 18);
+      ctx.lineWidth = 0.5;
+      roundRect(ctx, 5.5, 5.5, W - 11, H - 11, 2);
+      ctx.stroke();
+      // Crest: gold medallion with a spade.
+      ctx.fillStyle = radial(ctx, W / 2 - 3, H / 2 - 4, 1, 13, [
+        [0, '#fff1b8'],
+        [0.5, '#f2c14e'],
+        [1, '#8a5a12'],
+      ]);
+      ctx.beginPath();
+      ctx.arc(W / 2, H / 2, 11, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#2c1260';
+      ctx.beginPath();
+      ctx.arc(W / 2, H / 2, 8.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = linear(ctx, W / 2 - 6, H / 2 - 6, W / 2 + 6, H / 2 + 6, GOLD);
+      spade(ctx, W / 2, H / 2 + 0.5, 11);
+      // Gloss
+      ctx.fillStyle = linear(ctx, 0, 0, 0, H * 0.5, [
+        [0, 'rgba(255,255,255,0.18)'],
+        [1, 'rgba(255,255,255,0)'],
+      ]);
+      roundRect(ctx, 1, 1, W - 2, H * 0.45, 4);
+      ctx.fill();
       return;
     }
     const rank = card.slice(0, -1);
@@ -232,14 +318,20 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
     const red = suit === 'H' || suit === 'D';
     const ink = red ? '#c8102e' : '#16142b';
 
-    roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4);
-    ctx.fillStyle = linear(ctx, 0, 0, W, H, [
+    // V7.1 2.5D face: warm white with a soft top light, bevelled edge and large readable indices.
+    roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 4.5);
+    ctx.fillStyle = linear(ctx, 0, 0, 0, H, [
       [0, '#ffffff'],
-      [1, '#efe9dc'],
+      [0.7, '#f7f4ee'],
+      [1, '#e6dfd0'],
     ]);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
-    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = 'rgba(40,30,60,0.35)';
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+    ctx.lineWidth = 0.6;
+    roundRect(ctx, 1.4, 1.4, W - 2.8, H - 2.8, 3.6);
     ctx.stroke();
 
     const corner = (flip: boolean) => {
@@ -249,11 +341,16 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
         ctx.rotate(Math.PI);
       }
       ctx.fillStyle = ink;
-      ctx.font = `700 ${rank === '10' ? 10 : 11}px ${FONT_DISPLAY}`;
+      ctx.font = `800 ${rank === '10' ? 12 : 14}px ${FONT_DISPLAY}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.fillText(rank, 7.5, 3);
-      drawSuit(ctx, suit, 7.5, 18.5, 7);
+      if (rank === '10') {
+        ctx.save();
+        ctx.scale(0.86, 1);
+        ctx.fillText(rank, 8.5 / 0.86, 2.5);
+        ctx.restore();
+      } else ctx.fillText(rank, 8.5, 2.5);
+      drawSuit(ctx, suit, 8.5, 22, 8.5);
       ctx.restore();
     };
     corner(false);
@@ -284,7 +381,7 @@ export function ensureCardTexture(scene: Phaser.Scene, card: Card | null) {
   });
 }
 
-// ---------------------------------------------------------------- chips
+// ---------------------------------------------------------------- chips (V7.1 2.5D)
 
 export const CHIP_STYLES: Record<number, { base: string; dark: string; insert: string; text: string }> = {
   10: { base: '#e9e6f2', dark: '#9d98b8', insert: '#3d3790', text: '#2b2766' },
@@ -302,70 +399,113 @@ export function chipDenomFor(amount: number): number {
 
 export const CHIP_SIZE = 32;
 
+/**
+ * V7.1 Premium 2.5D casino chip: a visible striped edge (thickness), a bevelled top face with eight
+ * edge inserts, a metallic gold inlay ring, a recessed centre with the value, and a top gloss.
+ * Same keys and footprint as before (CHIP_SIZE × CHIP_SIZE+3), so every table picks it up unchanged.
+ * Also 'chip-glow' (win halo under a paid stack).
+ */
 export function ensureChipTextures(scene: Phaser.Scene) {
   for (const [value, c] of Object.entries(CHIP_STYLES)) {
     hdTexture(scene, `chip-${value}`, CHIP_SIZE, CHIP_SIZE + 3, (ctx) => {
-      const r = CHIP_SIZE / 2 - 1;
       const cx = CHIP_SIZE / 2;
-      const cy = CHIP_SIZE / 2;
-      // Edge thickness (gives the chip depth)
+      const cy = CHIP_SIZE / 2 - 0.5;
+      const r = CHIP_SIZE / 2 - 1.2;
+      const depth = 3.2;
+      // Contact shadow.
+      ctx.fillStyle = 'rgba(0,0,0,0.32)';
+      ctx.beginPath();
+      ctx.ellipse(cx + 0.5, cy + depth + 0.9, r, r * 0.97, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Edge band (thickness) with the insert stripes running down the side.
       ctx.fillStyle = c.dark;
       ctx.beginPath();
-      ctx.ellipse(cx, cy + 2.5, r, r, 0, 0, Math.PI * 2);
+      ctx.arc(cx, cy + depth, r, 0, Math.PI);
+      ctx.lineTo(cx - r, cy);
+      ctx.arc(cx, cy, r, Math.PI, 0, true);
+      ctx.closePath();
       ctx.fill();
-      ctx.fillStyle = radial(ctx, cx, cy, 2, r, [
-        [0, c.base],
-        [0.85, c.base],
-        [1, c.dark],
-      ], cx - 4, cy - 5);
+      ctx.fillStyle = c.insert;
+      ctx.globalAlpha = 0.85;
+      for (let i = 0; i < 8; i++) {
+        const a = (i + 0.5) * (Math.PI / 8) + Math.PI / 16;
+        if (a <= 0.12 || a >= Math.PI - 0.12) continue;
+        const x = cx + Math.cos(a) * r;
+        const w = Math.max(0.8, 2.6 * Math.sin(a));
+        ctx.fillRect(x - w / 2, cy + Math.sin(a) * r - 0.2, w, depth + 0.2);
+      }
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = linear(ctx, 0, cy, 0, cy + r + depth, [[0, 'rgba(255,255,255,0.10)'], [1, 'rgba(0,0,0,0.35)']]);
+      ctx.beginPath();
+      ctx.arc(cx, cy + depth, r, 0, Math.PI);
+      ctx.lineTo(cx - r, cy);
+      ctx.arc(cx, cy, r, Math.PI, 0, true);
+      ctx.closePath();
+      ctx.fill();
+      // Top face.
+      ctx.fillStyle = radial(ctx, cx, cy, 1, r, [[0, c.base], [0.82, c.base], [1, c.dark]], cx - 5, cy - 6);
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.fill();
-      // Edge inserts
+      // Edge inserts on the top face.
       ctx.fillStyle = c.insert;
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 8; i++) {
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate((i * Math.PI) / 3);
-        roundRect(ctx, -2.6, -r + 0.6, 5.2, 4.2, 1);
+        ctx.rotate((i * Math.PI) / 4);
+        roundRect(ctx, -2.2, -r + 0.5, 4.4, 3.8, 0.9);
         ctx.fill();
         ctx.restore();
       }
-      // Inner ring
-      ctx.strokeStyle = c.insert;
-      ctx.globalAlpha = 0.7;
-      ctx.setLineDash([2, 1.5]);
+      // Metallic gold inlay ring.
+      ctx.strokeStyle = linear(ctx, cx - r, cy - r, cx + r, cy + r, GOLD);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 0.7, 0, Math.PI * 2);
+      ctx.stroke();
+      // Recessed centre: darker rim at the top (in shadow), light at the bottom.
+      ctx.fillStyle = radial(ctx, cx, cy, 0, r * 0.62, [[0, c.base], [0.8, c.base], [1, c.dark]], cx - 1.5, cy - 2.5);
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
       ctx.lineWidth = 0.8;
       ctx.beginPath();
-      ctx.arc(cx, cy, r * 0.66, 0, Math.PI * 2);
+      ctx.arc(cx, cy, r * 0.6, Math.PI * 1.1, Math.PI * 1.9);
       ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = radial(ctx, cx, cy, 0, r * 0.6, [
-        [0, c.base],
-        [1, c.dark],
-      ], cx - 2, cy - 3);
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
       ctx.beginPath();
-      ctx.arc(cx, cy, r * 0.58, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = c.text;
-      ctx.font = `800 ${value.length > 3 ? 6.5 : 8}px ${FONT_UI}`;
+      ctx.arc(cx, cy, r * 0.6, Math.PI * 0.15, Math.PI * 0.85);
+      ctx.stroke();
+      // Value.
+      const label = Number(value) >= 1000 ? `${Number(value) / 1000}K` : value;
+      ctx.font = `900 ${label.length > 3 ? 6.5 : 8}px ${FONT_UI}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(Number(value) >= 1000 ? `${Number(value) / 1000}K` : value, cx, cy + 0.5);
-      // Gloss
-      ctx.fillStyle = linear(ctx, 0, cy - r, 0, cy, [
-        [0, 'rgba(255,255,255,0.45)'],
-        [1, 'rgba(255,255,255,0)'],
-      ]);
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+      ctx.strokeText(label, cx, cy + 0.6);
+      ctx.fillStyle = c.text;
+      ctx.fillText(label, cx, cy + 0.6);
+      // Gloss across the upper half.
+      ctx.save();
       ctx.beginPath();
-      ctx.ellipse(cx, cy - r * 0.45, r * 0.8, r * 0.45, 0, 0, Math.PI * 2);
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.fillStyle = linear(ctx, 0, cy - r, 0, cy + 2, [[0, 'rgba(255,255,255,0.5)'], [1, 'rgba(255,255,255,0)']]);
+      ctx.beginPath();
+      ctx.ellipse(cx - 2, cy - r * 0.5, r * 0.85, r * 0.42, -0.25, 0, Math.PI * 2);
       ctx.fill();
+      ctx.restore();
     });
   }
+  hdTexture(scene, 'chip-glow', 44, 44, (ctx) => {
+    ctx.fillStyle = radial(ctx, 22, 22, 0, 22, [[0, 'rgba(255,240,190,0.95)'], [0.35, 'rgba(242,193,78,0.55)'], [1, 'rgba(242,193,78,0)']]);
+    ctx.fillRect(0, 0, 44, 44);
+  });
 }
 
-// ---------------------------------------------------------------- dice
+// ---------------------------------------------------------------- dice (V7.1 2.5D)
 
 const PIPS: Record<number, [number, number][]> = {
   1: [[0, 0]],
@@ -378,47 +518,158 @@ const PIPS: Record<number, [number, number][]> = {
 
 export const DIE_SIZE = 34;
 
-export function ensureDiceTextures(scene: Phaser.Scene) {
-  for (let face = 1; face <= 6; face++) {
-    hdTexture(scene, `die-${face}`, DIE_SIZE + 4, DIE_SIZE + 4, (ctx) => {
-      const s = DIE_SIZE;
-      ctx.save();
-      ctx.shadowColor = 'rgba(0,0,0,0.45)';
-      ctx.shadowBlur = 3;
-      ctx.shadowOffsetY = 2;
-      roundRect(ctx, 1, 1, s, s, 7);
-      ctx.fillStyle = linear(ctx, 0, 0, s, s, [
-        [0, '#ffffff'],
-        [0.7, '#ece7f5'],
-        [1, '#c9c1da'],
-      ]);
-      ctx.fill();
-      ctx.restore();
-      ctx.fillStyle = radial(ctx, s * 0.35, s * 0.3, 0, s * 0.6, [
-        [0, 'rgba(255,255,255,0.8)'],
-        [1, 'rgba(255,255,255,0)'],
-      ]);
-      roundRect(ctx, 1, 1, s, s, 7);
-      ctx.fill();
-      // Asian dice: the 1 and 4 pips are red.
-      const red = face === 1 || face === 4;
-      for (const [dx, dy] of PIPS[face]!) {
-        const x = 1 + s / 2 + dx * s * 0.27;
-        const y = 1 + s / 2 + dy * s * 0.27;
-        const pr = face === 1 ? 5 : 3;
-        ctx.fillStyle = radial(ctx, x, y, 0, pr, red ? [[0, '#ff5a6e'], [1, '#a00d24']] : [[0, '#4a4670'], [1, '#0e0c1f']], x - 1, y - 1);
-        ctx.beginPath();
-        ctx.arc(x, y, pr, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    });
+/** One ivory 2.5D die body (visible lower/right faces, bevelled top) with carved pips. */
+function paintDie(ctx: Ctx, face: number) {
+  const s = DIE_SIZE - 3;
+  const d = 3; // visible depth of the lower / right faces
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 3.5;
+  ctx.shadowOffsetY = 2;
+  // Side faces (the body seen slightly from above-left).
+  roundRect(ctx, 1 + d, 1 + d, s, s, 7);
+  ctx.fillStyle = linear(ctx, 0, 0, s + d, s + d, [[0, '#d9cfe6'], [1, '#9c90b4']]);
+  ctx.fill();
+  ctx.restore();
+  // Top face.
+  roundRect(ctx, 1, 1, s, s, 7);
+  ctx.fillStyle = linear(ctx, 1, 1, s, s, [[0, '#ffffff'], [0.6, '#f3eef9'], [1, '#d8cfe6']]);
+  ctx.fill();
+  // Bevel: bright upper-left edge, soft shade along the lower-right edge.
+  ctx.lineWidth = 1.1;
+  ctx.strokeStyle = linear(ctx, 1, 1, s, s, [[0, 'rgba(255,255,255,0.95)'], [0.5, 'rgba(255,255,255,0.2)'], [1, 'rgba(110,96,140,0.55)']]);
+  roundRect(ctx, 1.6, 1.6, s - 1.2, s - 1.2, 6.4);
+  ctx.stroke();
+  ctx.fillStyle = radial(ctx, s * 0.32, s * 0.28, 0, s * 0.62, [[0, 'rgba(255,255,255,0.75)'], [1, 'rgba(255,255,255,0)']]);
+  roundRect(ctx, 1, 1, s, s, 7);
+  ctx.fill();
+  // Carved pips (Asian dice: the 1 and the 4 are red).
+  const red = face === 1 || face === 4;
+  for (const [dx, dy] of PIPS[face]!) {
+    const x = 1 + s / 2 + dx * s * 0.27;
+    const y = 1 + s / 2 + dy * s * 0.27;
+    const pr = face === 1 ? 5.2 : 3.1;
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.beginPath();
+    ctx.arc(x + 0.5, y + 0.6, pr, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = radial(ctx, x, y, 0, pr, red ? [[0, '#a00d24'], [0.7, '#d62a43'], [1, '#ff6b7e']] : [[0, '#07060f'], [0.7, '#2a2645'], [1, '#5b5680']], x - pr * 0.35, y - pr * 0.35);
+    ctx.beginPath();
+    ctx.arc(x, y, pr, 0, Math.PI * 2);
+    ctx.fill();
   }
 }
 
 /**
- * Traditional Tài Xỉu cover seen from above: a black lacquered dome over the dice plate, a thin
- * gold rim, the turned foot ring at the top of the dome, a soft highlight from the upper left and
- * a contact shadow on the felt. Square so it can rotate while shaking.
+ * Dice: die-1 … die-6 (same keys / size as before) plus 'die-blur', the rolling state (motion streak),
+ * used by Sic Bo while the dice tumble.
+ */
+export function ensureDiceTextures(scene: Phaser.Scene) {
+  for (let face = 1; face <= 6; face++) hdTexture(scene, `die-${face}`, DIE_SIZE + 4, DIE_SIZE + 4, (ctx) => paintDie(ctx, face));
+  hdTexture(scene, 'die-blur', DIE_SIZE + 4, DIE_SIZE + 4, (ctx) => {
+    for (let i = 3; i >= 0; i--) {
+      ctx.save();
+      ctx.globalAlpha = i === 0 ? 1 : 0.18;
+      ctx.translate(-i * 2.2, -i * 1.2);
+      ctx.translate((DIE_SIZE + 4) / 2, (DIE_SIZE + 4) / 2);
+      ctx.rotate(0.35 - i * 0.1);
+      ctx.translate(-(DIE_SIZE + 4) / 2, -(DIE_SIZE + 4) / 2);
+      paintDie(ctx, i === 0 ? 5 : 3);
+      ctx.restore();
+    }
+  });
+}
+
+/**
+ * Sic Bo props (V7.1 2.5D): 'sicbo-plate', a porcelain dice plate with a bevelled gold rim and a blue
+ * glaze ring; 'sicbo-dome', the crystal shaker dome that covers the dice while they tumble.
+ */
+export const PLATE_SIZE = 168;
+export function ensureSicBoProps(scene: Phaser.Scene) {
+  hdTexture(scene, 'sicbo-plate', PLATE_SIZE, PLATE_SIZE, (ctx) => {
+    const c = PLATE_SIZE / 2;
+    const r = 72;
+    ctx.fillStyle = radial(ctx, c + 4, c + 7, r * 0.6, r + 9, [[0, 'rgba(0,0,0,0.55)'], [1, 'rgba(0,0,0,0)']]);
+    ctx.beginPath();
+    ctx.arc(c + 4, c + 7, r + 9, 0, Math.PI * 2);
+    ctx.fill();
+    // Rim thickness then the bevelled gold rim.
+    ctx.fillStyle = '#6b4708';
+    ctx.beginPath();
+    ctx.arc(c, c + 3, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = linear(ctx, c - r, c - r, c + r, c + r, GOLD);
+    ctx.beginPath();
+    ctx.arc(c, c, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(c, c, r - 0.8, Math.PI * 1.05, Math.PI * 1.7);
+    ctx.stroke();
+    // Porcelain well, lit from the upper left, deeper towards the lower right.
+    ctx.fillStyle = radial(ctx, c, c, 0, r - 6, [[0, '#ffffff'], [0.75, '#f4efe4'], [1, '#cfc6b3']], c - 18, c - 22);
+    ctx.beginPath();
+    ctx.arc(c, c, r - 6, 0, Math.PI * 2);
+    ctx.fill();
+    // Blue glaze ring with small motif dots.
+    ctx.strokeStyle = '#2f4fb8';
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.arc(c, c, r - 12, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = '#2f4fb8';
+    for (let i = 0; i < 24; i++) {
+      const a = (i / 24) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.arc(c + Math.cos(a) * (r - 17), c + Math.sin(a) * (r - 17), 1.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = radial(ctx, c + 4, c + 6, r * 0.2, r - 20, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(60,45,20,0.18)']]);
+    ctx.beginPath();
+    ctx.arc(c, c, r - 20, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  hdTexture(scene, 'sicbo-dome', PLATE_SIZE, PLATE_SIZE, (ctx) => {
+    const c = PLATE_SIZE / 2;
+    const r = 70;
+    // Crystal: a faint violet tint, bright rim, specular streaks; mostly transparent so the dice show.
+    ctx.fillStyle = radial(ctx, c, c, r * 0.2, r, [[0, 'rgba(210,200,255,0.10)'], [0.85, 'rgba(170,150,255,0.18)'], [1, 'rgba(255,255,255,0.45)']], c - 20, c - 24);
+    ctx.beginPath();
+    ctx.arc(c, c, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.arc(c, c, r - 1, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = linear(ctx, c - r, c - r, c + r, c + r, GOLD);
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    ctx.arc(c, c, r + 1.5, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.beginPath();
+    ctx.ellipse(c - r * 0.38, c - r * 0.42, r * 0.34, r * 0.12, -0.75, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.arc(c, c, r - 8, Math.PI * 0.15, Math.PI * 0.4);
+    ctx.stroke();
+    // Gold knob on top.
+    ctx.fillStyle = radial(ctx, c, c, 0, 10, [[0, '#fff7d6'], [0.5, '#f2c14e'], [1, '#8a5a12']], c - 3, c - 4);
+    ctx.beginPath();
+    ctx.arc(c, c, 9, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+/**
+ * Traditional Tài Xỉu cover seen from above (V7.1 2.5D): a black lacquered dome with its rim
+ * thickness showing at the bottom, a red lacquer band with a gold motif ring, the turned foot at
+ * the top, glossy reflections and a contact shadow. Square so it can rotate while shaking.
  */
 export const BOWL_W = 168;
 export const BOWL_H = 168;
@@ -427,58 +678,59 @@ export const BOWL_R = 72;
 export function ensureBowlTexture(scene: Phaser.Scene) {
   hdTexture(scene, 'taixiu-bowl', BOWL_W, BOWL_H, (ctx) => {
     const cx = BOWL_W / 2;
-    const cy = BOWL_H / 2;
+    const cy = BOWL_H / 2 - 2;
     const r = BOWL_R;
-    // Contact shadow on the felt (light comes from the upper left).
-    ctx.fillStyle = radial(ctx, cx + 5, cy + 7, r * 0.7, r + 10, [
-      [0, 'rgba(0,0,0,0.55)'],
-      [1, 'rgba(0,0,0,0)'],
-    ]);
+    ctx.fillStyle = radial(ctx, cx + 5, cy + 9, r * 0.7, r + 10, [[0, 'rgba(0,0,0,0.6)'], [1, 'rgba(0,0,0,0)']]);
     ctx.beginPath();
-    ctx.arc(cx + 5, cy + 7, r + 10, 0, Math.PI * 2);
+    ctx.arc(cx + 5, cy + 9, r + 10, 0, Math.PI * 2);
     ctx.fill();
-    // Lacquered dome: lighter where it faces the light, near-black towards the rim.
-    ctx.fillStyle = radial(
-      ctx,
-      cx,
-      cy,
-      0,
-      r,
-      [
-        [0, '#4b4651'],
-        [0.35, '#24202a'],
-        [0.75, '#0e0c11'],
-        [1, '#050406'],
-      ],
-      cx - r * 0.32,
-      cy - r * 0.36,
-    );
+    // Rim thickness (2.5D): the lower edge of the dome.
+    ctx.fillStyle = linear(ctx, 0, cy, 0, cy + r + 5, [[0, '#2a0a10'], [1, '#090305']]);
+    ctx.beginPath();
+    ctx.arc(cx, cy + 4, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = linear(ctx, cx - r, cy, cx + r, cy + r, GOLD);
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.arc(cx, cy + 4, r - 0.6, Math.PI * 0.05, Math.PI * 0.95);
+    ctx.stroke();
+    // Lacquered dome.
+    ctx.fillStyle = radial(ctx, cx, cy, 0, r, [[0, '#4b4651'], [0.35, '#24202a'], [0.75, '#0e0c11'], [1, '#050406']], cx - r * 0.32, cy - r * 0.36);
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fill();
-    // Thin gold rim and a fine inner gold line.
+    // Red lacquer band with a gold motif ring.
+    ctx.strokeStyle = linear(ctx, cx - r, cy - r, cx + r, cy + r, [[0, '#b0182e'], [0.5, '#6e0a18'], [1, '#c4253c']]);
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r - 6.5, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = linear(ctx, cx - r, cy - r, cx + r, cy + r, GOLD);
+    for (let i = 0; i < 28; i++) {
+      const a = (i / 28) * Math.PI * 2;
+      ctx.save();
+      ctx.translate(cx + Math.cos(a) * (r - 6.5), cy + Math.sin(a) * (r - 6.5));
+      ctx.rotate(a + Math.PI / 4);
+      ctx.fillRect(-1.3, -1.3, 2.6, 2.6);
+      ctx.restore();
+    }
     ctx.strokeStyle = linear(ctx, cx - r, cy - r, cx + r, cy + r, GOLD);
-    ctx.lineWidth = 2.2;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(cx, cy, r - 1.1, 0, Math.PI * 2);
+    ctx.arc(cx, cy, r - 1, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.globalAlpha = 0.55;
-    ctx.lineWidth = 0.8;
+    ctx.lineWidth = 0.9;
     ctx.beginPath();
-    ctx.arc(cx, cy, r - 7, 0, Math.PI * 2);
+    ctx.arc(cx, cy, r - 11, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.globalAlpha = 1;
     // Turned foot ring at the top of the inverted bowl.
     const fr = 22;
-    ctx.fillStyle = radial(ctx, cx, cy, 0, fr, [
-      [0, '#2c2830'],
-      [1, '#0b0a0d'],
-    ], cx - 6, cy - 7);
+    ctx.fillStyle = radial(ctx, cx, cy, 0, fr, [[0, '#2c2830'], [1, '#0b0a0d']], cx - 6, cy - 7);
     ctx.beginPath();
     ctx.arc(cx, cy, fr, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = linear(ctx, cx - fr, cy - fr, cx + fr, cy + fr, GOLD);
-    ctx.lineWidth = 1.4;
+    ctx.lineWidth = 1.6;
     ctx.beginPath();
     ctx.arc(cx, cy, fr, 0, Math.PI * 2);
     ctx.stroke();
@@ -487,15 +739,16 @@ export function ensureBowlTexture(scene: Phaser.Scene) {
     ctx.beginPath();
     ctx.arc(cx, cy, fr - 4, 0, Math.PI * 2);
     ctx.stroke();
-    // Glossy highlights: a broad soft reflection and a crisp arc along the lit edge.
+    ctx.fillStyle = radial(ctx, cx, cy, 0, 7, [[0, '#fff7d6'], [0.5, '#f2c14e'], [1, '#8a5a12']], cx - 2, cy - 2);
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.fill();
+    // Glossy highlights.
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r - 2, 0, Math.PI * 2);
     ctx.clip();
-    ctx.fillStyle = radial(ctx, cx - r * 0.38, cy - r * 0.42, 0, r * 0.55, [
-      [0, 'rgba(255,255,255,0.32)'],
-      [1, 'rgba(255,255,255,0)'],
-    ]);
+    ctx.fillStyle = radial(ctx, cx - r * 0.38, cy - r * 0.42, 0, r * 0.55, [[0, 'rgba(255,255,255,0.32)'], [1, 'rgba(255,255,255,0)']]);
     ctx.beginPath();
     ctx.ellipse(cx - r * 0.36, cy - r * 0.4, r * 0.5, r * 0.28, -0.75, 0, Math.PI * 2);
     ctx.fill();
@@ -504,7 +757,7 @@ export function ensureBowlTexture(scene: Phaser.Scene) {
     ctx.lineWidth = 1.6;
     ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.arc(cx, cy, r - 5, Math.PI * 1.05, Math.PI * 1.45);
+    ctx.arc(cx, cy, r - 13, Math.PI * 1.05, Math.PI * 1.45);
     ctx.stroke();
   });
 }
@@ -596,6 +849,22 @@ export function ensureWheelTextures(scene: Phaser.Scene) {
     ctx.beginPath();
     ctx.arc(c, c, rCone, 0, Math.PI * 2);
     ctx.fill();
+    // 2.5D depth: pockets sink towards their inner edge, the polished cone catches the light, and the
+    // ball track gets a lacquer sheen (light from the upper left).
+    ctx.fillStyle = radial(ctx, c, c, rPocketIn, rPocketOut, [[0, 'rgba(0,0,0,0.5)'], [0.45, 'rgba(0,0,0,0.12)'], [1, 'rgba(0,0,0,0)']]);
+    ctx.beginPath();
+    ctx.arc(c, c, rPocketOut, 0, Math.PI * 2);
+    ctx.arc(c, c, rPocketIn, 0, Math.PI * 2, true);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,240,200,0.35)';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.arc(c, c, (rOuter + rTrack) / 2, Math.PI * 1.02, Math.PI * 1.55);
+    ctx.stroke();
+    ctx.fillStyle = radial(ctx, c - rCone * 0.35, c - rCone * 0.4, 0, rCone * 0.8, [[0, 'rgba(255,236,190,0.45)'], [1, 'rgba(255,236,190,0)']]);
+    ctx.beginPath();
+    ctx.arc(c, c, rCone, 0, Math.PI * 2);
+    ctx.fill();
     // Turret with four arms
     ctx.fillStyle = linear(ctx, c - 20, c - 20, c + 20, c + 20, GOLD);
     for (let i = 0; i < 4; i++) {
@@ -633,12 +902,61 @@ export function ensureWheelTextures(scene: Phaser.Scene) {
   hdTexture(scene, 'roulette-ball', 7, 7, (ctx) => {
     ctx.fillStyle = radial(ctx, 3.5, 3.5, 0, 3.4, [
       [0, '#ffffff'],
-      [0.6, '#e6e6ee'],
-      [1, '#8c8aa0'],
-    ], 2.4, 2.2);
+      [0.55, '#ecebf3'],
+      [1, '#7d7a92'],
+    ], 2.3, 2.1);
     ctx.beginPath();
     ctx.arc(3.5, 3.5, 3.3, 0, Math.PI * 2);
     ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.beginPath();
+    ctx.arc(2.5, 2.3, 0.9, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  // Static mahogany bowl around the spinning wheel (V7.1 2.5D): bevelled wood, gold lips and eight
+  // diamond deflectors; drawn under the wheel so only its outer band shows.
+  const B = WHEEL_SIZE + 22;
+  hdTexture(scene, 'roulette-bowl', B, B, (ctx) => {
+    const c = B / 2;
+    const rOut = c - 2;
+    ctx.fillStyle = radial(ctx, c + 3, c + 6, rOut * 0.7, rOut + 2, [[0, 'rgba(0,0,0,0.55)'], [1, 'rgba(0,0,0,0)']]);
+    ctx.beginPath();
+    ctx.arc(c + 3, c + 6, rOut + 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = radial(ctx, c, c, WHEEL_SIZE / 2 - 4, rOut, [[0, '#1c0c03'], [0.45, '#6b3713'], [0.8, '#a2622c'], [1, '#3a1d0b']], c - 6, c - 8);
+    ctx.beginPath();
+    ctx.arc(c, c, rOut, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = linear(ctx, 0, 0, B, B, GOLD);
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.arc(c, c, rOut - 0.9, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(c, c, WHEEL_SIZE / 2 + 1.5, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,230,190,0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(c, c, rOut - 4, Math.PI * 1.05, Math.PI * 1.6);
+    ctx.stroke();
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
+      const rr = (rOut + WHEEL_SIZE / 2) / 2 + 1;
+      ctx.save();
+      ctx.translate(c + Math.cos(a) * rr, c + Math.sin(a) * rr);
+      ctx.rotate(a + Math.PI / 2);
+      ctx.fillStyle = linear(ctx, -3, -2, 3, 2, GOLD);
+      ctx.beginPath();
+      ctx.moveTo(0, -3.4);
+      ctx.lineTo(2, 0);
+      ctx.lineTo(0, 3.4);
+      ctx.lineTo(-2, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
   });
 }
 
@@ -883,25 +1201,67 @@ export function ensureShoeTexture(scene: Phaser.Scene) {
   });
 }
 
-/** Glossy machine frame around the slot reels. */
+/**
+ * Slot machine cabinet (V7.1 2.5D): plum lacquer body with a chrome-gold bevel, side pillars that
+ * give it depth, an inner neon line and a recessed reel window. Same key / size as before.
+ */
 export function ensureSlotCabinet(scene: Phaser.Scene, w: number, h: number) {
   hdTexture(scene, 'slots-cabinet', w, h, (ctx) => {
     withShadow(ctx, () => {
-      roundRect(ctx, 2, 2, w - 4, h - 4, 16);
-      ctx.fillStyle = linear(ctx, 0, 0, 0, h, [[0, '#2a1f4f'], [0.5, '#130e2b'], [1, '#08061a']]);
+      roundRect(ctx, 2, 4, w - 4, h - 6, 16);
+      ctx.fillStyle = '#05030d';
       ctx.fill();
     });
+    roundRect(ctx, 2, 2, w - 4, h - 6, 16);
+    ctx.fillStyle = linear(ctx, 0, 0, 0, h, [[0, '#3a2468'], [0.45, '#1b1036'], [1, '#0a0618']]);
+    ctx.fill();
+    // Side pillars (depth).
+    for (const x of [6, w - 18]) {
+      roundRect(ctx, x, 14, 12, h - 34, 6);
+      ctx.fillStyle = linear(ctx, x, 0, x + 12, 0, [[0, '#120a26'], [0.5, '#4a3285'], [1, '#120a26']]);
+      ctx.fill();
+    }
     ctx.lineWidth = 3;
     ctx.strokeStyle = linear(ctx, 0, 0, w, h, GOLD);
-    roundRect(ctx, 3, 3, w - 6, h - 6, 15);
+    roundRect(ctx, 3, 3, w - 6, h - 8, 15);
     ctx.stroke();
     ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(190,90,255,0.6)';
-    roundRect(ctx, 8, 8, w - 16, h - 16, 11);
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+    roundRect(ctx, 5, 5, w - 10, h - 12, 13);
     ctx.stroke();
-    ctx.fillStyle = linear(ctx, 0, 0, 0, 40, [[0, 'rgba(255,255,255,0.12)'], [1, 'rgba(255,255,255,0)']]);
-    roundRect(ctx, 8, 8, w - 16, 36, 11);
+    ctx.strokeStyle = 'rgba(190,90,255,0.65)';
+    roundRect(ctx, 20, 10, w - 40, h - 22, 11);
+    ctx.stroke();
+    ctx.fillStyle = linear(ctx, 0, 0, 0, 40, [[0, 'rgba(255,255,255,0.16)'], [1, 'rgba(255,255,255,0)']]);
+    roundRect(ctx, 8, 6, w - 16, 36, 11);
     ctx.fill();
+  });
+}
+
+/**
+ * Reel window overlay (V7.1 2.5D): the drums curve away at the top and bottom (shade), a highlight
+ * band runs across the upper third, and a chrome frame sits around the window. Drawn over the reels.
+ */
+export function ensureSlotReelShade(scene: Phaser.Scene, w: number, h: number) {
+  hdTexture(scene, 'slots-reelshade', w + 10, h + 10, (ctx) => {
+    const x = 5;
+    const y = 5;
+    ctx.fillStyle = linear(ctx, 0, y, 0, y + h, [[0, 'rgba(10,6,24,0.62)'], [0.16, 'rgba(10,6,24,0.10)'], [0.3, 'rgba(255,255,255,0.10)'], [0.38, 'rgba(255,255,255,0)'], [0.84, 'rgba(10,6,24,0.10)'], [1, 'rgba(10,6,24,0.62)']]);
+    ctx.fillRect(x, y, w, h);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = linear(ctx, 0, 0, w, h, [[0, '#f4f1ff'], [0.3, '#9a93b8'], [0.55, '#f2c14e'], [1, '#5c557a']]);
+    roundRect(ctx, x - 2, y - 2, w + 4, h + 4, 8);
+    ctx.stroke();
+  });
+  hdTexture(scene, 'slot-winframe', 46, 46, (ctx) => {
+    ctx.lineWidth = 2.4;
+    ctx.strokeStyle = linear(ctx, 0, 0, 46, 46, GOLD);
+    roundRect(ctx, 2, 2, 42, 42, 8);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+    roundRect(ctx, 4.5, 4.5, 37, 37, 6);
+    ctx.stroke();
   });
 }
 
@@ -968,9 +1328,9 @@ export function ensureCardBackTexture(scene: Phaser.Scene, key: string, colors: 
 // ---------------------------------------------------------------- cosmetics (table skins, card backs)
 
 /** Background texture for the viewer's table skin and the scene's layout (one per skin + layout). */
-export function ensureSkinBackground(scene: Phaser.Scene, skinId: string, layout: TableLayout, oval?: OvalGeometry): string {
-  const key = `skin-bg:${skinId}:${layout}:${oval ? `${oval.cx},${oval.cy},${oval.rx},${oval.ry}` : ''}`;
-  hdTexture(scene, key, WORLD_W, WORLD_H, (ctx) => paintTable(ctx, WORLD_W, WORLD_H, skinId, layout, oval));
+export function ensureSkinBackground(scene: Phaser.Scene, skinId: string, layout: TableLayout, oval?: OvalGeometry, w = WORLD_W, h = WORLD_H): string {
+  const key = `skin-bg:${skinId}:${layout}:${w}x${h}:${oval ? `${oval.cx},${oval.cy},${oval.rx},${oval.ry}` : ''}`;
+  hdTexture(scene, key, w, h, (ctx) => paintTable(ctx, w, h, skinId, layout, oval));
   return key;
 }
 

@@ -1,3 +1,4 @@
+import { KeyoImg } from '../assets/keyo';
 import { CHECKIN_REWARDS, type CheckinResult } from '@casino/shared';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -54,7 +55,10 @@ export function CheckinPanel() {
   return (
     <div className={`glass flex flex-col gap-3 p-4 ${claimedToday ? '' : 'animate-pulse-glow'}`}>
       <div className="flex items-baseline justify-between gap-2">
-        <h3 className="font-display text-lg">{t('checkin.title')}</h3>
+        <h3 className="flex items-center gap-2 font-display text-lg">
+          <KeyoImg id="ui.calendar" size={30} alt="" decorative className="-my-1" />
+          {t('checkin.title')}
+        </h3>
         <span className="text-[11px] text-white/40">{t('checkin.resetIn', { time: formatDuration(endsIn) })}</span>
       </div>
       <div className="grid grid-cols-7 gap-1">
@@ -83,6 +87,7 @@ export function CheckinPanel() {
                   <CurrencyIcon currency="gold" size={12} />+{reward.gold}
                 </span>
               )}
+              {day === 7 && <KeyoImg id="reward.login-chest" size={22} alt="" decorative className="pointer-events-none absolute -right-1.5 -top-2.5" />}
               {done && (
                 <span className="absolute inset-0 flex items-center justify-center rounded-lg bg-ink-950/55 text-lg font-bold text-emerald-400">✓</span>
               )}
@@ -97,7 +102,10 @@ export function CheckinPanel() {
           {t('checkin.claim')} · {t('checkin.day', { n: nextDay })}
         </Button>
       )}
-      <p className="text-[11px] leading-snug text-white/40">{t('checkin.streakInfo')}</p>
+      <p className="flex items-start gap-1.5 text-[11px] leading-snug text-white/40">
+        <KeyoImg id="reward.streak" size={18} alt="" decorative className="shrink-0" />
+        <span>{t('checkin.streakInfo')}</span>
+      </p>
     </div>
   );
 }

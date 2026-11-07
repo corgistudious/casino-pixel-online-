@@ -1,0 +1,196 @@
+{
+  "requestId": "2026-11-07-lib-06-3-frames-profile-1",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.4,
+  "remainingBeforeUsd": 5.5079,
+  "runCapUsd": 1.4,
+  "planned": [
+    {
+      "id": "avatar.collector",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.default",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.fantasy-dealer",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.kol",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.limited",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.premium",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.royal",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.seasonal",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.tournament",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "avatar.vip",
+      "size": "1024x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.seasonal.anniversary",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.seasonal.christmas",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.seasonal.easter",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.seasonal.halloween",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "avatar.collector",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.default",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.fantasy-dealer",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.kol",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.limited",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.premium",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.royal",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.seasonal",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.tournament",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "avatar.vip",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.seasonal.anniversary",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.seasonal.christmas",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.seasonal.easter",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.seasonal.halloween",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T01:00:11.961Z",
+  "plannedEstimateUsd": 1.4,
+  "finishedAt": "2026-11-07T01:07:35.005Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 5.26089,
+    "spentEstimatedUsd": 14.55,
+    "spentActualUsd": 5.26089,
+    "remainingUsd": 4.7391,
+    "images": 99
+  }
+}

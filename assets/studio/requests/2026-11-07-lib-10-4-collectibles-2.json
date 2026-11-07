@@ -1,0 +1,24 @@
+{
+  "id": "2026-11-07-lib-10-4-collectibles-2",
+  "mode": "generate",
+  "assets": [
+    "collectible.property.mansion",
+    "collectible.property.royal-estate",
+    "collectible.property.villa",
+    "collectible.watch.classic",
+    "collectible.watch.diamond",
+    "collectible.watch.gold",
+    "collectible.watch.limited",
+    "collectible.yacht.limited",
+    "collectible.yacht.luxury",
+    "collectible.yacht.royal",
+    "collectible.yacht.small",
+    "collectible.yacht.super"
+  ],
+  "batchSize": 12,
+  "budgetLimitUsd": 1.2,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — 2026-11-07 'COMPLETE ALL 252 REMAINING ASSETS' (within the approved budget only)",
+  "note": "Library batch 10/20 (4-collectibles 2/2)."
+}

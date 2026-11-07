@@ -3,6 +3,9 @@ import { useId, useState, type ReactNode } from 'react';
 import { assetSrc, useCatalog } from '../store/catalog';
 import { usesVuongGiaArt, VuongGiaAvatarArt, VuongGiaFrame } from './Cosmetics';
 import { isLibraryFrame, LibraryFrame } from './FrameArt';
+import { KEYO_ASSETS, keyoUrl, type KeyoAssetId } from '../assets/keyo';
+import type { KeyoAssetEntry } from '../assets/keyo/registry.generated';
+import { itemArt } from '../assets/keyo/bindings';
 
 /** 16 vector emblems: gradient pairs and glyph paths (24×24 viewBox). */
 const PALETTES: [string, string][] = [
@@ -87,10 +90,13 @@ export function FramedAvatar({
   avatarSrc,
   avatarArt,
   animated = false,
+  noStudio = false,
 }: {
   index: number;
   size: number;
   frame: string;
+  /** Internal: render the drawn frame (used as the studio frame's fallback). */
+  noStudio?: boolean;
   frameItem?: Pick<CatalogItem, 'assetUrl' | 'render'> & Partial<Pick<CatalogItem, 'style'>>;
   avatarSrc?: string;
   /** Built-in artwork avatar (e.g. the Vương Giả set) instead of an uploaded image. */
@@ -121,6 +127,11 @@ export function FramedAvatar({
   );
   const inner = avatarArt === 'vuong_gia' ? <VuongGiaAvatarArt /> : avatarSrc ? <SafeImage src={avatarSrc} fallback={emblem} /> : emblem;
   if (frame === 'none') return <div className="shrink-0" style={{ width: size, height: size }}>{inner}</div>;
+  // Asset Studio frame art for this catalog frame (assets/keyo/bindings.ts); the drawn frame is the fallback.
+  const studio = !noStudio && !frameItem?.assetUrl ? itemArt(frame, frameItem?.style?.art) : null;
+  if (studio) {
+    return <StudioFramedAvatar id={studio} size={size} inner={inner} fallback={<FramedAvatar index={index} size={size} frame={frame} frameItem={frameItem} avatarSrc={avatarSrc} avatarArt={avatarArt} animated={animated} noStudio />} />;
+  }
   // Frame Library artwork (podium, Hall of Fame, seasonal, tournament, role): drawn by id, so it
   // renders even before the catalog has loaded.
   const libraryArt = !frameItem?.assetUrl ? (frameItem?.style?.art ?? frame) : null;
@@ -161,6 +172,34 @@ export function FramedAvatar({
       <FrameRing frame={frame} animated={animated} />
       <div className="absolute inset-[2px] rounded-full bg-ink-900" />
       <div className="absolute inset-[3px] overflow-hidden rounded-full">{inner}</div>
+    </div>
+  );
+}
+
+/**
+ * Avatar inside a studio frame: the frame's transparent centre (measured per file, `hole`) is sized
+ * to the avatar circle, so the ring sits around the photo and never covers the face. Static: the
+ * frame is never rotated.
+ */
+function StudioFramedAvatar({ id, size, inner, fallback }: { id: KeyoAssetId; size: number; inner: ReactNode; fallback: ReactNode }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <>{fallback}</>;
+  const hole = ((KEYO_ASSETS[id] as KeyoAssetEntry).hole ?? 340) / 1000;
+  const box = Math.round(size / (2 * hole * 0.97));
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }} data-frame-art={id}>
+      <div className="absolute inset-0 overflow-hidden rounded-full">{inner}</div>
+      <img
+        src={keyoUrl(id, box)}
+        alt=""
+        aria-hidden
+        draggable={false}
+        decoding="async"
+        data-keyo-asset={id}
+        onError={() => setFailed(true)}
+        className="pointer-events-none absolute max-w-none select-none"
+        style={{ width: box, height: box, left: (size - box) / 2, top: (size - box) / 2 }}
+      />
     </div>
   );
 }

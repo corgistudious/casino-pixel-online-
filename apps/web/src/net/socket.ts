@@ -1,5 +1,6 @@
 import type { ClientMessage, ErrorCode, ResponseMap, ServerEvent, ServerMessage } from '@casino/shared';
 import { wsUrl } from '../config';
+import { IS_DEMO } from '../demo';
 import { ApiError } from './api';
 
 type Payload<K extends ClientMessage['type']> = Omit<Extract<ClientMessage, { type: K }>, 'type' | 'id'>;
@@ -57,6 +58,11 @@ export class GameSocket {
   }
 
   async request<K extends keyof ResponseMap & ClientMessage['type']>(type: K, payload: Payload<K>): Promise<ResponseMap[K]> {
+    if (IS_DEMO) {
+      // UI-preview build only: a local simulator answers (never loaded in live builds).
+      const { demoRequest } = await import('../demoSocket');
+      return demoRequest(type, payload as Record<string, unknown>, (ev) => this.dispatch(ev)) as Promise<ResponseMap[K]>;
+    }
     if (!this.ready) throw new ApiError('network');
     await Promise.race([
       this.ready,
@@ -106,8 +112,7 @@ export class GameSocket {
       const msg = JSON.parse(String(e.data)) as ServerMessage;
       if (msg.type === 'event') {
         const { type: _t, ...ev } = msg;
-        this.onEvent(ev as ServerEvent);
-        for (const fn of this.listeners) fn(ev as ServerEvent);
+        this.dispatch(ev as ServerEvent);
         return;
       }
       const p = this.pending.get(msg.id);
@@ -127,6 +132,11 @@ export class GameSocket {
       const delay = Math.min(15_000, 500 * 2 ** this.retry++);
       this.reconnectTimer = setTimeout(() => this.connect(), delay);
     };
+  }
+
+  private dispatch(ev: ServerEvent) {
+    this.onEvent(ev);
+    for (const fn of this.listeners) fn(ev);
   }
 
   private failAll(code: 'network') {
