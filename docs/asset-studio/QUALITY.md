@@ -115,14 +115,14 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | avatar.kol | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 625.9 | 117 KB |
 | avatar.collector | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 840.2 | 128 KB |
 | avatar.fantasy-dealer | NEEDS_REVIEW | OK |  |  | 0.696 | 0.001 | 739.6 | 116 KB |
-| bubble.default | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 6%) — opaque backdrop or fake checkerboard |  | 0.429 | 0.061 | 391.6 | 45 KB |
+| bubble.default | NEEDS_REVIEW | OK |  |  | 0.347 | 0 | 351 | 40 KB |
 | bubble.classic | NEEDS_REVIEW | OK |  |  | 0.46 | 0 | 373.8 | 40 KB |
 | bubble.gold | USER_APPROVED | OK |  |  | 0.441 | 0.001 | 478.1 | 39 KB |
 | bubble.diamond | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 421.4 | 51 KB |
 | bubble.vip | NEEDS_REVIEW | OK |  |  | 0.436 | 0.053 | 478.7 | 49 KB |
-| bubble.royal | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard |  | 0.458 | 0.074 | 356 | 52 KB |
+| bubble.royal | NEEDS_REVIEW | OK |  |  | 0.372 | 0 | 330.7 | 44 KB |
 | bubble.limited | NEEDS_REVIEW | OK |  |  | 0.438 | 0 | 281.8 | 47 KB |
-| bubble.tournament | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard |  | 0.457 | 0.074 | 584.2 | 52 KB |
+| bubble.tournament | NEEDS_REVIEW | OK |  |  | 0.371 | 0 | 506.6 | 44 KB |
 | bubble.champion | NEEDS_REVIEW | OK |  |  | 0.477 | 0.055 | 579 | 52 KB |
 | bubble.kol | NEEDS_REVIEW | OK |  |  | 0.465 | 0.027 | 396.6 | 56 KB |
 | bubble.creator | NEEDS_REVIEW | OK |  |  | 0.471 | 0.038 | 426.2 | 55 KB |
@@ -133,15 +133,15 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | title.champion | NEEDS_REVIEW | OK |  |  | 0.3 | 0.028 | 883.2 | 91 KB |
 | title.tournament-winner | NEEDS_REVIEW | OK |  |  | 0.327 | 0.059 | 1120.2 | 111 KB |
 | title.high-roller | NEEDS_REVIEW | OK |  |  | 0.314 | 0.02 | 943.1 | 88 KB |
-| title.collector | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 8%) — opaque backdrop or fake checkerboard; object touches the canvas edge (possibly cut off) |  | 0.315 | 0.076 | 801.4 | 83 KB |
+| title.collector | NEEDS_REVIEW | OK |  |  | 0.256 | 0 | 703.6 | 73 KB |
 | title.lucky-player | NEEDS_REVIEW | OK |  |  | 0.292 | 0.021 | 825.3 | 75 KB |
 | title.jackpot-winner | NEEDS_REVIEW | OK |  |  | 0.321 | 0.039 | 775.8 | 95 KB |
 | title.vip-elite | NEEDS_REVIEW | OK |  |  | 0.31 | 0.06 | 902.3 | 84 KB |
 | title.founder | NEEDS_REVIEW | OK |  |  | 0.268 | 0.027 | 761.1 | 70 KB |
-| title.kol | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.314 | 0.028 | 765.9 | 87 KB |
+| title.kol | NEEDS_REVIEW | OK |  |  | 0.255 | 0 | 652.8 | 74 KB |
 | title.creator | NEEDS_REVIEW | OK |  |  | 0.306 | 0.011 | 804 | 80 KB |
 | title.limited | NEEDS_REVIEW | OK |  |  | 0.255 | 0.008 | 632 | 65 KB |
-| title.seasonal | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard; object touches the canvas edge (possibly cut off) |  | 0.327 | 0.074 | 797.3 | 94 KB |
+| title.seasonal | NEEDS_REVIEW | OK |  |  | 0.265 | 0 | 697 | 81 KB |
 | title.event-winner | NEEDS_REVIEW | OK |  |  | 0.268 | 0.001 | 753 | 72 KB |
 | title.grand-champion | NEEDS_REVIEW | OK |  |  | 0.319 | 0.018 | 889.7 | 98 KB |
 | profile.nameplate | NEEDS_REVIEW | OK |  |  | 0.173 | 0 | 361.3 | 64 KB |

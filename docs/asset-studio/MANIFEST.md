@@ -8,8 +8,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 246 |
-| NEEDS_REVISION | 6 |
+| NEEDS_REVIEW | 252 |
 
 ## Theo nhóm
 
@@ -189,14 +188,14 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| bubble.default | Chat bubble: default | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| bubble.default | Chat bubble: default | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.classic | Chat bubble: classic | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.gold | Chat bubble: gold | Chat | 1536x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | bubble.diamond | Chat bubble: diamond | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.vip | Chat bubble: vip | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| bubble.royal | Chat bubble: royal | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| bubble.royal | Chat bubble: royal | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.limited | Chat bubble: limited | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| bubble.tournament | Chat bubble: tournament | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| bubble.tournament | Chat bubble: tournament | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.champion | Chat bubble: champion | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.kol | Chat bubble: kol | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.creator | Chat bubble: creator | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
@@ -212,15 +211,15 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | title.champion | Title plate: champion | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.tournament-winner | Title plate: tournament-winner | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.high-roller | Title plate: high-roller | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| title.collector | Title plate: collector | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| title.collector | Title plate: collector | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.lucky-player | Title plate: lucky-player | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.jackpot-winner | Title plate: jackpot-winner | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.vip-elite | Title plate: vip-elite | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.founder | Title plate: founder | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| title.kol | Title plate: kol | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| title.kol | Title plate: kol | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.creator | Title plate: creator | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.limited | Title plate: limited | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| title.seasonal | Title plate: seasonal | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| title.seasonal | Title plate: seasonal | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.event-winner | Title plate: event-winner | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | title.grand-champion | Title plate: grand-champion | Profile | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 

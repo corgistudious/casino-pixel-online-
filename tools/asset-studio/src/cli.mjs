@@ -100,13 +100,17 @@ async function main() {
       console.log(`${id} → ${a.status}`);
       break;
     }
+    case 'pad':
     case 'circle-mask': {
-      // Post-process (no paid call): round badge art → real transparent corners. Usage: circle-mask <category|id>
-      const [, target] = args;
-      const { circleMask } = await import('./compose/circle.mjs');
+      // Post-process (no paid call). circle-mask: round badge art → real transparent corners.
+      // pad: transparent 5% margin around art drawn too close to the edges. Usage: <cmd> <category|id>[,<id>…]
+      const targets = String(args[1] ?? '').split(',');
+      const target = targets[0];
+      const circleMask = cmd === 'pad' ? (await import('./compose/pad.mjs')).padMargin : (await import('./compose/circle.mjs')).circleMask;
+      const method = cmd === 'pad' ? 'postprocess-margin' : 'postprocess-circle-mask';
       const { optimize } = await import('./validate.mjs');
       const m = loadManifest();
-      const list = m.assets.filter((x) => (x.id === target || x.category === target) && x.sourceFile?.startsWith('assets/studio/') && !['USER_APPROVED', 'INTEGRATED'].includes(x.status));
+      const list = m.assets.filter((x) => (targets.includes(x.id) || x.category === target) && x.sourceFile?.startsWith('assets/studio/') && !['USER_APPROVED', 'INTEGRATED'].includes(x.status));
       for (const a of list) {
         const base = a.sourceFile;
         const version = (a.version ?? 0) + 1;
@@ -116,12 +120,12 @@ async function main() {
         await circleMask(path.join(REPO, base), src);
         const webp = path.join(dir, 'optimized.webp');
         const opt = await optimize(src, webp);
-        Object.assign(a, { version, sourceFile: path.relative(REPO, src), optimizedFile: path.relative(REPO, webp), transparency: true, method: 'postprocess-circle-mask' });
+        Object.assign(a, { version, sourceFile: path.relative(REPO, src), optimizedFile: path.relative(REPO, webp), transparency: true, method });
         const others = m.assets.filter((x) => x.id !== a.id && x.validation?.metrics?.dhash).map((x) => ({ id: x.id, hash: x.validation.metrics.dhash, color: x.validation.metrics.avgColor }));
         a.validation = { ...(await validateImage(src, a, others)), optimized: opt };
         a.status = a.validation.ok ? 'NEEDS_REVIEW' : 'NEEDS_REVISION';
-        a.provenance = `${a.provenance} Post-processed: circle mask (outside of the round badge made truly transparent) from ${base}; artwork unchanged.`;
-        a.versions = [...(a.versions ?? []), { version, sourceFile: a.sourceFile, optimizedFile: a.optimizedFile, method: 'postprocess-circle-mask', from: base, createdAt: new Date().toISOString(), validationOk: a.validation.ok }];
+        a.provenance = `${a.provenance} Post-processed (${method}) from ${base}: ${cmd === 'pad' ? 'artwork scaled to 90% inside a transparent 5% margin' : 'outside of the round badge made truly transparent'}; artwork otherwise unchanged.`;
+        a.versions = [...(a.versions ?? []), { version, sourceFile: a.sourceFile, optimizedFile: a.optimizedFile, method, from: base, createdAt: new Date().toISOString(), validationOk: a.validation.ok }];
         console.log(`${a.id} v${version} → ${a.status}${a.validation.errors.length ? ` (${a.validation.errors.join('; ')})` : ''}`);
       }
       saveManifest(m);
