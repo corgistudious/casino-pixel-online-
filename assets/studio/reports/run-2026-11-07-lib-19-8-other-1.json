@@ -5,73 +5,144 @@
   "quality": "high",
   "pricingVerified": true,
   "budgetLimitUsd": 1,
-  "remainingBeforeUsd": 0.0808,
-  "runCapUsd": 0.0808,
-  "planned": [],
-  "generated": [],
-  "skippedBudget": [
+  "remainingBeforeUsd": 6.4004,
+  "runCapUsd": 1,
+  "planned": [
     {
       "id": "reward.daily-gift",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "reward.login-chest",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "reward.milestone",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "reward.mystery-gift",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "reward.premium-gift",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "reward.streak",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "reward.vip-daily",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "reward.weekly-gift",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "spin.button",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "spin.pointer",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     }
   ],
+  "generated": [
+    {
+      "id": "reward.daily-gift",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "reward.login-chest",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "reward.milestone",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "reward.mystery-gift",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "reward.premium-gift",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "reward.streak",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "reward.vip-daily",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "reward.weekly-gift",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "spin.button",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "spin.pointer",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
   "errors": [],
-  "startedAt": "2026-11-07T01:55:32.422Z",
-  "plannedEstimateUsd": 0,
-  "finishedAt": "2026-11-07T01:55:32.422Z",
-  "budgetExhausted": true,
+  "startedAt": "2026-11-07T03:34:24.222Z",
+  "plannedEstimateUsd": 1,
+  "finishedAt": "2026-11-07T03:39:56.843Z",
+  "budgetExhausted": false,
   "ledger": {
-    "approvedTotalUsd": 10,
-    "spentUsd": 9.919155,
-    "spentEstimatedUsd": 23.15,
-    "spentActualUsd": 9.919155,
-    "remainingUsd": 0.0808,
-    "images": 185
+    "approvedTotalUsd": 20,
+    "spentUsd": 14.14881,
+    "spentEstimatedUsd": 31.55,
+    "spentActualUsd": 14.14881,
+    "remainingUsd": 5.8512,
+    "images": 269
   }
 }
