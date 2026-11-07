@@ -45,7 +45,7 @@ function proposal(id) {
   if (g === 'collectible') return ['B', 'Vật phẩm sưu tầm (kind "collectible"): Cửa hàng, Kho, Trưng bày hồ sơ, Giao dịch; hoặc thêm vào Shop quà (gift catalog) qua Admin › Quà', 'Gắn ngay được sau khi Owner tạo vật phẩm / quà'];
   if (g === 'fx') return ['C', 'Hiệu ứng chiến thắng (victory_effect) — hiện hiệu ứng chỉ vẽ bằng code theo danh sách cố định, chưa nhận ảnh tải lên', 'Cần sửa code VictoryEffect để nhận ảnh, rồi tạo vật phẩm'];
   if (id === 'game.slots.cabinet-frame') return ['A', 'Khung máy Slots (bàn Slots đã có)', 'Cần chỉnh bố cục cuộn/khung trong scene Slots (không đổi gameplay)'];
-  if (id === 'game.sicbo.dice-set') return ['A', 'Ảnh minh hoạ Sic Bo: thẻ game ở sảnh, màn hình luật chơi, ảnh tải trang', 'Gắn được bằng thay đổi UI nhỏ'];
+  if (id === 'game.sicbo.dice-set') return ['A', 'Mặt xúc xắc Sic Bo / Tài Xỉu (texture die-1…6, khớp đúng kết quả server) sau khi cắt bảng thành 6 mặt', 'Gắn được: cắt ảnh (không tốn phí) + khai báo texture; không đổi gameplay'];
   if (g === 'game') return ['E', 'Biểu tượng Slots mới (scatter / gold bar) — thêm vào cuộn = đổi tỉ lệ & bảng trả thưởng', 'Cần thay đổi gameplay (Owner quyết định)'];
   if (g === 'event') return ['D', 'Bộ sự kiện Lễ Tạ Ơn (banner, icon, rương, huy hiệu, trang trí)', 'Cần thêm mùa sự kiện Lễ Tạ Ơn trước'];
   if (g === 'spin') return ['E', 'Vòng quay may mắn (wheel, kim, vé, nút)', 'Cần tạo tính năng mới (tỉ lệ thưởng, giới hạn lượt, ledger)'];

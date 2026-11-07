@@ -941,7 +941,7 @@
  },
  "game.sicbo.dice-set": {
   "status": "READY_FOR_FUTURE_USE",
-  "why": "Mặt xúc xắc trong game phải khớp kết quả từng viên (die-1…6); ảnh bộ 3 viên cố định không dùng được cho kết quả",
+  "why": "Bảng 6 mặt xúc xắc (1–6) trong một ảnh; game dùng 6 texture riêng die-1…6 nên cần cắt ảnh thành 6 mặt trước khi thay (chưa làm)",
   "wave": "library"
  },
  "game.sicbo.icon-big": {
