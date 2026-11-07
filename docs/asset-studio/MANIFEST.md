@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 124 |
+| NEEDS_REVIEW | 129 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 122 |
+| PLANNED | 117 |
 
 ## Theo nhóm
 
@@ -263,17 +263,17 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | bank.vault-premium | Bank: vault-premium | Bank | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
-| bank.vault-open | Bank: vault-open | Bank | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| bank.money-bag | Bank: money-bag | Bank | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| bank.money-bag-vip | Bank: money-bag-vip | Bank | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| bank.vault-open | Bank: vault-open | Bank | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| bank.money-bag | Bank: money-bag | Bank | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| bank.money-bag-vip | Bank: money-bag-vip | Bank | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## chest
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| chest.common | Chest: common | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| chest.common | Chest: common | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | chest.rare | Chest: rare | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| chest.epic | Chest: epic | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| chest.epic | Chest: epic | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | chest.legendary | Chest: legendary | Rewards | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | chest.limited | Chest: limited | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | chest.event | Chest: event | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |

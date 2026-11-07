@@ -125,6 +125,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | profile.accent-limited | NEEDS_REVIEW | OK |  |  | 0.243 | 0 | 567.1 | 110 KB |
 | profile.accent-kol | NEEDS_REVIEW | OK |  |  | 0.272 | 0 | 586.2 | 111 KB |
 | bank.vault-premium | USER_APPROVED | OK |  |  | 0.609 | 0 | 1358.7 | 181 KB |
+| bank.vault-open | NEEDS_REVIEW | OK |  |  | 0.569 | 0 | 1398.4 | 181 KB |
+| bank.money-bag | NEEDS_REVIEW | OK |  |  | 0.543 | 0 | 806.2 | 193 KB |
+| bank.money-bag-vip | NEEDS_REVIEW | OK |  |  | 0.53 | 0 | 1135.2 | 192 KB |
+| chest.common | NEEDS_REVIEW | OK |  |  | 0.527 | 0 | 740.9 | 143 KB |
+| chest.epic | NEEDS_REVIEW | OK |  |  | 0.525 | 0 | 1085.5 | 157 KB |
 | chest.legendary | USER_APPROVED | OK |  |  | 0.571 | 0 | 1395.4 | 193 KB |
 | collectible.watch.classic | NEEDS_REVIEW | OK |  |  | 0.483 | 0 | 1103.8 | 143 KB |
 | collectible.watch.luxury | USER_APPROVED | OK |  |  | 0.496 | 0 | 1402.1 | 172 KB |

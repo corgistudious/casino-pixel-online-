@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 19.75,
-  "spentActualUsd": 8.098015,
-  "images": 151,
+  "spentEstimatedUsd": 20.25,
+  "spentActualUsd": 8.372915,
+  "images": 156,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -3942,6 +3942,136 @@
           "text_tokens": 0
         },
         "total_tokens": 2218
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:36:05.788Z",
+      "requestId": "2026-11-07-lib-11-5-bank-chests",
+      "assetId": "bank.money-bag",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055,
+      "usage": {
+        "input_tokens": 464,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 464
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2220
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:36:35.478Z",
+      "requestId": "2026-11-07-lib-11-5-bank-chests",
+      "assetId": "bank.money-bag-vip",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05503,
+      "usage": {
+        "input_tokens": 470,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 470
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2226
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:37:06.014Z",
+      "requestId": "2026-11-07-lib-11-5-bank-chests",
+      "assetId": "bank.vault-open",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055035,
+      "usage": {
+        "input_tokens": 471,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 471
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2227
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:37:36.325Z",
+      "requestId": "2026-11-07-lib-11-5-bank-chests",
+      "assetId": "chest.common",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05491,
+      "usage": {
+        "input_tokens": 446,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 446
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2202
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:38:06.760Z",
+      "requestId": "2026-11-07-lib-11-5-bank-chests",
+      "assetId": "chest.epic",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054925,
+      "usage": {
+        "input_tokens": 449,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 449
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2205
       },
       "seconds": 30
     }
