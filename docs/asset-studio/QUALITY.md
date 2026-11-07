@@ -170,6 +170,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | event.christmas.chest | NEEDS_REVIEW | OK |  |  | 0.568 | 0 | 1496.9 | 202 KB |
 | event.christmas.badge | NEEDS_REVIEW | OK |  |  | 0.523 | 0 | 1026.4 | 188 KB |
 | event.christmas.decoration | NEEDS_REVIEW | OK |  |  | 0.347 | 0 | 992.5 | 200 KB |
+| event.new-year.icon | NEEDS_REVIEW | OK |  |  | 0.484 | 0 | 866.5 | 195 KB |
+| event.new-year.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1151.9 | 146 KB |
+| event.new-year.chest | NEEDS_REVIEW | OK |  |  | 0.583 | 0 | 1266.5 | 201 KB |
+| event.new-year.badge | NEEDS_REVIEW | OK |  |  | 0.565 | 0 | 1026.1 | 202 KB |
+| event.new-year.decoration | NEEDS_REVIEW | OK |  |  | 0.333 | 0 | 1061.9 | 218 KB |
 | event.lunar-new-year.icon | NEEDS_REVIEW | OK |  |  | 0.51 | 0 | 1050.7 | 177 KB |
 | event.lunar-new-year.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1263.2 | 145 KB |
 | event.lunar-new-year.chest | NEEDS_REVIEW | OK |  |  | 0.544 | 0 | 1171.7 | 178 KB |
