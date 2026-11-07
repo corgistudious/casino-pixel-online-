@@ -208,6 +208,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | tournament.ticket | NEEDS_REVIEW | OK |  |  | 0.402 | 0 | 995.2 | 140 KB |
 | tournament.banner | NEEDS_REVIEW | OK |  |  | 0.448 | 0 | 1007.1 | 145 KB |
 | tournament.badge | NEEDS_REVIEW | OK |  |  | 0.505 | 0 | 1223.4 | 180 KB |
+| reward.daily-gift | NEEDS_REVIEW | OK |  |  | 0.464 | 0 | 492.4 | 94 KB |
+| reward.login-chest | NEEDS_REVIEW | OK |  |  | 0.545 | 0 | 685.1 | 131 KB |
+| reward.milestone | NEEDS_REVIEW | OK |  |  | 0.428 | 0 | 804.7 | 145 KB |
+| reward.mystery-gift | NEEDS_REVIEW | OK |  |  | 0.53 | 0 | 665.1 | 131 KB |
+| reward.premium-gift | NEEDS_REVIEW | OK |  |  | 0.433 | 0 | 900.5 | 132 KB |
 | event.halloween.icon | NEEDS_REVIEW | OK |  |  | 0.504 | 0 | 683.6 | 141 KB |
 | event.halloween.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 776.6 | 84 KB |
 | event.halloween.chest | NEEDS_REVIEW | OK |  |  | 0.521 | 0 | 1302.1 | 173 KB |

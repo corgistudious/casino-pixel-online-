@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 30.55,
-  "spentActualUsd": 13.599605,
-  "images": 259,
+  "spentEstimatedUsd": 31.05,
+  "spentActualUsd": 13.874225,
+  "images": 264,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -6761,6 +6761,136 @@
         "total_tokens": 1837
       },
       "seconds": 24
+    },
+    {
+      "at": "2026-11-07T03:34:51.784Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "reward.daily-gift",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054925,
+      "usage": {
+        "input_tokens": 449,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 449
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2205
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T03:35:25.217Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "reward.login-chest",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05491,
+      "usage": {
+        "input_tokens": 446,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 446
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2202
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-07T03:35:53.972Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "reward.milestone",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054905,
+      "usage": {
+        "input_tokens": 445,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 445
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2201
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T03:36:25.620Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "reward.mystery-gift",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05496,
+      "usage": {
+        "input_tokens": 456,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 456
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2212
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T03:36:54.293Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "reward.premium-gift",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05492,
+      "usage": {
+        "input_tokens": 448,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 448
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2204
+      },
+      "seconds": 28
     }
   ],
   "approvals": [
