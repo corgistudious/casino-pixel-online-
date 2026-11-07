@@ -4,7 +4,7 @@
 - Đã tính vào ngân sách: **$4.4921** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
 - Chi phí thật theo token usage × bảng giá đã xác minh: $4.4921; tổng ước tính trần: $13.15
 - Còn lại theo bộ đếm nội bộ: **$5.51**
-- Ảnh đã tạo: 85; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4
+- Ảnh đã tạo: 85; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
