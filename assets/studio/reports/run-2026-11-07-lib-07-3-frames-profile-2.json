@@ -1,0 +1,206 @@
+{
+  "requestId": "2026-11-07-lib-07-3-frames-profile-2",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.4,
+  "remainingBeforeUsd": 4.7391,
+  "runCapUsd": 1.4,
+  "planned": [
+    {
+      "id": "frame.seasonal.new-year",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.seasonal.summer",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.seasonal.thanksgiving",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.seasonal.valentine",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.special.anniversary-exclusive",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.special.collector",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.special.creator",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.special.early-supporter",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.special.event-exclusive",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.special.founder",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.special.limited-edition",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.special.reviewer",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.tournament.champion",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.tournament.grand-champion",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "frame.seasonal.new-year",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.seasonal.summer",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.seasonal.thanksgiving",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.seasonal.valentine",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.anniversary-exclusive",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "near-duplicate of frame.vip.vip-10"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.collector",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "near-duplicate of frame.seasonal.summer"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.creator",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.early-supporter",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "near-duplicate of frame.vip.vip-05"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.event-exclusive",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.founder",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.limited-edition",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "near-duplicate of frame.special.anniversary-exclusive"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "frame.special.reviewer",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.tournament.champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.tournament.grand-champion",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "object touches the canvas edge (possibly cut off)"
+      ],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T01:07:43.334Z",
+  "plannedEstimateUsd": 1.4,
+  "finishedAt": "2026-11-07T01:15:08.034Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 6.032125,
+    "spentEstimatedUsd": 15.95,
+    "spentActualUsd": 6.032125,
+    "remainingUsd": 3.9679,
+    "images": 113
+  }
+}
