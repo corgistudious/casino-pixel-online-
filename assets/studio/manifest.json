@@ -1404,7 +1404,7 @@
       "name": "Hit icon",
       "description": "Action icon.",
       "prompt": "Asset: Hit icon for KEYO GAME (Blackjack (Multiplayer & Solo)). Purpose: Action icon.\nObject: A bold rounded game icon showing a single card sliding in with a plus-shaped sparkle, enamel and gold, readable at 44 px.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -1413,17 +1413,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05496,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/game.blackjack.action-hit/v1/source.png",
+          "optimizedFile": "assets/studio/generated/game.blackjack.action-hit/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:31:29.984Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/game.blackjack.action-hit/v1/source.png",
+      "optimizedFile": "assets/studio/generated/game.blackjack.action-hit/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.426,
+          "borderAlpha": 0,
+          "lumStd": 81.2,
+          "bbox": {
+            "x": 0.10546875,
+            "y": 0.07421875,
+            "w": 0.81640625,
+            "h": 0.81640625
+          },
+          "sharpness": 719.7,
+          "dhash": "7185071b4b467291"
+        },
+        "checkedAt": "2026-11-07T00:31:29.984Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 123136
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 456,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 456
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2212
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1466,7 +1513,7 @@
       "name": "Double icon",
       "description": "Action icon.",
       "prompt": "Asset: Double icon for KEYO GAME (Blackjack (Multiplayer & Solo)). Purpose: Action icon.\nObject: A bold rounded game icon showing two stacked chips with a ×2-like twin arrow motif (no digits), enamel and gold, readable at 44 px.\nMaterials: enamel, gold.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -1475,17 +1522,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05498,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/game.blackjack.action-double/v1/source.png",
+          "optimizedFile": "assets/studio/generated/game.blackjack.action-double/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:31:00.059Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/game.blackjack.action-double/v1/source.png",
+      "optimizedFile": "assets/studio/generated/game.blackjack.action-double/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.483,
+          "borderAlpha": 0,
+          "lumStd": 79.1,
+          "bbox": {
+            "x": 0.1015625,
+            "y": 0.10546875,
+            "w": 0.8125,
+            "h": 0.765625
+          },
+          "sharpness": 931.4,
+          "dhash": "d853914c6d36ac59"
+        },
+        "checkedAt": "2026-11-07T00:31:00.059Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 132658
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 460,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 460
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2216
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2351,7 +2445,7 @@
       "name": "Card back: vip",
       "description": "Playing card back, shared by Poker, Liêng, Xì Tố and Blackjack.",
       "prompt": "Asset: Card back: vip for KEYO GAME (Card games). Purpose: Playing card back, shared by Poker, Liêng, Xì Tố and Blackjack.\nObject: A single playing card back, perfectly upright and flat, rounded corners, black lacquer back with gold art-deco rays and a central VIP-style crest (no letters); strictly symmetrical (mirror on both axes), thin even border, no text.\nMaterials: premium card stock, foil.\nCamera: Perfectly frontal, orthographic, no perspective.\nComposition: One card centred, card aspect 5:7, 6% margin.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1536; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1536",
       "transparency": true,
@@ -2360,17 +2454,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.04359,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/cardback.vip/v1/source.png",
+          "optimizedFile": "assets/studio/generated/cardback.vip/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:30:31.396Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/cardback.vip/v1/source.png",
+      "optimizedFile": "assets/studio/generated/cardback.vip/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1536,
+          "hasAlpha": true,
+          "coverage": 0.755,
+          "borderAlpha": 0,
+          "lumStd": 64.4,
+          "bbox": {
+            "x": 0.0625,
+            "y": 0.0546875,
+            "w": 0.875,
+            "h": 0.8671875
+          },
+          "sharpness": 3240.5,
+          "dhash": "68e88ec88e8ee8c8"
+        },
+        "checkedAt": "2026-11-07T00:30:31.396Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 165810
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 486,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 486
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1858
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2382,7 +2523,7 @@
       "name": "Card back: tournament",
       "description": "Playing card back, shared by Poker, Liêng, Xì Tố and Blackjack.",
       "prompt": "Asset: Card back: tournament for KEYO GAME (Card games). Purpose: Playing card back, shared by Poker, Liêng, Xì Tố and Blackjack.\nObject: A single playing card back, perfectly upright and flat, rounded corners, crimson back with crossed laurels and a trophy medallion; strictly symmetrical (mirror on both axes), thin even border, no text.\nMaterials: premium card stock, foil.\nCamera: Perfectly frontal, orthographic, no perspective.\nComposition: One card centred, card aspect 5:7, 6% margin.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1536; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1536",
       "transparency": true,
@@ -2391,17 +2532,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.04356,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/cardback.tournament/v1/source.png",
+          "optimizedFile": "assets/studio/generated/cardback.tournament/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:30:05.703Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/cardback.tournament/v1/source.png",
+      "optimizedFile": "assets/studio/generated/cardback.tournament/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1536,
+          "hasAlpha": true,
+          "coverage": 0.738,
+          "borderAlpha": 0,
+          "lumStd": 61.2,
+          "bbox": {
+            "x": 0.0625,
+            "y": 0.05859375,
+            "w": 0.875,
+            "h": 0.84765625
+          },
+          "sharpness": 2391.9,
+          "dhash": "7be8ce8a96cce8b2"
+        },
+        "checkedAt": "2026-11-07T00:30:05.703Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 147074
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 480,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 480
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1852
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2569,7 +2757,7 @@
       "name": "Card back: lunar-new-year",
       "description": "Playing card back, shared by Poker, Liêng, Xì Tố and Blackjack.",
       "prompt": "Asset: Card back: lunar-new-year for KEYO GAME (Card games). Purpose: Playing card back, shared by Poker, Liêng, Xì Tố and Blackjack.\nObject: A single playing card back, perfectly upright and flat, rounded corners, red lacquer back with gold clouds, lanterns and a central stylized dragon coin; strictly symmetrical (mirror on both axes), thin even border, no text.\nMaterials: premium card stock, foil.\nCamera: Perfectly frontal, orthographic, no perspective.\nComposition: One card centred, card aspect 5:7, 6% margin.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1536; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1536",
       "transparency": true,
@@ -2578,17 +2766,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.04359,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/cardback.lunar-new-year/v1/source.png",
+          "optimizedFile": "assets/studio/generated/cardback.lunar-new-year/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:29:39.824Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/cardback.lunar-new-year/v1/source.png",
+      "optimizedFile": "assets/studio/generated/cardback.lunar-new-year/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1536,
+          "hasAlpha": true,
+          "coverage": 0.736,
+          "borderAlpha": 0,
+          "lumStd": 54.1,
+          "bbox": {
+            "x": 0.07421875,
+            "y": 0.0625,
+            "w": 0.8515625,
+            "h": 0.8671875
+          },
+          "sharpness": 3223,
+          "dhash": "71d6969e9e9696f0"
+        },
+        "checkedAt": "2026-11-07T00:29:39.824Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 191530
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 486,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 486
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1858
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -9955,5 +10190,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T00:29:04.183Z"
+  "updatedAt": "2026-11-07T00:31:29.984Z"
 }

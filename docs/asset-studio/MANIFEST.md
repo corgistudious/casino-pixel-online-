@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| PLANNED | 247 |
-| NEEDS_REVIEW | 5 |
+| PLANNED | 242 |
+| NEEDS_REVIEW | 10 |
 
 ## Theo nhóm
 
@@ -81,9 +81,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.xito.dealer-marker | Xì Tố dealer marker | Xì Tố | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.blackjack.card-shoe | Card shoe | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | game.blackjack.result-emblem | Blackjack result emblem (no text) | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.blackjack.action-hit | Hit icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.blackjack.action-hit | Hit icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-stand | Stand icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.blackjack.action-double | Double icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.blackjack.action-double | Double icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-split | Split icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.blackjack.action-insurance | Insurance icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.blackjack.table-felt | Blackjack arc table (opaque) | Blackjack (Multiplayer & Solo) | 1536x1024 | no | P2 |  | PLANNED | 0.10 |
@@ -108,11 +108,11 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | cardback.royal-gold | Card back: royal-gold | Card games | 1024x1536 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | cardback.royal-purple | Card back: royal-purple | Card games | 1024x1536 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | cardback.diamond | Card back: diamond | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| cardback.vip | Card back: vip | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
-| cardback.tournament | Card back: tournament | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
+| cardback.vip | Card back: vip | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| cardback.tournament | Card back: tournament | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | cardback.halloween | Card back: halloween | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | cardback.christmas | Card back: christmas | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| cardback.lunar-new-year | Card back: lunar-new-year | Card games | 1024x1536 | yes | P2 |  | PLANNED | 0.10 |
+| cardback.lunar-new-year | Card back: lunar-new-year | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | cardback.limited | Card back: limited | Card games | 1024x1536 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## vip
