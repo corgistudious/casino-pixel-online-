@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 13.15,
-  "spentActualUsd": 4.492125,
-  "images": 85,
+  "spentEstimatedUsd": 13.65,
+  "spentActualUsd": 4.76634,
+  "images": 90,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -2221,6 +2221,136 @@
           "text_tokens": 0
         },
         "total_tokens": 2228
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:00:42.928Z",
+      "requestId": "2026-11-07-lib-06-3-frames-profile-1",
+      "assetId": "avatar.collector",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05483,
+      "usage": {
+        "input_tokens": 430,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 430
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2186
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:01:11.155Z",
+      "requestId": "2026-11-07-lib-06-3-frames-profile-1",
+      "assetId": "avatar.default",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054845,
+      "usage": {
+        "input_tokens": 433,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 433
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2189
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T01:01:42.806Z",
+      "requestId": "2026-11-07-lib-06-3-frames-profile-1",
+      "assetId": "avatar.fantasy-dealer",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054895,
+      "usage": {
+        "input_tokens": 443,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 443
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2199
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T01:02:12.691Z",
+      "requestId": "2026-11-07-lib-06-3-frames-profile-1",
+      "assetId": "avatar.kol",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054825,
+      "usage": {
+        "input_tokens": 429,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 429
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2185
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T01:02:43.432Z",
+      "requestId": "2026-11-07-lib-06-3-frames-profile-1",
+      "assetId": "avatar.limited",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05482,
+      "usage": {
+        "input_tokens": 428,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 428
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2184
       },
       "seconds": 31
     }

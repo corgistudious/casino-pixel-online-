@@ -7196,7 +7196,7 @@
       "name": "Avatar: default",
       "description": "Profile avatar (fantasy mascot, no real people).",
       "prompt": "Asset: Avatar: default for KEYO GAME (Profile). Purpose: Profile avatar (fantasy mascot, no real people).\nObject: a friendly stylized corgi mascot head in a round badge, bust portrait, appealing and expressive, inside a circular composition.\nMaterials: stylized fur/feather/cloth.\nCamera: Front three-quarter portrait.\nComposition: Character bust centred on a soft plum gradient circle background, fills 80%.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: as described in the composition (opaque image).\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": false,
@@ -7205,17 +7205,58 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054845,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/avatar.default/v1/source.png",
+          "optimizedFile": "assets/studio/generated/avatar.default/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:01:11.340Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/avatar.default/v1/source.png",
+      "optimizedFile": "assets/studio/generated/avatar.default/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false,
+          "coverage": 1,
+          "borderAlpha": 1,
+          "lumStd": 78.7,
+          "sharpness": 810.3,
+          "dhash": "f0b4a7271b92ccf8"
+        },
+        "checkedAt": "2026-11-07T01:01:11.340Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 127078
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 433,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 433
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2189
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7320,7 +7361,7 @@
       "name": "Avatar: limited",
       "description": "Profile avatar (fantasy mascot, no real people).",
       "prompt": "Asset: Avatar: limited for KEYO GAME (Profile). Purpose: Profile avatar (fantasy mascot, no real people).\nObject: a stylized dragon hatchling mascot, bust portrait, appealing and expressive, inside a circular composition.\nMaterials: stylized fur/feather/cloth.\nCamera: Front three-quarter portrait.\nComposition: Character bust centred on a soft plum gradient circle background, fills 80%.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: as described in the composition (opaque image).\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": false,
@@ -7329,17 +7370,58 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05482,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/avatar.limited/v1/source.png",
+          "optimizedFile": "assets/studio/generated/avatar.limited/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:02:43.609Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/avatar.limited/v1/source.png",
+      "optimizedFile": "assets/studio/generated/avatar.limited/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false,
+          "coverage": 1,
+          "borderAlpha": 1,
+          "lumStd": 76.1,
+          "sharpness": 798.5,
+          "dhash": "f09e82570b8ec6f0"
+        },
+        "checkedAt": "2026-11-07T01:02:43.609Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 109882
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 428,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 428
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2184
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7413,7 +7495,7 @@
       "name": "Avatar: kol",
       "description": "Profile avatar (fantasy mascot, no real people).",
       "prompt": "Asset: Avatar: kol for KEYO GAME (Profile). Purpose: Profile avatar (fantasy mascot, no real people).\nObject: a stylized parrot mascot with headphones, bust portrait, appealing and expressive, inside a circular composition.\nMaterials: stylized fur/feather/cloth.\nCamera: Front three-quarter portrait.\nComposition: Character bust centred on a soft plum gradient circle background, fills 80%.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: as described in the composition (opaque image).\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": false,
@@ -7422,17 +7504,58 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054825,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/avatar.kol/v1/source.png",
+          "optimizedFile": "assets/studio/generated/avatar.kol/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:02:12.868Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/avatar.kol/v1/source.png",
+      "optimizedFile": "assets/studio/generated/avatar.kol/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false,
+          "coverage": 1,
+          "borderAlpha": 1,
+          "lumStd": 84.5,
+          "sharpness": 788.7,
+          "dhash": "f08eb24b4ba6e4f0"
+        },
+        "checkedAt": "2026-11-07T01:02:12.868Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 121704
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 429,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 429
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2185
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7444,7 +7567,7 @@
       "name": "Avatar: collector",
       "description": "Profile avatar (fantasy mascot, no real people).",
       "prompt": "Asset: Avatar: collector for KEYO GAME (Profile). Purpose: Profile avatar (fantasy mascot, no real people).\nObject: a stylized owl mascot with a monocle, bust portrait, appealing and expressive, inside a circular composition.\nMaterials: stylized fur/feather/cloth.\nCamera: Front three-quarter portrait.\nComposition: Character bust centred on a soft plum gradient circle background, fills 80%.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: as described in the composition (opaque image).\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": false,
@@ -7453,17 +7576,58 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05483,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/avatar.collector/v1/source.png",
+          "optimizedFile": "assets/studio/generated/avatar.collector/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:00:43.116Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/avatar.collector/v1/source.png",
+      "optimizedFile": "assets/studio/generated/avatar.collector/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false,
+          "coverage": 1,
+          "borderAlpha": 1,
+          "lumStd": 91.8,
+          "sharpness": 999.1,
+          "dhash": "f0cca61bcec6e4f0"
+        },
+        "checkedAt": "2026-11-07T01:00:43.116Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 131562
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 430,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 430
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2186
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7475,7 +7639,7 @@
       "name": "Avatar: fantasy-dealer",
       "description": "Profile avatar (fantasy mascot, no real people).",
       "prompt": "Asset: Avatar: fantasy-dealer for KEYO GAME (Profile). Purpose: Profile avatar (fantasy mascot, no real people).\nObject: a stylized fantasy casino dealer character (non-human, elf-like) with a vest and bow tie, bust portrait, appealing and expressive, inside a circular composition.\nMaterials: stylized fur/feather/cloth.\nCamera: Front three-quarter portrait.\nComposition: Character bust centred on a soft plum gradient circle background, fills 80%.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: as described in the composition (opaque image).\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": false,
@@ -7484,17 +7648,58 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054895,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/avatar.fantasy-dealer/v1/source.png",
+          "optimizedFile": "assets/studio/generated/avatar.fantasy-dealer/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:01:42.982Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/avatar.fantasy-dealer/v1/source.png",
+      "optimizedFile": "assets/studio/generated/avatar.fantasy-dealer/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": false,
+          "coverage": 1,
+          "borderAlpha": 1,
+          "lumStd": 91.1,
+          "sharpness": 884.3,
+          "dhash": "f0c6961a4eb6b4f0"
+        },
+        "checkedAt": "2026-11-07T01:01:42.982Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 118162
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 443,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 443
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2199
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -12713,5 +12918,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T00:59:58.034Z"
+  "updatedAt": "2026-11-07T01:02:43.609Z"
 }

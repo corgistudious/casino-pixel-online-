@@ -81,6 +81,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.vip.vip-15 | USER_APPROVED | OK |  |  | 0.373 | 0.028 | 1550.9 | 245 KB |
 | frame.seasonal.lunar-new-year | USER_APPROVED | OK |  |  | 0.274 | 0 | 817.7 | 164 KB |
 | frame.special.kol | USER_APPROVED | OK |  |  | 0.271 | 0.002 | 974.5 | 153 KB |
+| avatar.default | NEEDS_REVIEW | OK |  |  | 1 | 1 | 810.3 | 124 KB |
+| avatar.limited | NEEDS_REVIEW | OK |  |  | 1 | 1 | 798.5 | 107 KB |
+| avatar.kol | NEEDS_REVIEW | OK |  |  | 1 | 1 | 788.7 | 119 KB |
+| avatar.collector | NEEDS_REVIEW | OK |  |  | 1 | 1 | 999.1 | 128 KB |
+| avatar.fantasy-dealer | NEEDS_REVIEW | OK |  |  | 1 | 1 | 884.3 | 115 KB |
 | bubble.gold | USER_APPROVED | OK |  |  | 0.441 | 0.001 | 478.1 | 39 KB |
 | bank.vault-premium | USER_APPROVED | OK |  |  | 0.609 | 0 | 1358.7 | 181 KB |
 | chest.legendary | USER_APPROVED | OK |  |  | 0.571 | 0 | 1395.4 | 193 KB |

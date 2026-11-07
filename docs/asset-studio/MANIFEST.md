@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 64 |
-| PLANNED | 188 |
+| NEEDS_REVIEW | 69 |
+| PLANNED | 183 |
 
 ## Theo nhóm
 
@@ -174,16 +174,16 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| avatar.default | Avatar: default | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
+| avatar.default | Avatar: default | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | avatar.premium | Avatar: premium | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
 | avatar.royal | Avatar: royal | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
 | avatar.vip | Avatar: vip | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
-| avatar.limited | Avatar: limited | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
+| avatar.limited | Avatar: limited | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | avatar.seasonal | Avatar: seasonal | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
 | avatar.tournament | Avatar: tournament | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
-| avatar.kol | Avatar: kol | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
-| avatar.collector | Avatar: collector | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
-| avatar.fantasy-dealer | Avatar: fantasy-dealer | Profile | 1024x1024 | no | P2 |  | PLANNED | 0.10 |
+| avatar.kol | Avatar: kol | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.collector | Avatar: collector | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
+| avatar.fantasy-dealer | Avatar: fantasy-dealer | Profile | 1024x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## bubble
 
