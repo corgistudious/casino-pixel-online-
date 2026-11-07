@@ -61,8 +61,13 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | cardback.lunar-new-year | NEEDS_REVIEW | OK |  |  | 0.736 | 0 | 3223 | 187 KB |
 | cardback.limited | NEEDS_REVIEW | OK |  |  | 0.745 | 0 | 2518.7 | 183 KB |
 | vip.badge.vip-01 | USER_APPROVED | OK |  |  | 0.386 | 0 | 345.4 | 67 KB |
+| vip.badge.vip-02 | NEEDS_REVIEW | OK |  |  | 0.455 | 0 | 703 | 111 KB |
+| vip.badge.vip-03 | NEEDS_REVIEW | OK |  |  | 0.509 | 0 | 1148.4 | 165 KB |
 | vip.badge.vip-08 | USER_APPROVED | OK |  |  | 0.462 | 0 | 1251.1 | 188 KB |
 | vip.badge.vip-15 | USER_APPROVED | OK |  |  | 0.568 | 0.013 | 1693.1 | 228 KB |
+| frame.vip.vip-05 | NEEDS_REVIEW | OK |  |  | 0.247 | 0.005 | 842.9 | 154 KB |
+| frame.vip.vip-07 | NEEDS_REVIEW | OK |  |  | 0.21 | 0.002 | 1028 | 156 KB |
+| frame.vip.vip-10 | NEEDS_REVIEW | OK |  |  | 0.274 | 0.005 | 1137.2 | 164 KB |
 | frame.vip.vip-15 | USER_APPROVED | OK |  |  | 0.373 | 0.028 | 1550.9 | 245 KB |
 | frame.seasonal.lunar-new-year | USER_APPROVED | OK |  |  | 0.274 | 0 | 817.7 | 164 KB |
 | frame.special.kol | USER_APPROVED | OK |  |  | 0.271 | 0.002 | 974.5 | 153 KB |

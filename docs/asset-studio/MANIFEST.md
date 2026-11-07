@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 49 |
-| PLANNED | 203 |
+| NEEDS_REVIEW | 54 |
+| PLANNED | 198 |
 
 ## Theo nhóm
 
@@ -120,8 +120,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | vip.badge.vip-01 | VIP 1 badge | VIP | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
-| vip.badge.vip-02 | VIP 2 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| vip.badge.vip-03 | VIP 3 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| vip.badge.vip-02 | VIP 2 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| vip.badge.vip-03 | VIP 3 badge | VIP | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | vip.badge.vip-04 | VIP 4 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | vip.badge.vip-05 | VIP 5 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | vip.badge.vip-06 | VIP 6 badge | VIP | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
@@ -139,9 +139,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| frame.vip.vip-05 | VIP 5 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.vip.vip-07 | VIP 7 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| frame.vip.vip-10 | VIP 10 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.vip.vip-05 | VIP 5 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| frame.vip.vip-07 | VIP 7 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| frame.vip.vip-10 | VIP 10 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.vip.vip-15 | VIP 15 frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | frame.seasonal.halloween | halloween frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | frame.seasonal.christmas | christmas frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
