@@ -1576,6 +1576,8 @@ export const vi: Translation = {
       title: 'Vật phẩm & trang trí',
       create: 'Vật phẩm mới',
       upload: 'Tải ảnh lên (PNG, WebP hoặc GIF, ảnh vuông, 64–1024 px, ≤ 1 MB)',
+      keyoLibrary: 'Hoặc chọn từ Thư viện Keyo (asset đã duyệt, chưa gắn vật phẩm nào)',
+      keyoLibraryPick: '— Chọn ảnh —',
       id: 'Mã (a–z, 0–9, _)',
       kind: 'Loại',
       nameVi: 'Tên (tiếng Việt)',

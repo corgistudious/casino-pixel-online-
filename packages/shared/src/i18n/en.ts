@@ -1574,6 +1574,8 @@ export const en = {
       title: 'Items & cosmetics',
       create: 'New item',
       upload: 'Upload image (PNG, WebP or GIF, square, 64–1024 px, ≤ 1 MB)',
+      keyoLibrary: 'Or pick from the Keyo Library (approved art not yet used by any item)',
+      keyoLibraryPick: '— Choose art —',
       id: 'Id (a–z, 0–9, _)',
       kind: 'Kind',
       nameVi: 'Name (Vietnamese)',
