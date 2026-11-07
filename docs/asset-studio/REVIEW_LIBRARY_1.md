@@ -40,11 +40,11 @@
 - Contact sheet nằm trong `assets/studio/previews/`: `game`, `cardback`, `vip`, `frame`, `avatar`, `profile`, `collectible`, `bank`, `chest`, `event`, `tournament`, `achievement`.
 
 ## Cần nạp thêm để hoàn thiện
-| Hạng mục | Số ảnh | Chi phí (chi phí thật trung bình $0.0536/ảnh) |
+| Hạng mục | Số ảnh | Chi phí (chi phí thật đo theo kích thước: vuông $0.0550, ngang/dọc $0.0434) |
 |---|---|---|
-| 88 asset còn thiếu (batch 14–20) | 88 | $4.72 |
-| 6 asset đề xuất làm lại | 6 | $0.32 |
-| Dự phòng 30% cho lần sửa tiếp theo | — | $1.51 |
-| **Tổng** | 94 | **≈ $6.55** (trừ $0.08 còn lại: **≈ $6.47**) |
+| 88 asset còn thiếu (batch 14–20) | 88 | $4.45 |
+| 6 asset đề xuất làm lại | 6 | $0.31 |
+| Dự phòng 30% cho lần sửa tiếp theo | — | $1.43 |
+| **Tổng** | 94 | **≈ $6.19** (trừ $0.08 còn lại: **≈ $6.10**) |
 
 Đề xuất nạp **$7**. Sau khi nạp, anh/chị xác nhận hạn mức mới (ví dụ tổng $17); tôi sẽ nâng `APPROVED_TOTAL_USD` rồi chạy tiếp. Batch 14–20 đang chờ và tự chạy từ chỗ dở; asset đã xong không bị tạo lại.
