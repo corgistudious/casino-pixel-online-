@@ -27,6 +27,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -56,6 +58,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -85,6 +89,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -114,6 +120,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -143,6 +151,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -172,6 +182,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -201,6 +213,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -230,6 +244,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -259,6 +275,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Existing project asset (in repository before Asset Studio)."
     },
@@ -323,8 +341,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Circular, clean lacquer + gold band, reads well at 44 px. Fits the procedural plate size.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 500,
         "input_tokens_details": {
@@ -337,7 +359,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2256
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "game.sicbo.dice-plate",
@@ -365,6 +389,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -394,6 +420,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -423,6 +451,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -452,6 +482,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -481,6 +513,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -510,6 +544,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -539,6 +575,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -603,8 +641,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-revise",
+        "note": "Two concentric rings of coloured pockets (a real wheel has ONE ring of 37); pocket count cannot be confirmed. Also includes the outer bowl with diamonds although that is a separate catalog asset. Revise with a single 37-pocket ring and no bowl.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 495,
         "input_tokens_details": {
@@ -617,7 +659,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2251
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "game.roulette.wheel-rim",
@@ -645,6 +689,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -674,6 +720,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -703,6 +751,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -732,6 +782,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -761,6 +813,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -825,8 +879,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Clean ivory puck, crown emblem, no letters; thickness visible.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 464,
         "input_tokens_details": {
@@ -839,7 +897,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2220
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "game.poker.blind-small",
@@ -867,6 +927,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -896,6 +958,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -925,6 +989,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -954,6 +1020,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -983,6 +1051,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1012,6 +1082,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1041,6 +1113,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1070,6 +1144,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1099,6 +1175,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1128,6 +1206,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1157,6 +1237,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1221,8 +1303,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Premium smoked-acrylic shoe with gold trim; card back peeking out.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 459,
         "input_tokens_details": {
@@ -1235,7 +1321,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2215
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "game.blackjack.result-emblem",
@@ -1263,6 +1351,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1292,6 +1382,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1321,6 +1413,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1350,6 +1444,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1379,6 +1475,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1408,6 +1506,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1437,6 +1537,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1466,6 +1568,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1495,6 +1599,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1524,6 +1630,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1553,6 +1661,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1582,6 +1692,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1611,6 +1723,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1640,6 +1754,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1704,8 +1820,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Strong silhouette, readable at 44 px (future symbol — no gameplay change).",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 446,
         "input_tokens_details": {
@@ -1718,7 +1838,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2202
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "game.slots.symbol-scatter",
@@ -1746,6 +1868,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1775,6 +1899,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1804,6 +1930,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1833,6 +1961,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1862,6 +1992,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -1926,8 +2058,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "user-decision",
+        "note": "Mirror-symmetric left/right; not 180° symmetric (upright crown). Fine for a flip animation; decide whether card backs must read the same upside down.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 486,
         "input_tokens_details": {
@@ -1940,7 +2076,9 @@
           "text_tokens": 0
         },
         "total_tokens": 1858
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "cardback.royal-purple",
@@ -2003,8 +2141,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "user-decision",
+        "note": "Same as royal-gold (upright fleur-de-lis). Otherwise clean, thin even border.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 486,
         "input_tokens_details": {
@@ -2017,7 +2159,9 @@
           "text_tokens": 0
         },
         "total_tokens": 1858
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "cardback.diamond",
@@ -2045,6 +2189,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2074,6 +2220,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2103,6 +2251,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2132,6 +2282,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2161,6 +2313,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2190,6 +2344,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2219,6 +2375,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2283,8 +2441,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-revise",
+        "note": "Looks too ornate for the entry level (laurel wings + star overlap with the planned VIP 2/3 designs); revise to the simple brushed-silver shield described so the 1→15 progression reads clearly.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 462,
         "input_tokens_details": {
@@ -2297,7 +2459,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2218
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "vip.badge.vip-02",
@@ -2325,6 +2489,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2354,6 +2520,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2383,6 +2551,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2412,6 +2582,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2441,6 +2613,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2470,6 +2644,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2534,8 +2710,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Platinum + sapphire + feathered wings, as specified.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 465,
         "input_tokens_details": {
@@ -2548,7 +2728,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2221
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "vip.badge.vip-09",
@@ -2576,6 +2758,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2605,6 +2789,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2634,6 +2820,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2663,6 +2851,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2692,6 +2882,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2721,6 +2913,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2785,8 +2979,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Majestic crown emblem; clearly top tier.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 485,
         "input_tokens_details": {
@@ -2799,7 +2997,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2241
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "frame.vip.vip-05",
@@ -2827,6 +3027,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2856,6 +3058,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2885,6 +3089,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2950,8 +3156,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Centre fully transparent, ring even, crown/wings outside the photo area. Test on avatar photo passed.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 513,
         "input_tokens_details": {
@@ -2964,7 +3174,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2269
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "frame.seasonal.halloween",
@@ -2992,6 +3204,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3021,6 +3235,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3050,6 +3266,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3117,8 +3335,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-revise",
+        "note": "Dragon head and lanterns touch/extend past the canvas edge (validator: possibly cut off). Revise with a wider margin; design itself is strong.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 496,
         "input_tokens_details": {
@@ -3131,7 +3353,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2252
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "frame.seasonal.valentine",
@@ -3159,6 +3383,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3188,6 +3414,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3217,6 +3445,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3246,6 +3476,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3275,6 +3507,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3304,6 +3538,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3333,6 +3569,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3362,6 +3600,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3391,6 +3631,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3420,6 +3662,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3449,6 +3693,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3478,6 +3724,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3507,6 +3755,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3536,6 +3786,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3565,6 +3817,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3630,8 +3884,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Even ring, broadcast star at the top, centre clear.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 490,
         "input_tokens_details": {
@@ -3644,7 +3902,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2246
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "frame.special.creator",
@@ -3672,6 +3932,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3701,6 +3963,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3730,6 +3994,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3759,6 +4025,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3788,6 +4056,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3817,6 +4087,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3846,6 +4118,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3875,6 +4149,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3904,6 +4180,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3933,6 +4211,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3962,6 +4242,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3991,6 +4273,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4020,6 +4304,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4049,6 +4335,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4078,6 +4366,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4107,6 +4397,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4136,6 +4428,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4165,6 +4459,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4229,8 +4525,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Decoration in corners only, straight edges plain → 9-slice friendly. Interior even.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 504,
         "input_tokens_details": {
@@ -4243,7 +4543,9 @@
           "text_tokens": 0
         },
         "total_tokens": 1876
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "bubble.diamond",
@@ -4271,6 +4573,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4300,6 +4604,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4329,6 +4635,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4358,6 +4666,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4387,6 +4697,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4416,6 +4728,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4445,6 +4759,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4474,6 +4790,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4503,6 +4821,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4532,6 +4852,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4561,6 +4883,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4590,6 +4914,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4619,6 +4945,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4648,6 +4976,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4677,6 +5007,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4706,6 +5038,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4735,6 +5069,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4764,6 +5100,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4793,6 +5131,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4822,6 +5162,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4851,6 +5193,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4880,6 +5224,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4909,6 +5255,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4938,6 +5286,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4967,6 +5317,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -4996,6 +5348,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5025,6 +5379,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5054,6 +5410,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5083,6 +5441,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5112,6 +5472,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5141,6 +5503,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5170,6 +5534,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5199,6 +5565,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5228,6 +5596,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5257,6 +5627,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5286,6 +5658,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5315,6 +5689,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5344,6 +5720,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5373,6 +5751,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5402,6 +5782,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5431,6 +5813,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5460,6 +5844,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5489,6 +5875,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5518,6 +5906,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5547,6 +5937,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5576,6 +5968,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5605,6 +5999,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5634,6 +6030,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5663,6 +6061,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5727,8 +6127,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "No currency symbols; strong 2.5D read.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 472,
         "input_tokens_details": {
@@ -5741,7 +6145,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2228
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "bank.vault-open",
@@ -5769,6 +6175,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5798,6 +6206,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5827,6 +6237,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5856,6 +6268,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5885,6 +6299,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5914,6 +6330,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -5978,8 +6396,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Clearly legendary tier; no text.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 461,
         "input_tokens_details": {
@@ -5992,7 +6414,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2217
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "chest.limited",
@@ -6020,6 +6444,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6049,6 +6475,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6078,6 +6506,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6142,8 +6572,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Fictional design, no brand marks visible at review size.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 468,
         "input_tokens_details": {
@@ -6156,7 +6590,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2224
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "collectible.watch.gold",
@@ -6184,6 +6620,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6213,6 +6651,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6242,6 +6682,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6271,6 +6713,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6300,6 +6744,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6329,6 +6775,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6358,6 +6806,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6387,6 +6837,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6416,6 +6868,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6445,6 +6899,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6474,6 +6930,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6503,6 +6961,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6532,6 +6992,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6561,6 +7023,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6590,6 +7054,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6619,6 +7085,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6648,6 +7116,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6677,6 +7147,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6706,6 +7178,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6735,6 +7209,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6764,6 +7240,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6793,6 +7271,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6822,6 +7302,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6851,6 +7333,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6915,8 +7399,12 @@
         }
       },
       "review": null,
-      "createdDate": "2026-11-06",
-      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).",
+      "qa": {
+        "verdict": "recommend-approve",
+        "note": "Gold cup, wing handles, gems, black marble base — as specified.",
+        "by": "Claude (technical + visual QA — NOT an approval; only the user approves)",
+        "at": "2026-11-06"
+      },
       "usage": {
         "input_tokens": 468,
         "input_tokens_details": {
@@ -6929,7 +7417,9 @@
           "text_tokens": 0
         },
         "total_tokens": 2224
-      }
+      },
+      "createdDate": "2026-11-06",
+      "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
     {
       "id": "tournament.medal",
@@ -6957,6 +7447,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6986,6 +7478,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7015,6 +7509,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7044,6 +7540,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7073,6 +7571,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7102,6 +7602,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7131,6 +7633,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7160,6 +7664,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7189,6 +7695,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7218,6 +7726,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7247,6 +7757,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7276,6 +7788,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7305,6 +7819,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7334,6 +7850,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7363,6 +7881,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7392,6 +7912,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7421,6 +7943,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7450,6 +7974,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7479,6 +8005,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7508,6 +8036,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7537,6 +8067,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7566,6 +8098,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7595,6 +8129,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7624,6 +8160,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7653,6 +8191,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7682,6 +8222,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7711,6 +8253,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7740,6 +8284,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7769,6 +8315,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7798,6 +8346,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7827,6 +8377,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7856,6 +8408,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7885,6 +8439,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7914,6 +8470,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7943,6 +8501,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7972,6 +8532,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8001,6 +8563,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8030,6 +8594,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8059,6 +8625,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8088,6 +8656,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8117,6 +8687,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8146,6 +8718,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8175,6 +8749,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8204,6 +8780,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8233,6 +8811,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8262,6 +8842,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8291,6 +8873,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8320,6 +8904,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8349,6 +8935,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8378,6 +8966,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8407,6 +8997,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8436,6 +9028,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8465,6 +9059,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8494,6 +9090,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8523,6 +9121,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8552,6 +9152,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8581,6 +9183,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8610,6 +9214,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8639,6 +9245,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8668,6 +9276,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8697,6 +9307,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8726,6 +9338,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8755,6 +9369,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8784,6 +9400,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8813,6 +9431,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8842,6 +9462,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8871,6 +9493,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8900,6 +9524,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8929,6 +9555,8 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -8958,9 +9586,11 @@
       "optimizedFile": null,
       "validation": null,
       "review": null,
+      "qa": null,
+      "usage": null,
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-06T23:55:43.322Z"
+  "updatedAt": "2026-11-06T23:59:47.320Z"
 }

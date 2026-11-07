@@ -53,6 +53,9 @@ export function buildManifest() {
       optimizedFile: old?.optimizedFile ?? null,
       validation: old?.validation ?? null,
       review: old?.review ?? null,
+      qa: old?.qa ?? null,
+      usage: old?.usage ?? null,
+      ...(old?.lastError ? { lastError: old.lastError } : {}),
       createdDate: old?.createdDate ?? today,
       provenance: c.existing ? 'Existing project asset (in repository before Asset Studio).' : 'Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets).',
     };
