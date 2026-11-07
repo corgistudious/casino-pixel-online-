@@ -129,8 +129,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | bank.money-bag | NEEDS_REVIEW | OK |  |  | 0.543 | 0 | 806.2 | 193 KB |
 | bank.money-bag-vip | NEEDS_REVIEW | OK |  |  | 0.53 | 0 | 1135.2 | 192 KB |
 | chest.common | NEEDS_REVIEW | OK |  |  | 0.527 | 0 | 740.9 | 143 KB |
+| chest.rare | NEEDS_REVIEW | OK |  |  | 0.478 | 0 | 843.5 | 150 KB |
 | chest.epic | NEEDS_REVIEW | OK |  |  | 0.525 | 0 | 1085.5 | 157 KB |
 | chest.legendary | USER_APPROVED | OK |  |  | 0.571 | 0 | 1395.4 | 193 KB |
+| chest.limited | NEEDS_REVIEW | OK |  |  | 0.523 | 0 | 1260.5 | 153 KB |
+| chest.event | NEEDS_REVIEW | OK |  |  | 0.473 | 0 | 1008.1 | 148 KB |
 | collectible.watch.classic | NEEDS_REVIEW | OK |  |  | 0.483 | 0 | 1103.8 | 143 KB |
 | collectible.watch.luxury | USER_APPROVED | OK |  |  | 0.496 | 0 | 1402.1 | 172 KB |
 | collectible.watch.gold | NEEDS_REVIEW | OK |  |  | 0.443 | 0 | 1326.2 | 147 KB |
