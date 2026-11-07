@@ -5,7 +5,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | Asset | Trạng thái | Kết quả | Lỗi | Cảnh báo | Coverage | Edge alpha | Sharpness | WebP |
 |---|---|---|---|---|---|---|---|---|
 | game.taixiu.bowl-cover | USER_APPROVED | OK |  |  | 0.681 | 0 | 1319.1 | 168 KB |
-| game.roulette.wheel-head | NEEDS_REVIEW | OK |  |  | 0.667 | 0 | 1228.1 | 142 KB |
+| game.roulette.wheel-head | USER_APPROVED | OK |  |  | 0.667 | 0 | 1228.1 | 142 KB |
 | game.poker.dealer-button | USER_APPROVED | OK |  |  | 0.461 | 0 | 684.1 | 99 KB |
 | game.blackjack.card-shoe | USER_APPROVED | OK |  |  | 0.441 | 0 | 907.1 | 129 KB |
 | game.slots.symbol-crown | USER_APPROVED | OK |  |  | 0.546 | 0 | 1369.2 | 178 KB |

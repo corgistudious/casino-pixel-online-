@@ -22,7 +22,7 @@ export function selectAssets(manifest, { assets, batch, category, batchSize = 10
 }
 
 /** Plans (dry run) or runs a batch within the remaining approved budget. Writes a run report. */
-export async function runBatch({ client = null, dryRun = true, model, quality = DEFAULT_QUALITY, budgetLimitUsd = 0, requestId = `manual-${Date.now()}`, select = {}, log = console.log }) {
+export async function runBatch({ client = null, dryRun = true, model, quality = DEFAULT_QUALITY, budgetLimitUsd = 0, requestId = `manual-${Date.now()}`, select = {}, log = console.log, checkpoint = null, checkpointEvery = 5, deadline = null }) {
   const manifest = loadManifest();
   const ledger = loadLedger();
   const pricing = loadPricing();
@@ -47,14 +47,20 @@ export async function runBatch({ client = null, dryRun = true, model, quality = 
   // Live budget: the plan above uses upper-bound estimates; while generating, completed images count
   // at their real cost (usage) when known, so the run continues through `picked` only while
   // (spent in this run + the next image's upper-bound estimate) stays within the cap.
-  const startEntries = ledger.entries.length;
-  const spentThisRun = () => ledger.entries.slice(startEntries).reduce((t, e) => t + entryUsd(e), 0);
+  // The request cap covers every run of the same request (a resumed request never re-spends its cap);
+  // the approved budget is re-checked live before every image.
+  const spentThisRequest = () => ledger.entries.filter((e) => e.requestId === requestId).reduce((t, e) => t + entryUsd(e), 0);
   report.planned = [];
   report.skippedBudget = [];
   for (const cand of picked) {
     const est = estimateUsd(pricing, quality, cand.resolution);
-    if (spentThisRun() + est > runCap + 1e-9) {
-      report.skippedBudget.push({ id: cand.id, estimateUsd: est });
+    if (deadline && Date.now() > deadline) {
+      report.deferred = true;
+      log(`[defer] time budget reached before ${cand.id} — the rest of this request resumes in the next run`);
+      break;
+    }
+    if (spentThisRequest() + est > Math.max(0, budgetLimitUsd) + 1e-9 || est > remainingUsd(ledger) + 1e-9) {
+      report.skippedBudget.push({ id: cand.id, estimateUsd: est, reason: est > remainingUsd(ledger) ? 'approved budget exhausted' : 'request cap' });
       continue;
     }
     const p = { id: cand.id, size: cand.resolution, transparent: cand.transparency, estimateUsd: est };
@@ -117,12 +123,18 @@ export async function runBatch({ client = null, dryRun = true, model, quality = 
     saveManifest(manifest);
     report.generated.push({ id: a.id, status: a.status, errors: a.validation.errors, warnings: a.validation.warnings });
     log(`[ok] ${a.id} → ${a.status}${a.validation.errors.length ? ` (${a.validation.errors.join('; ')})` : ''}`);
+    // Checkpoint: images, manifest and ledger are already on disk; persist them remotely every few
+    // images so a later failure never loses earlier work (CI commits + pushes).
+    if (checkpoint && report.generated.length % checkpointEvery === 0) await checkpoint(`${requestId}: ${report.generated.length} image(s)`);
   }
   return finish(report, ledger, log);
 }
 
 function finish(report, ledger, log) {
   report.finishedAt = new Date().toISOString();
+  // Stopped because the APPROVED budget ran out (not the request cap): the request stays pending and
+  // resumes after the owner raises the approved budget.
+  report.budgetExhausted = !report.dryRun && report.skippedBudget.some((s) => s.reason === 'approved budget exhausted');
   report.ledger = { approvedTotalUsd: ledger.approvedTotalUsd, spentUsd: spentUsd(ledger), spentEstimatedUsd: ledger.spentEstimatedUsd, spentActualUsd: ledger.spentActualUsd, remainingUsd: +remainingUsd(ledger).toFixed(4), images: ledger.images };
   fs.mkdirSync(PATHS.reports, { recursive: true });
   fs.writeFileSync(path.join(PATHS.reports, `run-${report.requestId}.json`), `${JSON.stringify(report, null, 2)}\n`);

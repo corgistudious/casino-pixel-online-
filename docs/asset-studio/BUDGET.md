@@ -34,4 +34,7 @@
 
 ## Dự toán phần còn lại
 
-252 asset ở trạng thái PLANNED, ước tính **$83.55** theo đơn giá hiện tại của `assets/studio/pricing.json` (chưa gồm làm lại/biến thể).
+- 252 asset ở trạng thái PLANNED.
+- Theo chi phí thật đã đo (1024x1024: $0.0551, 1536x1024: $0.0437, 1024x1536: $0.0436): **$13.28**; cộng 30% dự phòng làm lại: **$17.27**.
+- Còn lại trong ngân sách đã duyệt: $8.88 → **cần nạp thêm khoảng $8.39** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.41.
+- Ước tính trần dùng để chặn chi tiêu (pricing.json): $25.20.

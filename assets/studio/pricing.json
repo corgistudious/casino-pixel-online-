@@ -9,9 +9,9 @@
     "gpt-image-2.6-sunburst": { "textInput": 5.0, "imageInput": 8.0, "imageOutput": 30.0, "cachedImageInput": 2.0, "cachedTextInput": 1.25 },
     "gpt-image-2.6-flare": { "textInput": 5.0, "imageInput": 8.0, "imageOutput": 30.0, "cachedImageInput": 2.0, "cachedTextInput": 1.25 }
   },
-  "perImageNote": "Planning estimates (upper bounds) = the verified $30/1M image-output price x an ASSUMED output-token count of about 2.4x the published gpt-image-1 counts (high: 4160 square / 6240 wide), because the page read does not list per-image token counts for this model. Real cost is taken from the API usage object when it is returned; otherwise the estimate is charged to the ledger.",
+  "perImageNote": "Planning estimates (upper bounds). Updated 2026-11-07 from 21 real gpt-image-2.5-sunburst high images: max 1756 output + 575 input tokens = $0.0556. Bound used: 3000 output + 800 input tokens = $0.094 → $0.10 per image (≈1.8× the observed maximum). Real cost is taken from the API usage object; the estimate is charged only when usage is missing.",
   "perImageUsd": {
-    "high": { "1024x1024": 0.3, "1536x1024": 0.45, "1024x1536": 0.45 },
+    "high": { "1024x1024": 0.1, "1536x1024": 0.1, "1024x1536": 0.1 },
     "medium": { "1024x1024": 0.08, "1536x1024": 0.12, "1024x1536": 0.12 },
     "low": { "1024x1024": 0.03, "1536x1024": 0.04, "1024x1536": 0.04 }
   }

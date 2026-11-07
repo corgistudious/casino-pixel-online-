@@ -13,6 +13,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { execSync } from 'node:child_process';
 import OpenAI from 'openai';
 import { DEFAULT_QUALITY, MODEL_PREFERENCE, PATHS, REPO } from './config.mjs';
 import { buildManifest, loadManifest, saveManifest, summarize } from './manifest.mjs';
@@ -159,7 +160,19 @@ async function ci() {
   const c = client();
   const p = await probe(c);
   console.log(`[probe] image models available: ${p.imageModels.join(', ') || '(none listed)'}; preferred: ${p.preferred ?? 'none'}${p.modelsError ? `; error: ${p.modelsError}` : ''}`);
+  // Wall-clock budget inside the job timeout: no new image starts after the deadline; unfinished
+  // requests stay pending and resume in the next run (assets already generated are skipped).
+  const deadline = Date.now() + Number(process.env.KEYO_TIME_BUDGET_MIN ?? 110) * 60_000;
+  const checkpoint = async (label) => {
+    await buildSheets(loadManifest());
+    writeReports();
+    gitCheckpoint(label);
+  };
   for (const job of jobs) {
+    if (Date.now() > deadline) {
+      console.log(`[defer] ${job.id}: time budget reached — resumes in the next run`);
+      continue;
+    }
     const generate = job.mode === 'generate';
     const model = job.model && job.model !== 'auto' ? job.model : (p.preferred ?? null);
     console.log(`[request] ${job.id}: ${job.mode} batch=${job.batch ?? '-'} category=${job.category ?? '-'} size=${job.batchSize} budget=$${job.budgetLimitUsd} model=${model ?? 'unavailable'}`);
@@ -167,15 +180,43 @@ async function ci() {
       console.log('[skip] generation needs OPENAI_API_KEY and an available image model (see reports/probe.json)');
       continue;
     }
-    await runBatch({ client: generate ? c : null, dryRun: !generate, model: model ?? MODEL_PREFERENCE[0], quality: job.quality ?? DEFAULT_QUALITY, budgetLimitUsd: job.budgetLimitUsd ?? 0, requestId: job.id, select: { batch: job.batch, category: job.category, assets: job.assets, batchSize: job.batchSize ?? 10 } });
-    if (ev !== 'workflow_dispatch') {
+    const r = await runBatch({ client: generate ? c : null, dryRun: !generate, model: model ?? MODEL_PREFERENCE[0], quality: job.quality ?? DEFAULT_QUALITY, budgetLimitUsd: job.budgetLimitUsd ?? 0, requestId: job.id, select: { batch: job.batch, category: job.category, assets: job.assets, batchSize: job.batchSize ?? 10 }, checkpoint: generate ? checkpoint : null, deadline });
+    // A request is done when it was not cut short by the deadline (budget stops are final: they are reported).
+    if (r.budgetExhausted) console.log(`[budget] approved budget exhausted — ${r.skippedBudget.length} asset(s) of ${job.id} wait for a top-up (see docs/asset-studio/BUDGET.md)`);
+    if (ev !== 'workflow_dispatch' && !r.deferred && !r.budgetExhausted) {
       const ledger = loadLedger();
       ledger.executedRequests = [...new Set([...ledger.executedRequests, job.id])];
       saveLedger(ledger);
     }
+    if (generate) await checkpoint(`${job.id} done`);
   }
   await buildSheets(loadManifest());
   writeReports();
+}
+
+/** Commits and pushes studio outputs (GitHub Actions only). Never fails the run on a push error. */
+function gitCheckpoint(label) {
+  if (process.env.GITHUB_ACTIONS !== 'true') return;
+  const sh = (cmd) => execSync(cmd, { cwd: REPO, stdio: ['ignore', 'pipe', 'pipe'] }).toString();
+  try {
+    sh('git add assets/studio docs/asset-studio');
+    if (!sh('git status --porcelain assets/studio docs/asset-studio').trim()) return;
+    sh(`git commit -m "chore(asset-studio): checkpoint — ${label.replace(/"/g, "'")}"`);
+    const ref = process.env.GITHUB_REF_NAME;
+    for (let i = 0; i < 3; i++) {
+      try {
+        sh(`git pull --rebase origin ${ref}`);
+        sh(`git push origin HEAD:${ref}`);
+        console.log(`[checkpoint] pushed: ${label}`);
+        return;
+      } catch {
+        /* retry */
+      }
+    }
+    console.log(`[checkpoint] push failed (outputs stay committed locally and in the artifact): ${label}`);
+  } catch (e) {
+    console.log(`[checkpoint] skipped: ${String(e?.message ?? e).slice(0, 160)}`);
+  }
 }
 
 main().catch((e) => {

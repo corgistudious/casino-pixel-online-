@@ -30,7 +30,20 @@ export function writeReports() {
   b += '> Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.\n\n';
   b += `| Thời gian | Request | Asset | Model | Quality | Size | OK | Ước tính | Token usage |\n|---|---|---|---|---|---|---|---|---|\n${md(ledger.entries.map((e) => [e.at, e.requestId, e.assetId, e.model, e.quality, e.size, e.ok ? 'yes' : `no (${e.error})`, `$${(e.estimatedUsd ?? 0).toFixed(2)}`, e.usage ? `in ${e.usage.input_tokens ?? '?'} / out ${e.usage.output_tokens ?? '?'}` : '—']))}\n`;
   const planned = m.assets.filter((a) => a.status === 'PLANNED');
-  b += `\n## Dự toán phần còn lại\n\n${planned.length} asset ở trạng thái PLANNED, ước tính **$${planned.reduce((t, a) => t + (a.costEstimateUsd ?? 0), 0).toFixed(2)}** theo đơn giá hiện tại của \`assets/studio/pricing.json\` (chưa gồm làm lại/biến thể).\n`;
+  // Projection from REAL costs observed so far (per size), plus a 30% reserve for revisions.
+  const real = {};
+  for (const e of ledger.entries.filter((x) => x.ok && typeof x.actualUsd === 'number')) (real[e.size] ??= []).push(e.actualUsd);
+  const avg = Object.fromEntries(Object.entries(real).map(([k, v]) => [k, v.reduce((t, x) => t + x, 0) / v.length]));
+  const fallback = Object.values(avg).length ? Math.max(...Object.values(avg)) : null;
+  const projection = fallback === null ? null : planned.reduce((t, a) => t + (avg[a.resolution] ?? fallback), 0);
+  b += `\n## Dự toán phần còn lại\n\n- ${planned.length} asset ở trạng thái PLANNED.\n`;
+  if (projection !== null) {
+    const withReserve = projection * 1.3;
+    const topUp = Math.max(0, withReserve - remainingUsd(ledger));
+    b += `- Theo chi phí thật đã đo (${Object.entries(avg).map(([k, v]) => `${k}: $${v.toFixed(4)}`).join(', ')}): **$${projection.toFixed(2)}**; cộng 30% dự phòng làm lại: **$${withReserve.toFixed(2)}**.\n`;
+    b += `- Còn lại trong ngân sách đã duyệt: $${remainingUsd(ledger).toFixed(2)} → **cần nạp thêm khoảng $${topUp.toFixed(2)}** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $${Math.max(0, projection - remainingUsd(ledger)).toFixed(2)}.\n`;
+  }
+  b += `- Ước tính trần dùng để chặn chi tiêu (pricing.json): $${planned.reduce((t, a) => t + (a.costEstimateUsd ?? 0), 0).toFixed(2)}.\n`;
   fs.writeFileSync(path.join(PATHS.docs, 'BUDGET.md'), b);
 
   // Quality.

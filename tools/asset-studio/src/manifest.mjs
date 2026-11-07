@@ -61,6 +61,8 @@ export function buildManifest() {
       ...(old?.method ? { method: old.method } : {}),
     };
     if (!STATUSES.includes(base.status)) base.status = 'PLANNED';
+    // Resume: an asset left GENERATING by an interrupted run never got its image recorded — retry it.
+    if (base.status === 'GENERATING') base.status = base.version > 0 && base.validation ? (base.validation.ok ? 'NEEDS_REVIEW' : 'NEEDS_REVISION') : 'PLANNED';
     if (old && old.prompt && old.prompt !== prompt && old.status === 'PLANNED') base.promptChanged = true;
     return base;
   });
