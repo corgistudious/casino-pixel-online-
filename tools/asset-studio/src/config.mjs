@@ -31,7 +31,7 @@ export const DEFAULT_QUALITY = 'high';
 export const STANDARD_SIZES = ['1024x1024', '1536x1024', '1024x1536'];
 
 /** The budget the user approved for the first wave (USD). Raised only by an explicit user request. */
-export const APPROVED_TOTAL_USD = 10;
+export const APPROVED_TOTAL_USD = 20;
 
 /** Delivery limits of the game's asset upload (packages/shared/src/cosmetics.ts). */
 export const DELIVERY = { maxSide: 1024, maxBytes: 1_048_576 };

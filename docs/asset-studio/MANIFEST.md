@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 160 |
-| NEEDS_REVISION | 4 |
+| NEEDS_REVIEW | 158 |
+| NEEDS_REVISION | 6 |
 | PLANNED | 88 |
 
 ## Theo nhóm
@@ -289,7 +289,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | collectible.watch.limited | watch: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.car.sports | car: sports | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.car.supercar | car: supercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| collectible.car.hypercar | car: hypercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| collectible.car.hypercar | car: hypercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | collectible.car.luxury | car: luxury | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.car.limited | car: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.yacht.small | yacht: small | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
@@ -303,7 +303,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | collectible.property.royal-estate | property: royal-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.property.limited-estate | property: limited-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.standard | phone: standard | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| collectible.phone.premium | phone: premium | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| collectible.phone.premium | phone: premium | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | collectible.phone.luxury | phone: luxury | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.gold | phone: gold | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.limited | phone: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |

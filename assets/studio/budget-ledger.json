@@ -1,5 +1,5 @@
 {
-  "approvedTotalUsd": 10,
+  "approvedTotalUsd": 20,
   "spentEstimatedUsd": 23.15,
   "spentActualUsd": 9.919155,
   "images": 185,
@@ -4831,6 +4831,20 @@
         "total_tokens": 2208
       },
       "seconds": 31
+    }
+  ],
+  "approvals": [
+    {
+      "at": "2026-11-06",
+      "totalUsd": 10,
+      "by": "owner",
+      "note": "initial approved budget"
+    },
+    {
+      "at": "2026-11-07T02:52:57.397Z",
+      "totalUsd": 20,
+      "by": "owner",
+      "note": "chat 2026-11-07: topped up, approve +$10 (total $20) and redo the 6 flagged assets"
     }
   ]
 }

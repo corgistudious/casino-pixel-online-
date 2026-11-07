@@ -141,7 +141,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.watch.limited | NEEDS_REVIEW | OK |  |  | 0.436 | 0 | 1466.2 | 162 KB |
 | collectible.car.sports | NEEDS_REVIEW | OK |  |  | 0.381 | 0.001 | 1106.8 | 139 KB |
 | collectible.car.supercar | NEEDS_REVIEW | OK |  |  | 0.386 | 0.001 | 1270.7 | 150 KB |
-| collectible.car.hypercar | NEEDS_REVIEW | OK |  |  | 0.367 | 0.002 | 1187.5 | 149 KB |
+| collectible.car.hypercar | NEEDS_REVISION | OK |  |  | 0.367 | 0.002 | 1187.5 | 149 KB |
 | collectible.car.luxury | NEEDS_REVIEW | OK |  |  | 0.391 | 0.011 | 1642.1 | 151 KB |
 | collectible.car.limited | NEEDS_REVIEW | OK |  |  | 0.401 | 0.005 | 1375.1 | 147 KB |
 | collectible.yacht.small | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 865.3 | 132 KB |
@@ -155,7 +155,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.property.royal-estate | NEEDS_REVIEW | OK |  |  | 0.537 | 0 | 1573.6 | 252 KB |
 | collectible.property.limited-estate | NEEDS_REVIEW | OK |  |  | 0.467 | 0 | 966.3 | 244 KB |
 | collectible.phone.standard | NEEDS_REVIEW | OK |  |  | 0.389 | 0 | 649 | 98 KB |
-| collectible.phone.premium | NEEDS_REVIEW | OK |  |  | 0.393 | 0 | 753.7 | 122 KB |
+| collectible.phone.premium | NEEDS_REVISION | OK |  |  | 0.393 | 0 | 753.7 | 122 KB |
 | collectible.phone.luxury | NEEDS_REVIEW | OK |  |  | 0.431 | 0 | 1224.4 | 143 KB |
 | collectible.phone.gold | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 780.6 | 92 KB |
 | collectible.phone.limited | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 1160.5 | 140 KB |

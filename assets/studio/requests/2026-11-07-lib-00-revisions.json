@@ -1,0 +1,18 @@
+{
+  "id": "2026-11-07-lib-00-revisions",
+  "mode": "generate",
+  "assets": [
+    "game.blackjack.table-felt",
+    "profile.header",
+    "frame.tournament.seasonal-champion",
+    "frame.tournament.grand-champion",
+    "collectible.car.hypercar",
+    "collectible.phone.premium"
+  ],
+  "batchSize": 6,
+  "budgetLimitUsd": 0.6,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "approvedBy": "owner — chat 2026-11-07: 'Đã nạp, duyệt tổng $10 và làm lại 6 asset' → clarified: approve +$10 (total $20)",
+  "note": "v2 of the 6 flagged assets with tightened prompts: felt/header painted edge to edge on dark plum; champion frames inside the central 84%; hypercar pearl white + teal; premium phone titanium + sapphire back. v1 files are kept."
+}
