@@ -5,98 +5,210 @@
   "quality": "high",
   "pricingVerified": true,
   "budgetLimitUsd": 1.5,
-  "remainingBeforeUsd": 0.0808,
-  "runCapUsd": 0.0808,
-  "planned": [],
-  "generated": [],
-  "skippedBudget": [
+  "remainingBeforeUsd": 8.445,
+  "runCapUsd": 1.5,
+  "planned": [
     {
       "id": "bubble.anniversary",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.champion",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.christmas",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.classic",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.creator",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.default",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.diamond",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.halloween",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.kol",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.limited",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.lunar-new-year",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.royal",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.tournament",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "bubble.vip",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "fx.all-in",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     }
   ],
+  "generated": [
+    {
+      "id": "bubble.anniversary",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.christmas",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.classic",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.creator",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.default",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "background not transparent at the edges (edge alpha 6%) — opaque backdrop or fake checkerboard"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "bubble.diamond",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.halloween",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.kol",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.limited",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.lunar-new-year",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "bubble.royal",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "bubble.tournament",
+      "status": "NEEDS_REVISION",
+      "errors": [
+        "background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "bubble.vip",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "fx.all-in",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
   "errors": [],
-  "startedAt": "2026-11-07T01:55:02.637Z",
-  "plannedEstimateUsd": 0,
-  "finishedAt": "2026-11-07T01:55:02.638Z",
-  "budgetExhausted": true,
+  "startedAt": "2026-11-07T03:11:49.733Z",
+  "plannedEstimateUsd": 1.5,
+  "finishedAt": "2026-11-07T03:18:13.973Z",
+  "budgetExhausted": false,
   "ledger": {
-    "approvedTotalUsd": 10,
-    "spentUsd": 9.919155,
-    "spentEstimatedUsd": 23.15,
-    "spentActualUsd": 9.919155,
-    "remainingUsd": 0.0808,
-    "images": 185
+    "approvedTotalUsd": 20,
+    "spentUsd": 12.221085,
+    "spentEstimatedUsd": 27.75,
+    "spentActualUsd": 12.221085,
+    "remainingUsd": 7.7789,
+    "images": 231
   }
 }
