@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 132 |
+| NEEDS_REVIEW | 137 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 114 |
+| PLANNED | 109 |
 
 ## Theo nhóm
 
@@ -390,12 +390,12 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| achievement.badge | Achievement: badge | Achievements | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| achievement.badge | Achievement: badge | Achievements | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | achievement.rare | Achievement: rare | Achievements | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| achievement.epic | Achievement: epic | Achievements | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| achievement.legendary | Achievement: legendary | Achievements | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| achievement.collector | Achievement: collector | Achievements | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| achievement.champion | Achievement: champion | Achievements | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| achievement.epic | Achievement: epic | Achievements | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| achievement.legendary | Achievement: legendary | Achievements | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| achievement.collector | Achievement: collector | Achievements | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| achievement.champion | Achievement: champion | Achievements | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## ui
 

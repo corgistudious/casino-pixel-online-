@@ -1,10 +1,10 @@
 # Budget Tracking (generated)
 
 - Ngân sách đã duyệt: **$10**
-- Đã tính vào ngân sách: **$8.5376** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
-- Chi phí thật theo token usage × bảng giá đã xác minh: $8.5376; tổng ước tính trần: $20.55
-- Còn lại theo bộ đếm nội bộ: **$1.46**
-- Ảnh đã tạo: 159; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip, 2026-11-07-lib-06-3-frames-profile-1, 2026-11-07-lib-07-3-frames-profile-2, 2026-11-07-lib-08-3-frames-profile-3, 2026-11-07-lib-09-4-collectibles-1, 2026-11-07-lib-10-4-collectibles-2, 2026-11-07-lib-11-5-bank-chests
+- Đã tính vào ngân sách: **$8.8120** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
+- Chi phí thật theo token usage × bảng giá đã xác minh: $8.8120; tổng ước tính trần: $21.05
+- Còn lại theo bộ đếm nội bộ: **$1.19**
+- Ảnh đã tạo: 164; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip, 2026-11-07-lib-06-3-frames-profile-1, 2026-11-07-lib-07-3-frames-profile-2, 2026-11-07-lib-08-3-frames-profile-3, 2026-11-07-lib-09-4-collectibles-1, 2026-11-07-lib-10-4-collectibles-2, 2026-11-07-lib-11-5-bank-chests
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
@@ -169,10 +169,15 @@
 | 2026-11-07T01:38:46.013Z | 2026-11-07-lib-11-5-bank-chests | chest.event | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 446 / out 1756 |
 | 2026-11-07T01:39:18.131Z | 2026-11-07-lib-11-5-bank-chests | chest.limited | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 446 / out 1756 |
 | 2026-11-07T01:39:47.552Z | 2026-11-07-lib-11-5-bank-chests | chest.rare | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 446 / out 1756 |
+| 2026-11-07T01:40:29.558Z | 2026-11-07-lib-12-6-events-tournament-achievements-1 | achievement.badge | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 438 / out 1756 |
+| 2026-11-07T01:40:58.804Z | 2026-11-07-lib-12-6-events-tournament-achievements-1 | achievement.champion | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 442 / out 1756 |
+| 2026-11-07T01:41:30.657Z | 2026-11-07-lib-12-6-events-tournament-achievements-1 | achievement.collector | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 439 / out 1756 |
+| 2026-11-07T01:42:01.488Z | 2026-11-07-lib-12-6-events-tournament-achievements-1 | achievement.epic | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 439 / out 1756 |
+| 2026-11-07T01:42:29.395Z | 2026-11-07-lib-12-6-events-tournament-achievements-1 | achievement.legendary | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 442 / out 1756 |
 
 ## Dự toán phần còn lại
 
-- 114 asset ở trạng thái PLANNED.
-- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0434, 1024x1536: $0.0436): **$5.83**; cộng 30% dự phòng làm lại: **$7.58**.
-- Còn lại trong ngân sách đã duyệt: $1.46 → **cần nạp thêm khoảng $6.12** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.37.
-- Ước tính trần dùng để chặn chi tiêu (pricing.json): $11.40.
+- 109 asset ở trạng thái PLANNED.
+- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0434, 1024x1536: $0.0436): **$5.56**; cộng 30% dự phòng làm lại: **$7.22**.
+- Còn lại trong ngân sách đã duyệt: $1.19 → **cần nạp thêm khoảng $6.03** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.37.
+- Ước tính trần dùng để chặn chi tiêu (pricing.json): $10.90.

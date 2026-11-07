@@ -160,3 +160,8 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.phone.gold | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 780.6 | 92 KB |
 | collectible.phone.limited | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 1160.5 | 140 KB |
 | tournament.trophy-champion | USER_APPROVED | OK |  |  | 0.318 | 0.014 | 1139 | 171 KB |
+| achievement.badge | NEEDS_REVIEW | OK |  |  | 0.518 | 0 | 927.6 | 130 KB |
+| achievement.epic | NEEDS_REVIEW | OK |  |  | 0.496 | 0 | 1120.2 | 164 KB |
+| achievement.legendary | NEEDS_REVIEW | OK |  |  | 0.487 | 0 | 936 | 154 KB |
+| achievement.collector | NEEDS_REVIEW | OK |  |  | 0.477 | 0 | 1092.1 | 156 KB |
+| achievement.champion | NEEDS_REVIEW | OK |  |  | 0.541 | 0 | 1122.3 | 189 KB |
