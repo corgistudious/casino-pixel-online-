@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 12.15,
-  "spentActualUsd": 3.94204,
-  "images": 75,
+  "spentEstimatedUsd": 12.65,
+  "spentActualUsd": 4.217055,
+  "images": 80,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -1962,6 +1962,136 @@
         "total_tokens": 2218
       },
       "seconds": 29
+    },
+    {
+      "at": "2026-11-07T00:55:07.280Z",
+      "requestId": "2026-11-07-lib-05-2-vip",
+      "assetId": "vip.badge.vip-04",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055,
+      "usage": {
+        "input_tokens": 464,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 464
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2220
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:55:37.289Z",
+      "requestId": "2026-11-07-lib-05-2-vip",
+      "assetId": "vip.badge.vip-05",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05501,
+      "usage": {
+        "input_tokens": 466,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 466
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2222
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:56:09.342Z",
+      "requestId": "2026-11-07-lib-05-2-vip",
+      "assetId": "vip.badge.vip-06",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05499,
+      "usage": {
+        "input_tokens": 462,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 462
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2218
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T00:56:42.116Z",
+      "requestId": "2026-11-07-lib-05-2-vip",
+      "assetId": "vip.badge.vip-07",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05502,
+      "usage": {
+        "input_tokens": 468,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 468
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2224
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T00:57:11.942Z",
+      "requestId": "2026-11-07-lib-05-2-vip",
+      "assetId": "vip.badge.vip-09",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054995,
+      "usage": {
+        "input_tokens": 463,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 463
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2219
+      },
+      "seconds": 30
     }
   ]
 }

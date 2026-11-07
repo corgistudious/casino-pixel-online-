@@ -63,7 +63,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | vip.badge.vip-01 | USER_APPROVED | OK |  |  | 0.386 | 0 | 345.4 | 67 KB |
 | vip.badge.vip-02 | NEEDS_REVIEW | OK |  |  | 0.455 | 0 | 703 | 111 KB |
 | vip.badge.vip-03 | NEEDS_REVIEW | OK |  |  | 0.509 | 0 | 1148.4 | 165 KB |
+| vip.badge.vip-04 | NEEDS_REVIEW | OK |  |  | 0.545 | 0 | 1102.3 | 160 KB |
+| vip.badge.vip-05 | NEEDS_REVIEW | OK |  |  | 0.43 | 0.002 | 831.2 | 132 KB |
+| vip.badge.vip-06 | NEEDS_REVIEW | OK |  |  | 0.574 | 0.003 | 1519.2 | 244 KB |
+| vip.badge.vip-07 | NEEDS_REVIEW | OK |  |  | 0.392 | 0 | 1341.9 | 149 KB |
 | vip.badge.vip-08 | USER_APPROVED | OK |  |  | 0.462 | 0 | 1251.1 | 188 KB |
+| vip.badge.vip-09 | NEEDS_REVIEW | OK |  |  | 0.459 | 0 | 1307.4 | 182 KB |
 | vip.badge.vip-15 | USER_APPROVED | OK |  |  | 0.568 | 0.013 | 1693.1 | 228 KB |
 | frame.vip.vip-05 | NEEDS_REVIEW | OK |  |  | 0.247 | 0.005 | 842.9 | 154 KB |
 | frame.vip.vip-07 | NEEDS_REVIEW | OK |  |  | 0.21 | 0.002 | 1028 | 156 KB |
