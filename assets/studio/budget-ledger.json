@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 23.65,
-  "spentActualUsd": 10.184005,
-  "images": 190,
+  "spentEstimatedUsd": 23.75,
+  "spentActualUsd": 10.22759,
+  "images": 191,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -19,7 +19,8 @@
     "2026-11-07-lib-10-4-collectibles-2",
     "2026-11-07-lib-11-5-bank-chests",
     "2026-11-07-lib-12-6-events-tournament-achievements-1",
-    "2026-11-07-lib-13-6-events-tournament-achievements-2"
+    "2026-11-07-lib-13-6-events-tournament-achievements-2",
+    "2026-11-07-lib-00-revisions"
   ],
   "entries": [
     {
@@ -4961,6 +4962,32 @@
         "total_tokens": 1895
       },
       "seconds": 24
+    },
+    {
+      "at": "2026-11-07T02:57:16.678Z",
+      "requestId": "2026-11-07-lib-00-revisions",
+      "assetId": "profile.header",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043585,
+      "usage": {
+        "input_tokens": 485,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 485
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1857
+      },
+      "seconds": 23
     }
   ],
   "approvals": [

@@ -1,0 +1,100 @@
+{
+  "requestId": "2026-11-07-lib-00-revisions",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 0.6,
+  "remainingBeforeUsd": 10.0808,
+  "runCapUsd": 0.6,
+  "planned": [
+    {
+      "id": "collectible.car.hypercar",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "collectible.phone.premium",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.tournament.grand-champion",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "frame.tournament.seasonal-champion",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.blackjack.table-felt",
+      "size": "1536x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "profile.header",
+      "size": "1536x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "collectible.car.hypercar",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "collectible.phone.premium",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.tournament.grand-champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "frame.tournament.seasonal-champion",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.blackjack.table-felt",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "profile.header",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T02:54:14.197Z",
+  "plannedEstimateUsd": 0.6,
+  "finishedAt": "2026-11-07T02:57:16.872Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 20,
+    "spentUsd": 10.22759,
+    "spentEstimatedUsd": 23.75,
+    "spentActualUsd": 10.22759,
+    "remainingUsd": 9.7724,
+    "images": 191
+  }
+}

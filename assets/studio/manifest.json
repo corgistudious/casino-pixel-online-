@@ -10959,10 +10959,10 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": 0.043285,
-      "status": "NEEDS_REVISION",
+      "actualCostUsd": 0.043585,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 1,
+      "version": 2,
       "versions": [
         {
           "version": 1,
@@ -10972,15 +10972,22 @@
           "quality": "high",
           "createdAt": "2026-11-07T01:21:16.397Z",
           "validationOk": true
+        },
+        {
+          "version": 2,
+          "sourceFile": "assets/studio/generated/profile.header/v2/source.png",
+          "optimizedFile": "assets/studio/generated/profile.header/v2/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T02:57:16.867Z",
+          "validationOk": true
         }
       ],
-      "sourceFile": "assets/studio/generated/profile.header/v1/source.png",
-      "optimizedFile": "assets/studio/generated/profile.header/v1/optimized.webp",
+      "sourceFile": "assets/studio/generated/profile.header/v2/source.png",
+      "optimizedFile": "assets/studio/generated/profile.header/v2/optimized.webp",
       "validation": {
-        "ok": false,
-        "errors": [
-          "opaque image has a light grey/white border (95%) — fake checkerboard or blank backdrop"
-        ],
+        "ok": true,
+        "errors": [],
         "warnings": [],
         "metrics": {
           "width": 1536,
@@ -10988,20 +10995,20 @@
           "hasAlpha": false,
           "coverage": 1,
           "borderAlpha": 1,
-          "lumStd": 95.7,
-          "greyEdge": 0.948,
-          "sharpness": 1024.8,
-          "dhash": "cc33b2aa96962b54",
+          "lumStd": 36.1,
+          "greyEdge": 0,
+          "sharpness": 965.6,
+          "dhash": "cc9669cccccccc8e",
           "avgColor": [
-            194,
-            173,
-            181
+            63,
+            23,
+            59
           ]
         },
-        "checkedAt": "2026-11-07T02:02:06.932Z",
+        "checkedAt": "2026-11-07T02:57:16.867Z",
         "optimized": {
           "quality": 90,
-          "bytes": 84246
+          "bytes": 91174
         }
       },
       "review": {
@@ -11018,17 +11025,17 @@
         "version": 1
       },
       "usage": {
-        "input_tokens": 425,
+        "input_tokens": 485,
         "input_tokens_details": {
           "image_tokens": 0,
-          "text_tokens": 425
+          "text_tokens": 485
         },
         "output_tokens": 1372,
         "output_tokens_details": {
           "image_tokens": 1372,
           "text_tokens": 0
         },
-        "total_tokens": 1797
+        "total_tokens": 1857
       },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
@@ -18593,5 +18600,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T02:56:40.388Z"
+  "updatedAt": "2026-11-07T02:57:16.867Z"
 }

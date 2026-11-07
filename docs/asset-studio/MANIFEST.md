@@ -8,9 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 163 |
+| NEEDS_REVIEW | 164 |
 | PLANNED | 88 |
-| NEEDS_REVISION | 1 |
 
 ## Theo nhóm
 
@@ -230,7 +229,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | profile.nameplate | Profile nameplate | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| profile.header | Profile header | Profile | 1536x1024 | no | P2 |  | NEEDS_REVISION | 0.10 |
+| profile.header | Profile header | Profile | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | profile.background | Profile background | Profile | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | profile.prestige-effect | Profile prestige-effect | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | profile.achievement-showcase | Profile achievement-showcase | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
