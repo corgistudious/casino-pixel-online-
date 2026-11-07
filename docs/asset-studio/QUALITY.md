@@ -131,6 +131,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | bubble.lunar-new-year | NEEDS_REVIEW | OK |  |  | 0.447 | 0.024 | 338.9 | 46 KB |
 | bubble.anniversary | NEEDS_REVIEW | OK |  |  | 0.427 | 0.018 | 496.9 | 56 KB |
 | title.champion | NEEDS_REVIEW | OK |  |  | 0.3 | 0.028 | 883.2 | 91 KB |
+| title.collector | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 8%) — opaque backdrop or fake checkerboard; object touches the canvas edge (possibly cut off) |  | 0.315 | 0.076 | 801.4 | 83 KB |
+| title.founder | NEEDS_REVIEW | OK |  |  | 0.268 | 0.027 | 761.1 | 70 KB |
+| title.creator | NEEDS_REVIEW | OK |  |  | 0.306 | 0.011 | 804 | 80 KB |
+| title.event-winner | NEEDS_REVIEW | OK |  |  | 0.268 | 0.001 | 753 | 72 KB |
+| title.grand-champion | NEEDS_REVIEW | OK |  |  | 0.319 | 0.018 | 889.7 | 98 KB |
 | profile.nameplate | NEEDS_REVIEW | OK |  |  | 0.173 | 0 | 361.3 | 64 KB |
 | profile.header | NEEDS_REVIEW | OK |  |  | 1 | 1 | 965.6 | 89 KB |
 | profile.background | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1176.9 | 132 KB |
