@@ -81,10 +81,15 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.vip.vip-15 | USER_APPROVED | OK |  |  | 0.373 | 0.028 | 1550.9 | 245 KB |
 | frame.seasonal.halloween | NEEDS_REVIEW | OK |  |  | 0.273 | 0.006 | 1031.7 | 169 KB |
 | frame.seasonal.christmas | NEEDS_REVIEW | OK |  |  | 0.327 | 0.006 | 1276.2 | 180 KB |
+| frame.seasonal.new-year | NEEDS_REVIEW | OK |  |  | 0.277 | 0.002 | 1323.6 | 171 KB |
 | frame.seasonal.lunar-new-year | USER_APPROVED | OK |  |  | 0.274 | 0 | 817.7 | 164 KB |
+| frame.seasonal.valentine | NEEDS_REVIEW | OK |  |  | 0.25 | 0.008 | 1075.9 | 175 KB |
 | frame.seasonal.easter | NEEDS_REVIEW | OK |  |  | 0.345 | 0.027 | 999.9 | 178 KB |
+| frame.seasonal.summer | NEEDS_REVIEW | OK |  |  | 0.266 | 0.003 | 914.1 | 167 KB |
+| frame.seasonal.thanksgiving | NEEDS_REVIEW | OK |  |  | 0.294 | 0.001 | 807.2 | 189 KB |
 | frame.seasonal.anniversary | NEEDS_REVIEW | OK |  |  | 0.289 | 0.007 | 889.2 | 166 KB |
 | frame.special.kol | USER_APPROVED | OK |  |  | 0.271 | 0.002 | 974.5 | 153 KB |
+| frame.special.anniversary-exclusive | NEEDS_REVISION | FAIL | near-duplicate of frame.vip.vip-10 |  | 0.287 | 0.007 | 978.3 | 193 KB |
 | avatar.default | NEEDS_REVIEW | OK |  |  | 1 | 1 | 810.3 | 124 KB |
 | avatar.premium | NEEDS_REVIEW | OK |  |  | 1 | 1 | 916.2 | 124 KB |
 | avatar.royal | NEEDS_REVIEW | OK |  |  | 1 | 1 | 937.7 | 132 KB |

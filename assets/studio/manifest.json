@@ -6422,7 +6422,7 @@
       "name": "new-year frame",
       "description": "new-year frame avatar frame.",
       "prompt": "Asset: new-year frame for KEYO GAME (Profile / Avatar frames). Purpose: new-year frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; midnight blue ring with gold fireworks and confetti; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -6431,17 +6431,65 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05509,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.seasonal.new-year/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.seasonal.new-year/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:08:12.932Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.seasonal.new-year/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.seasonal.new-year/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.277,
+          "borderAlpha": 0.002,
+          "lumStd": 72.5,
+          "bbox": {
+            "x": 0.01953125,
+            "y": 0.01953125,
+            "w": 0.9609375,
+            "h": 0.94140625
+          },
+          "centerAlpha": 0,
+          "sharpness": 1323.6,
+          "dhash": "49cc96414992cc4d"
+        },
+        "checkedAt": "2026-11-07T01:08:12.932Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 175134
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 482,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 482
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2238
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6552,7 +6600,7 @@
       "name": "valentine frame",
       "description": "valentine frame avatar frame.",
       "prompt": "Asset: valentine frame for KEYO GAME (Profile / Avatar frames). Purpose: valentine frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; rose-gold ring with small hearts and roses; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -6561,17 +6609,65 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05509,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.seasonal.valentine/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.seasonal.valentine/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:09:46.661Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.seasonal.valentine/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.seasonal.valentine/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.25,
+          "borderAlpha": 0.008,
+          "lumStd": 57.2,
+          "bbox": {
+            "x": 0.0234375,
+            "y": 0.01953125,
+            "w": 0.953125,
+            "h": 0.94140625
+          },
+          "centerAlpha": 0,
+          "sharpness": 1075.9,
+          "dhash": "16334dc0d4e8b217"
+        },
+        "checkedAt": "2026-11-07T01:09:46.661Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 179238
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 482,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 482
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2238
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6662,7 +6758,7 @@
       "name": "summer frame",
       "description": "summer frame avatar frame.",
       "prompt": "Asset: summer frame for KEYO GAME (Profile / Avatar frames). Purpose: summer frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; turquoise ring with sun, waves and pearls; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -6671,17 +6767,65 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.055075,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.seasonal.summer/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.seasonal.summer/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:08:43.949Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.seasonal.summer/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.seasonal.summer/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.266,
+          "borderAlpha": 0.003,
+          "lumStd": 51.9,
+          "bbox": {
+            "x": 0.046875,
+            "y": 0.01171875,
+            "w": 0.90625,
+            "h": 0.93359375
+          },
+          "centerAlpha": 0.002,
+          "sharpness": 914.1,
+          "dhash": "8e2b69c4c5612b8e"
+        },
+        "checkedAt": "2026-11-07T01:08:43.949Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 171258
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 479,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 479
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2235
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -6693,7 +6837,7 @@
       "name": "thanksgiving frame",
       "description": "thanksgiving frame avatar frame.",
       "prompt": "Asset: thanksgiving frame for KEYO GAME (Profile / Avatar frames). Purpose: thanksgiving frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; amber ring with autumn leaves and wheat; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -6702,17 +6846,65 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05507,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.seasonal.thanksgiving/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.seasonal.thanksgiving/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:09:17.793Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.seasonal.thanksgiving/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.seasonal.thanksgiving/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.294,
+          "borderAlpha": 0.001,
+          "lumStd": 51.7,
+          "bbox": {
+            "x": 0.0234375,
+            "y": 0.03125,
+            "w": 0.953125,
+            "h": 0.92578125
+          },
+          "centerAlpha": 0,
+          "sharpness": 807.2,
+          "dhash": "8e4d618455718e96"
+        },
+        "checkedAt": "2026-11-07T01:09:17.793Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 193314
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 478,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 478
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2234
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -7357,7 +7549,7 @@
       "name": "anniversary-exclusive frame",
       "description": "anniversary-exclusive frame avatar frame.",
       "prompt": "Asset: anniversary-exclusive frame for KEYO GAME (Profile / Avatar frames). Purpose: anniversary-exclusive frame avatar frame.\nObject: A circular avatar frame ring: the inner circle (about 72% of the diameter) is completely empty and fully transparent so a profile photo shows through; the ring is even, not too thick, nothing protrudes into the centre; champagne gold ring with ribbon and stars; no text.\nMaterials: gold, gems.\nCamera: Perfectly frontal, circular, symmetrical.\nComposition: Ring centred, 5% margin, decorations stay outside the inner circle.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -7366,17 +7558,67 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05508,
+      "status": "NEEDS_REVISION",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/frame.special.anniversary-exclusive/v1/source.png",
+          "optimizedFile": "assets/studio/generated/frame.special.anniversary-exclusive/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T01:10:19.720Z",
+          "validationOk": false
+        }
+      ],
+      "sourceFile": "assets/studio/generated/frame.special.anniversary-exclusive/v1/source.png",
+      "optimizedFile": "assets/studio/generated/frame.special.anniversary-exclusive/v1/optimized.webp",
+      "validation": {
+        "ok": false,
+        "errors": [
+          "near-duplicate of frame.vip.vip-10"
+        ],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.287,
+          "borderAlpha": 0.007,
+          "lumStd": 43.8,
+          "bbox": {
+            "x": 0.01953125,
+            "y": 0.0078125,
+            "w": 0.9609375,
+            "h": 0.9375
+          },
+          "centerAlpha": 0,
+          "sharpness": 978.3,
+          "dhash": "8e2b61c4d469338e"
+        },
+        "checkedAt": "2026-11-07T01:10:19.720Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 198054
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 480,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 480
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2236
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -13315,5 +13557,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T01:07:35.000Z"
+  "updatedAt": "2026-11-07T01:10:19.720Z"
 }
