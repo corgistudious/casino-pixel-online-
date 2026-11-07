@@ -6,9 +6,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 |---|---|---|---|---|---|---|---|---|
 | game.taixiu.bowl-cover | USER_APPROVED | OK |  |  | 0.681 | 0 | 1319.1 | 168 KB |
 | game.roulette.wheel-head | USER_APPROVED | OK |  |  | 0.667 | 0 | 1228.1 | 142 KB |
+| game.roulette.ball | NEEDS_REVIEW | OK |  |  | 0.34 | 0 | 34.1 | 32 KB |
 | game.poker.dealer-button | USER_APPROVED | OK |  |  | 0.461 | 0 | 684.1 | 99 KB |
 | game.poker.blind-small | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 613.2 | 105 KB |
 | game.poker.blind-big | NEEDS_REVIEW | OK |  |  | 0.46 | 0 | 855.3 | 121 KB |
+| game.poker.pot-pile | NEEDS_REVIEW | OK |  |  | 0.4 | 0 | 1127.4 | 136 KB |
+| game.poker.table-felt-royal | NEEDS_REVIEW | OK |  |  | 1 | 1 | 676 | 93 KB |
 | game.cards.chip-stack | NEEDS_REVIEW | OK |  |  | 0.478 | 0 | 611.8 | 103 KB |
 | game.cards.action-fold | NEEDS_REVIEW | OK |  |  | 0.456 | 0 | 778.9 | 134 KB |
 | game.cards.action-call | NEEDS_REVIEW | OK |  |  | 0.404 | 0 | 951.8 | 160 KB |

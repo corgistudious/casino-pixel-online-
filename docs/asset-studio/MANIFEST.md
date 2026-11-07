@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| PLANNED | 229 |
-| NEEDS_REVIEW | 23 |
+| PLANNED | 226 |
+| NEEDS_REVIEW | 26 |
 
 ## Theo nhóm
 
@@ -63,15 +63,15 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.sicbo.table-vip | VIP dice table felt | Sic Bo / Tài Xỉu | 1536x1024 | no | P2 |  | PLANNED | 0.10 |
 | game.roulette.wheel-head | Roulette wheel head (no numbers) | Roulette | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | game.roulette.wheel-rim | Wheel bowl rim | Roulette | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.roulette.ball | Roulette ball | Roulette | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.roulette.ball | Roulette ball | Roulette | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.roulette.pointer | Result pointer | Roulette | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.roulette.marker | Betting marker (dolly) | Roulette | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.roulette.result-emblem | Result emblem | Roulette | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.poker.dealer-button | Dealer button (no letters) | Texas Hold'em Poker | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | game.poker.blind-small | Small blind marker | Texas Hold'em Poker | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.poker.blind-big | Big blind marker | Texas Hold'em Poker | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| game.poker.pot-pile | Pot chip pile | Texas Hold'em Poker | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.poker.table-felt-royal | Royal oval table (opaque) | Texas Hold'em Poker | 1536x1024 | no | P2 |  | PLANNED | 0.10 |
+| game.poker.pot-pile | Pot chip pile | Texas Hold'em Poker | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| game.poker.table-felt-royal | Royal oval table (opaque) | Texas Hold'em Poker | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.cards.chip-stack | Chip stack | Card games | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.cards.action-fold | Fold icon | Card games | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.cards.action-call | Call icon | Card games | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
