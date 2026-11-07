@@ -44,9 +44,11 @@ Workflow tự commit ảnh, manifest, sổ ngân sách, contact sheet và báo c
 4. Asset `NEEDS_REVISION` có thể được tạo lại (phiên bản `v2`, bản cũ vẫn giữ) bằng file yêu cầu ghi rõ `"assets": ["<id>"]`.
 
 ## Tích hợp (chỉ với asset USER_APPROVED)
-- Game (Phaser): thêm vào `ASSET_OVERRIDES` trong `apps/web/src/game/art.ts`. Ảnh thay thế texture vẽ bằng code cùng tên; layout và hitbox vẫn do code quyết định.
-- Cosmetic (khung, bubble, danh hiệu, item): dùng `optimized.webp` (≤ 1024 px, ≤ 1 MB) qua luồng upload asset hiện có. Không đổi giá, số lượng hay quyền sở hữu.
-- Sau khi tích hợp: chạy e2e (`apps/web/e2e`) để kiểm tra layout, hitbox và responsive, rồi đánh dấu `INTEGRATED`.
+1. Xuất bản web: `node src/cli.mjs export-web` → `apps/web/public/assets/keyo/<nhóm>/<id>.<kích thước>.<hash>.webp` (128/256/512 cho ảnh vuông, 512/1024 cho ảnh ngang/dọc) và `apps/web/src/assets/keyo/registry.generated.ts` (id → kích thước, vùng hiển thị, lỗ giữa của khung, các file). Tên file có hash nội dung nên mỗi phiên bản mới có URL mới.
+2. Hiển thị trong React: `KeyoImg` / `KeyoFit` / `SliceFrame` (`apps/web/src/assets/keyo/`) — tự chọn file nhỏ nhất đủ nét theo kích thước × DPR, `loading="lazy"`, và khi file lỗi thì hiện lại bản vẽ bằng code.
+3. Bàn chơi (Phaser): khai báo trong `apps/web/src/game/assetTextures.ts` (key texture, asset, scene cần dùng, kích thước world). Mỗi scene chỉ tải texture của nó trong `preload`; texture vẽ bằng code cùng key là bản dự phòng. Layout, hitbox, kết quả và tỉ lệ vẫn do code/server quyết định.
+4. Ánh xạ dữ liệu → ảnh (VIP, vật phẩm catalog, skin bàn, mùa sự kiện, quà, thành tích): `apps/web/src/assets/keyo/bindings.ts`. Không đổi giá, độ hiếm, nguồn hay quyền sở hữu.
+5. Trạng thái từng asset: `apps/web/src/assets/keyo/integration.json`; báo cáo `node src/cli.mjs integration-report` → `docs/asset-studio/INTEGRATION.md` (dùng kết quả `pnpm --filter @casino/web e2e assets`).
 
 ## Ngân sách
 - Đã duyệt **$10** (`APPROVED_TOTAL_USD`). Khi hết tiền, pipeline dừng các yêu cầu trả phí và báo cáo số tiền đã dùng, số asset đã xong và dự toán phần còn lại.

@@ -59,9 +59,9 @@ Claude Code không tạo được tranh minh hoạ raster chất lượng chuyê
 
 ## Cách thay asset raster
 
-1. Xuất PNG/WebP có alpha ở **3× kích thước world** (bảng dưới), đặt vào `apps/web/public/assets/`.
-2. Khai báo trong `ASSET_OVERRIDES` (`apps/web/src/game/art.ts`), ví dụ `'card-KH': 'assets/cards/KH.webp'`.
-3. Texture override được tải trước khi scene dựng và tự thay bản vẽ procedural cùng key.
+1. Asset đã duyệt trong Keyo Asset Studio được xuất bằng `node tools/asset-studio/src/cli.mjs export-web` (WebP nhiều kích thước, tên có hash) vào `apps/web/public/assets/keyo/`.
+2. Khai báo trong `apps/web/src/game/assetTextures.ts`: key texture, asset id, scene dùng nó và chiều rộng world của phần hình (`contentW`) — kích thước file không cần đúng 3×, tỉ lệ được tính khi file tải xong.
+3. Scene chỉ tải texture của nó trong `preload` và tự thay bản vẽ procedural cùng key; nếu file lỗi thì bản procedural được vẽ như cũ.
 
 | Key | Kích thước world | File 3× |
 | --- | --- | --- |

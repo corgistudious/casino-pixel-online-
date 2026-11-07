@@ -36,7 +36,7 @@ Khác với brief:
 ## 3. Đồ họa vẽ bằng code (đang dùng)
 | Hệ thống | Hiện trạng | Đánh giá |
 |---|---|---|
-| Game (Phaser, `apps/web/src/game/art.ts`) | Lá bài, mặt sau, chip 2.5D, xúc xắc, đĩa và chụp Sic Bo, bát Tài Xỉu, bánh xe và bát roulette, biểu tượng và tủ slots, nhẫn ghế, bảng tên, dealer button | Đạt, đang chạy. AI art chỉ thay sau khi được duyệt (`ASSET_OVERRIDES`) |
+| Game (Phaser, `apps/web/src/game/art.ts`) | Lá bài, mặt sau, chip 2.5D, xúc xắc, đĩa và chụp Sic Bo, bát Tài Xỉu, bánh xe và bát roulette, biểu tượng và tủ slots, nhẫn ghế, bảng tên, dealer button | Đạt, đang chạy. AI art đã duyệt thay qua `apps/web/src/game/assetTextures.ts` (bản vẽ code là dự phòng) |
 | Cosmetic seed trong DB (`apps/server/drizzle/*`) | 81 khung, 16 chat bubble, 11 danh hiệu, 12 mặt sau bài, 13 skin bàn, 7 avatar, 14 hiệu ứng thắng (vẽ SVG/CSS) | Đạt về kỹ thuật. Đây là ứng viên nâng cấp lên artwork 2.5D |
 | Thư viện khung (`packages/shared/src/frameLibrary.ts`) | Khung podium, hall of fame, mùa, giải đấu, vai trò | Như trên |
 
