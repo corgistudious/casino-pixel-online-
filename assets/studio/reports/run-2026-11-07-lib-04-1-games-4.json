@@ -1,0 +1,148 @@
+{
+  "requestId": "2026-11-07-lib-04-1-games-4",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1,
+  "remainingBeforeUsd": 6.8824,
+  "runCapUsd": 1,
+  "planned": [
+    {
+      "id": "game.slots.symbol-bell",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.symbol-cherry",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.symbol-clover",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.symbol-diamond",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.symbol-gold-bar",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.symbol-lemon",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.symbol-scatter",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.symbol-seven",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.slots.symbol-wild",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    },
+    {
+      "id": "game.xito.dealer-marker",
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
+    }
+  ],
+  "generated": [
+    {
+      "id": "game.slots.symbol-bell",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-cherry",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-clover",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-diamond",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-gold-bar",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-lemon",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-scatter",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-seven",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.slots.symbol-wild",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "game.xito.dealer-marker",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
+  "errors": [],
+  "startedAt": "2026-11-07T00:46:38.734Z",
+  "plannedEstimateUsd": 1,
+  "finishedAt": "2026-11-07T00:51:53.143Z",
+  "budgetExhausted": false,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 3.666675,
+    "spentEstimatedUsd": 11.65,
+    "spentActualUsd": 3.666675,
+    "remainingUsd": 6.3333,
+    "images": 70
+  }
+}
