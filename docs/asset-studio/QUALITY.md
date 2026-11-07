@@ -37,7 +37,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.blackjack.action-double | NEEDS_REVIEW | OK |  |  | 0.483 | 0 | 931.4 | 130 KB |
 | game.blackjack.action-split | NEEDS_REVIEW | OK |  |  | 0.423 | 0 | 704.6 | 113 KB |
 | game.blackjack.action-insurance | NEEDS_REVIEW | OK |  |  | 0.451 | 0 | 643.1 | 110 KB |
-| game.blackjack.table-felt | NEEDS_REVISION | FAIL | opaque image has a light grey/white border (98%) — fake checkerboard or blank backdrop |  | 1 | 1 | 1328.7 | 118 KB |
+| game.blackjack.table-felt | NEEDS_REVIEW | OK |  |  | 1 | 1 | 591.5 | 89 KB |
 | game.slots.symbol-seven | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 686.5 | 112 KB |
 | game.slots.symbol-diamond | NEEDS_REVIEW | OK |  |  | 0.367 | 0 | 587 | 99 KB |
 | game.slots.symbol-bell | NEEDS_REVIEW | OK |  |  | 0.501 | 0 | 624.4 | 126 KB |
@@ -94,8 +94,8 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.tournament.top-3 | NEEDS_REVIEW | OK |  |  | 0.275 | 0.005 | 1136.6 | 172 KB |
 | frame.tournament.runner-up | NEEDS_REVIEW | OK |  |  | 0.287 | 0.014 | 1085.2 | 167 KB |
 | frame.tournament.champion | NEEDS_REVIEW | OK |  |  | 0.267 | 0 | 1176.6 | 174 KB |
-| frame.tournament.seasonal-champion | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.29 | 0.007 | 957.2 | 169 KB |
-| frame.tournament.grand-champion | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.34 | 0.009 | 1347 | 211 KB |
+| frame.tournament.seasonal-champion | NEEDS_REVIEW | OK |  |  | 0.253 | 0 | 947.9 | 156 KB |
+| frame.tournament.grand-champion | NEEDS_REVIEW | OK |  |  | 0.325 | 0.005 | 1135.6 | 194 KB |
 | frame.special.founder | NEEDS_REVIEW | OK |  |  | 0.222 | 0.001 | 913.8 | 143 KB |
 | frame.special.early-supporter | NEEDS_REVIEW | OK |  |  | 0.244 | 0 | 897.4 | 157 KB |
 | frame.special.kol | USER_APPROVED | OK |  |  | 0.271 | 0.002 | 974.5 | 153 KB |
@@ -141,7 +141,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.watch.limited | NEEDS_REVIEW | OK |  |  | 0.436 | 0 | 1466.2 | 162 KB |
 | collectible.car.sports | NEEDS_REVIEW | OK |  |  | 0.381 | 0.001 | 1106.8 | 139 KB |
 | collectible.car.supercar | NEEDS_REVIEW | OK |  |  | 0.386 | 0.001 | 1270.7 | 150 KB |
-| collectible.car.hypercar | NEEDS_REVISION | OK |  |  | 0.367 | 0.002 | 1187.5 | 149 KB |
+| collectible.car.hypercar | NEEDS_REVIEW | OK |  |  | 0.336 | 0.005 | 1096.8 | 123 KB |
 | collectible.car.luxury | NEEDS_REVIEW | OK |  |  | 0.391 | 0.011 | 1642.1 | 151 KB |
 | collectible.car.limited | NEEDS_REVIEW | OK |  |  | 0.401 | 0.005 | 1375.1 | 147 KB |
 | collectible.yacht.small | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 865.3 | 132 KB |
@@ -155,7 +155,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.property.royal-estate | NEEDS_REVIEW | OK |  |  | 0.537 | 0 | 1573.6 | 252 KB |
 | collectible.property.limited-estate | NEEDS_REVIEW | OK |  |  | 0.467 | 0 | 966.3 | 244 KB |
 | collectible.phone.standard | NEEDS_REVIEW | OK |  |  | 0.389 | 0 | 649 | 98 KB |
-| collectible.phone.premium | NEEDS_REVISION | OK |  |  | 0.393 | 0 | 753.7 | 122 KB |
+| collectible.phone.premium | NEEDS_REVIEW | OK |  |  | 0.335 | 0 | 545.2 | 76 KB |
 | collectible.phone.luxury | NEEDS_REVIEW | OK |  |  | 0.431 | 0 | 1224.4 | 143 KB |
 | collectible.phone.gold | NEEDS_REVIEW | OK |  |  | 0.369 | 0 | 780.6 | 92 KB |
 | collectible.phone.limited | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 1160.5 | 140 KB |

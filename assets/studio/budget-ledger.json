@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 23.15,
-  "spentActualUsd": 9.919155,
-  "images": 185,
+  "spentEstimatedUsd": 23.65,
+  "spentActualUsd": 10.184005,
+  "images": 190,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -4831,6 +4831,136 @@
         "total_tokens": 2208
       },
       "seconds": 31
+    },
+    {
+      "at": "2026-11-07T02:54:45.717Z",
+      "requestId": "2026-11-07-lib-00-revisions",
+      "assetId": "collectible.car.hypercar",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05521,
+      "usage": {
+        "input_tokens": 506,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 506
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2262
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T02:55:13.078Z",
+      "requestId": "2026-11-07-lib-00-revisions",
+      "assetId": "collectible.phone.premium",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055195,
+      "usage": {
+        "input_tokens": 503,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 503
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2259
+      },
+      "seconds": 27
+    },
+    {
+      "at": "2026-11-07T02:55:45.497Z",
+      "requestId": "2026-11-07-lib-00-revisions",
+      "assetId": "frame.tournament.grand-champion",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05534,
+      "usage": {
+        "input_tokens": 532,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 532
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2288
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T02:56:15.750Z",
+      "requestId": "2026-11-07-lib-00-revisions",
+      "assetId": "frame.tournament.seasonal-champion",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05533,
+      "usage": {
+        "input_tokens": 530,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 530
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2286
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T02:56:40.188Z",
+      "requestId": "2026-11-07-lib-00-revisions",
+      "assetId": "game.blackjack.table-felt",
+      "version": 2,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043775,
+      "usage": {
+        "input_tokens": 523,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 523
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1895
+      },
+      "seconds": 24
     }
   ],
   "approvals": [

@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 158 |
-| NEEDS_REVISION | 6 |
+| NEEDS_REVIEW | 163 |
 | PLANNED | 88 |
+| NEEDS_REVISION | 1 |
 
 ## Theo nhóm
 
@@ -87,7 +87,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.blackjack.action-double | Double icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-split | Split icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.action-insurance | Insurance icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| game.blackjack.table-felt | Blackjack arc table (opaque) | Blackjack (Multiplayer & Solo) | 1536x1024 | no | P2 |  | NEEDS_REVISION | 0.10 |
+| game.blackjack.table-felt | Blackjack arc table (opaque) | Blackjack (Multiplayer & Solo) | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-seven | Slot symbol: seven | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-diamond | Slot symbol: diamond | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-bell | Slot symbol: bell | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
@@ -159,8 +159,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | frame.tournament.top-3 | Tournament top-3 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.runner-up | Tournament runner-up frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.champion | Tournament champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| frame.tournament.seasonal-champion | Tournament seasonal-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
-| frame.tournament.grand-champion | Tournament grand-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| frame.tournament.seasonal-champion | Tournament seasonal-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| frame.tournament.grand-champion | Tournament grand-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.founder | founder frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.early-supporter | early-supporter frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.special.kol | kol frame | Profile / Avatar frames | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
@@ -289,7 +289,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | collectible.watch.limited | watch: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.car.sports | car: sports | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.car.supercar | car: supercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| collectible.car.hypercar | car: hypercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| collectible.car.hypercar | car: hypercar | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.car.luxury | car: luxury | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.car.limited | car: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.yacht.small | yacht: small | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
@@ -303,7 +303,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | collectible.property.royal-estate | property: royal-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.property.limited-estate | property: limited-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.standard | phone: standard | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| collectible.phone.premium | phone: premium | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
+| collectible.phone.premium | phone: premium | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.luxury | phone: luxury | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.gold | phone: gold | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.limited | phone: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
