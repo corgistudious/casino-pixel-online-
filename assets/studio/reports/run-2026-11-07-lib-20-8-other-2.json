@@ -1,0 +1,77 @@
+{
+  "requestId": "2026-11-07-lib-20-8-other-2",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1,
+  "remainingBeforeUsd": 0.0808,
+  "runCapUsd": 0.0808,
+  "planned": [],
+  "generated": [],
+  "skippedBudget": [
+    {
+      "id": "spin.ticket",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "spin.wheel",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "ui.announcement",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "ui.calendar",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "ui.claim-panel",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "ui.leaderboard",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "ui.mailbox",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "ui.notification",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "ui.progress-panel",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "ui.quest",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    }
+  ],
+  "errors": [],
+  "startedAt": "2026-11-07T01:55:42.615Z",
+  "plannedEstimateUsd": 0,
+  "finishedAt": "2026-11-07T01:55:42.616Z",
+  "budgetExhausted": true,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 9.919155,
+    "spentEstimatedUsd": 23.15,
+    "spentActualUsd": 9.919155,
+    "remainingUsd": 0.0808,
+    "images": 185
+  }
+}
