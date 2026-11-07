@@ -24,6 +24,8 @@ import { buildSheets } from './sheets.mjs';
 import { audit } from './audit.mjs';
 import { probe } from './probe.mjs';
 import { writeReports } from './reports.mjs';
+import { exportWeb } from './export-web.mjs';
+import { integrationReport } from './integration-report.mjs';
 
 const args = process.argv.slice(2);
 const cmd = args[0];
@@ -83,6 +85,12 @@ async function main() {
       saveManifest(m);
       break;
     }
+    case 'export-web':
+      await exportWeb();
+      break;
+    case 'integration-report':
+      integrationReport();
+      break;
     case 'sheets':
       console.log((await buildSheets(loadManifest())).join('\n'));
       break;
