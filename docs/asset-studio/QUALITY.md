@@ -266,6 +266,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | achievement.legendary | NEEDS_REVIEW | OK |  |  | 0.487 | 0 | 936 | 154 KB |
 | achievement.collector | NEEDS_REVIEW | OK |  |  | 0.477 | 0 | 1092.1 | 156 KB |
 | achievement.champion | NEEDS_REVIEW | OK |  |  | 0.541 | 0 | 1122.3 | 189 KB |
+| ui.notification | NEEDS_REVIEW | OK |  |  | 0.361 | 0 | 293.4 | 71 KB |
+| ui.mailbox | NEEDS_REVIEW | OK |  |  | 0.466 | 0 | 656 | 99 KB |
 | ui.calendar | NEEDS_REVIEW | OK |  |  | 0.566 | 0 | 1095.6 | 140 KB |
+| ui.quest | NEEDS_REVIEW | OK |  |  | 0.418 | 0 | 854 | 116 KB |
 | ui.claim-panel | NEEDS_REVIEW | OK |  |  | 0.274 | 0 | 813 | 102 KB |
+| ui.progress-panel | NEEDS_REVIEW | OK |  |  | 0.431 | 0 | 904.8 | 91 KB |
 | ui.announcement | NEEDS_REVIEW | OK |  |  | 0.401 | 0 | 697.2 | 123 KB |
+| ui.leaderboard | NEEDS_REVIEW | OK |  |  | 0.38 | 0 | 884.5 | 127 KB |
