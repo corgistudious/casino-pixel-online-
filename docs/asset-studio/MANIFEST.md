@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 150 |
+| NEEDS_REVIEW | 155 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 96 |
+| PLANNED | 91 |
 
 ## Theo nhóm
 
@@ -345,11 +345,11 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
-| event.halloween.icon | halloween icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.halloween.icon | halloween icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.halloween.banner | halloween banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |
-| event.halloween.chest | halloween chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.halloween.chest | halloween chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.halloween.badge | halloween badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
-| event.halloween.decoration | halloween decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.halloween.decoration | halloween decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.christmas.icon | christmas icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.christmas.banner | christmas banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.christmas.chest | christmas chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
@@ -361,9 +361,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | event.new-year.badge | new-year badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.new-year.decoration | new-year decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.lunar-new-year.icon | lunar-new-year icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.lunar-new-year.banner | lunar-new-year banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | PLANNED | 0.10 |
+| event.lunar-new-year.banner | lunar-new-year banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.lunar-new-year.chest | lunar-new-year chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.lunar-new-year.badge | lunar-new-year badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.lunar-new-year.badge | lunar-new-year badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.lunar-new-year.decoration | lunar-new-year decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.valentine.icon | valentine icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.valentine.banner | valentine banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | PLANNED | 0.10 |

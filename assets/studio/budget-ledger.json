@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 22.35,
-  "spentActualUsd": 9.491255,
-  "images": 177,
+  "spentEstimatedUsd": 22.85,
+  "spentActualUsd": 9.75433,
+  "images": 182,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -4622,6 +4622,136 @@
         "total_tokens": 1811
       },
       "seconds": 27
+    },
+    {
+      "at": "2026-11-07T01:50:33.628Z",
+      "requestId": "2026-11-07-lib-13-6-events-tournament-achievements-2",
+      "assetId": "event.halloween.chest",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05492,
+      "usage": {
+        "input_tokens": 448,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 448
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2204
+      },
+      "seconds": 34
+    },
+    {
+      "at": "2026-11-07T01:51:06.618Z",
+      "requestId": "2026-11-07-lib-13-6-events-tournament-achievements-2",
+      "assetId": "event.halloween.decoration",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054925,
+      "usage": {
+        "input_tokens": 449,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 449
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2205
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-07T01:51:39.220Z",
+      "requestId": "2026-11-07-lib-13-6-events-tournament-achievements-2",
+      "assetId": "event.halloween.icon",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05492,
+      "usage": {
+        "input_tokens": 448,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 448
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2204
+      },
+      "seconds": 32
+    },
+    {
+      "at": "2026-11-07T01:52:12.486Z",
+      "requestId": "2026-11-07-lib-13-6-events-tournament-achievements-2",
+      "assetId": "event.lunar-new-year.badge",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054935,
+      "usage": {
+        "input_tokens": 451,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 451
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2207
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-07T01:52:41.556Z",
+      "requestId": "2026-11-07-lib-13-6-events-tournament-achievements-2",
+      "assetId": "event.lunar-new-year.banner",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1536x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.043375,
+      "usage": {
+        "input_tokens": 443,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 443
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1815
+      },
+      "seconds": 29
     }
   ]
 }
