@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 11.15,
-  "spentActualUsd": 3.39206,
-  "images": 65,
+  "spentEstimatedUsd": 11.65,
+  "spentActualUsd": 3.666675,
+  "images": 70,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -1701,6 +1701,136 @@
         "total_tokens": 2197
       },
       "seconds": 28
+    },
+    {
+      "at": "2026-11-07T00:49:43.666Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-lemon",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054865,
+      "usage": {
+        "input_tokens": 437,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 437
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2193
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:50:13.731Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-scatter",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054935,
+      "usage": {
+        "input_tokens": 451,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 451
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2207
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:50:44.579Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-seven",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054945,
+      "usage": {
+        "input_tokens": 453,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 453
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2209
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T00:51:13.592Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-wild",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054925,
+      "usage": {
+        "input_tokens": 449,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 449
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2205
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T00:51:45.774Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.xito.dealer-marker",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054945,
+      "usage": {
+        "input_tokens": 453,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 453
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2209
+      },
+      "seconds": 32
     }
   ]
 }

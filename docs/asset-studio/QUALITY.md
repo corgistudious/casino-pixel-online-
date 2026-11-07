@@ -29,6 +29,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.cards.action-raise | NEEDS_REVIEW | OK |  |  | 0.432 | 0 | 979.9 | 127 KB |
 | game.cards.action-allin | NEEDS_REVIEW | OK |  |  | 0.372 | 0 | 942.6 | 136 KB |
 | game.lieng.reveal-fan | NEEDS_REVIEW | OK |  |  | 0.453 | 0 | 1642.3 | 183 KB |
+| game.xito.dealer-marker | NEEDS_REVIEW | OK |  |  | 0.465 | 0 | 1079.3 | 148 KB |
 | game.blackjack.card-shoe | USER_APPROVED | OK |  |  | 0.441 | 0 | 907.1 | 129 KB |
 | game.blackjack.result-emblem | NEEDS_REVIEW | OK |  |  | 0.472 | 0 | 733.9 | 125 KB |
 | game.blackjack.action-hit | NEEDS_REVIEW | OK |  |  | 0.426 | 0 | 719.7 | 120 KB |
@@ -37,11 +38,15 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.blackjack.action-split | NEEDS_REVIEW | OK |  |  | 0.423 | 0 | 704.6 | 113 KB |
 | game.blackjack.action-insurance | NEEDS_REVIEW | OK |  |  | 0.451 | 0 | 643.1 | 110 KB |
 | game.blackjack.table-felt | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1328.7 | 118 KB |
+| game.slots.symbol-seven | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 686.5 | 112 KB |
 | game.slots.symbol-diamond | NEEDS_REVIEW | OK |  |  | 0.367 | 0 | 587 | 99 KB |
 | game.slots.symbol-bell | NEEDS_REVIEW | OK |  |  | 0.501 | 0 | 624.4 | 126 KB |
 | game.slots.symbol-cherry | NEEDS_REVIEW | OK |  |  | 0.424 | 0 | 366.3 | 114 KB |
+| game.slots.symbol-lemon | NEEDS_REVIEW | OK |  |  | 0.5 | 0 | 287.5 | 100 KB |
 | game.slots.symbol-clover | NEEDS_REVIEW | OK |  |  | 0.49 | 0 | 1009 | 157 KB |
+| game.slots.symbol-wild | NEEDS_REVIEW | OK |  |  | 0.444 | 0 | 707.2 | 128 KB |
 | game.slots.symbol-crown | USER_APPROVED | OK |  |  | 0.546 | 0 | 1369.2 | 178 KB |
+| game.slots.symbol-scatter | NEEDS_REVIEW | OK |  |  | 0.484 | 0 | 1033.5 | 173 KB |
 | game.slots.symbol-gold-bar | NEEDS_REVIEW | OK |  |  | 0.425 | 0 | 352.7 | 93 KB |
 | game.slots.cabinet-frame | NEEDS_REVIEW | OK |  |  | 0.442 | 0 | 1644.8 | 146 KB |
 | game.slots.spin-button | NEEDS_REVIEW | OK |  |  | 0.518 | 0 | 549 | 111 KB |
