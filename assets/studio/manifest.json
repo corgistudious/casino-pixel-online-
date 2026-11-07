@@ -2966,7 +2966,7 @@
       "name": "Slot symbol: diamond",
       "description": "Reel symbol.",
       "prompt": "Asset: Slot symbol: diamond for KEYO GAME (Slots). Purpose: Reel symbol.\nObject: A slot reel symbol: a large brilliant-cut sapphire-blue diamond with crisp facets, chunky and readable at 64 px.\nMaterials: cut gem.\nCamera: Front view, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -2975,17 +2975,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05489,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/game.slots.symbol-diamond/v1/source.png",
+          "optimizedFile": "assets/studio/generated/game.slots.symbol-diamond/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:48:38.479Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/game.slots.symbol-diamond/v1/source.png",
+      "optimizedFile": "assets/studio/generated/game.slots.symbol-diamond/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.367,
+          "borderAlpha": 0,
+          "lumStd": 65.2,
+          "bbox": {
+            "x": 0.0625,
+            "y": 0.16015625,
+            "w": 0.875,
+            "h": 0.703125
+          },
+          "sharpness": 587,
+          "dhash": "c21d1daa49491428"
+        },
+        "checkedAt": "2026-11-07T00:48:38.479Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 101276
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 442,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 442
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2198
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -2997,7 +3044,7 @@
       "name": "Slot symbol: bell",
       "description": "Reel symbol.",
       "prompt": "Asset: Slot symbol: bell for KEYO GAME (Slots). Purpose: Reel symbol.\nObject: A slot reel symbol: a classic golden bell with a small bow, chunky and readable at 64 px.\nMaterials: polished gold.\nCamera: Front view, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -3006,17 +3053,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05488,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/game.slots.symbol-bell/v1/source.png",
+          "optimizedFile": "assets/studio/generated/game.slots.symbol-bell/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:47:07.612Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/game.slots.symbol-bell/v1/source.png",
+      "optimizedFile": "assets/studio/generated/game.slots.symbol-bell/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.501,
+          "borderAlpha": 0,
+          "lumStd": 61.1,
+          "bbox": {
+            "x": 0.125,
+            "y": 0.05859375,
+            "w": 0.75,
+            "h": 0.85546875
+          },
+          "sharpness": 624.4,
+          "dhash": "0eeecc9c1b39ca32"
+        },
+        "checkedAt": "2026-11-07T00:47:07.612Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 128514
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 440,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 440
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2196
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3028,7 +3122,7 @@
       "name": "Slot symbol: cherry",
       "description": "Reel symbol.",
       "prompt": "Asset: Slot symbol: cherry for KEYO GAME (Slots). Purpose: Reel symbol.\nObject: A slot reel symbol: a pair of glossy cherries with a leaf, chunky and readable at 64 px.\nMaterials: glossy fruit.\nCamera: Front view, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -3037,17 +3131,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05488,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/game.slots.symbol-cherry/v1/source.png",
+          "optimizedFile": "assets/studio/generated/game.slots.symbol-cherry/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:47:38.071Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/game.slots.symbol-cherry/v1/source.png",
+      "optimizedFile": "assets/studio/generated/game.slots.symbol-cherry/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.424,
+          "borderAlpha": 0,
+          "lumStd": 54.3,
+          "bbox": {
+            "x": 0.07421875,
+            "y": 0.09375,
+            "w": 0.85546875,
+            "h": 0.79296875
+          },
+          "sharpness": 366.3,
+          "dhash": "1c53967e76f8cc45"
+        },
+        "checkedAt": "2026-11-07T00:47:38.071Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 116384
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 440,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 440
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2196
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3090,7 +3231,7 @@
       "name": "Slot symbol: clover",
       "description": "Reel symbol.",
       "prompt": "Asset: Slot symbol: clover for KEYO GAME (Slots). Purpose: Reel symbol.\nObject: A slot reel symbol: a four-leaf clover in emerald with gold veins, chunky and readable at 64 px.\nMaterials: emerald enamel, gold.\nCamera: Front view, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -3099,17 +3240,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05491,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/game.slots.symbol-clover/v1/source.png",
+          "optimizedFile": "assets/studio/generated/game.slots.symbol-clover/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:48:07.173Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/game.slots.symbol-clover/v1/source.png",
+      "optimizedFile": "assets/studio/generated/game.slots.symbol-clover/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.49,
+          "borderAlpha": 0,
+          "lumStd": 64.4,
+          "bbox": {
+            "x": 0.1015625,
+            "y": 0.0859375,
+            "w": 0.796875,
+            "h": 0.84765625
+          },
+          "sharpness": 1009,
+          "dhash": "9625746d344c4b96"
+        },
+        "checkedAt": "2026-11-07T00:48:07.173Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 160644
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 446,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 446
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2202
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -3271,7 +3459,7 @@
       "name": "Slot symbol: gold-bar",
       "description": "Reel symbol.",
       "prompt": "Asset: Slot symbol: gold-bar for KEYO GAME (Slots). Purpose: Reel symbol.\nObject: A slot reel symbol: a stack of three gold bars (future symbol), chunky and readable at 64 px.\nMaterials: gold.\nCamera: Front view, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -3280,17 +3468,64 @@
       "priority": "P2",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054885,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/game.slots.symbol-gold-bar/v1/source.png",
+          "optimizedFile": "assets/studio/generated/game.slots.symbol-gold-bar/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T00:49:06.440Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/game.slots.symbol-gold-bar/v1/source.png",
+      "optimizedFile": "assets/studio/generated/game.slots.symbol-gold-bar/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.425,
+          "borderAlpha": 0,
+          "lumStd": 50.2,
+          "bbox": {
+            "x": 0.046875,
+            "y": 0.14453125,
+            "w": 0.90234375,
+            "h": 0.75390625
+          },
+          "sharpness": 352.7,
+          "dhash": "3446971d59260444"
+        },
+        "checkedAt": "2026-11-07T00:49:06.440Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 95420
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 441,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 441
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2197
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -11535,5 +11770,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T00:46:31.940Z"
+  "updatedAt": "2026-11-07T00:49:06.440Z"
 }

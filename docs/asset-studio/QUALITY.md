@@ -37,7 +37,12 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | game.blackjack.action-split | NEEDS_REVIEW | OK |  |  | 0.423 | 0 | 704.6 | 113 KB |
 | game.blackjack.action-insurance | NEEDS_REVIEW | OK |  |  | 0.451 | 0 | 643.1 | 110 KB |
 | game.blackjack.table-felt | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1328.7 | 118 KB |
+| game.slots.symbol-diamond | NEEDS_REVIEW | OK |  |  | 0.367 | 0 | 587 | 99 KB |
+| game.slots.symbol-bell | NEEDS_REVIEW | OK |  |  | 0.501 | 0 | 624.4 | 126 KB |
+| game.slots.symbol-cherry | NEEDS_REVIEW | OK |  |  | 0.424 | 0 | 366.3 | 114 KB |
+| game.slots.symbol-clover | NEEDS_REVIEW | OK |  |  | 0.49 | 0 | 1009 | 157 KB |
 | game.slots.symbol-crown | USER_APPROVED | OK |  |  | 0.546 | 0 | 1369.2 | 178 KB |
+| game.slots.symbol-gold-bar | NEEDS_REVIEW | OK |  |  | 0.425 | 0 | 352.7 | 93 KB |
 | game.slots.cabinet-frame | NEEDS_REVIEW | OK |  |  | 0.442 | 0 | 1644.8 | 146 KB |
 | game.slots.spin-button | NEEDS_REVIEW | OK |  |  | 0.518 | 0 | 549 | 111 KB |
 | cardback.classic | NEEDS_REVIEW | OK |  |  | 0.743 | 0 | 3417.5 | 166 KB |

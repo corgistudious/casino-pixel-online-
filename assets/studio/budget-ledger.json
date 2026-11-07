@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 10.65,
-  "spentActualUsd": 3.117615,
-  "images": 60,
+  "spentEstimatedUsd": 11.15,
+  "spentActualUsd": 3.39206,
+  "images": 65,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -1571,6 +1571,136 @@
         "total_tokens": 2205
       },
       "seconds": 29
+    },
+    {
+      "at": "2026-11-07T00:47:07.368Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-bell",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05488,
+      "usage": {
+        "input_tokens": 440,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 440
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2196
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T00:47:37.839Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-cherry",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05488,
+      "usage": {
+        "input_tokens": 440,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 440
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2196
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:48:06.939Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-clover",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05491,
+      "usage": {
+        "input_tokens": 446,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 446
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2202
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T00:48:38.275Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-diamond",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05489,
+      "usage": {
+        "input_tokens": 442,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 442
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2198
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T00:49:06.224Z",
+      "requestId": "2026-11-07-lib-04-1-games-4",
+      "assetId": "game.slots.symbol-gold-bar",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054885,
+      "usage": {
+        "input_tokens": 441,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 441
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2197
+      },
+      "seconds": 28
     }
   ]
 }

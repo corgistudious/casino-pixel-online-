@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 39 |
-| PLANNED | 213 |
+| NEEDS_REVIEW | 44 |
+| PLANNED | 208 |
 
 ## Theo nhóm
 
@@ -88,15 +88,15 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | game.blackjack.action-insurance | Insurance icon | Blackjack (Multiplayer & Solo) | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.blackjack.table-felt | Blackjack arc table (opaque) | Blackjack (Multiplayer & Solo) | 1536x1024 | no | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-seven | Slot symbol: seven | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.slots.symbol-diamond | Slot symbol: diamond | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.slots.symbol-bell | Slot symbol: bell | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.slots.symbol-cherry | Slot symbol: cherry | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.slots.symbol-diamond | Slot symbol: diamond | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| game.slots.symbol-bell | Slot symbol: bell | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| game.slots.symbol-cherry | Slot symbol: cherry | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-lemon | Slot symbol: lemon | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.slots.symbol-clover | Slot symbol: clover | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.slots.symbol-clover | Slot symbol: clover | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.symbol-wild | Slot symbol: wild | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | game.slots.symbol-crown | Slot symbol: crown | Slots | 1024x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | game.slots.symbol-scatter | Slot symbol: scatter | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| game.slots.symbol-gold-bar | Slot symbol: gold-bar | Slots | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| game.slots.symbol-gold-bar | Slot symbol: gold-bar | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.cabinet-frame | Slot machine frame | Slots | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | game.slots.spin-button | Spin button | Slots | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
