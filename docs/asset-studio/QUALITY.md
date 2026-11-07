@@ -5,8 +5,13 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | Asset | Trạng thái | Kết quả | Lỗi | Cảnh báo | Coverage | Edge alpha | Sharpness | WebP |
 |---|---|---|---|---|---|---|---|---|
 | game.taixiu.bowl-cover | USER_APPROVED | OK |  |  | 0.681 | 0 | 1319.1 | 168 KB |
+| game.sicbo.crystal-dome | NEEDS_REVIEW | OK |  |  | 0.575 | 0 | 1094.9 | 186 KB |
 | game.roulette.wheel-head | USER_APPROVED | OK |  |  | 0.667 | 0 | 1228.1 | 142 KB |
+| game.roulette.wheel-rim | NEEDS_REVIEW | OK |  |  | 0.37 | 0 | 892.7 | 144 KB |
 | game.roulette.ball | NEEDS_REVIEW | OK |  |  | 0.34 | 0 | 34.1 | 32 KB |
+| game.roulette.pointer | NEEDS_REVIEW | OK |  |  | 0.133 | 0 | 327.9 | 56 KB |
+| game.roulette.marker | NEEDS_REVIEW | OK |  |  | 0.215 | 0 | 705.1 | 108 KB |
+| game.roulette.result-emblem | NEEDS_REVIEW | OK |  |  | 0.555 | 0 | 998 | 141 KB |
 | game.poker.dealer-button | USER_APPROVED | OK |  |  | 0.461 | 0 | 684.1 | 99 KB |
 | game.poker.blind-small | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 613.2 | 105 KB |
 | game.poker.blind-big | NEEDS_REVIEW | OK |  |  | 0.46 | 0 | 855.3 | 121 KB |

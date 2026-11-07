@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 9.35,
-  "spentActualUsd": 2.437545,
-  "images": 47,
+  "spentEstimatedUsd": 9.85,
+  "spentActualUsd": 2.71227,
+  "images": 52,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -1232,6 +1232,136 @@
         "total_tokens": 2190
       },
       "seconds": 24
+    },
+    {
+      "at": "2026-11-07T00:40:38.136Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.roulette.marker",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054915,
+      "usage": {
+        "input_tokens": 447,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 447
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2203
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:41:03.370Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.roulette.pointer",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054885,
+      "usage": {
+        "input_tokens": 441,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 441
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2197
+      },
+      "seconds": 25
+    },
+    {
+      "at": "2026-11-07T00:41:34.012Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.roulette.result-emblem",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054955,
+      "usage": {
+        "input_tokens": 455,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 455
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2211
+      },
+      "seconds": 30
+    },
+    {
+      "at": "2026-11-07T00:42:01.976Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.roulette.wheel-rim",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05496,
+      "usage": {
+        "input_tokens": 456,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 456
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2212
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T00:42:34.538Z",
+      "requestId": "2026-11-07-lib-03-1-games-3",
+      "assetId": "game.sicbo.crystal-dome",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05501,
+      "usage": {
+        "input_tokens": 466,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 466
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2222
+      },
+      "seconds": 32
     }
   ]
 }

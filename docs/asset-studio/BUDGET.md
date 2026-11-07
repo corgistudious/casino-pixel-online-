@@ -1,10 +1,10 @@
 # Budget Tracking (generated)
 
 - Ngân sách đã duyệt: **$10**
-- Đã tính vào ngân sách: **$2.4375** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
-- Chi phí thật theo token usage × bảng giá đã xác minh: $2.4375; tổng ước tính trần: $9.35
-- Còn lại theo bộ đếm nội bộ: **$7.56**
-- Ảnh đã tạo: 47; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2
+- Đã tính vào ngân sách: **$2.7123** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
+- Chi phí thật theo token usage × bảng giá đã xác minh: $2.7123; tổng ước tính trần: $9.85
+- Còn lại theo bộ đếm nội bộ: **$7.29**
+- Ảnh đã tạo: 52; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
@@ -57,10 +57,15 @@
 | 2026-11-07T00:39:14.120Z | 2026-11-07-lib-02-1-games-2 | game.poker.pot-pile | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 461 / out 1756 |
 | 2026-11-07T00:39:38.021Z | 2026-11-07-lib-02-1-games-2 | game.poker.table-felt-royal | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 455 / out 1372 |
 | 2026-11-07T00:40:02.432Z | 2026-11-07-lib-02-1-games-2 | game.roulette.ball | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 434 / out 1756 |
+| 2026-11-07T00:40:38.136Z | 2026-11-07-lib-03-1-games-3 | game.roulette.marker | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 447 / out 1756 |
+| 2026-11-07T00:41:03.370Z | 2026-11-07-lib-03-1-games-3 | game.roulette.pointer | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 441 / out 1756 |
+| 2026-11-07T00:41:34.012Z | 2026-11-07-lib-03-1-games-3 | game.roulette.result-emblem | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 455 / out 1756 |
+| 2026-11-07T00:42:01.976Z | 2026-11-07-lib-03-1-games-3 | game.roulette.wheel-rim | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 456 / out 1756 |
+| 2026-11-07T00:42:34.538Z | 2026-11-07-lib-03-1-games-3 | game.sicbo.crystal-dome | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 466 / out 1756 |
 
 ## Dự toán phần còn lại
 
-- 226 asset ở trạng thái PLANNED.
-- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$11.94**; cộng 30% dự phòng làm lại: **$15.53**.
-- Còn lại trong ngân sách đã duyệt: $7.56 → **cần nạp thêm khoảng $7.96** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.38.
-- Ước tính trần dùng để chặn chi tiêu (pricing.json): $22.60.
+- 221 asset ở trạng thái PLANNED.
+- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$11.67**; cộng 30% dự phòng làm lại: **$15.16**.
+- Còn lại trong ngân sách đã duyệt: $7.29 → **cần nạp thêm khoảng $7.88** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $4.38.
+- Ước tính trần dùng để chặn chi tiêu (pricing.json): $22.10.
