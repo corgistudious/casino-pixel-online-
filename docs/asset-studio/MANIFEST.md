@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 110 |
+| NEEDS_REVIEW | 112 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 136 |
+| PLANNED | 134 |
 
 ## Theo nhóm
 
@@ -299,9 +299,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | collectible.yacht.limited | yacht: limited | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.property.villa | property: villa | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | collectible.property.mansion | property: mansion | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.property.beach-villa | property: beach-villa | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| collectible.property.beach-villa | property: beach-villa | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.property.royal-estate | property: royal-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| collectible.property.limited-estate | property: limited-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| collectible.property.limited-estate | property: limited-estate | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.standard | phone: standard | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.premium | phone: premium | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | collectible.phone.luxury | phone: luxury | Collectibles / Gifts | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |

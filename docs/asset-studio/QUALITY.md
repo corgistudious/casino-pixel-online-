@@ -132,6 +132,8 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | collectible.car.hypercar | NEEDS_REVIEW | OK |  |  | 0.367 | 0.002 | 1187.5 | 149 KB |
 | collectible.car.luxury | NEEDS_REVIEW | OK |  |  | 0.391 | 0.011 | 1642.1 | 151 KB |
 | collectible.car.limited | NEEDS_REVIEW | OK |  |  | 0.401 | 0.005 | 1375.1 | 147 KB |
+| collectible.property.beach-villa | NEEDS_REVIEW | OK |  |  | 0.546 | 0 | 920.4 | 236 KB |
+| collectible.property.limited-estate | NEEDS_REVIEW | OK |  |  | 0.467 | 0 | 966.3 | 244 KB |
 | collectible.phone.standard | NEEDS_REVIEW | OK |  |  | 0.389 | 0 | 649 | 98 KB |
 | collectible.phone.premium | NEEDS_REVIEW | OK |  |  | 0.393 | 0 | 753.7 | 122 KB |
 | collectible.phone.luxury | NEEDS_REVIEW | OK |  |  | 0.431 | 0 | 1224.4 | 143 KB |
