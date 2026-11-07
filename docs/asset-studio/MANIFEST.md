@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 231 |
+| NEEDS_REVIEW | 236 |
 | NEEDS_REVISION | 6 |
-| PLANNED | 15 |
+| PLANNED | 10 |
 
 ## Theo nhóm
 
@@ -324,10 +324,10 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | reward.daily-gift | Reward: daily-gift | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| reward.weekly-gift | Reward: weekly-gift | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| reward.weekly-gift | Reward: weekly-gift | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | reward.login-chest | Reward: login-chest | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| reward.streak | Reward: streak | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| reward.vip-daily | Reward: vip-daily | Rewards | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| reward.streak | Reward: streak | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| reward.vip-daily | Reward: vip-daily | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | reward.milestone | Reward: milestone | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | reward.mystery-gift | Reward: mystery-gift | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | reward.premium-gift | Reward: premium-gift | Rewards | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
@@ -337,9 +337,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | ID | Tên | Hệ thống | Kích thước | Alpha | Ưu tiên | Batch | Trạng thái | Ước tính (USD) |
 |---|---|---|---|---|---|---|---|---|
 | spin.wheel | Spin wheel: wheel | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| spin.pointer | Spin wheel: pointer | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| spin.pointer | Spin wheel: pointer | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | spin.ticket | Spin wheel: ticket | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| spin.button | Spin wheel: button | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| spin.button | Spin wheel: button | Spin Wheel (planned — no gameplay without approval) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 
 ## event
 

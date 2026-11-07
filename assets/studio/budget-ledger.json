@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 20,
-  "spentEstimatedUsd": 31.05,
-  "spentActualUsd": 13.874225,
-  "images": 264,
+  "spentEstimatedUsd": 31.55,
+  "spentActualUsd": 14.14881,
+  "images": 269,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -6889,6 +6889,136 @@
           "text_tokens": 0
         },
         "total_tokens": 2204
+      },
+      "seconds": 28
+    },
+    {
+      "at": "2026-11-07T03:37:37.809Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "reward.streak",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054925,
+      "usage": {
+        "input_tokens": 449,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 449
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2205
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T03:38:08.552Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "reward.vip-daily",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05493,
+      "usage": {
+        "input_tokens": 450,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 450
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2206
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T03:38:42.266Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "reward.weekly-gift",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05493,
+      "usage": {
+        "input_tokens": 450,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 450
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2206
+      },
+      "seconds": 33
+    },
+    {
+      "at": "2026-11-07T03:39:13.955Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "spin.button",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054905,
+      "usage": {
+        "input_tokens": 445,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 445
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2201
+      },
+      "seconds": 31
+    },
+    {
+      "at": "2026-11-07T03:39:41.898Z",
+      "requestId": "2026-11-07-lib-19-8-other-1",
+      "assetId": "spin.pointer",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054895,
+      "usage": {
+        "input_tokens": 443,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 443
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2199
       },
       "seconds": 28
     }

@@ -1,10 +1,10 @@
 # Budget Tracking (generated)
 
 - Ngân sách đã duyệt: **$20**
-- Đã tính vào ngân sách: **$13.8742** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
-- Chi phí thật theo token usage × bảng giá đã xác minh: $13.8742; tổng ước tính trần: $31.05
-- Còn lại theo bộ đếm nội bộ: **$6.13**
-- Ảnh đã tạo: 264; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip, 2026-11-07-lib-06-3-frames-profile-1, 2026-11-07-lib-07-3-frames-profile-2, 2026-11-07-lib-08-3-frames-profile-3, 2026-11-07-lib-09-4-collectibles-1, 2026-11-07-lib-10-4-collectibles-2, 2026-11-07-lib-11-5-bank-chests, 2026-11-07-lib-12-6-events-tournament-achievements-1, 2026-11-07-lib-13-6-events-tournament-achievements-2, 2026-11-07-lib-00-revisions, 2026-11-07-lib-14-6-events-tournament-achievements-3, 2026-11-07-lib-15-6-events-tournament-achievements-4, 2026-11-07-lib-16-7-bubbles-titles-fx-1, 2026-11-07-lib-17-7-bubbles-titles-fx-2, 2026-11-07-lib-18-7-bubbles-titles-fx-3
+- Đã tính vào ngân sách: **$14.1488** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
+- Chi phí thật theo token usage × bảng giá đã xác minh: $14.1488; tổng ước tính trần: $31.55
+- Còn lại theo bộ đếm nội bộ: **$5.85**
+- Ảnh đã tạo: 269; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip, 2026-11-07-lib-06-3-frames-profile-1, 2026-11-07-lib-07-3-frames-profile-2, 2026-11-07-lib-08-3-frames-profile-3, 2026-11-07-lib-09-4-collectibles-1, 2026-11-07-lib-10-4-collectibles-2, 2026-11-07-lib-11-5-bank-chests, 2026-11-07-lib-12-6-events-tournament-achievements-1, 2026-11-07-lib-13-6-events-tournament-achievements-2, 2026-11-07-lib-00-revisions, 2026-11-07-lib-14-6-events-tournament-achievements-3, 2026-11-07-lib-15-6-events-tournament-achievements-4, 2026-11-07-lib-16-7-bubbles-titles-fx-1, 2026-11-07-lib-17-7-bubbles-titles-fx-2, 2026-11-07-lib-18-7-bubbles-titles-fx-3
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
@@ -274,10 +274,15 @@
 | 2026-11-07T03:35:53.972Z | 2026-11-07-lib-19-8-other-1 | reward.milestone | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 445 / out 1756 |
 | 2026-11-07T03:36:25.620Z | 2026-11-07-lib-19-8-other-1 | reward.mystery-gift | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 456 / out 1756 |
 | 2026-11-07T03:36:54.293Z | 2026-11-07-lib-19-8-other-1 | reward.premium-gift | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 448 / out 1756 |
+| 2026-11-07T03:37:37.809Z | 2026-11-07-lib-19-8-other-1 | reward.streak | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 449 / out 1756 |
+| 2026-11-07T03:38:08.552Z | 2026-11-07-lib-19-8-other-1 | reward.vip-daily | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 450 / out 1756 |
+| 2026-11-07T03:38:42.266Z | 2026-11-07-lib-19-8-other-1 | reward.weekly-gift | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 450 / out 1756 |
+| 2026-11-07T03:39:13.955Z | 2026-11-07-lib-19-8-other-1 | spin.button | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 445 / out 1756 |
+| 2026-11-07T03:39:41.898Z | 2026-11-07-lib-19-8-other-1 | spin.pointer | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 443 / out 1756 |
 
 ## Dự toán phần còn lại
 
-- 15 asset ở trạng thái PLANNED.
-- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$0.80**; cộng 30% dự phòng làm lại: **$1.04**.
-- Còn lại trong ngân sách đã duyệt: $6.13 → **cần nạp thêm khoảng $0.00** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $0.00.
-- Ước tính trần dùng để chặn chi tiêu (pricing.json): $1.50.
+- 10 asset ở trạng thái PLANNED.
+- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$0.53**; cộng 30% dự phòng làm lại: **$0.68**.
+- Còn lại trong ngân sách đã duyệt: $5.85 → **cần nạp thêm khoảng $0.00** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $0.00.
+- Ước tính trần dùng để chặn chi tiêu (pricing.json): $1.00.
