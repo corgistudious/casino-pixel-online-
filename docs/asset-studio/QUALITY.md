@@ -185,9 +185,11 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | event.lunar-new-year.chest | NEEDS_REVIEW | OK |  |  | 0.544 | 0 | 1171.7 | 178 KB |
 | event.lunar-new-year.badge | NEEDS_REVIEW | OK |  |  | 0.527 | 0 | 1085.6 | 196 KB |
 | event.lunar-new-year.decoration | NEEDS_REVIEW | OK |  |  | 0.276 | 0 | 615.4 | 158 KB |
+| event.valentine.icon | NEEDS_REVIEW | OK |  |  | 0.5 | 0 | 658.3 | 136 KB |
 | event.valentine.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 991.8 | 104 KB |
 | event.valentine.chest | NEEDS_REVIEW | OK |  |  | 0.517 | 0 | 1023.6 | 167 KB |
 | event.valentine.badge | NEEDS_REVIEW | OK |  |  | 0.473 | 0 | 897.8 | 171 KB |
+| event.valentine.decoration | NEEDS_REVIEW | OK |  |  | 0.222 | 0.004 | 505.2 | 115 KB |
 | event.summer.icon | NEEDS_REVIEW | OK |  |  | 0.575 | 0 | 870.7 | 186 KB |
 | event.summer.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1167.1 | 136 KB |
 | event.summer.chest | NEEDS_REVIEW | OK |  |  | 0.581 | 0 | 1177.2 | 188 KB |

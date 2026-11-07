@@ -5,83 +5,168 @@
   "quality": "high",
   "pricingVerified": true,
   "budgetLimitUsd": 1.2,
-  "remainingBeforeUsd": 0.0808,
-  "runCapUsd": 0.0808,
-  "planned": [],
-  "generated": [],
-  "skippedBudget": [
+  "remainingBeforeUsd": 9.0927,
+  "runCapUsd": 1.2,
+  "planned": [
     {
       "id": "tournament.badge",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "tournament.banner",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "tournament.medal",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "tournament.ticket",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "tournament.trophy",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "event.thanksgiving.decoration",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "event.thanksgiving.icon",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "event.valentine.badge",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "event.valentine.banner",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1536x1024",
+      "transparent": false,
+      "estimateUsd": 0.1
     },
     {
       "id": "event.valentine.chest",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "event.valentine.decoration",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     },
     {
       "id": "event.valentine.icon",
-      "estimateUsd": 0.1,
-      "reason": "approved budget exhausted"
+      "size": "1024x1024",
+      "transparent": true,
+      "estimateUsd": 0.1
     }
   ],
+  "generated": [
+    {
+      "id": "tournament.badge",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "tournament.banner",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "tournament.medal",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "tournament.ticket",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "tournament.trophy",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.thanksgiving.decoration",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.thanksgiving.icon",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.valentine.badge",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.valentine.banner",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.valentine.chest",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.valentine.decoration",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "id": "event.valentine.icon",
+      "status": "NEEDS_REVIEW",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "skippedBudget": [],
   "errors": [],
-  "startedAt": "2026-11-07T01:54:52.609Z",
-  "plannedEstimateUsd": 0,
-  "finishedAt": "2026-11-07T01:54:52.609Z",
-  "budgetExhausted": true,
+  "startedAt": "2026-11-07T03:04:55.683Z",
+  "plannedEstimateUsd": 1.2,
+  "finishedAt": "2026-11-07T03:11:37.551Z",
+  "budgetExhausted": false,
   "ledger": {
-    "approvedTotalUsd": 10,
-    "spentUsd": 9.919155,
-    "spentEstimatedUsd": 23.15,
-    "spentActualUsd": 9.919155,
-    "remainingUsd": 0.0808,
-    "images": 185
+    "approvedTotalUsd": 20,
+    "spentUsd": 11.554985,
+    "spentEstimatedUsd": 26.25,
+    "spentActualUsd": 11.554985,
+    "remainingUsd": 8.445,
+    "images": 216
   }
 }
