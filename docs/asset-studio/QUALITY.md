@@ -91,6 +91,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | frame.tournament.participant | NEEDS_REVIEW | OK |  |  | 0.235 | 0.003 | 930.9 | 142 KB |
 | frame.tournament.top-100 | NEEDS_REVIEW | OK |  |  | 0.292 | 0.004 | 1107 | 172 KB |
 | frame.tournament.top-10 | NEEDS_REVIEW | OK |  |  | 0.277 | 0.005 | 988 | 159 KB |
+| frame.tournament.top-3 | NEEDS_REVIEW | OK |  |  | 0.275 | 0.005 | 1136.6 | 172 KB |
 | frame.tournament.runner-up | NEEDS_REVIEW | OK |  |  | 0.287 | 0.014 | 1085.2 | 167 KB |
 | frame.tournament.champion | NEEDS_REVIEW | OK |  |  | 0.267 | 0 | 1176.6 | 174 KB |
 | frame.tournament.seasonal-champion | NEEDS_REVISION | FAIL | object touches the canvas edge (possibly cut off) |  | 0.29 | 0.007 | 957.2 | 169 KB |
@@ -115,6 +116,10 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | avatar.collector | NEEDS_REVIEW | OK |  |  | 1 | 1 | 999.1 | 128 KB |
 | avatar.fantasy-dealer | NEEDS_REVIEW | OK |  |  | 1 | 1 | 884.3 | 115 KB |
 | bubble.gold | USER_APPROVED | OK |  |  | 0.441 | 0.001 | 478.1 | 39 KB |
+| profile.achievement-showcase | NEEDS_REVIEW | OK |  |  | 0.369 | 0.004 | 709.5 | 113 KB |
+| profile.accent-vip | NEEDS_REVIEW | OK |  |  | 0.229 | 0 | 583.6 | 103 KB |
+| profile.accent-limited | NEEDS_REVIEW | OK |  |  | 0.243 | 0 | 567.1 | 110 KB |
+| profile.accent-kol | NEEDS_REVIEW | OK |  |  | 0.272 | 0 | 586.2 | 111 KB |
 | bank.vault-premium | USER_APPROVED | OK |  |  | 0.609 | 0 | 1358.7 | 181 KB |
 | chest.legendary | USER_APPROVED | OK |  |  | 0.571 | 0 | 1395.4 | 193 KB |
 | collectible.watch.luxury | USER_APPROVED | OK |  |  | 0.496 | 0 | 1402.1 | 172 KB |

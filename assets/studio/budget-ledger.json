@@ -1,8 +1,8 @@
 {
   "approvedTotalUsd": 10,
-  "spentEstimatedUsd": 16.45,
-  "spentActualUsd": 6.30761,
-  "images": 118,
+  "spentEstimatedUsd": 16.95,
+  "spentActualUsd": 6.58219,
+  "images": 123,
   "executedRequests": [
     "2026-11-06-01-probe-dry-run",
     "2026-11-06-02-sample-1-generate",
@@ -3083,6 +3083,136 @@
         "total_tokens": 2238
       },
       "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:18:23.595Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "frame.tournament.top-3",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.055105,
+      "usage": {
+        "input_tokens": 485,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 485
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2241
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:18:52.685Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "profile.accent-kol",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054865,
+      "usage": {
+        "input_tokens": 437,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 437
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2193
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:19:19.786Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "profile.accent-limited",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054865,
+      "usage": {
+        "input_tokens": 437,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 437
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2193
+      },
+      "seconds": 27
+    },
+    {
+      "at": "2026-11-07T01:19:49.303Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "profile.accent-vip",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.054865,
+      "usage": {
+        "input_tokens": 437,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 437
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2193
+      },
+      "seconds": 29
+    },
+    {
+      "at": "2026-11-07T01:20:17.917Z",
+      "requestId": "2026-11-07-lib-08-3-frames-profile-3",
+      "assetId": "profile.achievement-showcase",
+      "version": 1,
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "high",
+      "size": "1024x1024",
+      "ok": true,
+      "estimatedUsd": 0.1,
+      "actualUsd": 0.05488,
+      "usage": {
+        "input_tokens": 440,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 440
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2196
+      },
+      "seconds": 28
     }
   ]
 }

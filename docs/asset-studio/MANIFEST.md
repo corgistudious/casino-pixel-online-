@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 91 |
-| PLANNED | 155 |
+| NEEDS_REVIEW | 96 |
 | NEEDS_REVISION | 6 |
+| PLANNED | 150 |
 
 ## Theo nhóm
 
@@ -156,7 +156,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | frame.tournament.participant | Tournament participant frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.top-100 | Tournament top-100 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.top-10 | Tournament top-10 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| frame.tournament.top-3 | Tournament top-3 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| frame.tournament.top-3 | Tournament top-3 frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.runner-up | Tournament runner-up frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.champion | Tournament champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | frame.tournament.seasonal-champion | Tournament seasonal-champion frame | Profile / Avatar frames | 1024x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
@@ -233,10 +233,10 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | profile.header | Profile header | Profile | 1536x1024 | no | P2 |  | PLANNED | 0.10 |
 | profile.background | Profile background | Profile | 1536x1024 | no | P2 |  | PLANNED | 0.10 |
 | profile.prestige-effect | Profile prestige-effect | Profile | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| profile.achievement-showcase | Profile achievement-showcase | Profile | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| profile.accent-vip | Profile accent-vip | Profile | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| profile.accent-limited | Profile accent-limited | Profile | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| profile.accent-kol | Profile accent-kol | Profile | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| profile.achievement-showcase | Profile achievement-showcase | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| profile.accent-vip | Profile accent-vip | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| profile.accent-limited | Profile accent-limited | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| profile.accent-kol | Profile accent-kol | Profile | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## fx
 
