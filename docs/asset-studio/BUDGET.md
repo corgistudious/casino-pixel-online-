@@ -1,10 +1,10 @@
 # Budget Tracking (generated)
 
 - Ngân sách đã duyệt: **$20**
-- Đã tính vào ngân sách: **$11.9915** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
-- Chi phí thật theo token usage × bảng giá đã xác minh: $11.9915; tổng ước tính trần: $27.25
-- Còn lại theo bộ đếm nội bộ: **$8.01**
-- Ảnh đã tạo: 226; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip, 2026-11-07-lib-06-3-frames-profile-1, 2026-11-07-lib-07-3-frames-profile-2, 2026-11-07-lib-08-3-frames-profile-3, 2026-11-07-lib-09-4-collectibles-1, 2026-11-07-lib-10-4-collectibles-2, 2026-11-07-lib-11-5-bank-chests, 2026-11-07-lib-12-6-events-tournament-achievements-1, 2026-11-07-lib-13-6-events-tournament-achievements-2, 2026-11-07-lib-00-revisions, 2026-11-07-lib-14-6-events-tournament-achievements-3, 2026-11-07-lib-15-6-events-tournament-achievements-4
+- Đã tính vào ngân sách: **$12.2211** (chi phí thật từ token usage khi API trả về; nếu không có thì tính theo ước tính trần)
+- Chi phí thật theo token usage × bảng giá đã xác minh: $12.2211; tổng ước tính trần: $27.75
+- Còn lại theo bộ đếm nội bộ: **$7.78**
+- Ảnh đã tạo: 231; yêu cầu đã chạy: 2026-11-06-01-probe-dry-run, 2026-11-06-02-sample-1-generate, 2026-11-07-01-sample-1-revisions, 2026-11-07-lib-01-1-games-1, 2026-11-07-lib-02-1-games-2, 2026-11-07-lib-03-1-games-3, 2026-11-07-lib-04-1-games-4, 2026-11-07-lib-05-2-vip, 2026-11-07-lib-06-3-frames-profile-1, 2026-11-07-lib-07-3-frames-profile-2, 2026-11-07-lib-08-3-frames-profile-3, 2026-11-07-lib-09-4-collectibles-1, 2026-11-07-lib-10-4-collectibles-2, 2026-11-07-lib-11-5-bank-chests, 2026-11-07-lib-12-6-events-tournament-achievements-1, 2026-11-07-lib-13-6-events-tournament-achievements-2, 2026-11-07-lib-00-revisions, 2026-11-07-lib-14-6-events-tournament-achievements-3, 2026-11-07-lib-15-6-events-tournament-achievements-4
 
 > Bộ đếm nội bộ không thay thế giới hạn chi tiêu của OpenAI Platform. Số thực tế xem tại OpenAI dashboard → Usage.
 
@@ -236,10 +236,15 @@
 | 2026-11-07T03:15:03.196Z | 2026-11-07-lib-16-7-bubbles-titles-fx-1 | bubble.halloween | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 497 / out 1372 |
 | 2026-11-07T03:15:25.669Z | 2026-11-07-lib-16-7-bubbles-titles-fx-1 | bubble.kol | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 498 / out 1372 |
 | 2026-11-07T03:15:48.447Z | 2026-11-07-lib-16-7-bubbles-titles-fx-1 | bubble.limited | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 500 / out 1372 |
+| 2026-11-07T03:16:22.729Z | 2026-11-07-lib-16-7-bubbles-titles-fx-1 | bubble.lunar-new-year | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 498 / out 1372 |
+| 2026-11-07T03:16:44.374Z | 2026-11-07-lib-16-7-bubbles-titles-fx-1 | bubble.royal | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 498 / out 1372 |
+| 2026-11-07T03:17:07.797Z | 2026-11-07-lib-16-7-bubbles-titles-fx-1 | bubble.tournament | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 496 / out 1372 |
+| 2026-11-07T03:17:28.547Z | 2026-11-07-lib-16-7-bubbles-titles-fx-1 | bubble.vip | gpt-image-2.5-sunburst | high | 1536x1024 | yes | $0.10 | in 499 / out 1372 |
+| 2026-11-07T03:18:00.422Z | 2026-11-07-lib-16-7-bubbles-titles-fx-1 | fx.all-in | gpt-image-2.5-sunburst | high | 1024x1024 | yes | $0.10 | in 465 / out 1756 |
 
 ## Dự toán phần còn lại
 
-- 53 asset ở trạng thái PLANNED.
-- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$2.69**; cộng 30% dự phòng làm lại: **$3.49**.
-- Còn lại trong ngân sách đã duyệt: $8.01 → **cần nạp thêm khoảng $0.00** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $0.00.
-- Ước tính trần dùng để chặn chi tiêu (pricing.json): $5.30.
+- 48 asset ở trạng thái PLANNED.
+- Theo chi phí thật đã đo (1024x1024: $0.0550, 1536x1024: $0.0435, 1024x1536: $0.0436): **$2.46**; cộng 30% dự phòng làm lại: **$3.19**.
+- Còn lại trong ngân sách đã duyệt: $7.78 → **cần nạp thêm khoảng $0.00** để hoàn thiện toàn bộ (gồm dự phòng); không dự phòng: $0.00.
+- Ước tính trần dùng để chặn chi tiêu (pricing.json): $4.80.

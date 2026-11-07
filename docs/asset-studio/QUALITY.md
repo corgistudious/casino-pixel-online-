@@ -119,12 +119,16 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | bubble.classic | NEEDS_REVIEW | OK |  |  | 0.46 | 0 | 373.8 | 40 KB |
 | bubble.gold | USER_APPROVED | OK |  |  | 0.441 | 0.001 | 478.1 | 39 KB |
 | bubble.diamond | NEEDS_REVIEW | OK |  |  | 0.445 | 0 | 421.4 | 51 KB |
+| bubble.vip | NEEDS_REVIEW | OK |  |  | 0.436 | 0.053 | 478.7 | 49 KB |
+| bubble.royal | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard |  | 0.458 | 0.074 | 356 | 52 KB |
 | bubble.limited | NEEDS_REVIEW | OK |  |  | 0.438 | 0 | 281.8 | 47 KB |
+| bubble.tournament | NEEDS_REVISION | FAIL | background not transparent at the edges (edge alpha 7%) — opaque backdrop or fake checkerboard |  | 0.457 | 0.074 | 584.2 | 52 KB |
 | bubble.champion | NEEDS_REVIEW | OK |  |  | 0.477 | 0.055 | 579 | 52 KB |
 | bubble.kol | NEEDS_REVIEW | OK |  |  | 0.465 | 0.027 | 396.6 | 56 KB |
 | bubble.creator | NEEDS_REVIEW | OK |  |  | 0.471 | 0.038 | 426.2 | 55 KB |
 | bubble.halloween | NEEDS_REVIEW | OK |  |  | 0.39 | 0 | 461.6 | 54 KB |
 | bubble.christmas | NEEDS_REVIEW | OK |  |  | 0.371 | 0.031 | 470.9 | 57 KB |
+| bubble.lunar-new-year | NEEDS_REVIEW | OK |  |  | 0.447 | 0.024 | 338.9 | 46 KB |
 | bubble.anniversary | NEEDS_REVIEW | OK |  |  | 0.427 | 0.018 | 496.9 | 56 KB |
 | profile.nameplate | NEEDS_REVIEW | OK |  |  | 0.173 | 0 | 361.3 | 64 KB |
 | profile.header | NEEDS_REVIEW | OK |  |  | 1 | 1 | 965.6 | 89 KB |
@@ -134,6 +138,7 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | profile.accent-vip | NEEDS_REVIEW | OK |  |  | 0.229 | 0 | 583.6 | 103 KB |
 | profile.accent-limited | NEEDS_REVIEW | OK |  |  | 0.243 | 0 | 567.1 | 110 KB |
 | profile.accent-kol | NEEDS_REVIEW | OK |  |  | 0.272 | 0 | 586.2 | 111 KB |
+| fx.all-in | NEEDS_REVIEW | OK |  |  | 0.427 | 0.001 | 1109.7 | 216 KB |
 | bank.vault-premium | USER_APPROVED | OK |  |  | 0.609 | 0 | 1358.7 | 181 KB |
 | bank.vault-open | NEEDS_REVIEW | OK |  |  | 0.569 | 0 | 1398.4 | 181 KB |
 | bank.money-bag | NEEDS_REVIEW | OK |  |  | 0.543 | 0 | 806.2 | 193 KB |

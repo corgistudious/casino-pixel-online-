@@ -8,9 +8,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 198 |
-| NEEDS_REVISION | 1 |
-| PLANNED | 53 |
+| NEEDS_REVIEW | 201 |
+| NEEDS_REVISION | 3 |
+| PLANNED | 48 |
 
 ## Theo nhóm
 
@@ -194,16 +194,16 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | bubble.classic | Chat bubble: classic | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.gold | Chat bubble: gold | Chat | 1536x1024 | yes | P1 | sample-1 | USER_APPROVED | 0.10 |
 | bubble.diamond | Chat bubble: diamond | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| bubble.vip | Chat bubble: vip | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
-| bubble.royal | Chat bubble: royal | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
+| bubble.vip | Chat bubble: vip | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
+| bubble.royal | Chat bubble: royal | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | bubble.limited | Chat bubble: limited | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| bubble.tournament | Chat bubble: tournament | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
+| bubble.tournament | Chat bubble: tournament | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVISION | 0.10 |
 | bubble.champion | Chat bubble: champion | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.kol | Chat bubble: kol | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.creator | Chat bubble: creator | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.halloween | Chat bubble: halloween | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.christmas | Chat bubble: christmas | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
-| bubble.lunar-new-year | Chat bubble: lunar-new-year | Chat | 1536x1024 | yes | P2 |  | PLANNED | 0.10 |
+| bubble.lunar-new-year | Chat bubble: lunar-new-year | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | bubble.anniversary | Chat bubble: anniversary | Chat | 1536x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 
 ## title
@@ -254,7 +254,7 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | fx.bust | Effect: bust | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | fx.push | Effect: push | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | fx.fold | Effect: fold | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
-| fx.all-in | Effect: all-in | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
+| fx.all-in | Effect: all-in | Effects | 1024x1024 | yes | P2 |  | NEEDS_REVIEW | 0.10 |
 | fx.reward-reveal | Effect: reward-reveal | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 | fx.chest-opening | Effect: chest-opening | Effects | 1024x1024 | yes | P2 |  | PLANNED | 0.10 |
 
