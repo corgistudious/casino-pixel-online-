@@ -1,0 +1,92 @@
+{
+  "requestId": "2026-11-07-lib-14-6-events-tournament-achievements-3",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.3,
+  "remainingBeforeUsd": 0.0808,
+  "runCapUsd": 0.0808,
+  "planned": [],
+  "generated": [],
+  "skippedBudget": [
+    {
+      "id": "event.new-year.badge",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.new-year.banner",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.new-year.chest",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.new-year.decoration",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.new-year.icon",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.summer.badge",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.summer.banner",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.summer.chest",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.summer.decoration",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.summer.icon",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.thanksgiving.badge",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.thanksgiving.banner",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "event.thanksgiving.chest",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    }
+  ],
+  "errors": [],
+  "startedAt": "2026-11-07T01:54:42.645Z",
+  "plannedEstimateUsd": 0,
+  "finishedAt": "2026-11-07T01:54:42.645Z",
+  "budgetExhausted": true,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 9.919155,
+    "spentEstimatedUsd": 23.15,
+    "spentActualUsd": 9.919155,
+    "remainingUsd": 0.0808,
+    "images": 185
+  }
+}
