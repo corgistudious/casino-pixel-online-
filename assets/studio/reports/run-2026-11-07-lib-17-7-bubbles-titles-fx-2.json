@@ -1,0 +1,102 @@
+{
+  "requestId": "2026-11-07-lib-17-7-bubbles-titles-fx-2",
+  "dryRun": false,
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "pricingVerified": true,
+  "budgetLimitUsd": 1.5,
+  "remainingBeforeUsd": 0.0808,
+  "runCapUsd": 0.0808,
+  "planned": [],
+  "generated": [],
+  "skippedBudget": [
+    {
+      "id": "fx.big-win",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.bust",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.champion-victory",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.chest-opening",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.fold",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.jackpot",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.mega-win",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.normal-lose",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.normal-win",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.perfect-win",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.push",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.reward-reveal",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.tournament-victory",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "fx.vip-victory",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    },
+    {
+      "id": "title.champion",
+      "estimateUsd": 0.1,
+      "reason": "approved budget exhausted"
+    }
+  ],
+  "errors": [],
+  "startedAt": "2026-11-07T01:55:12.528Z",
+  "plannedEstimateUsd": 0,
+  "finishedAt": "2026-11-07T01:55:12.528Z",
+  "budgetExhausted": true,
+  "ledger": {
+    "approvedTotalUsd": 10,
+    "spentUsd": 9.919155,
+    "spentEstimatedUsd": 23.15,
+    "spentActualUsd": 9.919155,
+    "remainingUsd": 0.0808,
+    "images": 185
+  }
+}
