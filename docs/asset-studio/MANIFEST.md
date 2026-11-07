@@ -8,8 +8,8 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 |---|---|
 | EXISTING_APPROVED | 9 |
 | USER_APPROVED | 18 |
-| NEEDS_REVIEW | 174 |
-| PLANNED | 78 |
+| NEEDS_REVIEW | 177 |
+| PLANNED | 75 |
 
 ## Theo nhóm
 
@@ -375,9 +375,9 @@ Nguồn dữ liệu: `assets/studio/manifest.json` (sinh từ `tools/asset-studi
 | event.summer.badge | summer badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.summer.decoration | summer decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.thanksgiving.icon | thanksgiving icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.thanksgiving.banner | thanksgiving banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | PLANNED | 0.10 |
-| event.thanksgiving.chest | thanksgiving chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
-| event.thanksgiving.badge | thanksgiving badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
+| event.thanksgiving.banner | thanksgiving banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |
+| event.thanksgiving.chest | thanksgiving chest | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
+| event.thanksgiving.badge | thanksgiving badge | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.thanksgiving.decoration | thanksgiving decoration | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | PLANNED | 0.10 |
 | event.anniversary.icon | anniversary icon | Seasonal events (existing season system) | 1024x1024 | yes | P3 |  | NEEDS_REVIEW | 0.10 |
 | event.anniversary.banner | anniversary banner | Seasonal events (existing season system) | 1536x1024 | no | P3 |  | NEEDS_REVIEW | 0.10 |

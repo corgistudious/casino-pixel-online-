@@ -17837,7 +17837,7 @@
       "name": "thanksgiving banner",
       "description": "Seasonal event art for the existing season themes.",
       "prompt": "Asset: thanksgiving banner for KEYO GAME (Seasonal events (existing season system)). Purpose: Seasonal event art for the existing season themes.\nObject: a wide event banner backdrop with an empty centre band (opaque) themed for thanksgiving; tasteful, premium; no text.\nMaterials: themed.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: opaque, painted edge to edge exactly as described in the composition (dark, rich, in palette). NEVER a checkerboard transparency pattern, never a white or grey studio backdrop, never empty margins.\nResolution target: 1536x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1536x1024",
       "transparency": false,
@@ -17846,17 +17846,64 @@
       "priority": "P3",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.043505,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/event.thanksgiving.banner/v1/source.png",
+          "optimizedFile": "assets/studio/generated/event.thanksgiving.banner/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:04:12.950Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/event.thanksgiving.banner/v1/source.png",
+      "optimizedFile": "assets/studio/generated/event.thanksgiving.banner/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1536,
+          "height": 1024,
+          "hasAlpha": false,
+          "coverage": 1,
+          "borderAlpha": 1,
+          "lumStd": 67.3,
+          "greyEdge": 0,
+          "sharpness": 1211.5,
+          "dhash": "e9f1332f977163c8",
+          "avgColor": [
+            127,
+            66,
+            44
+          ]
+        },
+        "checkedAt": "2026-11-07T03:04:12.950Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 134800
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 469,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 469
+        },
+        "output_tokens": 1372,
+        "output_tokens_details": {
+          "image_tokens": 1372,
+          "text_tokens": 0
+        },
+        "total_tokens": 1841
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -17868,7 +17915,7 @@
       "name": "thanksgiving chest",
       "description": "Seasonal event art for the existing season themes.",
       "prompt": "Asset: thanksgiving chest for KEYO GAME (Seasonal events (existing season system)). Purpose: Seasonal event art for the existing season themes.\nObject: an event reward chest themed for thanksgiving; tasteful, premium; no text.\nMaterials: themed.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -17877,17 +17924,69 @@
       "priority": "P3",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.05492,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/event.thanksgiving.chest/v1/source.png",
+          "optimizedFile": "assets/studio/generated/event.thanksgiving.chest/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:04:43.589Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/event.thanksgiving.chest/v1/source.png",
+      "optimizedFile": "assets/studio/generated/event.thanksgiving.chest/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.522,
+          "borderAlpha": 0,
+          "lumStd": 55.5,
+          "bbox": {
+            "x": 0.0625,
+            "y": 0.10546875,
+            "w": 0.875,
+            "h": 0.80859375
+          },
+          "sharpness": 1071.6,
+          "dhash": "92494bdad2f29626",
+          "avgColor": [
+            182,
+            102,
+            37
+          ]
+        },
+        "checkedAt": "2026-11-07T03:04:43.589Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 175300
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 448,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 448
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2204
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -17899,7 +17998,7 @@
       "name": "thanksgiving badge",
       "description": "Seasonal event art for the existing season themes.",
       "prompt": "Asset: thanksgiving badge for KEYO GAME (Seasonal events (existing season system)). Purpose: Seasonal event art for the existing season themes.\nObject: an event badge themed for thanksgiving; tasteful, premium; no text.\nMaterials: themed.\nCamera: Three-quarter front view, slightly from above, centred.\nComposition: Single object centred with about 8% empty margin on every side; nothing touches the canvas edges.\nLighting: Soft studio key light from upper left, warm rim light, gentle contact shadow only where the object rests (inside the object silhouette, never a separate plate).\nBackground: fully transparent (real alpha channel). Only the object is painted; no floor, no backdrop, no shadow plate, no checkerboard.\nResolution target: 1024x1024; must stay crisp and recognisable when shown at 64–128 px on a phone in landscape.\nArt style: KEYO premium stylized 2.5D HD game art for a social casino game center — polished, commercial mobile-game quality, crisp vector-like shapes with soft painterly shading. Stylized, NOT photorealistic: clean readable silhouettes, slightly chunky proportions, bevelled edges and gentle depth, like a high-end casual game asset. Lighting: soft key light from the upper left, gentle rim light, subtle ambient occlusion, controlled specular highlights; no harsh neon, no lens flare, no bloom haze. Materials rendered with restraint: polished gold, brushed silver, cut crystal, lacquer, velvet, leather or wood as specified — tasteful, not noisy. Colour: harmonious, high contrast against both dark plum and light backgrounds; gold and royal purple are accents, not mandatory everywhere.\nAvoid: photorealism, photographs, real-world brand logos or trademarks, existing game characters or copyrighted designs, any text, letters, numbers or watermarks unless explicitly requested, garbled glyphs, signatures, fake checkerboard transparency pattern, drop-shadow plates or coloured backgrounds behind a transparent asset, cropped or cut-off parts, distorted or asymmetric geometry when symmetry is required, blur, noise, JPEG artifacts, excessive tiny details, clutter, neon overload, multiple copies of the object, frames or borders around the image.",
-      "model": null,
+      "model": "gpt-image-2.5-sunburst",
       "quality": "high",
       "resolution": "1024x1024",
       "transparency": true,
@@ -17908,17 +18007,69 @@
       "priority": "P3",
       "batch": null,
       "costEstimateUsd": 0.1,
-      "actualCostUsd": null,
-      "status": "PLANNED",
+      "actualCostUsd": 0.054915,
+      "status": "NEEDS_REVIEW",
       "integration": "not-integrated",
-      "version": 0,
-      "versions": [],
-      "sourceFile": null,
-      "optimizedFile": null,
-      "validation": null,
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "sourceFile": "assets/studio/generated/event.thanksgiving.badge/v1/source.png",
+          "optimizedFile": "assets/studio/generated/event.thanksgiving.badge/v1/optimized.webp",
+          "model": "gpt-image-2.5-sunburst",
+          "quality": "high",
+          "createdAt": "2026-11-07T03:03:45.799Z",
+          "validationOk": true
+        }
+      ],
+      "sourceFile": "assets/studio/generated/event.thanksgiving.badge/v1/source.png",
+      "optimizedFile": "assets/studio/generated/event.thanksgiving.badge/v1/optimized.webp",
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "width": 1024,
+          "height": 1024,
+          "hasAlpha": true,
+          "coverage": 0.535,
+          "borderAlpha": 0,
+          "lumStd": 52.7,
+          "bbox": {
+            "x": 0.0390625,
+            "y": 0.05078125,
+            "w": 0.92578125,
+            "h": 0.8984375
+          },
+          "sharpness": 1089.7,
+          "dhash": "065b295ce6c6ea26",
+          "avgColor": [
+            171,
+            84,
+            30
+          ]
+        },
+        "checkedAt": "2026-11-07T03:03:45.799Z",
+        "optimized": {
+          "quality": 90,
+          "bytes": 233056
+        }
+      },
       "review": null,
       "qa": null,
-      "usage": null,
+      "usage": {
+        "input_tokens": 447,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 447
+        },
+        "output_tokens": 1756,
+        "output_tokens_details": {
+          "image_tokens": 1756,
+          "text_tokens": 0
+        },
+        "total_tokens": 2203
+      },
       "createdDate": "2026-11-06",
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     },
@@ -19110,5 +19261,5 @@
       "provenance": "Generated with the OpenAI Image API from the prompt above (original artwork; no third-party assets)."
     }
   ],
-  "updatedAt": "2026-11-07T03:03:00.252Z"
+  "updatedAt": "2026-11-07T03:04:43.589Z"
 }

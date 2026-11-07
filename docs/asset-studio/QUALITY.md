@@ -185,6 +185,9 @@ Kiểm tra kỹ thuật tự động (file, kích thước, alpha thật, viền
 | event.summer.chest | NEEDS_REVIEW | OK |  |  | 0.581 | 0 | 1177.2 | 188 KB |
 | event.summer.badge | NEEDS_REVIEW | OK |  |  | 0.553 | 0 | 966 | 192 KB |
 | event.summer.decoration | NEEDS_REVIEW | OK |  |  | 0.272 | 0 | 637.1 | 167 KB |
+| event.thanksgiving.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 1211.5 | 132 KB |
+| event.thanksgiving.chest | NEEDS_REVIEW | OK |  |  | 0.522 | 0 | 1071.6 | 171 KB |
+| event.thanksgiving.badge | NEEDS_REVIEW | OK |  |  | 0.535 | 0 | 1089.7 | 228 KB |
 | event.anniversary.icon | NEEDS_REVIEW | OK |  |  | 0.642 | 0 | 1135.3 | 195 KB |
 | event.anniversary.banner | NEEDS_REVIEW | OK |  |  | 1 | 1 | 992.3 | 104 KB |
 | event.anniversary.chest | NEEDS_REVIEW | OK |  |  | 0.567 | 0 | 1266.2 | 191 KB |
